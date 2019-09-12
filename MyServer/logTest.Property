@@ -1,0 +1,25 @@
+#配置root Category的Priority为DEBUG, Appender为rootAppender
+log4cpp.rootCategory=DEBUG, rootAppender
+#配置子Category sub1的Priority为DEBUG, Appender为A1
+log4cpp.category.sub1=DEBUG, A1 
+
+#配置rootAppender为FileAppender
+log4cpp.appender.rootAppender=FileAppender
+#配置日志文件名为test1.log，存放在D盘根目录下
+log4cpp.appender.rootAppender.fileName=test1.log
+#配置layout为PatternLayout
+log4cpp.appender.rootAppender.layout=PatternLayout
+#设置日志输出风格
+log4cpp.appender.rootAppender.layout.ConversionPattern=%d{%Y-%m-%d %H:%M:%S.%l} %t [%p] %m %n
+
+#配置A1为RollingFileAppender
+log4cpp.appender.A1=RollingFileAppender
+#配置日志文件名为test2.log，存放在D盘根目录下
+log4cpp.appender.A1.fileName=test2.log
+#配置日志文件最大不能超过1M
+log4cpp.appender.A1.maxFileSize=1024 * 1024
+#日志文件最多存储3个文件，超过就会删除旧的
+log4cpp.appender.A1.maxBackupIndex=2
+#设置日志风格
+log4cpp.appender.A1.layout=PatternLayout
+log4cpp.appender.A1.layout.ConversionPattern=%d{%Y-%m-%d %H:%M:%S.%l} %t [%p] %m %n

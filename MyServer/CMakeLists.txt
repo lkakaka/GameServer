@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.0)
+project(MyServer)
+add_subdirectory(../Math)
+add_executable(MyServer ServerMain.cpp)
+target_link_libraries(MyServer MathFunction)
