@@ -18,7 +18,7 @@
 /* define if the C library has snprintf */
 #define LOG4CPP_HAVE_SNPRINTF
 /* Define if you have the `syslog' function. */
-#define LOG4CPP_HAVE_SYSLOG
+#define LOG4CPP_HAVE_SYSLOG 1
  
 /* define if the C library has localtime_r */
 #define LOG4CPP_HAVE_LOCALTIME_R
@@ -31,3 +31,5 @@
  
 /* define if the compiler implements namespaces */
 #define LOG4CPP_HAVE_NAMESPACES
+
+#endif
