@@ -14,5 +14,7 @@ find_package(Boost REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
 link_directories(${Boost_LIBRARY_DIRS})
 
-add_executable(MyServer ./MyServer/ServerMain.cpp)
+aux_source_directory(./MyServer MYSERVER_SRC_DIR)
+
+add_executable(MyServer ${MYSERVER_SRC_DIR})
 target_link_libraries(MyServer MathFunction log4cpp)
