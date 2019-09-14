@@ -6,5 +6,13 @@ add_subdirectory(log4cpp)
 link_directories(log4cpp/Debug)
 include_directories(log4cpp/include)
 
+if (WIN32)
+	set(BOOST_ROOT F:/Project/boost_1_70_0)
+endif ()
+
+find_package(Boost REQUIRED)
+include_directories(${Boost_INCLUDE_DIRS})
+link_directories(${Boost_LIBRARY_DIRS})
+
 add_executable(MyServer ./MyServer/ServerMain.cpp)
 target_link_libraries(MyServer MathFunction log4cpp)

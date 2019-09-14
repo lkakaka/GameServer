@@ -9,6 +9,7 @@
 #include <log4cpp/PatternLayout.hh>
 #include "log4cpp/DailyRollingFileAppender.hh"
 #include "log4cpp/OstreamAppender.hh"
+#include "boost/asio.hpp"
 
 using namespace std;
 
@@ -23,7 +24,7 @@ int main()
 	log4cpp::Appender* rootAppender1 = new log4cpp::OstreamAppender("test1", &std::cout);
 	root.addAppender(rootAppender1);
 
-	rootAppender->setThreshold(log4cpp::Priority::ERROR);
+	rootAppender->setThreshold(log4cpp::Priority::NOTICE);
 	log4cpp::Appender* subAppender = new log4cpp::OstreamAppender("subtest", &std::cout);
 	sub.addAppender(subAppender);
 
@@ -38,6 +39,11 @@ int main()
 
 	root.notice("root1");
 	sub.notice("sub1");
+
+
+	boost::asio::io_service io;
+	boost::asio::deadline_timer t(io, boost::posix_time::seconds(5));
+	t.wait();
 
 	
 	cout << "MyServer Start" << endl;
