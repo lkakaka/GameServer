@@ -11,13 +11,14 @@ int main()
 {
 	Log::initLog();
 
-	Network* network = new Network();
-	network->startNetwork();
-
-
 	boost::asio::io_service io;
+	Network* network = new Network(&io);
+	network->startListen();
+
+
+	/*boost::asio::io_service io;
 	boost::asio::deadline_timer t(io, boost::posix_time::seconds(5));
-	t.wait();
+	t.wait();*/
 
 	
 	Log::logInfo("%MyServer Start!!!");
