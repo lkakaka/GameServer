@@ -8,7 +8,11 @@ include_directories(log4cpp/include)
 
 if (WIN32)
 	set(BOOST_ROOT F:/Project/boost_1_70_0)
-endif ()
+else (WIN32)
+	set(BOOST_ROOT ../boost_1_70_0)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}-pthread")
+	MESSAGE(STATUS ${CMAKE_CXX_FLAGS})
+endif (WIN32)
 
 find_package(Boost REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})

@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <string.h>
 #include "log4cpp/Category.hh"
 #include "log4cpp/FileAppender.hh"
 #include "log4cpp/SimpleLayout.hh"
