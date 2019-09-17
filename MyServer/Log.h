@@ -16,10 +16,11 @@ private:
 	static Log* g_log;
 	static const log4cpp::Category& root;
 
-	static void test();
 	static bool isPrint(const char* fmt);
 public:
+	static void test();
 	static int initLog();
+	static void formatLog(char* buff, const char* fmt, va_list va);
 	static void logDebug(const char* fmt, ...);
 	static void logInfo(char* fmt, ...);
 	static void logError(const char* fmt, ...);

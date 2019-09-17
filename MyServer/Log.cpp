@@ -1,5 +1,7 @@
 #include "Log.h"
 
+#define FORMAT_BUFF_SIZE 1024
+
 int Log::initLog()
 {
 	log4cpp::Category& root = log4cpp::Category::getRoot();
@@ -32,53 +34,64 @@ bool Log::isPrint(const char* fmt)
 {
 	if (NULL == fmt || strlen(fmt) <= 1)
 		return false;
-	return (fmt[0] == '%');
+	return (fmt[0] == '$');
+}
+
+void Log::formatLog(char* buff, const char* fmt, va_list va) 
+{
+	_vsnprintf_s(buff, FORMAT_BUFF_SIZE-1, _TRUNCATE, fmt, va);
 }
 
 void Log::logDebug(const char* fmt, ...)
 {
-	log4cpp::Category& root = log4cpp::Category::getRoot();
 	va_list args;
 	va_start(args, fmt);
+	char buff[FORMAT_BUFF_SIZE]{ 0 };
 	if (Log::isPrint(fmt))
 	{
-		root.debug(static_cast<const char*>(&fmt[1]), args);
+		formatLog(buff, &fmt[1], args);
 		log4cpp::Category& sub = log4cpp::Category::getInstance("sub1");
-		sub.debug(fmt, args);
+		sub.debug(buff);
 	}else {
-		root.debug(fmt, args);
+		formatLog(buff, fmt, args);
+		log4cpp::Category& root = log4cpp::Category::getRoot();
+		root.debug(buff);
 	}
 	va_end(args);
 }
 
 void Log::logInfo(char* fmt, ...)
 {
-	log4cpp::Category& root = log4cpp::Category::getRoot();
 	va_list args;
 	va_start(args, fmt);
+	char buff[FORMAT_BUFF_SIZE]{ 0 };
 	if (Log::isPrint(fmt))
 	{
-		root.notice(static_cast<const char*>(&fmt[1]), args);
+		formatLog(buff, &fmt[1], args);
 		log4cpp::Category& sub = log4cpp::Category::getInstance("sub1");
-		sub.notice(fmt, args);
+		sub.notice(buff);
 	}else {
-		root.notice(fmt, args);
+		formatLog(buff, fmt, args);
+		log4cpp::Category& root = log4cpp::Category::getRoot();
+		root.notice(buff);
 	}
 	va_end(args);
 }
 
 void Log::logError(const char* fmt, ...)
 {
-	log4cpp::Category& root = log4cpp::Category::getRoot();
 	va_list args;
 	va_start(args, fmt);
+	char buff[FORMAT_BUFF_SIZE]{ 0 };
 	if (Log::isPrint(fmt))
 	{
-		root.error(static_cast<const char*>(&fmt[1]), args);
+		formatLog(buff, &fmt[1], args);
 		log4cpp::Category& sub = log4cpp::Category::getInstance("sub1");
-		sub.error(fmt, args);
+		sub.error(buff);
 	}else {
-		root.error(fmt, args);
+		formatLog(buff, fmt, args);
+		log4cpp::Category& root = log4cpp::Category::getRoot();
+		root.error(buff);
 	}
 	va_end(args);
 }
@@ -107,7 +120,9 @@ void Log::test()
 	subPatternLayout->setConversionPattern("%d{%Y-%m-%d %H:%M:%S.%l} %t [%c] [%p] %m %n");
 	subAppender->setLayout(subPatternLayout);
 
-	root.notice("root1");
+	root.notice("root1, %d,%s", 1, "1234");
 	sub.notice("sub1");
+
+	//Log::logInfo("$root1, %d,%s", 1, "1234");
 }
 
