@@ -1,4 +1,5 @@
 #include "TcpConnection.h"
+#include "proto/test.pb.h"
 
 TcpConnection::TcpConnection(boost::asio::io_service& io, int connID, closeFuncType closeFunc):
 	m_connID(connID),
@@ -37,7 +38,7 @@ void TcpConnection::doRead()
 		if (error)
 		{
 			const std::string err_str = error.message();
-			Log::logError("$close connection, %s", err_str);
+			Log::logError("$close connection, %s", err_str.data());
 			m_closeFunc(getConnID());
 			return;
 		}
@@ -45,10 +46,21 @@ void TcpConnection::doRead()
 		{
 			Log::logInfo("$receive data, len:%d, %s\n", datLen, m_vecData.data());
 
-			std::string echo = "server echo:";
+			/*std::string echo = "server echo:";
+			std::vector<unsigned char>data;
+			std::copy(echo.begin(), echo.end(), std::back_inserter(data));*/
+			Test recvMsg;
+			recvMsg.ParseFromArray(m_vecData.data(), datLen);
+			Log::logInfo("$receive data obj, id:%d, msg:%s\n", recvMsg.id(), recvMsg.msg().data());
+
+			Test msg;
+			msg.set_id(1);
+			msg.set_msg("hello");
+			std::string echo;
+			msg.SerializeToString(&echo);
+			
 			std::vector<unsigned char>data;
 			std::copy(echo.begin(), echo.end(), std::back_inserter(data));
-
 			sendData(std::move(data), data.size());
 		}
 		else {
