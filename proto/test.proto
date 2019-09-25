@@ -6,3 +6,8 @@ message Test{
 	int32 id=1;
 	string msg=2;
 }
+
+message Login {
+	int32 user_id = 1;
+	string pwd = 2;
+}

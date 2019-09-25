@@ -12,6 +12,7 @@ class TcpConnection : public std::enable_shared_from_this<TcpConnection>
 private:
 	tcp::socket m_socket;
 	std::vector<unsigned char>	m_vecData;
+	std::vector<unsigned char> m_readData;
 	int m_connID;
 	//std::shared_ptr<Network> m_network;
 	closeFuncType m_closeFunc;

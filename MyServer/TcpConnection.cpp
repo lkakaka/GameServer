@@ -1,5 +1,6 @@
 #include "TcpConnection.h"
 #include "proto/test.pb.h"
+#include "proto/proto.h"
 
 TcpConnection::TcpConnection(boost::asio::io_service& io, int connID, closeFuncType closeFunc):
 	m_connID(connID),
@@ -29,6 +30,10 @@ int TcpConnection::getConnID() const
 	return m_connID;
 }
 
+inline int parseIntFromData(unsigned char* data) {
+	return *(int*)data;
+}
+
 void TcpConnection::doRead()
 {	
 	m_vecData.resize(1024);
@@ -49,9 +54,23 @@ void TcpConnection::doRead()
 			/*std::string echo = "server echo:";
 			std::vector<unsigned char>data;
 			std::copy(echo.begin(), echo.end(), std::back_inserter(data));*/
-			Test recvMsg;
+			std::copy(m_vecData.begin(), m_vecData.end(), std::back_inserter(m_readData));
+			if (m_vecData.size() >= 8) {
+				unsigned char* data = m_vecData.data();
+				int msgLen = parseIntFromData(&data[4]);
+				if(m_vecData.size() - 8 >= msgLen){ 
+					int msgId = parseIntFromData(data);
+					google::protobuf::Message* msg = (google::protobuf::Message*)CreateMsgById(msgId);
+					msg->ParseFromArray(&data[8], msgLen);
+					std::vector<unsigned char>::iterator end = m_vecData.begin();
+					std::advance(m_vecData.begin(), msgLen + 8);
+					m_vecData.erase(m_vecData.begin(), end);
+				}
+			}
+
+			/*Test recvMsg;
 			recvMsg.ParseFromArray(m_vecData.data(), datLen);
-			Log::logInfo("$receive data obj, id:%d, msg:%s\n", recvMsg.id(), recvMsg.msg().data());
+			Log::logInfo("$receive data obj, id:%d, msg:%s\n", recvMsg.id(), recvMsg.msg().data());*/
 
 			Test msg;
 			msg.set_id(1);

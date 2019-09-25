@@ -3,8 +3,8 @@ project(MyServer)
 add_subdirectory(Math)
 add_subdirectory(log4cpp)
 
-link_directories(log4cpp/Debug ../protobuf/cmake)
-include_directories(log4cpp/include ../protobuf/src)
+link_directories(log4cpp/Debug ../protobuf-3.9.0/cmake/build)
+include_directories(log4cpp/include ../protobuf-3.9.0/src)
 
 if (WIN32)
 	set(BOOST_ROOT ../boost_1_70_0)
@@ -14,15 +14,15 @@ else (WIN32)
 	MESSAGE(STATUS ${CMAKE_CXX_FLAGS})
 endif (WIN32)
 
-if (False)
-    foreach(flag_var
-        CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE
-        CMAKE_CXX_FLAGS_MINSIZEREL CMAKE_CXX_FLAGS_RELWITHDEBINFO)
-      if(${flag_var} MATCHES "/MD")
-        string(REGEX REPLACE "/MD" "/MT" ${flag_var} "${${flag_var}}")
-      endif(${flag_var} MATCHES "/MD")
-    endforeach(flag_var)
- endif (MSVC)
+# if (MSVC)
+#     foreach(flag_var
+#         CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE
+#         CMAKE_CXX_FLAGS_MINSIZEREL CMAKE_CXX_FLAGS_RELWITHDEBINFO)
+#       if(${flag_var} MATCHES "/MD")
+#         string(REGEX REPLACE "/MD" "/MT" ${flag_var} "${${flag_var}}")
+#       endif(${flag_var} MATCHES "/MD")
+#     endforeach(flag_var)
+#  endif (MSVC)
 
 find_package(Boost REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
