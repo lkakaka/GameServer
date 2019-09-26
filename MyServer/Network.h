@@ -4,7 +4,7 @@
 #include "boost/system/error_code.hpp"
 
 #include "TcpConnection.h"
-#include "Log.h"
+#include "Logger.h"
 #include <map>
 #include <unordered_map>
 

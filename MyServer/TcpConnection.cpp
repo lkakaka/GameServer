@@ -15,7 +15,7 @@ TcpConnection::~TcpConnection()
 	try {
 		this->m_socket.close();
 	}catch (boost::system::system_error e) {
-		Log::logError("socket close error, %s", e.what());
+		Logger::logError("socket close error, %s", e.what());
 	}
 	printf("delete TcpConnection\n");
 }
@@ -43,13 +43,13 @@ void TcpConnection::doRead()
 		if (error)
 		{
 			const std::string err_str = error.message();
-			Log::logError("$close connection, %s", err_str.data());
+			Logger::logError("$close connection, %s", err_str.data());
 			m_closeFunc(getConnID());
 			return;
 		}
 		if (datLen > 0)
 		{
-			Log::logInfo("$receive data, len:%d, %s\n", datLen, m_vecData.data());
+			Logger::logInfo("$receive data, len:%d, %s\n", datLen, m_vecData.data());
 
 			/*std::string echo = "server echo:";
 			std::vector<unsigned char>data;
@@ -83,7 +83,7 @@ void TcpConnection::doRead()
 			sendData(std::move(data), data.size());
 		}
 		else {
-			Log::logInfo("$receive data len is 0");
+			Logger::logInfo("$receive data len is 0");
 		}
 		this->doRead();
 	});
@@ -93,7 +93,7 @@ void TcpConnection::sendData(std::vector<unsigned char>&& dat, size_t datLen)
 {
 	boost::asio::const_buffer buf(&dat.front(), datLen);
 	m_socket.async_write_some(buf, [](boost::system::error_code err_code, size_t datLen) {
-		Log::logInfo("$send data len:%d", datLen);
+		Logger::logInfo("$send data len:%d", datLen);
 	});
 }
 
@@ -103,6 +103,6 @@ void TcpConnection::doShutDown()
 		this->m_socket.shutdown(m_socket.shutdown_both);
 	}
 	catch (boost::system::system_error e) {
-		Log::logError("socket shutdown error, %s", e.what());
+		Logger::logError("socket shutdown error, %s", e.what());
 	}
 }

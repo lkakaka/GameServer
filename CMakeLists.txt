@@ -1,18 +1,21 @@
 cmake_minimum_required(VERSION 3.0)
 project(MyServer)
+
 add_subdirectory(Math)
 add_subdirectory(log4cpp)
+add_subdirectory(DBPlugin) 
 
-link_directories(log4cpp/Debug ../protobuf-3.9.0/cmake/build)
-include_directories(log4cpp/include ../protobuf-3.9.0/src)
+set(PROTOBUFF_ROOT ../protobuf-3.9.0)
+set(BOOST_ROOT ../boost_1_70_0)
+find_package(Boost REQUIRED)
 
-if (WIN32)
-	set(BOOST_ROOT ../boost_1_70_0)
-else (WIN32)
-	set(BOOST_ROOT ../boost_1_70_0)
+link_directories(${Boost_LIBRARY_DIRS} log4cpp ${PROTOBUFF_ROOT}/cmake/build DBPlugin DBPlugin/mysql/lib64/vs14)
+include_directories(${Boost_INCLUDE_DIRS} log4cpp/include ${PROTOBUFF_ROOT}/src DBPlugin)
+
+if (NOT WIN32)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}-pthread")
 	MESSAGE(STATUS ${CMAKE_CXX_FLAGS})
-endif (WIN32)
+endif (NOT WIN32)
 
 # if (MSVC)
 #     foreach(flag_var
@@ -24,12 +27,16 @@ endif (WIN32)
 #     endforeach(flag_var)
 #  endif (MSVC)
 
-find_package(Boost REQUIRED)
-include_directories(${Boost_INCLUDE_DIRS})
-link_directories(${Boost_LIBRARY_DIRS})
-
+# link_directories(${Boost_LIBRARY_DIRS})
+ 
 aux_source_directory(./MyServer MYSERVER_SRC_DIR)
 aux_source_directory(./MyServer/proto MYSERVER_PROTO_SRC_DIR)
-
 add_executable(MyServer ${MYSERVER_SRC_DIR} ${MYSERVER_PROTO_SRC_DIR})
-target_link_libraries(MyServer MathFunction log4cpp libprotobufd)
+
+target_link_libraries(MyServer MathFunction log4cpp DBPlugin mysqlcppconn)
+target_link_libraries(MyServer debug libprotobufd optimized libprotobuf)
+
+message(STATUS ${PROJECT_SOURCE_DIR})
+
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
+set_target_properties(MyServer PROPERTIES DEBUG_POSTFIX "_d")

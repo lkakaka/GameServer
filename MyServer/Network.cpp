@@ -28,7 +28,7 @@ void Network::acceptHandler(std::shared_ptr<TcpConnection> conn, error_code ec)
 		//TcpConnection* conn = new TcpConnection(std::move(psocket.get()));
 		m_connMap.insert(std::make_pair(conn->getConnID(), conn));
 		conn->doRead();
-		Log::logDebug("$client connected, %s", conn->getSocket().remote_endpoint().address());
+		Logger::logDebug("$client connected, %s", conn->getSocket().remote_endpoint().address());
 	}
 	doAccept();
 }

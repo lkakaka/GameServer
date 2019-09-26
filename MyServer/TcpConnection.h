@@ -1,7 +1,7 @@
 #pragma once
 #include "boost/asio.hpp"
 #include "boost/asio/ip/tcp.hpp"
-#include "Log.h"
+#include "Logger.h"
 
 typedef std::function<void(int)> closeFuncType;
 
