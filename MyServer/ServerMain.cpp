@@ -14,7 +14,7 @@ int main()
 	Logger::initLog();
 
 	DBPlugin* dbPlugin = new DBPlugin();
-	dbPlugin->initDBPlugin();
+	dbPlugin->initDBPlugin("");
 
 	boost::asio::io_service io;
 	Network* network = new Network(&io);

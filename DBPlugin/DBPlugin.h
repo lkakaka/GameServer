@@ -12,6 +12,6 @@
 class DBPLUNGIN_API DBPlugin
 {
 public:
-	void initDBPlugin();
+	void initDBPlugin(std::string dbDir);
 };
 

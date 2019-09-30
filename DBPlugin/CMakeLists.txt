@@ -1,7 +1,7 @@
 set(CMAKE_DEBUG_POSTFIX "_d") 
 aux_source_directory(. DIR_LIB_SRCS)
 add_definitions(-DDBPLUGIN_EXPORT)
-include_directories(../log4cpp/include mysql/include)
+include_directories(../log4cpp/include mysql/include include)
 link_directories(mysql/lib64/vs14)
 link_libraries(log4cpp mysqlcppconn)
 add_library(DBPlugin SHARED ${DIR_LIB_SRCS})

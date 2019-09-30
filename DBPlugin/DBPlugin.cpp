@@ -2,12 +2,20 @@
 #include "jdbc/cppconn/driver.h"
 #include "jdbc/cppconn/resultset.h"
 #include "jdbc/cppconn/statement.h"
+#include "Reflect.h"
 
 using namespace sql;
 
-void DBPlugin::initDBPlugin()
+void DBPlugin::initDBPlugin(std::string dbDir)
 {
 	Logger::initLog();
+
+	RelectTest test;
+	test.setField("id", 1);
+	test.setField("name", "hello");
+
+	Logger::logInfo("$relect :%d, %s", test.id, test.name.c_str());
+
 	try {
 		Driver* driver = get_driver_instance();
 		Connection* conn = driver->connect("tcp://127.0.0.1:3306/test1", "root", "");
