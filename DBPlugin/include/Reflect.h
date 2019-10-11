@@ -14,9 +14,10 @@ enum FieldType
 class Field
 {
 public:
-	std::string name;
-	int type;
-	void* addr;
+	std::string name;	// 字段名
+	int type;			// 字段类型（FieldType）
+	void* addr;			// 字段地址
+	bool isSet;			// 是否已赋值
 };
 
 class Type
@@ -49,11 +50,14 @@ protected:
 	}
 
 public:
+	inline std::map<std::string, Field> getFieldMap() { return fieldMap;}
+
 	void setField(std::string fieldName, int val)
 	{
 		auto iter = type.fields.find(fieldName);
 		Field field = (Field)iter->second;
 		*(int*)field.addr = val;
+		field.isSet = true;
 		//*addr = val;
 		//*field.addr = val;
 	}
@@ -63,8 +67,16 @@ public:
 		auto iter = type.fields.find(fieldName);
 		Field field = (Field)iter->second;
 		*(std::string*)field.addr = val;
+		field.isSet = true;
 		//*addr = val;
 		//std::copy(val.begin(), val.end(), std::back_inserter(*field));
+	}
+
+	int getInt(std::string fieldName)
+	{
+		auto iter = type.fields.find(fieldName);
+		Field field = (Field)iter->second;
+		return *(int*)field.addr;
 	}
 };
 
