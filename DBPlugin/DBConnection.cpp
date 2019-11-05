@@ -14,6 +14,7 @@ void DBHandler::connect(std::string hostname, int port, std::string user, std::s
 
 std::vector<ReflectObject> DBHandler::select(ReflectObject in)
 {
+	std::vector<ReflectObject> result;
 	std::map<std::string, Field> fieldMap = in.getFieldMap();
-
+	return result;
 }

@@ -49,10 +49,25 @@ protected:
 		type.fields.insert(std::make_pair(fieldName, field));
 	}
 
-public:
-	inline std::map<std::string, Field> getFieldMap() { return fieldMap;}
+	void setTypeName(std::string typeName)
+	{
+		type.name = typeName;
+	}
 
-	void setField(std::string fieldName, int val)
+public:
+	inline std::map<std::string, Field> getFieldMap() { return type.fields;}
+
+	Field* getField(std::string fieldName) { 
+		auto iter = type.fields.find(fieldName);
+		if (iter == type.fields.end()) {
+			return NULL;
+		}
+		return &iter->second;
+	}
+
+	inline std::string getTypeName() { return type.name; }
+
+	void setInt(std::string fieldName, int val)
 	{
 		auto iter = type.fields.find(fieldName);
 		Field field = (Field)iter->second;
@@ -62,7 +77,7 @@ public:
 		//*field.addr = val;
 	}
 
-	void setField(std::string fieldName, std::string val)
+	void setString(std::string fieldName, std::string val)
 	{
 		auto iter = type.fields.find(fieldName);
 		Field field = (Field)iter->second;
@@ -77,6 +92,13 @@ public:
 		auto iter = type.fields.find(fieldName);
 		Field field = (Field)iter->second;
 		return *(int*)field.addr;
+	}
+
+	std::string getString(std::string fieldName)
+	{
+		auto iter = type.fields.find(fieldName);
+		Field field = (Field)iter->second;
+		return *(std::string*)field.addr;
 	}
 };
 
@@ -108,6 +130,7 @@ public:
 
 	RelectTest()
 	{
+		setTypeName("RelectTest");
 		registerField("id", TYPE_INT, &id);
 		registerField("name", TYPE_STRING, &name);
 	}

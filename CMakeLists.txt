@@ -10,7 +10,7 @@ set(BOOST_ROOT ../boost_1_70_0)
 find_package(Boost REQUIRED)
 
 link_directories(${Boost_LIBRARY_DIRS} log4cpp ${PROTOBUFF_ROOT}/cmake/build DBPlugin DBPlugin/mysql/lib64/vs14)
-include_directories(${Boost_INCLUDE_DIRS} log4cpp/include ${PROTOBUFF_ROOT}/src DBPlugin util)
+include_directories(${Boost_INCLUDE_DIRS} log4cpp/include ${PROTOBUFF_ROOT}/src DBPlugin DBPlugin/include util)
 
 if (NOT WIN32)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}-pthread")

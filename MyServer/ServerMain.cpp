@@ -6,6 +6,8 @@
 //#include "Log.h"
 #include "DBPlugin.h"
 #include "Logger.h"
+#include "DBTableDef.h"
+#include "DBMgr.h"
 
 using namespace std;
 
@@ -15,6 +17,12 @@ int main()
 
 	DBPlugin* dbPlugin = new DBPlugin();
 	dbPlugin->initDBPlugin("");
+
+	/*DBMgr* dbMgr = new DBMgr("test");
+	TblPlayer* tblPlayer = new TblPlayer();
+	std::vector<ReflectObject*> tbls;
+	tbls.push_back((ReflectObject*)tblPlayer);
+	dbMgr->initDbTable(tbls);*/
 
 	boost::asio::io_service io;
 	Network* network = new Network(&io);

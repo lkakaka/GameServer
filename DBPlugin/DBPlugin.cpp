@@ -1,8 +1,9 @@
 #include "DBPlugin.h"
+#include "Reflect.h"
 #include "jdbc/cppconn/driver.h"
 #include "jdbc/cppconn/resultset.h"
 #include "jdbc/cppconn/statement.h"
-#include "Reflect.h"
+
 
 using namespace sql;
 
@@ -11,27 +12,32 @@ void DBPlugin::initDBPlugin(std::string dbDir)
 	Logger::initLog();
 
 	RelectTest test;
-	test.setField("id", 1);
-	test.setField("name", "hello");
+	test.setInt("id", 1);
+	test.setString("name", "hello");
 
 	Logger::logInfo("$relect :%d, %s", test.id, test.name.c_str());
 
 	try {
 		Driver* driver = get_driver_instance();
-		Connection* conn = driver->connect("tcp://127.0.0.1:3306/test1", "root", "");
-		if (conn == NULL) {
+		Connection* m_dbConn = driver->connect("tcp://127.0.0.1:3306/test1", "root", "");
+		if (m_dbConn == NULL) {
 			Logger::logError("$connect mysql failed");
 			return;
 		}
 		//conn->setSchema("test1");
 
+		Statement* st = m_dbConn->createStatement();
+		std::string sql = "CREATE TABLE TblPlayer(id INT)";
+		if (!st->execute("CREATE TABLE TblPlayer(id INT)")) {
+			Logger::logError("$create table failed");
+		}
 
 		/*Statement* stmt = conn->createStatement();
 		stmt->executeQuery("SELECT * FROM bd_pred_dut");*/
 
 		std::unique_ptr<Statement> stmt(nullptr);
 		//Statement stmt; 
-		stmt.reset(conn->createStatement());
+		stmt.reset(m_dbConn->createStatement());
 		/* run a query which returns exactly one result set */
 		std::unique_ptr<ResultSet> res(nullptr);
 		res.reset(stmt->executeQuery("SELECT name FROM player"));

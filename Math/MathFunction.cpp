@@ -20,3 +20,11 @@ double power(double base, int exponent)
 
     return result;
 }
+
+int add(int a, int b) {
+	/*__asm {
+		mov eax,a
+		add eax,b
+	}*/
+	return 1;
+}
