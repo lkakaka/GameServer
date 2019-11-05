@@ -15,14 +15,14 @@ int main()
 {
 	Logger::initLog();
 
-	DBPlugin* dbPlugin = new DBPlugin();
-	dbPlugin->initDBPlugin("");
+	/*DBPlugin* dbPlugin = new DBPlugin();
+	dbPlugin->initDBPlugin("");*/
 
-	/*DBMgr* dbMgr = new DBMgr("test");
+	DBMgr* dbMgr = new DBMgr("test");
 	TblPlayer* tblPlayer = new TblPlayer();
 	std::vector<ReflectObject*> tbls;
 	tbls.push_back((ReflectObject*)tblPlayer);
-	dbMgr->initDbTable(tbls);*/
+	dbMgr->initDbTable(tbls);
 
 	boost::asio::io_service io;
 	Network* network = new Network(&io);

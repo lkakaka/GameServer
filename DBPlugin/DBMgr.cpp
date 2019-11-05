@@ -58,13 +58,14 @@ void DBMgr::createTable(ReflectObject* tbl)
 	}
 	sql.pop_back();
 	sql += ")";
+	sql::SQLString sqlStr = sql::SQLString(sql.c_str());
 	Connection* conn = getDBConnection();
 	if (conn == NULL) {
 		Logger::logError("$exec sql failed, conn is null, sql: %s", sql.c_str());
 	}
 	Statement* st = conn->createStatement();
 	try {
-		if (!st->execute(sql)) {
+		if (!st->execute(sqlStr)) {
 			Logger::logError("$exec sql failed, sql: %s", sql.c_str());
 		}
 	}
@@ -107,13 +108,13 @@ void DBMgr::insertOne(ReflectObject tbl)
 	val.pop_back();
 
 	sql += ")" + val + ")";
-
+	sql::SQLString sqlStr = sql::SQLString(sql.c_str());
 	Connection* conn = getDBConnection();
 	if (conn == NULL) {
 		Logger::logError("$exec sql failed, conn is null, sql: %s", sql.c_str());
 	}
 	Statement* st = conn->createStatement();
-	if (!st->execute(sql)) {
+	if (!st->execute(sqlStr)) {
 		Logger::logError("$exec sql failed, sql: %s", sql.c_str());
 	}
 }
@@ -152,12 +153,13 @@ void DBMgr::select(ReflectObject tbl)
 		sql += " WHERE " + conditions;
 	}
 
+	sql::SQLString sqlStr = sql::SQLString(sql.c_str());
 	Connection* conn = getDBConnection();
 	if (conn == NULL) {
 		Logger::logError("$exec sql failed, conn is null, sql: %s", sql.c_str());
 	}
 	Statement* st = conn->createStatement();
-	ResultSet* result = st->executeQuery(sql);
+	ResultSet* result = st->executeQuery(sqlStr);
 
 	/*ResultSetMetaData* metaData = result->getMetaData();
 	for (int i = 1; i <= metaData->getColumnCount(); i++) {
@@ -239,12 +241,13 @@ void DBMgr::update(ReflectObject src, ReflectObject dst)
 	}
 
 	sql += " SET " + val + " WHERE " + conditions;
+	sql::SQLString sqlStr = sql::SQLString(sql.c_str());
 	Connection* conn = getDBConnection();
 	if (conn == NULL) {
 		Logger::logError("$exec sql failed, conn is null, sql: %s", sql.c_str());
 	}
 	Statement* st = conn->createStatement();
-	if (!st->execute(sql)) {
+	if (!st->execute(sqlStr)) {
 		Logger::logError("update table %s failed, sql: %s", src.getTypeName(), sql);
 	}
 }
@@ -285,13 +288,13 @@ void DBMgr::del(ReflectObject tbl)
 	}
 
 	sql += " WHERE " + conditions;
-
+	sql::SQLString sqlStr = sql::SQLString(sql.c_str());
 	Connection* conn = getDBConnection();
 	if (conn == NULL) {
 		Logger::logError("$exec sql failed, conn is null, sql: %s", sql.c_str());
 	}
 	Statement* st = conn->createStatement();
-	if (!st->execute(sql)) {
+	if (!st->execute(sqlStr)) {
 		Logger::logError("del table %s failed, sql: %s", tbl.getTypeName(), sql);
 	}
 }
@@ -303,7 +306,8 @@ void DBMgr::executeSql(std::string sql)
 		Logger::logError("$exec sql failed, conn is null, sql: %s", sql.c_str());
 	}
 	Statement* st = conn->createStatement();
-	if (!st->execute(sql)) {
+	sql::SQLString sqlStr = sql::SQLString(sql.c_str());
+	if (!st->execute(sqlStr)) {
 		Logger::logError("execute sql failed, sql: %s", sql.c_str());
 	}
 }

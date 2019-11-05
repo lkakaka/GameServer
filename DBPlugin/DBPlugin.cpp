@@ -27,8 +27,10 @@ void DBPlugin::initDBPlugin(std::string dbDir)
 		//conn->setSchema("test1");
 
 		Statement* st = m_dbConn->createStatement();
-		std::string sql = "CREATE TABLE TblPlayer(id INT)";
-		if (!st->execute("CREATE TABLE TblPlayer(id INT)")) {
+		std::string sql = "CREATE TABLE IF NOT EXISTS TblPlayer(id INT)";
+		sql::SQLString sqlStr = sql::SQLString(sql.c_str());
+		//sql::SQLString sqlStr = sql;
+		if (!st->execute(sqlStr)) {
 			Logger::logError("$create table failed");
 		}
 
