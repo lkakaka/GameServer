@@ -30,9 +30,7 @@ void DBPlugin::initDBPlugin(std::string dbDir)
 		std::string sql = "CREATE TABLE IF NOT EXISTS TblPlayer(id INT)";
 		sql::SQLString sqlStr = sql::SQLString(sql.c_str());
 		//sql::SQLString sqlStr = sql;
-		if (!st->execute(sqlStr)) {
-			Logger::logError("$create table failed");
-		}
+		st->execute(sqlStr);
 
 		/*Statement* stmt = conn->createStatement();
 		stmt->executeQuery("SELECT * FROM bd_pred_dut");*/

@@ -65,9 +65,7 @@ void DBMgr::createTable(ReflectObject* tbl)
 	}
 	Statement* st = conn->createStatement();
 	try {
-		if (!st->execute(sqlStr)) {
-			Logger::logError("$exec sql failed, sql: %s", sql.c_str());
-		}
+		st->execute(sqlStr);
 	}
 	catch (std::exception e) {
 		Logger::logError("$exec sql failed, sql: %s, e: %s", sql.c_str(), e.what());
@@ -114,9 +112,7 @@ void DBMgr::insertOne(ReflectObject tbl)
 		Logger::logError("$exec sql failed, conn is null, sql: %s", sql.c_str());
 	}
 	Statement* st = conn->createStatement();
-	if (!st->execute(sqlStr)) {
-		Logger::logError("$exec sql failed, sql: %s", sql.c_str());
-	}
+	st->execute(sqlStr);
 }
 
 void DBMgr::select(ReflectObject tbl)
@@ -247,9 +243,7 @@ void DBMgr::update(ReflectObject src, ReflectObject dst)
 		Logger::logError("$exec sql failed, conn is null, sql: %s", sql.c_str());
 	}
 	Statement* st = conn->createStatement();
-	if (!st->execute(sqlStr)) {
-		Logger::logError("update table %s failed, sql: %s", src.getTypeName(), sql);
-	}
+	st->execute(sqlStr);
 }
 
 void DBMgr::del(ReflectObject tbl)
@@ -294,9 +288,7 @@ void DBMgr::del(ReflectObject tbl)
 		Logger::logError("$exec sql failed, conn is null, sql: %s", sql.c_str());
 	}
 	Statement* st = conn->createStatement();
-	if (!st->execute(sqlStr)) {
-		Logger::logError("del table %s failed, sql: %s", tbl.getTypeName(), sql);
-	}
+	st->execute(sqlStr);
 }
 
 void DBMgr::executeSql(std::string sql)
@@ -307,7 +299,5 @@ void DBMgr::executeSql(std::string sql)
 	}
 	Statement* st = conn->createStatement();
 	sql::SQLString sqlStr = sql::SQLString(sql.c_str());
-	if (!st->execute(sqlStr)) {
-		Logger::logError("execute sql failed, sql: %s", sql.c_str());
-	}
+	st->execute(sqlStr);
 }
