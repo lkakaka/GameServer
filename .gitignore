@@ -1,2 +1,3 @@
 build/
 bin/
+script/python/__pycache__/

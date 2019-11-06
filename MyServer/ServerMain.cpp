@@ -8,12 +8,15 @@
 #include "Logger.h"
 #include "DBTableDef.h"
 #include "DBMgr.h"
+#include "PythonPlugin.h"
 
 using namespace std;
 
 int main()
 {
 	Logger::initLog();
+
+	initPython();
 
 	/*DBPlugin* dbPlugin = new DBPlugin();
 	dbPlugin->initDBPlugin("");*/
@@ -38,6 +41,10 @@ int main()
 	Logger::logInfo("$MyServer Start!!!");
 
 	io.run();
+
+	Logger::logInfo("$MyServer exit!!!");
+
+	finalizePython();
 
 	return 0;
 }
