@@ -8,11 +8,11 @@ add_subdirectory(DBPlugin)
 set(PROTOBUFF_ROOT ../protobuf-3.9.0)
 set(BOOST_ROOT ../boost_1_70_0)
 # set(PYTHON_LIBRARY C:/Python34/libs)
-set(PYTHON_ROOT C:/Python38)
+set(PYTHON_ROOT Depends/Python38)
 find_package(Boost REQUIRED)
 # find_package(PythonLibs REQUIRED)
 
-link_directories(${Boost_LIBRARY_DIRS} ${PYTHON_ROOT}/libs log4cpp ${PROTOBUFF_ROOT}/cmake/build DBPlugin DBPlugin/mysql/lib64/vs14)
+link_directories(${Boost_LIBRARY_DIRS} ${PYTHON_ROOT}/libs log4cpp ${PROTOBUFF_ROOT}/cmake/build DBPlugin Depends/mysql/lib64/vs14)
 include_directories(${Boost_INCLUDE_DIRS} ${PYTHON_ROOT}/include log4cpp/include ${PROTOBUFF_ROOT}/src DBPlugin DBPlugin/include util)
 
 if (NOT WIN32)
