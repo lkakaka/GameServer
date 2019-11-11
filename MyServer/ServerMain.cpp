@@ -9,8 +9,11 @@
 #include "DBTableDef.h"
 #include "DBMgr.h"
 #include "PythonPlugin.h"
+#include "../Math/MathFunction.h"
 
 using namespace std;
+
+#pragma comment(lib, "MathFunction.lib")
 
 int main()
 {
@@ -30,7 +33,8 @@ int main()
 	boost::asio::io_service io;
 	Network* network = new Network(&io);
 	network->startListen();
-
+	
+	double x = power(2, 3);
 	/*int a;
 	printf("ptr size is %d", sizeof(a));*/
 

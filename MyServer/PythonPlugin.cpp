@@ -137,10 +137,11 @@ void initPython()
 	//Py_InitModule("Test", module_methods);	// python2
 	PyRun_SimpleString("import sys");
 	PyRun_SimpleString("import os");
-	//PyRun_SimpleString("print(os.getcwd())");
-	//PyRun_SimpleString("print(sys.path)");
-	//PyRun_SimpleString("sys.path.append('./')");
+	PyRun_SimpleString("print(os.getcwd())");
+	PyRun_SimpleString("sys.path.append('./')");
+	PyRun_SimpleString("sys.path.append('./Release')");
 	PyRun_SimpleString("sys.path.append('../script/python')");
+	PyRun_SimpleString("print(sys.path)");
 	callPyFunction("main", "init");
 }
 
