@@ -28,5 +28,5 @@ int add(int a, int b) {
 		mov eax,a
 		add eax,b
 	}*/
-	return 1;
+	return a + b;
 }

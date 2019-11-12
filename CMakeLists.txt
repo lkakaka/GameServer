@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
-project(MyServer)
+project(GameServer)
 
 add_subdirectory(Math)
 add_subdirectory(log4cpp)
@@ -32,15 +32,15 @@ endif (NOT WIN32)
 
 # link_directories(${Boost_LIBRARY_DIRS})
  
-aux_source_directory(./MyServer MYSERVER_SRC_DIR)
-aux_source_directory(./MyServer/proto MYSERVER_PROTO_SRC_DIR)
-aux_source_directory(./MyServer/db MYSERVER_DB_DIR)
-add_executable(MyServer ${MYSERVER_SRC_DIR} ${MYSERVER_PROTO_SRC_DIR} ${MYSERVER_DB_DIR})
+aux_source_directory(./GameServer MYSERVER_SRC_DIR)
+aux_source_directory(./GameServer/proto MYSERVER_PROTO_SRC_DIR)
+aux_source_directory(./GameServer/db MYSERVER_DB_DIR)
+add_executable(GameServer ${MYSERVER_SRC_DIR} ${MYSERVER_PROTO_SRC_DIR} ${MYSERVER_DB_DIR})
 
-target_link_libraries(MyServer MathFunction log4cpp DBPlugin mysqlcppconn)
-target_link_libraries(MyServer debug libprotobufd optimized libprotobuf)
+target_link_libraries(GameServer MathFunction log4cpp DBPlugin mysqlcppconn)
+target_link_libraries(GameServer debug libprotobufd optimized libprotobuf)
 
 message(STATUS ${PROJECT_SOURCE_DIR})
 
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
-set_target_properties(MyServer PROPERTIES DEBUG_POSTFIX "_d")
+set_target_properties(GameServer PROPERTIES DEBUG_POSTFIX "_d")

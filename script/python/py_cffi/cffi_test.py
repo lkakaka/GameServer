@@ -1,5 +1,15 @@
 
-def build():
+def test():
+    from cffi import FFI
+    ffi = FFI()
+    ffi.cdef("""
+        int printf(const char *format, ...); // 可以从man page或者头文件里面复制
+    """)
+    C = ffi.dlopen(None) # 加载整个C命名空间
+    arg = ffi.new("char[]", b"world") # 等于C代码: char arg[] = "world";
+    print(C.printf(b"hi there, %s.\n", arg)) # 调用printf
+
+def test1():
     from cffi import FFI
     ffibuilder = FFI()
 
@@ -21,5 +31,9 @@ def build():
     
     ffibuilder.compile(verbose=True)
 
-if __name__ == "__main__":
-    build()
+def test_use():
+    # use function
+    # import _math_cffi
+    from py_cffi._math_cffi import ffi,lib
+    print("math.power(2,3)=", lib.power(2, 3))
+
