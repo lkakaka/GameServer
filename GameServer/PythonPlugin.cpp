@@ -3,6 +3,7 @@
 #include "Python.h"
 #include "PythonPlugin.h"
 #include "PyDbInterface.h"
+#include "PyLogger.h"
 #include "Logger.h"
 
 static PyObject* TestError;
@@ -105,7 +106,7 @@ PyMODINIT_FUNC PyInit_Test(void)
 }
 
 
-static void callPyFunction(char* module, char* func)
+void callPyFunction(char* module, char* func)
 {
 	PyObject* pModule = NULL;//声明变量
 	PyObject* pFunc = NULL;// 声明变量
@@ -133,6 +134,7 @@ void initPython()
 {
 	PyImport_AppendInittab("Test", PyInit_Test);  // python3
 	initDbModule();
+	initLoggerModule();
 	Py_Initialize();
 	//Py_InitModule("Test", module_methods);	// python2
 	PyRun_SimpleString("import sys");

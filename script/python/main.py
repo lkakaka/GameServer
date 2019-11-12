@@ -2,14 +2,17 @@
 import os
 import sys
 import db.TbMgr
+import logger
 import py_cffi.cffi_test
 
 def init():
-    print("init python", os.getcwd(), os.path.abspath(""))
+    logger.logInfo("$init python {} {}", os.getcwd(), os.path.abspath(""))
     # import Test
     # print(Test.test())
     # db.TbMgr.TbMgr.initTbTable()
-    # cffi_test.test1()
     py_cffi.cffi_test.test_use()
-    print("init python end")
+    logger.logInfo("$init python end")
 
+def thread_test():
+    # print("thread test")
+    logger.logInfo("$python thread test")

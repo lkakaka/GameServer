@@ -21,11 +21,11 @@ int Logger::initLog()
 	sub.addAppender(subAppender);
 
 	log4cpp::PatternLayout* patternLayout = new log4cpp::PatternLayout();
-	patternLayout->setConversionPattern("%d{%Y-%m-%d %H:%M:%S.%l} [%p] %m %n");
+	patternLayout->setConversionPattern("%d{%Y-%m-%d %H:%M:%S.%l} thread_id:%t [%p] %m %n");
 	rootAppender->setLayout(patternLayout);
 
 	log4cpp::PatternLayout* subPatternLayout = new log4cpp::PatternLayout();
-	subPatternLayout->setConversionPattern("%d{%Y-%m-%d %H:%M:%S.%l} [%p] %m %n");
+	subPatternLayout->setConversionPattern("%d{%Y-%m-%d %H:%M:%S.%l} thread_id:%t [%p] %m %n");
 	subAppender->setLayout(subPatternLayout);
 
 	return 1;

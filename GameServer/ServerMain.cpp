@@ -1,5 +1,7 @@
 
 #include <iostream>
+#include <thread>
+
 #include "boost/asio.hpp"
 
 #include "Network.h"
@@ -14,6 +16,13 @@
 using namespace std;
 
 #pragma comment(lib, "MathFunction.lib")
+
+void threadFunc()
+{
+	Logger::logInfo("$Thread Start");
+	callPyFunction("main", "thread_test");
+	Logger::logInfo("$Thread End");
+}
 
 int main()
 {
@@ -41,6 +50,9 @@ int main()
 	/*boost::asio::io_service io;
 	boost::asio::deadline_timer t(io, boost::posix_time::seconds(5));
 	t.wait();*/
+
+	std::thread t(threadFunc);
+	t.join();
 	
 	Logger::logInfo("$MyServer Start!!!");
 
