@@ -10,7 +10,7 @@ def init():
     # import Test
     # print(Test.test())
     # db.TbMgr.TbMgr.initTbTable()
-    py_cffi.cffi_test.test_use()
+    # py_cffi.cffi_test.test_use()
     logger.logInfo("$init python end")
 
 def thread_test():
