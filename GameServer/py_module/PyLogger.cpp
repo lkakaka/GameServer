@@ -1,7 +1,5 @@
-#define PY_SSIZE_T_CLEAN
 
-#include "Python.h"
-#include "PyLogger.h"
+#include "PyModule.h"
 #include "Logger.h"
 
 static PyObject* ModuleError;

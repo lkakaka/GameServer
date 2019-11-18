@@ -1,9 +1,7 @@
-#define PY_SSIZE_T_CLEAN
 
-#include "Python.h"
 #include "PythonPlugin.h"
-#include "PyDbInterface.h"
-#include "PyLogger.h"
+#include "py_module/PyDbInterface.h"
+#include "py_module/PyModule.h"
 #include "Logger.h"
 
 static PyObject* TestError;
@@ -135,6 +133,7 @@ void initPython()
 	PyImport_AppendInittab("Test", PyInit_Test);  // python3
 	initDbModule();
 	initLoggerModule();
+	initTimerModule();
 	Py_Initialize();
 	if (!PyEval_ThreadsInitialized()) {
 		PyEval_InitThreads();
