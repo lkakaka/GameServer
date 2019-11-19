@@ -142,7 +142,7 @@ void initPython()
 	PyRun_SimpleString("import sys");
 	PyRun_SimpleString("import os");
 	PyRun_SimpleString("print(os.getcwd())");
-	PyRun_SimpleString("sys.path.append(os.path.abspath('..') + '\\script\\python')");
+	PyRun_SimpleString("sys.path.append(os.path.abspath('../..') + '\\script\\python')");
 	PyRun_SimpleString("print(sys.path)");
 	callPyFunction("main", "init");
 	// 启动子线程前执行，为了释放PyEval_InitThreads获得的全局锁，否则子线程可能无法获取到全局锁。
