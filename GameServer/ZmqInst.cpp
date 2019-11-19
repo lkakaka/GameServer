@@ -18,18 +18,20 @@ void ZmqInst::run()
 		//  等待客户端请求
 		zmq_msg_t request;
 		zmq_msg_init(&request);
-		zmq_recv(bind_socket, &request, 0, 0);
-		printf("收到 Hello\n");
+		zmq_msg_recv(&request, bind_socket, 0);
+		size_t len = zmq_msg_size(&request);
+		char *buff = new char[len + 1];
+		memcpy(buff, zmq_msg_data(&request), len);
+		buff[len] = '\0';
+		printf("收到 %s\n", buff);
 		zmq_msg_close(&request);
 
-		//  做些“处理”
-		//sleep(1);
 
 		//  返回应答
 		zmq_msg_t reply;
 		zmq_msg_init_size(&reply, 5);
 		memcpy(zmq_msg_data(&reply), "World", 5);
-		zmq_send(bind_socket, &reply, 0, 0);
+		zmq_msg_send(&reply, bind_socket, 0);
 		zmq_msg_close(&reply);
 	}
 	Logger::logInfo("$zmq intance exit");

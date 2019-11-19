@@ -5,11 +5,15 @@ message(STATUS ${PROJECT_SOURCE_DIR})
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set(DEPENDS_ROOT ${PROJECT_SOURCE_DIR}/Depends)
+set(LOG4CPP_ROOT ${PROJECT_SOURCE_DIR}/log4cpp)
+set(ZMQ_ROOT ${DEPENDS_ROOT}/zmq)
 
 add_subdirectory(Math)
 add_subdirectory(log4cpp)
 add_subdirectory(DBPlugin)
 add_subdirectory(GameServer)
+
+add_subdirectory(TestZmq)
 
 # if (NOT WIN32)
 # 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}-pthread")
