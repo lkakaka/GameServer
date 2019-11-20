@@ -12,6 +12,7 @@ add_subdirectory(Math)
 add_subdirectory(log4cpp)
 add_subdirectory(DBPlugin)
 add_subdirectory(GameServer)
+add_subdirectory(ZmqRouter)
 
 add_subdirectory(TestZmq)
 
