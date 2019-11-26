@@ -2,6 +2,7 @@
 #include "boost/asio.hpp"
 #include "boost/asio/ip/tcp.hpp"
 #include "Logger.h"
+#include <google/protobuf/message.h>
 
 typedef std::function<void(int)> closeFuncType;
 
@@ -17,6 +18,8 @@ private:
 	//std::shared_ptr<Network> m_network;
 	closeFuncType m_closeFunc;
 
+	void parseRecvData();
+
 public:
 	TcpConnection(boost::asio::io_service& io, int connID, closeFuncType closeFunc);
 	~TcpConnection();
@@ -24,6 +27,7 @@ public:
 	tcp::socket& getSocket();
 	int getConnID() const;
 	void doRead();
+	void sendPacket(google::protobuf::Message& msg);
 	void sendData(std::vector<unsigned char>&& dat, size_t datLen);
 	void doShutDown();
 };

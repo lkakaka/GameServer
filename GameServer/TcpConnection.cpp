@@ -55,24 +55,13 @@ void TcpConnection::doRead()
 			std::vector<unsigned char>data;
 			std::copy(echo.begin(), echo.end(), std::back_inserter(data));*/
 			std::copy(m_vecData.begin(), m_vecData.end(), std::back_inserter(m_readData));
-			if (m_vecData.size() >= 8) {
-				unsigned char* data = m_vecData.data();
-				int msgLen = parseIntFromData(&data[4]);
-				if(m_vecData.size() - 8 >= msgLen){ 
-					int msgId = parseIntFromData(data);
-					google::protobuf::Message* msg = (google::protobuf::Message*)CreateMsgById(msgId);
-					msg->ParseFromArray(&data[8], msgLen);
-					std::vector<unsigned char>::iterator end = m_vecData.begin();
-					std::advance(m_vecData.begin(), msgLen + 8);
-					m_vecData.erase(m_vecData.begin(), end);
-				}
-			}
+			parseRecvData();
 
 			/*Test recvMsg;
 			recvMsg.ParseFromArray(m_vecData.data(), datLen);
 			Log::logInfo("$receive data obj, id:%d, msg:%s\n", recvMsg.id(), recvMsg.msg().data());*/
 
-			Test msg;
+			/*Test msg;
 			msg.set_id(1);
 			msg.set_msg("hello");
 			std::string echo;
@@ -80,13 +69,37 @@ void TcpConnection::doRead()
 			
 			std::vector<unsigned char>data;
 			std::copy(echo.begin(), echo.end(), std::back_inserter(data));
-			sendData(std::move(data), data.size());
+			sendData(std::move(data), data.size());*/
 		}
 		else {
 			Logger::logInfo("$receive data len is 0");
 		}
 		this->doRead();
 	});
+}
+
+void TcpConnection::parseRecvData()
+{
+	if (m_vecData.size() < 8) {
+		return;
+	}
+
+	unsigned char* data = m_vecData.data();
+	int msgLen = parseIntFromData(&data[4]);
+	if (m_vecData.size() - 8 >= msgLen) {
+		int msgId = parseIntFromData(data);
+		google::protobuf::Message* msg = (google::protobuf::Message*)CreateMsgById(msgId);
+		msg->ParseFromArray(&data[8], msgLen);
+		std::vector<unsigned char>::iterator end = m_vecData.begin();
+		std::advance(m_vecData.begin(), msgLen + 8);
+		m_vecData.erase(m_vecData.begin(), end);
+	}
+
+	parseRecvData();
+}
+
+void TcpConnection::sendPacket(google::protobuf::Message& msg) {
+
 }
 
 void TcpConnection::sendData(std::vector<unsigned char>&& dat, size_t datLen)

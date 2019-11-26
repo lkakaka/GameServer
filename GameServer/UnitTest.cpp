@@ -5,21 +5,26 @@
 
 #define TEST_TIMER_TREAD 0
 #define TEST_PYTHON_TREAD 0
+#define TEST_DB_PLUGIN 0
+
+#if TEST_DB_PLUGIN
+#include "DBMgr.h"
+#endif
 
 #pragma comment(lib, "MathFunction.lib")
 
 void pyThreadFunc()
 {
-	Logger::logInfo("$Thread Start");
+	Logger::logInfo("$[UnitTest]Thread Start");
 	auto py_state = PyGILState_Ensure();
 	callPyFunction("main", "thread_test");
 	PyGILState_Release(py_state);
-	Logger::logInfo("$Thread End");
+	Logger::logInfo("$[UnitTest]Thread End");
 }
 
 void print(int timerId)
 {
-	Logger::logInfo("$Timer trigger, timerId:%d", timerId);
+	Logger::logInfo("$[UnitTest]Timer trigger, timerId:%d", timerId);
 
 }
 
@@ -47,6 +52,18 @@ static void testPythonThead(std::vector<std::thread*>* threads) {
 #endif
 }
 
+static void testDbPlugin() {
+#if TEST_DB_PLUGIN
+	DBMgr* dbMgr = DBMgr::getDBMgrInstance();
+	if (dbMgr == NULL) {
+		Logger::logError("$[UnitTest]DBMgr test failed, dbMgr Instance is NULL");
+		return;
+	}
+	dbMgr->createDBHander("test2");
+	Logger::logInfo("$[UnitTest]DB test success!!!");
+#endif
+}
+
 void UnitTest::test()
 {	
 	double x = power(2, 3);
@@ -57,6 +74,8 @@ void UnitTest::test()
 	std::vector<std::thread*> threads;
 	testTimerThead(&threads);
 	testPythonThead(&threads);
+
+	testDbPlugin();
 	
 	for (auto iter = threads.begin(); iter != threads.end(); iter++) {
 		std::thread* t = (std::thread*)*iter;

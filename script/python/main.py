@@ -12,7 +12,7 @@ def init():
     logger.logInfo("$init python {} {}", os.getcwd(), os.path.abspath(""))
     # import Test
     # print(Test.test())
-    # db.TbMgr.TbMgr.initTbTable()
+    db.TbMgr.TbMgr.initTbTable()
     # py_cffi.cffi_test.test_use()
     # test_timer()
     logger.logInfo("$init python end")

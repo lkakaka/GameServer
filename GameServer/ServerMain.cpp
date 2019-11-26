@@ -9,7 +9,7 @@
 #include "DBPlugin.h"
 #include "Logger.h"
 #include "DBTableDef.h"
-#include "DBMgr.h"
+//#include "DBMgr.h"
 #include "PythonPlugin.h"
 #include "ZmqInst.h"
 #include "Timer.h"
@@ -29,11 +29,12 @@ int main()
 	/*DBPlugin* dbPlugin = new DBPlugin();
 	dbPlugin->initDBPlugin("");*/
 
-	DBMgr* dbMgr = new DBMgr("test");
+	/*DBMgr* dbMgr = new DBMgr("test");
 	TblPlayer* tblPlayer = new TblPlayer();
 	std::vector<ReflectObject*> tbls;
 	tbls.push_back((ReflectObject*)tblPlayer);
-	dbMgr->initDbTable(tbls);
+	dbMgr->initDbTable(tbls);*/
+	//DBMgr::getDBMgrInstance();
 
 	Network* network = new Network(&io);
 	network->startListen();

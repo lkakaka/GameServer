@@ -7,6 +7,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set(DEPENDS_ROOT ${PROJECT_SOURCE_DIR}/Depends)
 set(LOG4CPP_ROOT ${PROJECT_SOURCE_DIR}/log4cpp)
 set(ZMQ_ROOT ${DEPENDS_ROOT}/zmq)
+set(PYTHON_ROOT ${DEPENDS_ROOT}/Python38)
 
 add_subdirectory(Math)
 add_subdirectory(log4cpp)

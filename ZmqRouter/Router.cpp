@@ -33,17 +33,17 @@ int main()
 
 	while (1) {
 		zmq_recv(router_socket, src_name, sizeof(src_name), 0);
-		zmq_recv(router_socket, NULL, 0, 0);
+		//zmq_recv(router_socket, NULL, 0, 0);
 		zmq_recv(router_socket, dst_name, sizeof(dst_name), 0);
-		zmq_recv(router_socket, NULL, 0, 0);
+		//zmq_recv(router_socket, NULL, 0, 0);
 		zmq_recv(router_socket, msg, sizeof(msg), 0);
 
 		printf("recv msg, src_name:%s, dst_name:%s, msg:%s\n", src_name, dst_name, msg);
 		
 		zmq_send(router_socket, dst_name, strlen(dst_name), ZMQ_SNDMORE);
-		zmq_send(router_socket, "", 0, ZMQ_SNDMORE);
+		//zmq_send(router_socket, "", 0, ZMQ_SNDMORE);
 		zmq_send(router_socket, src_name, strlen(src_name), ZMQ_SNDMORE);
-		zmq_send(router_socket, "", 0, ZMQ_SNDMORE);
+		//zmq_send(router_socket, "", 0, ZMQ_SNDMORE);
 		zmq_send(router_socket, msg, strlen(msg), 0);
 
 		memset(src_name, 0, sizeof(src_name));

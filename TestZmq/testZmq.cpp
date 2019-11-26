@@ -64,9 +64,9 @@ void test(char* pName, char* dstName)
 		char src_name[128]{ 0 };
 		char msg[1024]{ 0 };
 		while (1) {
-			zmq_recv(socket, NULL, 0, 0);
+			//zmq_recv(socket, NULL, 0, 0);
 			zmq_recv(socket, src_name, sizeof(src_name), 0);
-			zmq_recv(socket, NULL, 0, 0);
+			//zmq_recv(socket, NULL, 0, 0);
 			zmq_recv(socket, msg, sizeof(msg), 0);
 
 			printf("recv msg from %s, msg:%s\n", src_name, msg);
@@ -82,9 +82,9 @@ void test(char* pName, char* dstName)
 			std::string x;
 			std::cout << "input:\n";
 			std::cin >> x;
-			zmq_send(socket, "", 0, ZMQ_SNDMORE);
+			//zmq_send(socket, "", 0, ZMQ_SNDMORE);
 			zmq_send(socket, dstName, strlen(dstName), ZMQ_SNDMORE);
-			zmq_send(socket, "", 0, ZMQ_SNDMORE);
+			//zmq_send(socket, "", 0, ZMQ_SNDMORE);
 			zmq_send(socket, x.c_str(), x.length(), 0);
 		}
 	});

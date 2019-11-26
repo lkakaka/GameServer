@@ -3,11 +3,10 @@ set(PROTOBUFF_ROOT ../../protobuf-3.9.0)
 set(BOOST_ROOT ../../boost_1_70_0)
 # set(PYTHON_LIBRARY C:/Python34/libs)
 set(DBPLUGIN_ROOT ${PROJECT_SOURCE_DIR}/DBPlugin)
-set(PYTHON_ROOT ${DEPENDS_ROOT}/Python38)
 find_package(Boost REQUIRED)
 # find_package(PythonLibs REQUIRED)
 
-link_directories(${Boost_LIBRARY_DIRS} ${PYTHON_ROOT}/libs ${LOG4CPP_ROOT} ${PROTOBUFF_ROOT}/cmake/build ${DBPLUGIN_ROOT} ${DEPENDS_ROOT}/mysql/lib64/vs14 ${ZMQ_ROOT}/libs)
+link_directories(${Boost_LIBRARY_DIRS} ${PYTHON_ROOT}/libs ${LOG4CPP_ROOT} ${PROTOBUFF_ROOT}/cmake/build ${DEPENDS_ROOT}/mysql/lib64/vs14 ${DBPLUGIN_ROOT} ${ZMQ_ROOT}/libs)
 include_directories(${Boost_INCLUDE_DIRS} ${PYTHON_ROOT}/include ${LOG4CPP_ROOT}/include ${PROTOBUFF_ROOT}/src ${DBPLUGIN_ROOT} ${DBPLUGIN_ROOT}/include ${ZMQ_ROOT}/include)
 
 if (NOT WIN32)
@@ -29,7 +28,7 @@ add_executable(GameServer ${CURRENT_HEADERS} ${CURRENT_SRC})
 # message(STATUS ${CURRENT_HEADERS})
 # SOURCE_GROUP("include" FILES ${CURRENT_HEADERS})
 
-target_link_libraries(GameServer MathFunction log4cpp DBPlugin mysqlcppconn libzmq-v142-mt-4_3_3)
+target_link_libraries(GameServer MathFunction log4cpp DBPlugin libzmq-v142-mt-4_3_3)
 target_link_libraries(GameServer debug libprotobufd optimized libprotobuf)
 
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
