@@ -98,8 +98,22 @@ void TcpConnection::parseRecvData()
 	parseRecvData();
 }
 
-void TcpConnection::sendPacket(google::protobuf::Message& msg) {
+void writeInt(std::vector<unsigned char> *data, int val) {
+	char* p = (char*)& val;
+	for (int i = 0; i < 4; i++) {
+		data->push_back(p[i]);
+	}
+}
 
+void TcpConnection::sendPacket(int msgId, google::protobuf::Message& msg) {
+	std::string msgData;
+	msg.SerializeToString(&msgData);
+	int msgLen = msgData.size() + 8;
+	std::vector<unsigned char> data;
+	writeInt(&data, msgLen);
+	writeInt(&data, msgId);
+	std::copy(msgData.begin(), msgData.end(), std::back_inserter(data));
+	sendData(std::move(data), data.size());
 }
 
 void TcpConnection::sendData(std::vector<unsigned char>&& dat, size_t datLen)

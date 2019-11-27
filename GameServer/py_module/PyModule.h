@@ -4,4 +4,3 @@
 #include "Python.h"
 
 void initLoggerModule();
-void initTimerModule();

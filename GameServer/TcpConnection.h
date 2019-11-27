@@ -27,7 +27,7 @@ public:
 	tcp::socket& getSocket();
 	int getConnID() const;
 	void doRead();
-	void sendPacket(google::protobuf::Message& msg);
+	void sendPacket(int msgId, google::protobuf::Message& msg);
 	void sendData(std::vector<unsigned char>&& dat, size_t datLen);
 	void doShutDown();
 };

@@ -1,7 +1,9 @@
+#define PY_SSIZE_T_CLEAN
 
-#include "PyModule.h"
+#include "Python.h"
+#include "PyTimer.h"
 #include "Logger.h"
-#include "../Timer.h"
+#include "Timer.h"
 #include <functional>
 
 static PyObject* ModuleError;

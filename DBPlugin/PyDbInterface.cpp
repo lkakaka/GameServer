@@ -35,7 +35,12 @@ static PyObject* initTable(PyObject* self, PyObject* args)
 		//get an element out of the list - the element is also a python objects
 		PyObject* fieldInfo = PyTuple_GetItem(fieldTuple, i);
 		PyObject* val = PyDict_GetItemString(fieldInfo, "fieldName");
-		char* fieldName = PyBytes_AsString(val);
+		PyObject* bytes;
+		char* fieldName;
+		Py_ssize_t len;
+		bytes = PyUnicode_AsUTF8String(val);
+		PyBytes_AsStringAndSize(bytes, &fieldName, &len);
+		//char* fieldName = PyBytes_AsString(val);
 		val = PyDict_GetItemString(fieldInfo, "filedType");
 		int fieldType = PyLong_AsLong(val);
 		Logger::logInfo("$init table %s, field:%s, fieldType:%d", tbName, fieldName, fieldType);
@@ -57,8 +62,12 @@ static PyObject* createTable(PyObject* self, PyObject* args)
 	PyObject* val;
 	while (PyDict_Next(dictObj, &pos, &key, &val)) {
 		//PyBytes_AsString(val);
-		//todo:
-		pos++;
+		char* keyName;
+		PyObject* bytes;
+		Py_ssize_t len;
+		bytes = PyUnicode_AsUTF8String(key);
+		PyBytes_AsStringAndSize(bytes, &keyName, &len);
+		Logger::logInfo("$create table, field:%s", keyName);
 	}
 
 	PyObject* ageObj = PyObject_GetAttrString(tb, "age");
@@ -124,5 +133,6 @@ PyMODINIT_FUNC PyInit_PyDb(void)
 
 void initDbModule() {
 	PyImport_AppendInittab(ModuleName, PyInit_PyDb);  // python3
+	Logger::initLog();
 }
 

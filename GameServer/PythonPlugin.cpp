@@ -3,6 +3,7 @@
 #include "PyDbInterface.h"
 #include "py_module/PyModule.h"
 #include "Logger.h"
+#include "PyTimer.h"
 
 static PyObject* TestError;
 

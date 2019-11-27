@@ -4,6 +4,13 @@
 #include <shared_mutex>
 #include "boost/asio.hpp"
 
+
+#ifdef GAMEUTIL_EXPORT
+#define GAMEUTIL_API __declspec(dllexport)
+#else
+#define GAMEUTIL_API
+#endif
+
 //typedef void (*TimerCallback)();
 #define TimerCallback std::function<void(int)>
 
@@ -16,7 +23,7 @@ typedef struct
 	int triggerCnt;
 }Timer;
 
-class TimerMgr
+class GAMEUTIL_API TimerMgr
 {
 private:
 	boost::asio::io_service* m_io;

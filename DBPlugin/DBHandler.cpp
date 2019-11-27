@@ -321,5 +321,25 @@ void DBHandler::executeSql(std::string sql)
 	}
 	Statement* st = conn->createStatement();
 	sql::SQLString sqlStr = sql::SQLString(sql.c_str());
-	st->execute(sqlStr);
+	bool isResultSet = st->execute(sqlStr);
+
+	while (true) {
+		if (isResultSet) {
+			ResultSet* resultSet = st->getResultSet();
+			while (resultSet->next()) {
+
+			}
+		}
+		else {
+			int updateCount = st->getUpdateCount();
+			if (updateCount < 0) {
+				break;
+			}
+			Logger::logError("$exec sql success, sql: %s, update count:%d", sql.c_str(), updateCount);
+		}
+		
+		isResultSet = st->getMoreResults();
+	}
+
+	st->close();
 }
