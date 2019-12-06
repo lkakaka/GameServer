@@ -6,6 +6,7 @@
 #include "jdbc/cppconn/driver.h"
 #include "jdbc/cppconn/resultset.h"
 #include "jdbc/cppconn/statement.h"
+#include "jdbc/cppconn/datatype.h"
 
 #include "Logger.h"
 
@@ -325,9 +326,17 @@ void DBHandler::executeSql(std::string sql)
 
 	while (true) {
 		if (isResultSet) {
-			ResultSet* resultSet = st->getResultSet();
-			while (resultSet->next()) {
-
+			ResultSet* rs = st->getResultSet();
+			ResultSetMetaData* metaData = rs->getMetaData();
+			std::map<std::string, int> fieldTypeMap;
+			for (int i = 1; i <= metaData->getColumnCount(); i++) {
+				std::string fieldName = metaData->getColumnName(i);
+				int colType = metaData->getColumnType(i);
+				if (colType == DataType::INTEGER) {
+				}
+			}
+			while (rs->next()) {
+				
 			}
 		}
 		else {

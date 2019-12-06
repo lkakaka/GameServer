@@ -6,9 +6,14 @@
 #define TEST_TIMER_TREAD 0
 #define TEST_PYTHON_TREAD 0
 #define TEST_DB_PLUGIN 0
+#define TEST_PROFILE 1
 
 #if TEST_DB_PLUGIN
 #include "DBMgr.h"
+#endif
+
+#if TEST_PROFILE
+#include "Profile/ProfileTrack.h"
 #endif
 
 #pragma comment(lib, "MathFunction.lib")
@@ -64,6 +69,18 @@ static void testDbPlugin() {
 #endif
 }
 
+static void testProfile() {
+#if TEST_PROFILE
+	{
+		PROFILE_TRACK("test");
+		for (int i = 0; i < 100000000; i++) {
+			int x = sin(1.0) * 20;
+		}
+	}
+	PROFILE_TRACK("test1");
+#endif
+}
+
 void UnitTest::test()
 {	
 	double x = power(2, 3);
@@ -76,6 +93,7 @@ void UnitTest::test()
 	testPythonThead(&threads);
 
 	testDbPlugin();
+	testProfile();
 	
 	for (auto iter = threads.begin(); iter != threads.end(); iter++) {
 		std::thread* t = (std::thread*)*iter;

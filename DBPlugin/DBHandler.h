@@ -1,6 +1,8 @@
 #pragma once
 #include <vector>
 #include <Reflect.h>
+#include <functional>
+#include <vector>
 
 #ifdef DBPLUGIN_EXPORT
 #define DBPLUNGIN_API __declspec(dllexport)
@@ -26,4 +28,25 @@ public:
 	void update(ReflectObject src, ReflectObject dst);
 	void del(ReflectObject data);
 	void executeSql(std::string sql);
+};
+
+class DBField
+{
+public:
+	std::string name;	// 字段名
+	int type;			// 字段类型（FieldType）
+	void* val;			// 字段地址
+};
+
+class DBRow {
+	std::vector<std::string> m_cols;
+	std::vector<void*> m_dat;
+	DBRow* next;
+};
+
+class DBResult {
+public:
+	int rsType;
+	int updateCount;
+	DBRow* head;
 };

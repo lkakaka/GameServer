@@ -4,12 +4,14 @@
 #include <shared_mutex>
 #include "boost/asio.hpp"
 
+#include "GameUtil.h"
 
-#ifdef GAMEUTIL_EXPORT
-#define GAMEUTIL_API __declspec(dllexport)
-#else
-#define GAMEUTIL_API
-#endif
+
+//#ifdef GAMEUTIL_EXPORT
+//#define GAMEUTIL_API __declspec(dllexport)
+//#else
+//#define GAMEUTIL_API
+//#endif
 
 //typedef void (*TimerCallback)();
 #define TimerCallback std::function<void(int)>
