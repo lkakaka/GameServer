@@ -2,6 +2,7 @@
 #include "Logger.h"
 #include "boost/bind.hpp"
 //#include "boost/asio/error.hpp"
+#include "Profile/ProfileTrack.h"
 
 static TimerMgr* g_timerMgr = NULL;
 
@@ -26,6 +27,7 @@ void  TimerMgr::onTimer(const boost::system::error_code& e, long timerId) {
 		timer->triggerCnt++;
 		if (timer->loopCnt >= 0 && timer->triggerCnt >= timer->loopCnt) {
 			if (timer->m_callback != NULL) {
+				PROFILE_TRACK_WITH_TIME("timer", 10);
 				timer->m_callback(timerId);
 			}
 			removeTimer(timerId, false);
@@ -34,6 +36,7 @@ void  TimerMgr::onTimer(const boost::system::error_code& e, long timerId) {
 			timer->timer->expires_at(timer->timer->expires_at() + boost::posix_time::milliseconds(timer->interval));
 			timer->timer->async_wait(boost::bind(&TimerMgr::onTimer, this, boost::asio::placeholders::error, timerId));
 			if (timer->m_callback != NULL) {
+				PROFILE_TRACK_WITH_TIME("timer", 10);
 				timer->m_callback(timerId);
 			}
 		}

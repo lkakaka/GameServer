@@ -6,7 +6,7 @@
 #define TEST_TIMER_TREAD 0
 #define TEST_PYTHON_TREAD 0
 #define TEST_DB_PLUGIN 0
-#define TEST_PROFILE 1
+#define TEST_PROFILE 0
 
 #if TEST_DB_PLUGIN
 #include "DBMgr.h"

@@ -4,18 +4,25 @@
 
 #include "../GameUtil.h"
 
-#define PROFILE_TRACK(name) _PROFILE_TRACK(name, __COUNTER__)
-#define _PROFILE_TRACK(name, val) __PROFILE_TRACK(name, val)
-#define __PROFILE_TRACK(name, val) ProfileTrack l_profile_##val(name)
+#ifdef OPEN_PROFILE_TRACK
+#define PROFILE_TRACK(name) _PROFILE_TRACK(name, 0, __COUNTER__)
+#define PROFILE_TRACK_WITH_TIME(name, trackTime) _PROFILE_TRACK(name, trackTime, __COUNTER__)
+#define _PROFILE_TRACK(name, trackTime, val) __PROFILE_TRACK(name, trackTime, val)
+#define __PROFILE_TRACK(name, trackTime, val) ProfileTrack profile_track_##val(name, trackTime)
+#else
+#define PROFILE_TRACK(name)
+#define PROFILE_TRACK_WITH_TIME(name, time)
+#endif // OPEN_PROFILE_TRACK
 
 
 class GAMEUTIL_API ProfileTrack
 {
-	int64_t m_startTime;
+	long m_startTime;
 	std::string m_name;
+	int m_trackTime;
 public:
 	inline ProfileTrack(const char* name);
-
+	inline ProfileTrack(const char* name, int trackTime);
 	inline ~ProfileTrack();
 };
 

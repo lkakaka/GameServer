@@ -5,6 +5,7 @@
 #include "Logger.h"
 #include "Timer.h"
 #include <functional>
+#include "Profile/ProfileTrack.h"
 
 static PyObject* ModuleError;
 static char* ModuleName = "Timer";
@@ -22,7 +23,10 @@ static PyObject* pyAddTimer(PyObject* self, PyObject* args)
 
 	long timerId = TimerMgr::getTimerInstance()->addTimer(firstInterval, interval, loopCnt, [callback](int timerId){
 		auto py_state = PyGILState_Ensure();
-		PyObject_CallObject(callback, NULL);
+		{
+			PROFILE_TRACK_WITH_TIME("py_timer", 10);
+			PyObject_CallObject(callback, NULL);
+		}
 		PyGILState_Release(py_state);
 		});
 	return Py_BuildValue("l", timerId);

@@ -6,6 +6,8 @@ set(DBPLUGIN_ROOT ${PROJECT_SOURCE_DIR}/DBPlugin)
 # find_package(Boost REQUIRED)
 # find_package(PythonLibs REQUIRED)
 
+add_definitions(-DOPEN_PROFILE_TRACK)
+
 link_directories(${Boost_LIBRARY_DIRS} ${PYTHON_ROOT}/libs ${LOG4CPP_ROOT} ${PROTOBUFF_ROOT}/cmake/build ${DEPENDS_ROOT}/mysql/lib64/vs14 ${DBPLUGIN_ROOT} ${ZMQ_ROOT}/libs ${GAMEUTIL_ROOT})
 include_directories(${Boost_INCLUDE_DIRS} ${PYTHON_ROOT}/include ${LOG4CPP_ROOT}/include ${PROTOBUFF_ROOT}/src ${DBPLUGIN_ROOT} ${DBPLUGIN_ROOT}/include ${ZMQ_ROOT}/include ${GAMEUTIL_ROOT})
 

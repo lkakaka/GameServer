@@ -1,21 +1,26 @@
 ﻿#include "ProfileTrack.h"
-#include "boost/date_time/posix_time/posix_time.hpp"
-
-static int64_t getCurrentStamp64()
-{
-	boost::posix_time::ptime epoch(boost::gregorian::date(1970, boost::gregorian::Jan, 1));
-	boost::posix_time::time_duration time_from_epoch = boost::posix_time::microsec_clock::universal_time() - epoch;
-	return time_from_epoch.total_microseconds() / 1000;
-}
+#include "../TimeUtil.h"
 
 ProfileTrack::ProfileTrack(const char* name)
 {
-	m_startTime = getCurrentStamp64();
+	m_startTime = TimeUtil::getCurrentStamp();
 	m_name = name;
-	printf("enter profile track, %s\n", name);
+	m_trackTime = 0;
+	//printf("enter profile track, %s\n", name);
+}
+
+ProfileTrack::ProfileTrack(const char* name, int trackTime)
+{
+	m_startTime = TimeUtil::getCurrentStamp();
+	m_name = name;
+	m_trackTime = trackTime;
+	//printf("enter profile track, %s\n", name);
 }
 
 ProfileTrack::~ProfileTrack()
 {
-	printf("leave profile track, %s, cost time: %lldms\n", m_name.c_str(), getCurrentStamp64() - m_startTime);
+	long costTime = TimeUtil::getCurrentStamp() - m_startTime;
+	if (costTime >= m_trackTime) {
+		printf("profile track, %s, cost time: %ldms\n", m_name.c_str(), costTime);
+	}
 }

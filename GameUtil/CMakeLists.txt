@@ -1,7 +1,7 @@
 
 set(CMAKE_DEBUG_POSTFIX "_d")
 
-add_definitions(-DGAMEUTIL_EXPORT)
+add_definitions(-DGAMEUTIL_EXPORT -DOPEN_PROFILE_TRACK)
 
 include_directories(${LOG4CPP_ROOT}/include ${PYTHON_ROOT}/include ${Boost_INCLUDE_DIRS})
 link_directories(${LOG4CPP_ROOT} ${PYTHON_ROOT}/libs ${Boost_LIBRARY_DIRS})
