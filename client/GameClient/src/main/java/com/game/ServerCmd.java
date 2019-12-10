@@ -2,6 +2,9 @@ package com.game;
 
 import com.command.CmdAnnotation;
 import com.command.CmdDispatch;
+import com.proto.LoginOuterClass;
+import com.proto.ProtoBufferMsg;
+import com.util.Util;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -18,13 +21,14 @@ public class ServerCmd extends CmdDispatch {
         dispatchCmd(iCmd, cmdParam);
     }
 
-    @CmdAnnotation(serverCmd = 99991)
+    @CmdAnnotation(serverCmd = ProtoBufferMsg.MSG_ID_LOGINRSP)
     private void onRecvLoginResp(Object param) {
-
+        LoginOuterClass.LoginRsp loginRsp = (LoginOuterClass.LoginRsp)param;
+        Util.logInfo("recv log proto, account:%s, userId:%d", loginRsp.getAccount(), loginRsp.getUserId());
     }
 
-    @CmdAnnotation(serverCmd = 90005)
-    private void onRecvTbNotify(Object param) {
+    @CmdAnnotation(serverCmd = ProtoBufferMsg.MSG_ID_TEST)
+    private void onRecvTest(Object param) {
 
     }
 }

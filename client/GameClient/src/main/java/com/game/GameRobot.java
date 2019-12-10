@@ -81,7 +81,6 @@ public class GameRobot {
         }
 
         byte[] allBytes = m_buffer.toByteArray();
-        Object paramObj = null;
         ByteArrayInputStream buffer = new ByteArrayInputStream(allBytes);
         DataInputStream dataInputStream = new DataInputStream(buffer);
         try {
@@ -93,7 +92,7 @@ public class GameRobot {
             int dataLen = iMsgLen - 8;
             byte[] dat = new byte[dataLen];
             dataInputStream.read(dat,0, dataLen);
-            onMsg(iMsgId, paramObj);
+            onMsg(iMsgId, dat);
             m_buffer.reset();
             m_buffer.write(allBytes, iMsgLen, allBytes.length - iMsgLen);
             return true;
@@ -103,8 +102,9 @@ public class GameRobot {
         return false;
     }
 
-    private void onMsg(int iMsgId, Object param) {
-        System.out.println("recv msg: " + iMsgId + " ,param: " + param);
+    private void onMsg(int iMsgId, byte[] dat) {
+        System.out.println("recv msg: " + iMsgId);
+        Object param = ProtoBufferMsg.createMsgById(iMsgId, dat);
         m_robotCmd.onRecvServerCmd(iMsgId, param);
     }
 

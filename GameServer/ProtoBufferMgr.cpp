@@ -1,5 +1,6 @@
 #include "ProtoBufferMgr.h"
 #include "Network.h"
+
 #include "proto/proto.h"
 #include "Logger.h"
 
@@ -34,6 +35,11 @@ void handleMsg(int connId, int msgId, google::protobuf::Message* msg)
 	{
 		Login* recvMsg = (Login*)msg;
 		Logger::logInfo("$receive login proto, account:%s, pwd:%s", recvMsg->account().c_str(), recvMsg->pwd().data());
+
+		LoginRsp resp_msg;
+		resp_msg.set_account(recvMsg->account());
+		resp_msg.set_user_id(1);
+		ProtoBufferMgr::sendPacket(connId, MSG_ID_LOGINRSP, &resp_msg);
 		break;
 	}
 	default:
