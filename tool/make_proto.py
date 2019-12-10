@@ -4,7 +4,8 @@ from jinja2 import Environment
 from jinja2 import FileSystemLoader
 
 PROTO_PATH = "../proto"
-OUTPUT_PATH = "../MyServer/proto"
+OUTPUT_PATH = "../GameServer/proto"
+JAVA_OUTPUT_PATH="../client/GameClient/src/main/java"
 
 class ProtoBuilder():
     env = Environment(loader=FileSystemLoader(
@@ -21,6 +22,7 @@ class ProtoBuilder():
     def make_proto():
         ProtoBuilder.render_obj["msg_def"] = []
         ProtoBuilder.render_obj["proto_files"] = []
+        ProtoBuilder.render_obj["java_proto_files"] = []
 
         for path, dir_names,file_list in os.walk(PROTO_PATH):
             print(path, dir_names, file_list)
@@ -34,8 +36,11 @@ class ProtoBuilder():
 
         print("make proto file: " + file_name)
         os.system("protoc --cpp_out {} --proto_path {} {}".format(OUTPUT_PATH, PROTO_PATH, file_name))
+        os.system("protoc --java_out {} --proto_path {} {}".format(JAVA_OUTPUT_PATH, PROTO_PATH, file_name))
         match_obj = re.search("/?(\w+).proto$", file_name)
         ProtoBuilder.render_obj["proto_files"].append(match_obj.group(1))
+        java_file_name = match_obj.group(1).capitalize()    # 首字母转换成大写
+        ProtoBuilder.render_obj["java_proto_files"].append(java_file_name) 
 
         with open(file_name) as f:
             for line in f.readlines():
@@ -44,15 +49,17 @@ class ProtoBuilder():
                     proto_name = match_obj.group(1)
                     print(match_obj.group(1), type(match_obj.group(1))) 
                     msg_id = ProtoBuilder.alloc_msg_id()
-                    ProtoBuilder.render_obj["msg_def"].append(("MSG_ID_{}".format(proto_name.upper()), msg_id, proto_name))
+                    ProtoBuilder.render_obj["msg_def"].append(("MSG_ID_{}".format(proto_name.upper()), msg_id, proto_name, java_file_name))
         ProtoBuilder.render_file("c++_header_template", OUTPUT_PATH + "/proto.h", ProtoBuilder.render_obj)
+        ProtoBuilder.render_file("java_msg_template", JAVA_OUTPUT_PATH + "/com/proto/ProtoBufferMsg.java", ProtoBuilder.render_obj)
 
     @staticmethod
     def render_file(template_file, save_file, render_obj):
-        template = ProtoBuilder.env.get_template("c++_header_template")
+        template = ProtoBuilder.env.get_template(template_file)
         result = template.render(**render_obj)
         with open(save_file, "w", encoding="utf-8") as f:
             f.write(result)
+    
 
 
 

@@ -25,6 +25,11 @@ private:
 
 public:
 	Network(boost::asio::io_service* io);
+
+	static void initNetwork(boost::asio::io_service* io);
+	static Network* getNetworkInstance();
+	static TcpConnection* getConnById(int connId);
+
 	int startListen();
 	void doAccept();
 	void acceptHandler(std::shared_ptr<TcpConnection> conn, error_code ec);

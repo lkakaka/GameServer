@@ -1,6 +1,5 @@
 #include "TcpConnection.h"
-#include "proto/test.pb.h"
-#include "proto/proto.h"
+#include "ProtoBufferMgr.h"
 
 TcpConnection::TcpConnection(boost::asio::io_service& io, int connID, closeFuncType closeFunc):
 	m_connID(connID),
@@ -30,10 +29,6 @@ int TcpConnection::getConnID() const
 	return m_connID;
 }
 
-inline int parseIntFromData(unsigned char* data) {
-	return *(int*)data;
-}
-
 void TcpConnection::doRead()
 {	
 	m_vecData.resize(1024);
@@ -49,27 +44,11 @@ void TcpConnection::doRead()
 		}
 		if (datLen > 0)
 		{
-			Logger::logInfo("$receive data, len:%d, %s\n", datLen, m_vecData.data());
-
-			/*std::string echo = "server echo:";
-			std::vector<unsigned char>data;
-			std::copy(echo.begin(), echo.end(), std::back_inserter(data));*/
-			std::copy(m_vecData.begin(), m_vecData.end(), std::back_inserter(m_readData));
+			//Logger::logInfo("$receive data, len:%d, %s", datLen, m_vecData.data());
+			auto iter = m_vecData.begin();
+			std::advance(iter, datLen);
+			std::copy(m_vecData.begin(), iter, std::back_inserter(m_readData));
 			parseRecvData();
-
-			/*Test recvMsg;
-			recvMsg.ParseFromArray(m_vecData.data(), datLen);
-			Log::logInfo("$receive data obj, id:%d, msg:%s\n", recvMsg.id(), recvMsg.msg().data());*/
-
-			/*Test msg;
-			msg.set_id(1);
-			msg.set_msg("hello");
-			std::string echo;
-			msg.SerializeToString(&echo);
-			
-			std::vector<unsigned char>data;
-			std::copy(echo.begin(), echo.end(), std::back_inserter(data));
-			sendData(std::move(data), data.size());*/
 		}
 		else {
 			Logger::logInfo("$receive data len is 0");
@@ -80,47 +59,27 @@ void TcpConnection::doRead()
 
 void TcpConnection::parseRecvData()
 {
-	if (m_vecData.size() < 8) {
-		return;
-	}
-
-	unsigned char* data = m_vecData.data();
-	int msgLen = parseIntFromData(&data[4]);
-	if (m_vecData.size() - 8 >= msgLen) {
-		int msgId = parseIntFromData(data);
-		google::protobuf::Message* msg = (google::protobuf::Message*)CreateMsgById(msgId);
-		msg->ParseFromArray(&data[8], msgLen);
-		std::vector<unsigned char>::iterator end = m_vecData.begin();
-		std::advance(m_vecData.begin(), msgLen + 8);
-		m_vecData.erase(m_vecData.begin(), end);
-	}
-
-	parseRecvData();
-}
-
-void writeInt(std::vector<unsigned char> *data, int val) {
-	char* p = (char*)& val;
-	for (int i = 0; i < 4; i++) {
-		data->push_back(p[i]);
-	}
-}
-
-void TcpConnection::sendPacket(int msgId, google::protobuf::Message& msg) {
-	std::string msgData;
-	msg.SerializeToString(&msgData);
-	int msgLen = msgData.size() + 8;
-	std::vector<unsigned char> data;
-	writeInt(&data, msgLen);
-	writeInt(&data, msgId);
-	std::copy(msgData.begin(), msgData.end(), std::back_inserter(data));
-	sendData(std::move(data), data.size());
+	int len = 0;
+	do {
+		len = ProtoBufferMgr::parseProtoData(m_connID, &m_readData);
+		if (len > 0) {
+			auto removeIter = m_readData.begin();
+			std::advance(removeIter, len);
+			m_readData.erase(m_readData.begin(), removeIter);
+		}
+	} while (len > 0);
 }
 
 void TcpConnection::sendData(std::vector<unsigned char>&& dat, size_t datLen)
 {
 	boost::asio::const_buffer buf(&dat.front(), datLen);
 	m_socket.async_write_some(buf, [](boost::system::error_code err_code, size_t datLen) {
-		Logger::logInfo("$send data len:%d", datLen);
+		if (err_code)
+		{
+			const std::string err_str = err_code.message();
+			Logger::logError("$send data error, %s", err_str.data());
+			//Logger::logInfo("$send data len:%d", datLen);
+		}
 	});
 }
 

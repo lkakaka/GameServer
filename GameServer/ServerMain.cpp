@@ -36,8 +36,7 @@ int main()
 	dbMgr->initDbTable(tbls);*/
 	//DBMgr::getDBMgrInstance();
 
-	Network* network = new Network(&io);
-	network->startListen();
+	Network::initNetwork(&io);
 
 	ZmqInst* zmq = new ZmqInst();
 	zmq->startZmqInst();

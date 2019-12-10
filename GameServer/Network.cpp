@@ -1,11 +1,25 @@
 #include "Network.h"
 
+
+static Network* g_network = NULL;
+
 Network::Network(boost::asio::io_service* io)
 	: m_io(io),
 	m_acceptor(*io, tcp::endpoint(tcp::v4(), 20000)),
 	m_curConnId(0)
 {
 	
+}
+
+void Network::initNetwork(boost::asio::io_service* io)
+{
+	g_network = new Network(io);
+	g_network->startListen();
+}
+
+Network* Network::getNetworkInstance()
+{
+	return g_network;
 }
 
 int Network::startListen()
@@ -52,4 +66,14 @@ void Network::onConnectionClose(int connID)
 void Network::closeConnection(int connID)
 {
 	onConnectionClose(connID);
+}
+
+TcpConnection* Network::getConnById(int connId)
+{
+	Network* network = getNetworkInstance();
+	auto iter = network->m_connMap.find(connId);
+	if (iter == network->m_connMap.end()) {
+		return NULL;
+	}
+	return iter->second.get();
 }

@@ -17,7 +17,7 @@ if (NOT WIN32)
 endif (NOT WIN32)
 
 file(GLOB_RECURSE CURRENT_HEADERS *.h *.hpp)
-file(GLOB_RECURSE CURRENT_SRC *.cpp *cc)
+file(GLOB_RECURSE CURRENT_SRC *.cpp *.cc)
 
 # 使用aux_source_directory vs中头文件会无法显示
 # aux_source_directory(./ MYSERVER_SRC_DIR)

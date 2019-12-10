@@ -1,7 +1,7 @@
 @echo off
 
 set PROTO_DIR=..\proto
-set OUTPUT_DIR=F:\java_project\maven_demo\src\main\java
+set OUTPUT_DIR=..\client\GameClient\src\main\java
 
 cd ..\proto
 
