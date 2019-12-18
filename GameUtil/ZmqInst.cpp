@@ -12,14 +12,14 @@ ZmqInst::~ZmqInst()
 	destory();
 }
 
-void ZmqInst::initZmqInstance(const char* name) 
+void ZmqInst::initZmqInstance(const char* name, const char* router_addr) 
 {
 	if (zmqInstance != NULL) {
 		return;
 	}
 	Logger::initLog();
 	ZmqInst::zmqInstance = new ZmqInst();
-	ZmqInst::zmqInstance->startZmqInst(name);
+	ZmqInst::zmqInstance->startZmqInst(name, router_addr);
 }
 
 ZmqInst* ZmqInst::getZmqInstance()
@@ -90,7 +90,7 @@ void ZmqInst::run()
 	work_thread = new std::thread(threadFunc);
 }
 
-void ZmqInst::startZmqInst(const char* name)
+void ZmqInst::startZmqInst(const char* name, const char* router_addr)
 {
 	zmq_context = zmq_init(1);
 
@@ -112,7 +112,9 @@ void ZmqInst::startZmqInst(const char* name)
 		return;
 	}
 
-	if (zmq_connect(conn_socket, "tcp://localhost:5555") < 0) {
+	std::string routerAddr = "tcp://";
+	routerAddr.append(router_addr);
+	if (zmq_connect(conn_socket, routerAddr.c_str()) < 0) {
 		zmq_close(conn_socket);
 		zmq_ctx_destroy(zmq_context);
 		return;
@@ -120,7 +122,7 @@ void ZmqInst::startZmqInst(const char* name)
 
 	run();
 
-	Logger::logInfo("$create zmq instance, name: %s", name);
+	Logger::logInfo("$create zmq instance, name: %s, router addr:%s", name, routerAddr.c_str());
 }
 
 void ZmqInst::destory() 

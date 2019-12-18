@@ -22,11 +22,11 @@ public:
 	~ZmqInst();
 
 	static ZmqInst* getZmqInstance();
-	static void initZmqInstance(const char* name);
+	static void initZmqInstance(const char* name, const char* router_addr);
 	void setRecvCallback(ZmqRecvCallback callback);
 
 	void sendData(char* dstName, void* data, int datLen);
 
-	void startZmqInst(const char* name);
+	void startZmqInst(const char* name, const char* router_addr);
 	void destory();
 };

@@ -1,35 +1,59 @@
 #include "zmq.h"
 #include "Logger.h"
+#include "Config.h"
 
 
-int main()
+int main(int argc, char** argv)
 {
 	Logger::initLog();
 	int major, minor, patch;
 	zmq_version(&major, &minor, &patch);
-	Logger::logInfo("$Current 0MQ version is %d.%d.%d\n", major, minor, patch);
+	Logger::logInfo("$Current ZMQ version is %d.%d.%d\n", major, minor, patch);
 	Logger::logInfo("$===========================================\n\n");
+
+	if (argc < 2) {
+		Logger::logError("$arg count error");
+		return 0;
+	}
+	char* cfgName = argv[1];
+	if (!Config::checkFileExist(cfgName)) {
+		Logger::logError("$cfg file not exist, file name: %s", cfgName);
+		return 0;
+	}
+
+	std::string zmqName = Config::getConfigStr(cfgName, "zmq_name");
+	if (zmqName == "") {
+		Logger::logError("$not config zmq addr, cfg name: %s", cfgName);
+		return 0;
+	}
+	int port = Config::getConfigInt(cfgName, "port");
+	if (port <= 0) {
+		Logger::logError("$not config zmq router port, cfg name: %s", cfgName);
+		return 0;
+	}
 	
 	void* zmq_context = zmq_init(1);
 	void* router_socket = zmq_socket(zmq_context, ZMQ_ROUTER);
 
-	char* pName = "router";
-	if (zmq_setsockopt(router_socket, ZMQ_IDENTITY, pName, strlen(pName)) < 0)
+	if (zmq_setsockopt(router_socket, ZMQ_IDENTITY, zmqName.c_str(), zmqName.size()) < 0)
 	{
 		zmq_close(router_socket);
 		zmq_ctx_destroy(zmq_context);
 		return 0;
 	}
 
-	if (zmq_bind(router_socket, "tcp://*:5555") < 0) {
+	char addr[128]{0};
+	sprintf(addr, "tcp://*:%d", port);
+	if (zmq_bind(router_socket, addr) < 0) {
 		zmq_close(router_socket);
 		zmq_ctx_destroy(zmq_context);
 		return 0;
 	}
 
+	Logger::logInfo("$router name:%s, addr: %s", zmqName.c_str(), addr);
+
 	char src_name[128]{ 0 };
 	char dst_name[128]{ 0 };
-	//char msg[1024]{ 0 };
 
 	while (1) {
 		zmq_recv(router_socket, src_name, sizeof(src_name), 0);
@@ -41,7 +65,7 @@ int main()
 		char* msg = new char[msgLen];
 		zmq_recv(router_socket, msg, msgLen, 0);
 
-		printf("recv msg, src_name:%s, dst_name:%s, msg:%s\n", src_name, dst_name, msg);
+		Logger::logInfo("$recv msg, src_name:%s, dst_name:%s, msg:%s", src_name, dst_name, msg);
 		
 		zmq_send(router_socket, dst_name, strlen(dst_name), ZMQ_SNDMORE);
 		//zmq_send(router_socket, "", 0, ZMQ_SNDMORE);
@@ -53,7 +77,6 @@ int main()
 		memset(src_name, 0, sizeof(src_name));
 		memset(dst_name, 0, sizeof(dst_name));
 		delete[] msg;
-		//memset(msg, 0, sizeof(msg));
 	}
 
 	return 1;
