@@ -9,14 +9,22 @@ set(LOG4CPP_ROOT ${PROJECT_SOURCE_DIR}/log4cpp)
 set(ZMQ_ROOT ${DEPENDS_ROOT}/zmq)
 set(PYTHON_ROOT ${DEPENDS_ROOT}/Python38)
 set(GAMEUTIL_ROOT ${PROJECT_SOURCE_DIR}/GameUtil)
+set(PROTO_ROOT ${PROJECT_SOURCE_DIR}/ProtoBuffer)
 
 set(BOOST_ROOT ../boost_1_70_0)
+set(PROTOBUFF_ROOT ../../protobuf-3.9.0)
 find_package(Boost REQUIRED)
+
+file(GLOB_RECURSE PROTO_SRC ProtoBuffer/*.cpp ProtoBuffer/*.cc ProtoBuffer/*.h ProtoBuffer/*.hpp)
+
+message(STATUS ${PROTO_SRC})
 
 add_subdirectory(Math)
 add_subdirectory(log4cpp)
 add_subdirectory(GameUtil)
 add_subdirectory(DBPlugin)
+#add_subdirectory(ProtoBuffer)
+add_subdirectory(Gateway)
 add_subdirectory(GameServer)
 add_subdirectory(ZmqRouter)
 

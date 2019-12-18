@@ -3,8 +3,8 @@ import re
 from jinja2 import Environment
 from jinja2 import FileSystemLoader
 
-PROTO_PATH = "../proto"
-OUTPUT_PATH = "../GameServer/proto"
+PROTO_PATH = "./proto"
+OUTPUT_PATH = "../ProtoBuffer"
 JAVA_OUTPUT_PATH="../client/GameClient/src/main/java"
 
 class ProtoBuilder():
@@ -51,6 +51,7 @@ class ProtoBuilder():
                     msg_id = ProtoBuilder.alloc_msg_id()
                     ProtoBuilder.render_obj["msg_def"].append(("MSG_ID_{}".format(proto_name.upper()), msg_id, proto_name, java_file_name))
         ProtoBuilder.render_file("c++_header_template", OUTPUT_PATH + "/proto.h", ProtoBuilder.render_obj)
+        ProtoBuilder.render_file("c++_cpp_template", OUTPUT_PATH + "/proto.cpp", ProtoBuilder.render_obj)
         ProtoBuilder.render_file("java_msg_template", JAVA_OUTPUT_PATH + "/com/proto/ProtoBufferMsg.java", ProtoBuilder.render_obj)
 
     @staticmethod

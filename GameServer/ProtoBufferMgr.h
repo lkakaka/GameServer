@@ -5,7 +5,7 @@
 class ProtoBufferMgr
 {
 public:
-	static int parseProtoData(int connId, std::vector<unsigned char>* data);
 	static void sendPacket(int connID, int msgId, google::protobuf::Message* msg);
+	static void onRecvData(char* sender, char* data, int dataLen);
 };
 

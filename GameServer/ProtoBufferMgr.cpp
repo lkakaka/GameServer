@@ -1,17 +1,24 @@
 #include "ProtoBufferMgr.h"
-#include "Network.h"
 
-#include "proto/proto.h"
+#include "proto.h"
 #include "Logger.h"
+#include "ZmqInst.h"
 
 
-inline int readInt(unsigned char* data) {
+inline int readInt(char* data) {
 	return *(int*)data;
 }
 
-void writeInt(std::vector<unsigned char>* data, int val) {
+void writeInt(std::vector<char>* data, int val) {
 	char* p = (char*)& val;
 	for (int i = 3; i >= 0; i--) {
+		data->push_back(p[i]);
+	}
+}
+
+void writeIntEx(std::vector<char>* data, int val) {
+	char* p = (char*)& val;
+	for (int i = 0; i < 4; i++) {
 		data->push_back(p[i]);
 	}
 }
@@ -48,39 +55,36 @@ void handleMsg(int connId, int msgId, google::protobuf::Message* msg)
 	}
 }
 
-int ProtoBufferMgr::parseProtoData(int connId, std::vector<unsigned char> *recData)
-{
-	unsigned char* data = recData->data();
-	int dataLen = recData->size();
-	if (dataLen < 8) {
-		return 0;
+void ProtoBufferMgr::onRecvData(char* sender, char* data, int dataLen) {
+	if (dataLen <= 8) {
+		Logger::logError("$recv msg format error, data len < 8");
+		return;
 	}
-	int msgLen = readInt(&data[4]);
-	if (dataLen - 8 < msgLen) {
-		return 0;
-	}
-	int msgId = readInt(data);
+	int connId = readInt(data);
+	int msgId = readInt(&data[4]);
 	google::protobuf::Message* msg = (google::protobuf::Message*)CreateMsgById(msgId);
 	if (msg == NULL) {
 		Logger::logError("$create proto msg error, msgId:%d", msgId);
-		return msgLen + 8;
+		return;
 	}
-	msg->ParseFromArray(&data[8], msgLen);
+	msg->ParseFromArray(&data[8], dataLen - 8);
 	handleMsg(connId, msgId, msg);
-	return msgLen + 8;
+	Logger::logDebug("$recv msg, sender:%s,  msgId:%d", sender, msgId);
 }
 
 void ProtoBufferMgr::sendPacket(int connID, int msgId, google::protobuf::Message* msg) {
 	std::string msgData;
 	msg->SerializeToString(&msgData);
 	int msgLen = msgData.size() + 8;
-	std::vector<unsigned char> data;
-	writeInt(&data, msgLen);
-	writeInt(&data, msgId);
+	std::vector<char> data;
+	writeIntEx(&data, connID);
+	writeIntEx(&data, msgId);
 	std::copy(msgData.begin(), msgData.end(), std::back_inserter(data));
-	TcpConnection* connection = Network::getConnById(connID);
+	
+	ZmqInst::getZmqInstance()->sendData("gateway", data.data(), msgLen);
+	/*TcpConnection* connection = Network::getConnById(connID);
 	if (connection == NULL) {
 		return;
 	}
-	connection->sendData(std::move(data), data.size());
+	connection->sendData(std::move(data), data.size());*/
 }

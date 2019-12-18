@@ -8,6 +8,14 @@
 #include <map>
 #include <unordered_map>
 
+#ifdef GATEWAY_EXPORT
+#ifndef GATEWAY_API
+#define GATEWAY_API extern "C" __declspec(dllexport)
+#endif
+#else
+#define GATEWAY_API _declspec(dllimport)
+#endif
+
 using boost::asio::ip::tcp;
 using boost::system::error_code;
 
@@ -24,9 +32,9 @@ private:
 	inline int allocConnID() { return m_curConnId++; }
 
 public:
-	Network(boost::asio::io_service* io);
+	Network(boost::asio::io_service* io, int port);
 
-	static void initNetwork(boost::asio::io_service* io);
+	static void initNetwork(boost::asio::io_service* io, int port);
 	static Network* getNetworkInstance();
 	static TcpConnection* getConnById(int connId);
 
@@ -36,4 +44,6 @@ public:
 	void onConnectionClose(int connID);
 	void closeConnection(int connID);
 };
+
+GATEWAY_API void startNetwork(boost::asio::io_service* io, int port);
 

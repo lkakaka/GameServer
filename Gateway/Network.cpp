@@ -3,18 +3,19 @@
 
 static Network* g_network = NULL;
 
-Network::Network(boost::asio::io_service* io)
+Network::Network(boost::asio::io_service* io, int port)
 	: m_io(io),
-	m_acceptor(*io, tcp::endpoint(tcp::v4(), 20000)),
+	m_acceptor(*io, tcp::endpoint(tcp::v4(), port)),
 	m_curConnId(0)
 {
 	
 }
 
-void Network::initNetwork(boost::asio::io_service* io)
+void Network::initNetwork(boost::asio::io_service* io, int port)
 {
-	g_network = new Network(io);
+	g_network = new Network(io, port);
 	g_network->startListen();
+	Logger::logInfo("$start listening on port %d", port);
 }
 
 Network* Network::getNetworkInstance()
@@ -76,4 +77,10 @@ TcpConnection* Network::getConnById(int connId)
 		return NULL;
 	}
 	return iter->second.get();
+}
+
+void startNetwork(boost::asio::io_service* io, int port)
+{
+	Logger::initLog();
+	Network::initNetwork(io, port);
 }

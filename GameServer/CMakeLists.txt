@@ -1,5 +1,5 @@
 
-set(PROTOBUFF_ROOT ../../protobuf-3.9.0)
+# set(PROTOBUFF_ROOT ../../protobuf-3.9.0)
 # set(BOOST_ROOT ../../boost_1_70_0)
 # set(PYTHON_LIBRARY C:/Python34/libs)
 set(DBPLUGIN_ROOT ${PROJECT_SOURCE_DIR}/DBPlugin)
@@ -8,8 +8,10 @@ set(DBPLUGIN_ROOT ${PROJECT_SOURCE_DIR}/DBPlugin)
 
 add_definitions(-DOPEN_PROFILE_TRACK)
 
-link_directories(${Boost_LIBRARY_DIRS} ${PYTHON_ROOT}/libs ${LOG4CPP_ROOT} ${PROTOBUFF_ROOT}/cmake/build ${DEPENDS_ROOT}/mysql/lib64/vs14 ${DBPLUGIN_ROOT} ${ZMQ_ROOT}/libs ${GAMEUTIL_ROOT})
-include_directories(${Boost_INCLUDE_DIRS} ${PYTHON_ROOT}/include ${LOG4CPP_ROOT}/include ${PROTOBUFF_ROOT}/src ${DBPLUGIN_ROOT} ${DBPLUGIN_ROOT}/include ${ZMQ_ROOT}/include ${GAMEUTIL_ROOT})
+link_directories(${Boost_LIBRARY_DIRS} ${PYTHON_ROOT}/libs ${LOG4CPP_ROOT} ${PROTOBUFF_ROOT}/cmake/build 
+${DEPENDS_ROOT}/mysql/lib64/vs14 ${DBPLUGIN_ROOT} ${ZMQ_ROOT}/libs ${GAMEUTIL_ROOT})
+include_directories(${Boost_INCLUDE_DIRS} ${PYTHON_ROOT}/include ${LOG4CPP_ROOT}/include ${PROTOBUFF_ROOT}/src 
+${DBPLUGIN_ROOT} ${DBPLUGIN_ROOT}/include ${ZMQ_ROOT}/include ${GAMEUTIL_ROOT} ${PROTO_ROOT})
 
 if (NOT WIN32)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}-pthread")
@@ -25,7 +27,7 @@ file(GLOB_RECURSE CURRENT_SRC *.cpp *.cc)
 # aux_source_directory(./db MYSERVER_DB_DIR)
 # aux_source_directory(./py_module MYSERVER_PY_MOD_DIR)
 # add_executable(GameServer ${MYSERVER_SRC_DIR} ${MYSERVER_PROTO_SRC_DIR} ${MYSERVER_DB_DIR} ${MYSERVER_PY_MOD_DIR})
-add_executable(GameServer ${CURRENT_HEADERS} ${CURRENT_SRC})
+add_executable(GameServer ${CURRENT_HEADERS} ${CURRENT_SRC} ${PROTO_SRC})
 
 # message(STATUS ${CURRENT_HEADERS})
 # SOURCE_GROUP("include" FILES ${CURRENT_HEADERS})

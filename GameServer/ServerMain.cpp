@@ -3,9 +3,6 @@
 #include <thread>
 
 #include "boost/asio.hpp"
-
-#include "Network.h"
-//#include "Log.h"
 #include "DBPlugin.h"
 #include "Logger.h"
 #include "DBTableDef.h"
@@ -14,17 +11,33 @@
 #include "ZmqInst.h"
 #include "Timer.h"
 #include "UnitTest.h"
+#include "Config.h"
+#include "ProtoBufferMgr.h"
 
 using namespace std;
 
-int main()
+int main(int argc, char** argv)
 {
 	Logger::initLog();
+
+	if (argc < 2) {
+		Logger::logError("$arg count error");
+		return 0;
+	}
+	char* cfgName = argv[1];
+	if (!Config::checkFileExist(cfgName)) {
+		Logger::logError("$cfg file not exist, file name: %s", cfgName);
+		return 0;
+	}
 
 	boost::asio::io_service io;
 	TimerMgr::initTimerMgr(&io);
 
 	initPython();
+
+	std::string zmqAddr = Config::getConfigStr(cfgName, "zmq_addr");
+	ZmqInst::initZmqInstance(zmqAddr.c_str());
+	ZmqInst::getZmqInstance()->setRecvCallback(ProtoBufferMgr::onRecvData);
 
 	/*DBPlugin* dbPlugin = new DBPlugin();
 	dbPlugin->initDBPlugin("");*/
@@ -36,15 +49,28 @@ int main()
 	dbMgr->initDbTable(tbls);*/
 	//DBMgr::getDBMgrInstance();
 
-	Network::initNetwork(&io);
-
-	ZmqInst* zmq = new ZmqInst();
-	zmq->startZmqInst();
+	//Network::initNetwork(&io);
+//	int port = Config::getConfigInt(cfgName, "port");
+//	if (port > 0) {
+//#ifdef _DEBUG
+//		HINSTANCE h = LoadLibrary("Gateway_d.dll");
+//#else
+//		HINSTANCE h = LoadLibrary("Gateway.dll");
+//#endif // _DEBUG
+//		if (h == NULL) {
+//			Logger::logError("$gateway.dll not found");
+//			return 1;
+//		}
+//		typedef void(*FunPtr)(boost::asio::io_service*, int);//定义函数指针
+//		FunPtr funPtr = (FunPtr)GetProcAddress(h, "startNetwork");
+//		funPtr(&io, port);
+//	}
 	
 	UnitTest::test();
 
 	Logger::logInfo("$MyServer Start!!!");
 
+	boost::asio::io_service::work work(io);
 	io.run();
 
 	finalizePython();

@@ -7,6 +7,7 @@
 #define TEST_PYTHON_TREAD 0
 #define TEST_DB_PLUGIN 0
 #define TEST_PROFILE 0
+#define TEST_CONFIG 1
 
 #if TEST_DB_PLUGIN
 #include "DBMgr.h"
@@ -14,6 +15,10 @@
 
 #if TEST_PROFILE
 #include "Profile/ProfileTrack.h"
+#endif
+
+#if TEST_CONFIG
+#include "Config.h"
 #endif
 
 #pragma comment(lib, "MathFunction.lib")
@@ -81,6 +86,14 @@ static void testProfile() {
 #endif
 }
 
+static void testConfig() {
+#if TEST_CONFIG
+	int port = Config::getConfigInt("../../conf/gateway.cfg", "port");
+	assert(port == 20000);
+	//_ASSERT(port == 200000);
+#endif
+}
+
 void UnitTest::test()
 {	
 	double x = power(2, 3);
@@ -94,6 +107,7 @@ void UnitTest::test()
 
 	testDbPlugin();
 	testProfile();
+	testConfig();
 	
 	for (auto iter = threads.begin(); iter != threads.end(); iter++) {
 		std::thread* t = (std::thread*)*iter;

@@ -70,7 +70,7 @@ void TcpConnection::parseRecvData()
 	} while (len > 0);
 }
 
-void TcpConnection::sendData(std::vector<unsigned char>&& dat, size_t datLen)
+void TcpConnection::sendData(std::vector<char>&& dat, size_t datLen)
 {
 	boost::asio::const_buffer buf(&dat.front(), datLen);
 	m_socket.async_write_some(buf, [](boost::system::error_code err_code, size_t datLen) {
