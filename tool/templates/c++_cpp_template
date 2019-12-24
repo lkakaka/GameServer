@@ -3,13 +3,13 @@
 
 #include "proto.h"
 
-void* CreateMsgById(int msgId)
+std::shared_ptr<google::protobuf::Message> CreateMsgById(int msgId)
 {
 	switch (msgId)
 	{
 	{% for item in msg_def %}
 	case {{ item[0] }}:
-		return new {{ item[2] }}();
+		return std::shared_ptr<google::protobuf::Message>(new {{ item[2] }}());
 	{% endfor %}
 }
 	return NULL;

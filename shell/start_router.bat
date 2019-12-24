@@ -1,9 +1,9 @@
 @echo off
 
-set ServerCmd="ZmqRouter_d.exe"
+call config.bat
 set ConfigFile="../../conf/router.cfg"
 
 cd ../bin/Debug
 
-%ServerCmd% %ConfigFile%
-pause
+%RouterCmd% %ConfigFile%
+::pause

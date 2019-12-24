@@ -3,16 +3,16 @@
 
 #include "proto.h"
 
-void* CreateMsgById(int msgId)
+std::shared_ptr<google::protobuf::Message> CreateMsgById(int msgId)
 {
 	switch (msgId)
 	{
 		case MSG_ID_LOGIN:
-		return new Login();
+		return std::shared_ptr<google::protobuf::Message>(new Login());
 		case MSG_ID_LOGINRSP:
-		return new LoginRsp();
+		return std::shared_ptr<google::protobuf::Message>(new LoginRsp());
 		case MSG_ID_TEST:
-		return new Test();
+		return std::shared_ptr<google::protobuf::Message>(new Test());
 	}
 	return NULL;
 }

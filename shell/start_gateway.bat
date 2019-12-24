@@ -1,9 +1,9 @@
 @echo off
 
-set ServerCmd="Gateway_d.exe"
+call config.bat
 set ConfigFile="../../conf/gateway.cfg"
 
 cd ../bin/Debug
 
-%ServerCmd% %ConfigFile%
-pause
+%GatewayCmd% %ConfigFile%
+::pause

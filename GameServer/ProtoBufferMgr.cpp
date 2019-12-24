@@ -23,13 +23,13 @@ void writeIntEx(std::vector<char>* data, int val) {
 	}
 }
 
-void handleMsg(int connId, int msgId, google::protobuf::Message* msg)
+void handleMsg(int connId, int msgId, std::shared_ptr<google::protobuf::Message> msg)
 {
 	switch (msgId)
 	{
 	case MSG_ID_TEST:
 	{
-		Test* recvMsg = (Test*)msg;
+		Test* recvMsg = (Test*)msg.get();
 		Logger::logInfo("$receive test proto, id:%d, msg:%s", recvMsg->id(), recvMsg->msg().data());
 
 		Test resp_msg;
@@ -40,7 +40,7 @@ void handleMsg(int connId, int msgId, google::protobuf::Message* msg)
 	}
 	case MSG_ID_LOGIN:
 	{
-		Login* recvMsg = (Login*)msg;
+		Login* recvMsg = (Login*)msg.get();
 		Logger::logInfo("$receive login proto, account:%s, pwd:%s", recvMsg->account().c_str(), recvMsg->pwd().data());
 
 		LoginRsp resp_msg;
@@ -62,7 +62,8 @@ void ProtoBufferMgr::onRecvData(char* sender, char* data, int dataLen) {
 	}
 	int connId = readInt(data);
 	int msgId = readInt(&data[4]);
-	google::protobuf::Message* msg = (google::protobuf::Message*)CreateMsgById(msgId);
+	//google::protobuf::Message* msg = (google::protobuf::Message*)CreateMsgById(msgId);
+	std::shared_ptr<google::protobuf::Message> msg = CreateMsgById(msgId);
 	if (msg == NULL) {
 		Logger::logError("$create proto msg error, msgId:%d", msgId);
 		return;

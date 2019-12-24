@@ -67,8 +67,7 @@ public class CommandCmd extends CmdDispatch {
     @CmdAnnotation(inputCmd = "test")
     private void test() {
         TestOuterClass.Test.Builder builder = TestOuterClass.Test.newBuilder();
-        builder.setId(10);
-        builder.setMsg("hello");
+        builder.setId(10).setMsg("hello");
         GameRobot robot = RobotMgr.getInstance().getRobot("test");
         robot.sendProto(ProtoBufferMsg.MSG_ID_TEST, builder.build());
     }

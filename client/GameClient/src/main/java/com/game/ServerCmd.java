@@ -7,8 +7,6 @@ import com.proto.ProtoBufferMsg;
 import com.proto.TestOuterClass;
 import com.util.Util;
 
-import java.util.Iterator;
-import java.util.Map;
 
 public class ServerCmd extends CmdDispatch {
     private GameRobot m_robot;
