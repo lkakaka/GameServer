@@ -32,7 +32,7 @@ void ZmqInst::setRecvCallback(ZmqRecvCallback callback)
 	m_recvCallback = callback;
 }
 
-void ZmqInst::sendData(char* dstName, void* data, int datLen)
+void ZmqInst::sendData(const char* dstName, void* data, int datLen)
 {
 	zmq_send(conn_socket, dstName, strlen(dstName), ZMQ_SNDMORE);
 	zmq_send(conn_socket, (char*)&datLen, 4, ZMQ_SNDMORE);

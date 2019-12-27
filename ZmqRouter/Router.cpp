@@ -21,8 +21,8 @@ int main(int argc, char** argv)
 		return 0;
 	}
 
-	std::string zmqName = Config::getConfigStr(cfgName, "zmq_name");
-	if (zmqName == "") {
+	std::string serviceName = Config::getConfigStr(cfgName, "service_name");
+	if (serviceName == "") {
 		Logger::logError("$not config zmq addr, cfg name: %s", cfgName);
 		return 0;
 	}
@@ -35,7 +35,7 @@ int main(int argc, char** argv)
 	void* zmq_context = zmq_init(1);
 	void* router_socket = zmq_socket(zmq_context, ZMQ_ROUTER);
 
-	if (zmq_setsockopt(router_socket, ZMQ_IDENTITY, zmqName.c_str(), zmqName.size()) < 0)
+	if (zmq_setsockopt(router_socket, ZMQ_IDENTITY, serviceName.c_str(), serviceName.size()) < 0)
 	{
 		zmq_close(router_socket);
 		zmq_ctx_destroy(zmq_context);
@@ -50,7 +50,7 @@ int main(int argc, char** argv)
 		return 0;
 	}
 
-	Logger::logInfo("$router name:%s, addr: %s", zmqName.c_str(), addr);
+	Logger::logInfo("$router name:%s, addr: %s", serviceName.c_str(), addr);
 
 	char src_name[128]{ 0 };
 	char dst_name[128]{ 0 };

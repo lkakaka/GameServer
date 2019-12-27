@@ -12,9 +12,10 @@
 #include "Timer.h"
 #include "UnitTest.h"
 #include "Config.h"
-#include "ProtoBufferMgr.h"
+#include "MessageMgr.h"
 
 using namespace std;
+std::string g_service_name = "";
 
 int main(int argc, char** argv)
 {
@@ -30,11 +31,13 @@ int main(int argc, char** argv)
 		return 0;
 	}
 
-	std::string zmqName = Config::getConfigStr(cfgName, "zmq_name");
-	if (zmqName.length() == 0) {
+	std::string serviceName = Config::getConfigStr(cfgName, "service_name");
+	if (serviceName.length() == 0) {
 		Logger::logError("$not config zmq name, file name: %s", cfgName);
 		return 0;
 	}
+	g_service_name = serviceName;
+
 	std::string routerAddr = Config::getConfigStr(cfgName, "router_addr");
 	if (routerAddr.length() == 0) {
 		Logger::logError("$not config router addr, file name: %s", cfgName);
@@ -44,10 +47,13 @@ int main(int argc, char** argv)
 	boost::asio::io_service io;
 	TimerMgr::initTimerMgr(&io);
 
-	initPython();
+	std::string funcName = Config::getConfigStr(cfgName, "script_init_func");
+	if (funcName.length() > 0) {
+		initPython(funcName.c_str());
+	}
 
-	ZmqInst::initZmqInstance(zmqName.c_str(), routerAddr.c_str());
-	ZmqInst::getZmqInstance()->setRecvCallback(ProtoBufferMgr::onRecvData);
+	ZmqInst::initZmqInstance(serviceName.c_str(), routerAddr.c_str());
+	ZmqInst::getZmqInstance()->setRecvCallback(MessageMgr::onRecvData);
 
 	/*DBPlugin* dbPlugin = new DBPlugin();
 	dbPlugin->initDBPlugin("");*/

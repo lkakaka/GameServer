@@ -105,7 +105,7 @@ PyMODINIT_FUNC PyInit_Test(void)
 }
 
 
-void callPyFunction(char* module, char* func)
+PyObject* callPyFunction(const char* module, const char* func, PyObject* arg)
 {
 	PyObject* pModule = NULL;//声明变量
 	PyObject* pFunc = NULL;// 声明变量
@@ -114,27 +114,33 @@ void callPyFunction(char* module, char* func)
 	{
 		PyErr_Print();
 		Logger::logInfo("$call py function(%s.%s) falied, module is null", module, func);
-		return;
+		return NULL;
 	}
 	pFunc = PyObject_GetAttrString(pModule, func);//这里是要调用的函数名
 	if (pFunc == NULL) {
 		PyErr_Print();
 		Logger::logInfo("$call py function(%s.%s) falied, func not found", module, func);
-		return;
+		return NULL;
 	}
-	PyObject* result = PyEval_CallObject(pFunc, NULL);//调用函数
+	PyObject* result = PyEval_CallObject(pFunc, arg);//调用函数
+	//PyObject* result = PyEval_CallMethod(pModule, func, "");
+
 	if (result == NULL)
 	{
 		PyErr_Print();
 	}
+	return result;
 }
 
-void initPython()
+void initPython(const char* funcName)
 {	
 	PyImport_AppendInittab("Test", PyInit_Test);  // python3
+
 	initDbModule();
 	initLoggerModule();
 	initTimerModule();
+	initGameModule();
+
 	Py_Initialize();
 	if (!PyEval_ThreadsInitialized()) {
 		PyEval_InitThreads();
@@ -145,7 +151,7 @@ void initPython()
 	PyRun_SimpleString("print(os.getcwd())");
 	PyRun_SimpleString("sys.path.append(os.path.abspath('../..') + '\\script\\python')");
 	PyRun_SimpleString("print(sys.path)");
-	callPyFunction("main", "init");
+	callPyFunction("main", funcName, NULL);
 	// 启动子线程前执行，为了释放PyEval_InitThreads获得的全局锁，否则子线程可能无法获取到全局锁。
 	PyEval_ReleaseThread(PyThreadState_Get());
 }

@@ -27,7 +27,7 @@ void pyThreadFunc()
 {
 	Logger::logInfo("$[UnitTest]Thread Start");
 	auto py_state = PyGILState_Ensure();
-	callPyFunction("main", "thread_test");
+	callPyFunction("main", "thread_test", NULL);
 	PyGILState_Release(py_state);
 	Logger::logInfo("$[UnitTest]Thread End");
 }

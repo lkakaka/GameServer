@@ -28,8 +28,8 @@ int main(int argc, char** argv)
 		return 0;
 	}
 
-	std::string zmqName = Config::getConfigStr(cfgName, "zmq_name");
-	if (zmqName.length() == 0) {
+	std::string serviceName = Config::getConfigStr(cfgName, "service_name");
+	if (serviceName.length() == 0) {
 		Logger::logError("$not config zmq name, file name: %s", cfgName);
 		return 0;
 	}
@@ -42,7 +42,7 @@ int main(int argc, char** argv)
 	boost::asio::io_service io;
 	TimerMgr::initTimerMgr(&io);
 	
-	ZmqInst::initZmqInstance(zmqName.c_str(), routerAddr.c_str());
+	ZmqInst::initZmqInstance(serviceName.c_str(), routerAddr.c_str());
 	ZmqInst::getZmqInstance()->setRecvCallback(ProtoBufferMgr::onRecvData);
 
 	//Network::initNetwork(&io);

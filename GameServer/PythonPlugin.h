@@ -3,6 +3,6 @@
 
 #include "Python.h"
 
-void initPython();
+void initPython(const char* funcName);
 void finalizePython();
-void callPyFunction(char* module, char* func);
+PyObject* callPyFunction(const char* module, const char* func, PyObject* arg);

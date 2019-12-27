@@ -5,6 +5,9 @@ import db.TbMgr
 import logger
 import Timer
 import py_cffi.cffi_test
+import service.db_service
+import service.scene_service
+from proto.message import message
 
 timer_id = 0
 
@@ -25,6 +28,38 @@ def test_timer():
     global timer_id
     timer_id = Timer.addTimer(3000, 1000, 3, timer_cb)
     logger.logInfo("$add timer {}", timer_id)
+
+
+def create_db_service():
+    service_inst = service.db_service.DBService()
+    service_inst.on_service_start()
+    return service_inst
+
+def create_scene_service():
+    service_inst = service.scene_service.SceneService()
+    service_inst.on_service_start()
+    return service_inst
+
+def on_recv_client_msg(service, conn_id, msg_id, msg):
+    print("on_recv_client_msg---", service, conn_id, msg_id, msg)
+    msg = message.create_msg_by_id(msg_id)
+    msg.ParseFromString(msg)
+    if msg_id == message.MSG_ID_LOGIN:
+        rsp_msg = message.create_msg_by_id(message.MSG_ID_LOGINRSP)
+    # service.on_recv_msg(sender, msg)
+    # import proto.test_pb2
+    # test = proto.test_pb2.Test()
+    # test.ParseFromString(msg)
+    # print("test proto", test.id, test.msg)
+    # import proto.login_pb2
+    # login_rsp = proto.login_pb2.LoginRsp()
+    # login_rsp.account = "py_test"
+    # login_rsp.user_id = 11
+    # print("on_recv_client_msg---login rsp", login_rsp.account)
+
+
+def on_recv_service_msg(service, sender, msgId, msg):
+    print("on_recv_service_msg---", service, sender, msgId, msg)
 
 
 def timer_cb():

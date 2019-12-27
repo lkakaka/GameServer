@@ -4,3 +4,4 @@
 #include "Python.h"
 
 void initLoggerModule();
+void initGameModule();
