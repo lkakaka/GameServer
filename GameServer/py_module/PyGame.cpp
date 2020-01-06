@@ -10,9 +10,9 @@ static PyObject* sendMessage(PyObject* self, PyObject* args)
 {
 	int connId;
 	int msgId;
-	int msgLen;
+	Py_ssize_t msgLen;
 	char* msg = NULL;
-	if (!PyArg_ParseTuple(args, "iiis", &connId, &msgId, &msgLen, &msg)) {
+	if (!PyArg_ParseTuple(args, "iiy#", &connId, &msgId, &msg, &msgLen)) {
 		PyErr_SetString(ModuleError, "sendMessage failed");
 		Py_RETURN_FALSE;
 	}
@@ -25,9 +25,9 @@ static PyObject* sendMessageToServer(PyObject* self, PyObject* args)
 {
 	char* serviceName = NULL;
 	int msgId;
-	int msgLen;
+	Py_ssize_t msgLen;
 	char* msg = NULL;
-	if (!PyArg_ParseTuple(args, "siis", &serviceName, &msgId, &msgLen, &msg)) {
+	if (!PyArg_ParseTuple(args, "siy#", &serviceName, &msgId, &msg, &msgLen)) {
 		PyErr_SetString(ModuleError, "sendMessageToServer failed");
 		Py_RETURN_FALSE;
 	}

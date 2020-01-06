@@ -96,8 +96,8 @@ void MessageMgr::onRecvData(char* sender, char* data, int dataLen) {
 		char* msgData = &data[8];
 		int msgLen = dataLen - 8;
 		if (!handleMsg(connId, msgId, msgData, msgLen)) {
-			PyObject* arg = PyTuple_New(4);
 			auto py_state = PyGILState_Ensure();
+			PyObject* arg = PyTuple_New(4);
 			PyTuple_SetItem(arg, 0, Py_BuildValue("s", g_service_name.c_str()));
 			PyTuple_SetItem(arg, 1, PyLong_FromLong(connId));
 			PyTuple_SetItem(arg, 2, PyLong_FromLong(msgId));
