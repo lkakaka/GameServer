@@ -25,6 +25,7 @@ add_subdirectory(GameUtil)
 add_subdirectory(DBPlugin)
 #add_subdirectory(ProtoBuffer)
 add_subdirectory(Gateway)
+add_subdirectory(SceneServer)
 add_subdirectory(GameServer)
 add_subdirectory(ZmqRouter)
 

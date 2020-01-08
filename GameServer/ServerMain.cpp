@@ -13,9 +13,12 @@
 #include "UnitTest.h"
 #include "Config.h"
 #include "MessageMgr.h"
+#include "GameService.h"
 
 using namespace std;
 std::string g_service_name = "";
+//GameService g_game_service;
+//extern struct GameService g_game_service;
 
 int main(int argc, char** argv)
 {
@@ -36,7 +39,7 @@ int main(int argc, char** argv)
 		Logger::logError("$not config zmq name, file name: %s", cfgName);
 		return 0;
 	}
-	g_service_name = serviceName;
+	//g_game_service.service_name = serviceName;
 
 	std::string routerAddr = Config::getConfigStr(cfgName, "router_addr");
 	if (routerAddr.length() == 0) {
@@ -46,11 +49,21 @@ int main(int argc, char** argv)
 
 	boost::asio::io_service io;
 	TimerMgr::initTimerMgr(&io);
-
+	
+	PyObject* scriptObj = NULL;
 	std::string funcName = Config::getConfigStr(cfgName, "script_init_func");
 	if (funcName.length() > 0) {
 		initPython(funcName.c_str());
+		auto py_state = PyGILState_Ensure();
+		scriptObj = callPyFunction("main", funcName.c_str(), NULL);
+		//g_game_service.m_scriptObj = scriptObj;
+		auto func = PyObject_GetAttrString(scriptObj, "c_call");
+		PyObject* tuple = PyTuple_New(0);
+		PyObject_Call(func, tuple, NULL);
+		PyGILState_Release(py_state);
 	}
+
+	GameService::g_gameService = new GameService(serviceName, scriptObj);
 
 	ZmqInst::initZmqInstance(serviceName.c_str(), routerAddr.c_str());
 	ZmqInst::getZmqInstance()->setRecvCallback(MessageMgr::onRecvData);

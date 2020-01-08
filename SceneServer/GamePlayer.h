@@ -6,8 +6,9 @@
 class GamePlayer : public GameActor {
 private:
 	int m_connId;
-	std::string name;
+	int m_roleId;
+	std::string m_name;
 public:
-
+	GamePlayer(int connId, int actorId, int roleId, std::string name);
 	void sendPacket(int msgId);
 };
