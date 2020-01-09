@@ -2,9 +2,9 @@ package com.game;
 
 import com.network.Network;
 import com.network.NetworkEventHandler;
-import com.proto.LoginOuterClass;
+import com.proto.Login;
 import com.proto.ProtoBufferMsg;
-import com.proto.TestOuterClass;
+import com.proto.Test;
 import com.util.Util;
 
 import java.io.ByteArrayInputStream;
@@ -64,11 +64,11 @@ public class GameRobot {
     }
 
     public void login() {
-        LoginOuterClass.Login.Builder builder = ProtoBufferMsg.createLoginBuilder();
+        Login.LoginReq.Builder builder = ProtoBufferMsg.createLoginReqBuilder();
         builder.setAccount(getAccount());
         builder.setPwd("");
-        LoginOuterClass.Login login = builder.build();
-        sendProto(ProtoBufferMsg.MSG_ID_LOGIN, login);
+        Login.LoginReq login = builder.build();
+        sendProto(ProtoBufferMsg.MSG_ID_LOGIN_REQ, login);
     }
 
     public void disconnect() {

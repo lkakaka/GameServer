@@ -2,9 +2,9 @@ package com.game;
 
 import com.command.CmdAnnotation;
 import com.command.CmdDispatch;
-import com.proto.LoginOuterClass;
+import com.proto.Login;
 import com.proto.ProtoBufferMsg;
-import com.proto.TestOuterClass;
+import com.proto.Test;
 import com.util.Util;
 
 
@@ -20,15 +20,15 @@ public class ServerCmd extends CmdDispatch {
         dispatchCmd(iCmd, cmdParam);
     }
 
-    @CmdAnnotation(serverCmd = ProtoBufferMsg.MSG_ID_LOGINRSP)
+    @CmdAnnotation(serverCmd = ProtoBufferMsg.MSG_ID_LOGIN_RSP)
     private void onRecvLoginResp(Object param) {
-        LoginOuterClass.LoginRsp loginRsp = (LoginOuterClass.LoginRsp) param;
+        Login.LoginRsp loginRsp = (Login.LoginRsp) param;
         Util.logInfo("recv login rsp proto, account:%s, userId:%d", loginRsp.getAccount(), loginRsp.getUserId());
     }
 
-    @CmdAnnotation(serverCmd = ProtoBufferMsg.MSG_ID_TEST)
+    @CmdAnnotation(serverCmd = ProtoBufferMsg.MSG_ID_TEST_REQ)
     private void onRecvTest(Object param) {
-        TestOuterClass.Test test = (TestOuterClass.Test) param;
+        Test.TestReq test = (Test.TestReq) param;
         Util.logInfo("recv test proto, id:%d, :%s", test.getId(), test.getMsg());
     }
 }

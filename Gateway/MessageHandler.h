@@ -1,8 +1,7 @@
 #pragma once
 #include <vector>
-#include <google/protobuf/message.h>
 
-class ProtoBufferMgr
+class MessageHandler
 {
 public:
 	static int parseProtoData(int connId, std::vector<char>* data);

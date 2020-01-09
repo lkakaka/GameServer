@@ -11,7 +11,7 @@ public class ProtoBufferMsg {
 			{
 {% for item in msg_def %}
 				case {{ item[0] }}:
-					return {{ item[3] }}OuterClass.{{ item[2] }}.parseFrom(dat);
+					return {{ item[3] }}.{{ item[2] }}.parseFrom(dat);
 {% endfor %}
 			}
 		} catch (Exception e) {
@@ -24,15 +24,15 @@ public class ProtoBufferMsg {
 		switch (msgId) {
 {% for item in msg_def %}
 			case {{ item[0] }}:
-				return {{ item[3] }}OuterClass.{{ item[2] }}.newBuilder();
+				return {{ item[3] }}.{{ item[2] }}.newBuilder();
 {% endfor %}
 		}
 		return null;
 	}
 	
 {% for item in msg_def %}
-	public static {{ item[3] }}OuterClass.{{ item[2] }}.Builder create{{ item[2] }}Builder() {
-		return {{ item[3] }}OuterClass.{{ item[2] }}.newBuilder();
+	public static {{ item[3] }}.{{ item[2] }}.Builder create{{ item[2] }}Builder() {
+		return {{ item[3] }}.{{ item[2] }}.newBuilder();
 	}
 	
 {% endfor %}

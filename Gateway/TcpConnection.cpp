@@ -1,5 +1,5 @@
 #include "TcpConnection.h"
-#include "ProtoBufferMgr.h"
+#include "MessageHandler.h"
 
 TcpConnection::TcpConnection(boost::asio::io_service& io, int connID, closeFuncType closeFunc):
 	m_connID(connID),
@@ -61,7 +61,7 @@ void TcpConnection::parseRecvData()
 {
 	int len = 0;
 	do {
-		len = ProtoBufferMgr::parseProtoData(m_connID, &m_readData);
+		len = MessageHandler::parseProtoData(m_connID, &m_readData);
 		if (len > 0) {
 			auto removeIter = m_readData.begin();
 			std::advance(removeIter, len);

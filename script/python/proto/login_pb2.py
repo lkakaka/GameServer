@@ -19,31 +19,38 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='login.proto',
   package='',
   syntax='proto3',
-  serialized_options=_b('\n\tcom.proto'),
-  serialized_pb=_b('\n\x0blogin.proto\"%\n\x05Login\x12\x0f\n\x07\x61\x63\x63ount\x18\x01 \x01(\t\x12\x0b\n\x03pwd\x18\x02 \x01(\t\",\n\x08LoginRsp\x12\x0f\n\x07\x61\x63\x63ount\x18\x01 \x01(\t\x12\x0f\n\x07user_id\x18\x02 \x01(\x05\x42\x0b\n\tcom.protob\x06proto3')
+  serialized_options=_b('\n\tcom.protoB\005Login'),
+  serialized_pb=_b('\n\x0blogin.proto\"9\n\x08LoginReq\x12\x0f\n\x07\x61\x63\x63ount\x18\x01 \x01(\t\x12\x0b\n\x03pwd\x18\x02 \x01(\t\x12\x0f\n\x07\x63onn_id\x18\x03 \x01(\x05\"O\n\x08LoginRsp\x12\x0f\n\x07\x61\x63\x63ount\x18\x01 \x01(\t\x12\x0f\n\x07user_id\x18\x02 \x01(\x05\x12\x0f\n\x07\x63onn_id\x18\x03 \x01(\x05\x12\x10\n\x08\x65rr_code\x18\x04 \x01(\x05\x42\x12\n\tcom.protoB\x05Loginb\x06proto3')
 )
 
 
 
 
-_LOGIN = _descriptor.Descriptor(
-  name='Login',
-  full_name='Login',
+_LOGINREQ = _descriptor.Descriptor(
+  name='LoginReq',
+  full_name='LoginReq',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='account', full_name='Login.account', index=0,
+      name='account', full_name='LoginReq.account', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='pwd', full_name='Login.pwd', index=1,
+      name='pwd', full_name='LoginReq.pwd', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='conn_id', full_name='LoginReq.conn_id', index=2,
+      number=3, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -60,7 +67,7 @@ _LOGIN = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=15,
-  serialized_end=52,
+  serialized_end=72,
 )
 
 
@@ -85,6 +92,20 @@ _LOGINRSP = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='conn_id', full_name='LoginRsp.conn_id', index=2,
+      number=3, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='err_code', full_name='LoginRsp.err_code', index=3,
+      number=4, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -97,20 +118,20 @@ _LOGINRSP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=54,
-  serialized_end=98,
+  serialized_start=74,
+  serialized_end=153,
 )
 
-DESCRIPTOR.message_types_by_name['Login'] = _LOGIN
+DESCRIPTOR.message_types_by_name['LoginReq'] = _LOGINREQ
 DESCRIPTOR.message_types_by_name['LoginRsp'] = _LOGINRSP
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
-Login = _reflection.GeneratedProtocolMessageType('Login', (_message.Message,), {
-  'DESCRIPTOR' : _LOGIN,
+LoginReq = _reflection.GeneratedProtocolMessageType('LoginReq', (_message.Message,), {
+  'DESCRIPTOR' : _LOGINREQ,
   '__module__' : 'login_pb2'
-  # @@protoc_insertion_point(class_scope:Login)
+  # @@protoc_insertion_point(class_scope:LoginReq)
   })
-_sym_db.RegisterMessage(Login)
+_sym_db.RegisterMessage(LoginReq)
 
 LoginRsp = _reflection.GeneratedProtocolMessageType('LoginRsp', (_message.Message,), {
   'DESCRIPTOR' : _LOGINRSP,

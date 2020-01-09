@@ -1,13 +1,17 @@
 syntax="proto3";
 
 option java_package="com.proto";
+option java_outer_classname = "Login";
 
-message Login {
+message LoginReq {
 	string account = 1;
 	string pwd = 2;
+	int32 conn_id = 3;
 }
 
 message LoginRsp {
 	string account = 1;
 	int32 user_id = 2;
+	int32 conn_id = 3;
+	int32 err_code = 4;
 }

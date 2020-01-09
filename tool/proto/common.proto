@@ -1,0 +1,17 @@
+syntax="proto3";
+
+option java_package="com.proto";
+option java_outer_classname = "Common";
+
+message RpcMsg {
+	int32 rpc_id = 1;
+	string rpc_func = 2;
+	string rpc_param = 3;
+}
+
+message RpcMsgRsp {
+	int32 rpc_id = 1;
+	string rpc_data = 2;
+}
+
+

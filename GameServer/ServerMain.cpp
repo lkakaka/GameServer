@@ -56,10 +56,6 @@ int main(int argc, char** argv)
 		initPython(funcName.c_str());
 		auto py_state = PyGILState_Ensure();
 		scriptObj = callPyFunction("main", funcName.c_str(), NULL);
-		//g_game_service.m_scriptObj = scriptObj;
-		auto func = PyObject_GetAttrString(scriptObj, "c_call");
-		PyObject* tuple = PyTuple_New(0);
-		PyObject_Call(func, tuple, NULL);
 		PyGILState_Release(py_state);
 	}
 

@@ -3,8 +3,8 @@
 
 package com.proto;
 
-public final class LoginOuterClass {
-  private LoginOuterClass() {}
+public final class Login {
+  private Login() {}
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistryLite registry) {
   }
@@ -14,8 +14,8 @@ public final class LoginOuterClass {
     registerAllExtensions(
         (com.google.protobuf.ExtensionRegistryLite) registry);
   }
-  public interface LoginOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:Login)
+  public interface LoginReqOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:LoginReq)
       com.google.protobuf.MessageOrBuilder {
 
     /**
@@ -37,20 +37,25 @@ public final class LoginOuterClass {
      */
     com.google.protobuf.ByteString
         getPwdBytes();
+
+    /**
+     * <code>int32 conn_id = 3;</code>
+     */
+    int getConnId();
   }
   /**
-   * Protobuf type {@code Login}
+   * Protobuf type {@code LoginReq}
    */
-  public  static final class Login extends
+  public  static final class LoginReq extends
       com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:Login)
-      LoginOrBuilder {
+      // @@protoc_insertion_point(message_implements:LoginReq)
+      LoginReqOrBuilder {
   private static final long serialVersionUID = 0L;
-    // Use Login.newBuilder() to construct.
-    private Login(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+    // Use LoginReq.newBuilder() to construct.
+    private LoginReq(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-    private Login() {
+    private LoginReq() {
       account_ = "";
       pwd_ = "";
     }
@@ -59,7 +64,7 @@ public final class LoginOuterClass {
     @SuppressWarnings({"unused"})
     protected java.lang.Object newInstance(
         UnusedPrivateParameter unused) {
-      return new Login();
+      return new LoginReq();
     }
 
     @java.lang.Override
@@ -67,7 +72,7 @@ public final class LoginOuterClass {
     getUnknownFields() {
       return this.unknownFields;
     }
-    private Login(
+    private LoginReq(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -97,6 +102,11 @@ public final class LoginOuterClass {
               pwd_ = s;
               break;
             }
+            case 24: {
+
+              connId_ = input.readInt32();
+              break;
+            }
             default: {
               if (!parseUnknownField(
                   input, unknownFields, extensionRegistry, tag)) {
@@ -118,15 +128,15 @@ public final class LoginOuterClass {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.proto.LoginOuterClass.internal_static_Login_descriptor;
+      return com.proto.Login.internal_static_LoginReq_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.proto.LoginOuterClass.internal_static_Login_fieldAccessorTable
+      return com.proto.Login.internal_static_LoginReq_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.proto.LoginOuterClass.Login.class, com.proto.LoginOuterClass.Login.Builder.class);
+              com.proto.Login.LoginReq.class, com.proto.Login.LoginReq.Builder.class);
     }
 
     public static final int ACCOUNT_FIELD_NUMBER = 1;
@@ -197,6 +207,15 @@ public final class LoginOuterClass {
       }
     }
 
+    public static final int CONN_ID_FIELD_NUMBER = 3;
+    private int connId_;
+    /**
+     * <code>int32 conn_id = 3;</code>
+     */
+    public int getConnId() {
+      return connId_;
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -217,6 +236,9 @@ public final class LoginOuterClass {
       if (!getPwdBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 2, pwd_);
       }
+      if (connId_ != 0) {
+        output.writeInt32(3, connId_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -232,6 +254,10 @@ public final class LoginOuterClass {
       if (!getPwdBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, pwd_);
       }
+      if (connId_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(3, connId_);
+      }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
@@ -242,15 +268,17 @@ public final class LoginOuterClass {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof com.proto.LoginOuterClass.Login)) {
+      if (!(obj instanceof com.proto.Login.LoginReq)) {
         return super.equals(obj);
       }
-      com.proto.LoginOuterClass.Login other = (com.proto.LoginOuterClass.Login) obj;
+      com.proto.Login.LoginReq other = (com.proto.Login.LoginReq) obj;
 
       if (!getAccount()
           .equals(other.getAccount())) return false;
       if (!getPwd()
           .equals(other.getPwd())) return false;
+      if (getConnId()
+          != other.getConnId()) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -266,74 +294,76 @@ public final class LoginOuterClass {
       hash = (53 * hash) + getAccount().hashCode();
       hash = (37 * hash) + PWD_FIELD_NUMBER;
       hash = (53 * hash) + getPwd().hashCode();
+      hash = (37 * hash) + CONN_ID_FIELD_NUMBER;
+      hash = (53 * hash) + getConnId();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
     }
 
-    public static com.proto.LoginOuterClass.Login parseFrom(
+    public static com.proto.Login.LoginReq parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.proto.LoginOuterClass.Login parseFrom(
+    public static com.proto.Login.LoginReq parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.proto.LoginOuterClass.Login parseFrom(
+    public static com.proto.Login.LoginReq parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.proto.LoginOuterClass.Login parseFrom(
+    public static com.proto.Login.LoginReq parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.proto.LoginOuterClass.Login parseFrom(byte[] data)
+    public static com.proto.Login.LoginReq parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.proto.LoginOuterClass.Login parseFrom(
+    public static com.proto.Login.LoginReq parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.proto.LoginOuterClass.Login parseFrom(java.io.InputStream input)
+    public static com.proto.Login.LoginReq parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static com.proto.LoginOuterClass.Login parseFrom(
+    public static com.proto.Login.LoginReq parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.proto.LoginOuterClass.Login parseDelimitedFrom(java.io.InputStream input)
+    public static com.proto.Login.LoginReq parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static com.proto.LoginOuterClass.Login parseDelimitedFrom(
+    public static com.proto.Login.LoginReq parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.proto.LoginOuterClass.Login parseFrom(
+    public static com.proto.Login.LoginReq parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static com.proto.LoginOuterClass.Login parseFrom(
+    public static com.proto.Login.LoginReq parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -346,7 +376,7 @@ public final class LoginOuterClass {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(com.proto.LoginOuterClass.Login prototype) {
+    public static Builder newBuilder(com.proto.Login.LoginReq prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     @java.lang.Override
@@ -362,26 +392,26 @@ public final class LoginOuterClass {
       return builder;
     }
     /**
-     * Protobuf type {@code Login}
+     * Protobuf type {@code LoginReq}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:Login)
-        com.proto.LoginOuterClass.LoginOrBuilder {
+        // @@protoc_insertion_point(builder_implements:LoginReq)
+        com.proto.Login.LoginReqOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return com.proto.LoginOuterClass.internal_static_Login_descriptor;
+        return com.proto.Login.internal_static_LoginReq_descriptor;
       }
 
       @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.proto.LoginOuterClass.internal_static_Login_fieldAccessorTable
+        return com.proto.Login.internal_static_LoginReq_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                com.proto.LoginOuterClass.Login.class, com.proto.LoginOuterClass.Login.Builder.class);
+                com.proto.Login.LoginReq.class, com.proto.Login.LoginReq.Builder.class);
       }
 
-      // Construct using com.proto.LoginOuterClass.Login.newBuilder()
+      // Construct using com.proto.Login.LoginReq.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -403,23 +433,25 @@ public final class LoginOuterClass {
 
         pwd_ = "";
 
+        connId_ = 0;
+
         return this;
       }
 
       @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return com.proto.LoginOuterClass.internal_static_Login_descriptor;
+        return com.proto.Login.internal_static_LoginReq_descriptor;
       }
 
       @java.lang.Override
-      public com.proto.LoginOuterClass.Login getDefaultInstanceForType() {
-        return com.proto.LoginOuterClass.Login.getDefaultInstance();
+      public com.proto.Login.LoginReq getDefaultInstanceForType() {
+        return com.proto.Login.LoginReq.getDefaultInstance();
       }
 
       @java.lang.Override
-      public com.proto.LoginOuterClass.Login build() {
-        com.proto.LoginOuterClass.Login result = buildPartial();
+      public com.proto.Login.LoginReq build() {
+        com.proto.Login.LoginReq result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
@@ -427,10 +459,11 @@ public final class LoginOuterClass {
       }
 
       @java.lang.Override
-      public com.proto.LoginOuterClass.Login buildPartial() {
-        com.proto.LoginOuterClass.Login result = new com.proto.LoginOuterClass.Login(this);
+      public com.proto.Login.LoginReq buildPartial() {
+        com.proto.Login.LoginReq result = new com.proto.Login.LoginReq(this);
         result.account_ = account_;
         result.pwd_ = pwd_;
+        result.connId_ = connId_;
         onBuilt();
         return result;
       }
@@ -469,16 +502,16 @@ public final class LoginOuterClass {
       }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.proto.LoginOuterClass.Login) {
-          return mergeFrom((com.proto.LoginOuterClass.Login)other);
+        if (other instanceof com.proto.Login.LoginReq) {
+          return mergeFrom((com.proto.Login.LoginReq)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(com.proto.LoginOuterClass.Login other) {
-        if (other == com.proto.LoginOuterClass.Login.getDefaultInstance()) return this;
+      public Builder mergeFrom(com.proto.Login.LoginReq other) {
+        if (other == com.proto.Login.LoginReq.getDefaultInstance()) return this;
         if (!other.getAccount().isEmpty()) {
           account_ = other.account_;
           onChanged();
@@ -486,6 +519,9 @@ public final class LoginOuterClass {
         if (!other.getPwd().isEmpty()) {
           pwd_ = other.pwd_;
           onChanged();
+        }
+        if (other.getConnId() != 0) {
+          setConnId(other.getConnId());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -502,11 +538,11 @@ public final class LoginOuterClass {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.proto.LoginOuterClass.Login parsedMessage = null;
+        com.proto.Login.LoginReq parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.proto.LoginOuterClass.Login) e.getUnfinishedMessage();
+          parsedMessage = (com.proto.Login.LoginReq) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -653,6 +689,32 @@ public final class LoginOuterClass {
         onChanged();
         return this;
       }
+
+      private int connId_ ;
+      /**
+       * <code>int32 conn_id = 3;</code>
+       */
+      public int getConnId() {
+        return connId_;
+      }
+      /**
+       * <code>int32 conn_id = 3;</code>
+       */
+      public Builder setConnId(int value) {
+        
+        connId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 conn_id = 3;</code>
+       */
+      public Builder clearConnId() {
+        
+        connId_ = 0;
+        onChanged();
+        return this;
+      }
       @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -666,41 +728,41 @@ public final class LoginOuterClass {
       }
 
 
-      // @@protoc_insertion_point(builder_scope:Login)
+      // @@protoc_insertion_point(builder_scope:LoginReq)
     }
 
-    // @@protoc_insertion_point(class_scope:Login)
-    private static final com.proto.LoginOuterClass.Login DEFAULT_INSTANCE;
+    // @@protoc_insertion_point(class_scope:LoginReq)
+    private static final com.proto.Login.LoginReq DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new com.proto.LoginOuterClass.Login();
+      DEFAULT_INSTANCE = new com.proto.Login.LoginReq();
     }
 
-    public static com.proto.LoginOuterClass.Login getDefaultInstance() {
+    public static com.proto.Login.LoginReq getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
-    private static final com.google.protobuf.Parser<Login>
-        PARSER = new com.google.protobuf.AbstractParser<Login>() {
+    private static final com.google.protobuf.Parser<LoginReq>
+        PARSER = new com.google.protobuf.AbstractParser<LoginReq>() {
       @java.lang.Override
-      public Login parsePartialFrom(
+      public LoginReq parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new Login(input, extensionRegistry);
+        return new LoginReq(input, extensionRegistry);
       }
     };
 
-    public static com.google.protobuf.Parser<Login> parser() {
+    public static com.google.protobuf.Parser<LoginReq> parser() {
       return PARSER;
     }
 
     @java.lang.Override
-    public com.google.protobuf.Parser<Login> getParserForType() {
+    public com.google.protobuf.Parser<LoginReq> getParserForType() {
       return PARSER;
     }
 
     @java.lang.Override
-    public com.proto.LoginOuterClass.Login getDefaultInstanceForType() {
+    public com.proto.Login.LoginReq getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -724,6 +786,16 @@ public final class LoginOuterClass {
      * <code>int32 user_id = 2;</code>
      */
     int getUserId();
+
+    /**
+     * <code>int32 conn_id = 3;</code>
+     */
+    int getConnId();
+
+    /**
+     * <code>int32 err_code = 4;</code>
+     */
+    int getErrCode();
   }
   /**
    * Protobuf type {@code LoginRsp}
@@ -782,6 +854,16 @@ public final class LoginOuterClass {
               userId_ = input.readInt32();
               break;
             }
+            case 24: {
+
+              connId_ = input.readInt32();
+              break;
+            }
+            case 32: {
+
+              errCode_ = input.readInt32();
+              break;
+            }
             default: {
               if (!parseUnknownField(
                   input, unknownFields, extensionRegistry, tag)) {
@@ -803,15 +885,15 @@ public final class LoginOuterClass {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.proto.LoginOuterClass.internal_static_LoginRsp_descriptor;
+      return com.proto.Login.internal_static_LoginRsp_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.proto.LoginOuterClass.internal_static_LoginRsp_fieldAccessorTable
+      return com.proto.Login.internal_static_LoginRsp_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.proto.LoginOuterClass.LoginRsp.class, com.proto.LoginOuterClass.LoginRsp.Builder.class);
+              com.proto.Login.LoginRsp.class, com.proto.Login.LoginRsp.Builder.class);
     }
 
     public static final int ACCOUNT_FIELD_NUMBER = 1;
@@ -857,6 +939,24 @@ public final class LoginOuterClass {
       return userId_;
     }
 
+    public static final int CONN_ID_FIELD_NUMBER = 3;
+    private int connId_;
+    /**
+     * <code>int32 conn_id = 3;</code>
+     */
+    public int getConnId() {
+      return connId_;
+    }
+
+    public static final int ERR_CODE_FIELD_NUMBER = 4;
+    private int errCode_;
+    /**
+     * <code>int32 err_code = 4;</code>
+     */
+    public int getErrCode() {
+      return errCode_;
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -877,6 +977,12 @@ public final class LoginOuterClass {
       if (userId_ != 0) {
         output.writeInt32(2, userId_);
       }
+      if (connId_ != 0) {
+        output.writeInt32(3, connId_);
+      }
+      if (errCode_ != 0) {
+        output.writeInt32(4, errCode_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -893,6 +999,14 @@ public final class LoginOuterClass {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(2, userId_);
       }
+      if (connId_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(3, connId_);
+      }
+      if (errCode_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(4, errCode_);
+      }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
@@ -903,15 +1017,19 @@ public final class LoginOuterClass {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof com.proto.LoginOuterClass.LoginRsp)) {
+      if (!(obj instanceof com.proto.Login.LoginRsp)) {
         return super.equals(obj);
       }
-      com.proto.LoginOuterClass.LoginRsp other = (com.proto.LoginOuterClass.LoginRsp) obj;
+      com.proto.Login.LoginRsp other = (com.proto.Login.LoginRsp) obj;
 
       if (!getAccount()
           .equals(other.getAccount())) return false;
       if (getUserId()
           != other.getUserId()) return false;
+      if (getConnId()
+          != other.getConnId()) return false;
+      if (getErrCode()
+          != other.getErrCode()) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -927,74 +1045,78 @@ public final class LoginOuterClass {
       hash = (53 * hash) + getAccount().hashCode();
       hash = (37 * hash) + USER_ID_FIELD_NUMBER;
       hash = (53 * hash) + getUserId();
+      hash = (37 * hash) + CONN_ID_FIELD_NUMBER;
+      hash = (53 * hash) + getConnId();
+      hash = (37 * hash) + ERR_CODE_FIELD_NUMBER;
+      hash = (53 * hash) + getErrCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
     }
 
-    public static com.proto.LoginOuterClass.LoginRsp parseFrom(
+    public static com.proto.Login.LoginRsp parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.proto.LoginOuterClass.LoginRsp parseFrom(
+    public static com.proto.Login.LoginRsp parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.proto.LoginOuterClass.LoginRsp parseFrom(
+    public static com.proto.Login.LoginRsp parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.proto.LoginOuterClass.LoginRsp parseFrom(
+    public static com.proto.Login.LoginRsp parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.proto.LoginOuterClass.LoginRsp parseFrom(byte[] data)
+    public static com.proto.Login.LoginRsp parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.proto.LoginOuterClass.LoginRsp parseFrom(
+    public static com.proto.Login.LoginRsp parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.proto.LoginOuterClass.LoginRsp parseFrom(java.io.InputStream input)
+    public static com.proto.Login.LoginRsp parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static com.proto.LoginOuterClass.LoginRsp parseFrom(
+    public static com.proto.Login.LoginRsp parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.proto.LoginOuterClass.LoginRsp parseDelimitedFrom(java.io.InputStream input)
+    public static com.proto.Login.LoginRsp parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static com.proto.LoginOuterClass.LoginRsp parseDelimitedFrom(
+    public static com.proto.Login.LoginRsp parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.proto.LoginOuterClass.LoginRsp parseFrom(
+    public static com.proto.Login.LoginRsp parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static com.proto.LoginOuterClass.LoginRsp parseFrom(
+    public static com.proto.Login.LoginRsp parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -1007,7 +1129,7 @@ public final class LoginOuterClass {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(com.proto.LoginOuterClass.LoginRsp prototype) {
+    public static Builder newBuilder(com.proto.Login.LoginRsp prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     @java.lang.Override
@@ -1028,21 +1150,21 @@ public final class LoginOuterClass {
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:LoginRsp)
-        com.proto.LoginOuterClass.LoginRspOrBuilder {
+        com.proto.Login.LoginRspOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return com.proto.LoginOuterClass.internal_static_LoginRsp_descriptor;
+        return com.proto.Login.internal_static_LoginRsp_descriptor;
       }
 
       @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.proto.LoginOuterClass.internal_static_LoginRsp_fieldAccessorTable
+        return com.proto.Login.internal_static_LoginRsp_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                com.proto.LoginOuterClass.LoginRsp.class, com.proto.LoginOuterClass.LoginRsp.Builder.class);
+                com.proto.Login.LoginRsp.class, com.proto.Login.LoginRsp.Builder.class);
       }
 
-      // Construct using com.proto.LoginOuterClass.LoginRsp.newBuilder()
+      // Construct using com.proto.Login.LoginRsp.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -1064,23 +1186,27 @@ public final class LoginOuterClass {
 
         userId_ = 0;
 
+        connId_ = 0;
+
+        errCode_ = 0;
+
         return this;
       }
 
       @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return com.proto.LoginOuterClass.internal_static_LoginRsp_descriptor;
+        return com.proto.Login.internal_static_LoginRsp_descriptor;
       }
 
       @java.lang.Override
-      public com.proto.LoginOuterClass.LoginRsp getDefaultInstanceForType() {
-        return com.proto.LoginOuterClass.LoginRsp.getDefaultInstance();
+      public com.proto.Login.LoginRsp getDefaultInstanceForType() {
+        return com.proto.Login.LoginRsp.getDefaultInstance();
       }
 
       @java.lang.Override
-      public com.proto.LoginOuterClass.LoginRsp build() {
-        com.proto.LoginOuterClass.LoginRsp result = buildPartial();
+      public com.proto.Login.LoginRsp build() {
+        com.proto.Login.LoginRsp result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
@@ -1088,10 +1214,12 @@ public final class LoginOuterClass {
       }
 
       @java.lang.Override
-      public com.proto.LoginOuterClass.LoginRsp buildPartial() {
-        com.proto.LoginOuterClass.LoginRsp result = new com.proto.LoginOuterClass.LoginRsp(this);
+      public com.proto.Login.LoginRsp buildPartial() {
+        com.proto.Login.LoginRsp result = new com.proto.Login.LoginRsp(this);
         result.account_ = account_;
         result.userId_ = userId_;
+        result.connId_ = connId_;
+        result.errCode_ = errCode_;
         onBuilt();
         return result;
       }
@@ -1130,22 +1258,28 @@ public final class LoginOuterClass {
       }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.proto.LoginOuterClass.LoginRsp) {
-          return mergeFrom((com.proto.LoginOuterClass.LoginRsp)other);
+        if (other instanceof com.proto.Login.LoginRsp) {
+          return mergeFrom((com.proto.Login.LoginRsp)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(com.proto.LoginOuterClass.LoginRsp other) {
-        if (other == com.proto.LoginOuterClass.LoginRsp.getDefaultInstance()) return this;
+      public Builder mergeFrom(com.proto.Login.LoginRsp other) {
+        if (other == com.proto.Login.LoginRsp.getDefaultInstance()) return this;
         if (!other.getAccount().isEmpty()) {
           account_ = other.account_;
           onChanged();
         }
         if (other.getUserId() != 0) {
           setUserId(other.getUserId());
+        }
+        if (other.getConnId() != 0) {
+          setConnId(other.getConnId());
+        }
+        if (other.getErrCode() != 0) {
+          setErrCode(other.getErrCode());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -1162,11 +1296,11 @@ public final class LoginOuterClass {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.proto.LoginOuterClass.LoginRsp parsedMessage = null;
+        com.proto.Login.LoginRsp parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.proto.LoginOuterClass.LoginRsp) e.getUnfinishedMessage();
+          parsedMessage = (com.proto.Login.LoginRsp) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -1270,6 +1404,58 @@ public final class LoginOuterClass {
         onChanged();
         return this;
       }
+
+      private int connId_ ;
+      /**
+       * <code>int32 conn_id = 3;</code>
+       */
+      public int getConnId() {
+        return connId_;
+      }
+      /**
+       * <code>int32 conn_id = 3;</code>
+       */
+      public Builder setConnId(int value) {
+        
+        connId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 conn_id = 3;</code>
+       */
+      public Builder clearConnId() {
+        
+        connId_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int errCode_ ;
+      /**
+       * <code>int32 err_code = 4;</code>
+       */
+      public int getErrCode() {
+        return errCode_;
+      }
+      /**
+       * <code>int32 err_code = 4;</code>
+       */
+      public Builder setErrCode(int value) {
+        
+        errCode_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 err_code = 4;</code>
+       */
+      public Builder clearErrCode() {
+        
+        errCode_ = 0;
+        onChanged();
+        return this;
+      }
       @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -1287,12 +1473,12 @@ public final class LoginOuterClass {
     }
 
     // @@protoc_insertion_point(class_scope:LoginRsp)
-    private static final com.proto.LoginOuterClass.LoginRsp DEFAULT_INSTANCE;
+    private static final com.proto.Login.LoginRsp DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new com.proto.LoginOuterClass.LoginRsp();
+      DEFAULT_INSTANCE = new com.proto.Login.LoginRsp();
     }
 
-    public static com.proto.LoginOuterClass.LoginRsp getDefaultInstance() {
+    public static com.proto.Login.LoginRsp getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -1317,17 +1503,17 @@ public final class LoginOuterClass {
     }
 
     @java.lang.Override
-    public com.proto.LoginOuterClass.LoginRsp getDefaultInstanceForType() {
+    public com.proto.Login.LoginRsp getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
   }
 
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_Login_descriptor;
+    internal_static_LoginReq_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_Login_fieldAccessorTable;
+      internal_static_LoginReq_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_LoginRsp_descriptor;
   private static final 
@@ -1342,26 +1528,28 @@ public final class LoginOuterClass {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\013login.proto\"%\n\005Login\022\017\n\007account\030\001 \001(\t\022" +
-      "\013\n\003pwd\030\002 \001(\t\",\n\010LoginRsp\022\017\n\007account\030\001 \001(" +
-      "\t\022\017\n\007user_id\030\002 \001(\005B\013\n\tcom.protob\006proto3"
+      "\n\013login.proto\"9\n\010LoginReq\022\017\n\007account\030\001 \001" +
+      "(\t\022\013\n\003pwd\030\002 \001(\t\022\017\n\007conn_id\030\003 \001(\005\"O\n\010Logi" +
+      "nRsp\022\017\n\007account\030\001 \001(\t\022\017\n\007user_id\030\002 \001(\005\022\017" +
+      "\n\007conn_id\030\003 \001(\005\022\020\n\010err_code\030\004 \001(\005B\022\n\tcom" +
+      ".protoB\005Loginb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         });
-    internal_static_Login_descriptor =
+    internal_static_LoginReq_descriptor =
       getDescriptor().getMessageTypes().get(0);
-    internal_static_Login_fieldAccessorTable = new
+    internal_static_LoginReq_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_Login_descriptor,
-        new java.lang.String[] { "Account", "Pwd", });
+        internal_static_LoginReq_descriptor,
+        new java.lang.String[] { "Account", "Pwd", "ConnId", });
     internal_static_LoginRsp_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_LoginRsp_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_LoginRsp_descriptor,
-        new java.lang.String[] { "Account", "UserId", });
+        new java.lang.String[] { "Account", "UserId", "ConnId", "ErrCode", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

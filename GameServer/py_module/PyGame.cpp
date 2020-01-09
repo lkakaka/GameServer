@@ -6,7 +6,7 @@
 static PyObject* ModuleError;
 static char* ModuleName = "Game";
 
-static PyObject* sendMessage(PyObject* self, PyObject* args)
+static PyObject* sendMsgToClient(PyObject* self, PyObject* args)
 {
 	int connId;
 	int msgId;
@@ -21,14 +21,14 @@ static PyObject* sendMessage(PyObject* self, PyObject* args)
 	Py_RETURN_TRUE;
 }
 
-static PyObject* sendMessageToServer(PyObject* self, PyObject* args)
+static PyObject* sendMsgToService(PyObject* self, PyObject* args)
 {
 	char* serviceName = NULL;
 	int msgId;
 	Py_ssize_t msgLen;
 	char* msg = NULL;
 	if (!PyArg_ParseTuple(args, "siy#", &serviceName, &msgId, &msg, &msgLen)) {
-		PyErr_SetString(ModuleError, "sendMessageToServer failed");
+		PyErr_SetString(ModuleError, "sendMessageToService failed");
 		Py_RETURN_FALSE;
 	}
 
@@ -37,8 +37,8 @@ static PyObject* sendMessageToServer(PyObject* self, PyObject* args)
 }
 
 static PyMethodDef module_methods[] = {
-	{"sendMessage", (PyCFunction)sendMessage, METH_VARARGS, ""},
-	{"sendMessageToServer", (PyCFunction)sendMessageToServer, METH_VARARGS, ""},
+	{"sendMsgToClient", (PyCFunction)sendMsgToClient, METH_VARARGS, ""},
+	{"sendMsgToService", (PyCFunction)sendMsgToService, METH_VARARGS, ""},
 	{NULL, NULL, 0, NULL}
 
 };

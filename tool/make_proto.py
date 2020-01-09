@@ -12,6 +12,7 @@ class ProtoBuilder():
     env = Environment(loader=FileSystemLoader(
                 'templates'), trim_blocks=True)
     _msg_id = 0
+    proto_list = []
     render_obj = {}
 
     @staticmethod
@@ -29,6 +30,8 @@ class ProtoBuilder():
             print(path, dir_names, file_list)
             for file_name in file_list:
                 ProtoBuilder.make_proto_file("{}/{}".format(path, file_name))
+
+        ProtoBuilder.gen_proto_file()
 
     @staticmethod    
     def make_proto_file(file_name):
@@ -50,9 +53,31 @@ class ProtoBuilder():
                 match_obj = re.search(".*message\s+([\w\d]+).*", line)
                 if match_obj:
                     proto_name = match_obj.group(1)
-                    print(match_obj.group(1), type(match_obj.group(1))) 
-                    msg_id = ProtoBuilder.alloc_msg_id()
-                    ProtoBuilder.render_obj["msg_def"].append(("MSG_ID_{}".format(proto_name.upper()), msg_id, proto_name, java_file_name, org_file_name))
+                    if proto_name in ProtoBuilder.proto_list:
+                        print("proto {} duplicate define!!!!!".format(proto_name))
+                        raise
+                    ProtoBuilder.proto_list.append((proto_name, org_file_name))
+
+    @staticmethod
+    def gen_proto_file():
+        # print(ProtoBuilder.proto_list)
+        def cmp_key_func(elem):
+            return elem[0]
+
+        ProtoBuilder.proto_list.sort(key=cmp_key_func)
+        # print(ProtoBuilder.proto_list)
+        for proto_name, org_file_name in ProtoBuilder.proto_list:
+            def match_func(matched):
+                value = matched.group('value')
+                if value.isupper():
+                    return "_" + value
+                return value
+                    
+            proto_id_name = re.sub('(?P<value>\w)', match_func, proto_name)
+            msg_id = ProtoBuilder.alloc_msg_id()
+            java_file_name = org_file_name.capitalize()    # 首字母转换成大写
+            ProtoBuilder.render_obj["msg_def"].append(("MSG_ID{}".format(proto_id_name.upper()), msg_id, proto_name, java_file_name, org_file_name))
+        
         ProtoBuilder.render_file("proto_template.h", OUTPUT_PATH + "/proto.h", ProtoBuilder.render_obj)
         ProtoBuilder.render_file("proto_template.cpp", OUTPUT_PATH + "/proto.cpp", ProtoBuilder.render_obj)
         ProtoBuilder.render_file("proto_template.java", JAVA_OUTPUT_PATH + "/com/proto/ProtoBufferMsg.java", ProtoBuilder.render_obj)
@@ -64,9 +89,6 @@ class ProtoBuilder():
         result = template.render(**render_obj)
         with open(save_file, "w", encoding="utf-8") as f:
             f.write(result)
-    
-
-
 
 if __name__ == "__main__":
     ProtoBuilder.make_proto()

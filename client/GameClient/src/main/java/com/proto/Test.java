@@ -3,8 +3,8 @@
 
 package com.proto;
 
-public final class TestOuterClass {
-  private TestOuterClass() {}
+public final class Test {
+  private Test() {}
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistryLite registry) {
   }
@@ -14,8 +14,8 @@ public final class TestOuterClass {
     registerAllExtensions(
         (com.google.protobuf.ExtensionRegistryLite) registry);
   }
-  public interface TestOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:Test)
+  public interface TestReqOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:TestReq)
       com.google.protobuf.MessageOrBuilder {
 
     /**
@@ -34,18 +34,18 @@ public final class TestOuterClass {
         getMsgBytes();
   }
   /**
-   * Protobuf type {@code Test}
+   * Protobuf type {@code TestReq}
    */
-  public  static final class Test extends
+  public  static final class TestReq extends
       com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:Test)
-      TestOrBuilder {
+      // @@protoc_insertion_point(message_implements:TestReq)
+      TestReqOrBuilder {
   private static final long serialVersionUID = 0L;
-    // Use Test.newBuilder() to construct.
-    private Test(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+    // Use TestReq.newBuilder() to construct.
+    private TestReq(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-    private Test() {
+    private TestReq() {
       msg_ = "";
     }
 
@@ -53,7 +53,7 @@ public final class TestOuterClass {
     @SuppressWarnings({"unused"})
     protected java.lang.Object newInstance(
         UnusedPrivateParameter unused) {
-      return new Test();
+      return new TestReq();
     }
 
     @java.lang.Override
@@ -61,7 +61,7 @@ public final class TestOuterClass {
     getUnknownFields() {
       return this.unknownFields;
     }
-    private Test(
+    private TestReq(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -111,15 +111,15 @@ public final class TestOuterClass {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.proto.TestOuterClass.internal_static_Test_descriptor;
+      return com.proto.Test.internal_static_TestReq_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.proto.TestOuterClass.internal_static_Test_fieldAccessorTable
+      return com.proto.Test.internal_static_TestReq_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.proto.TestOuterClass.Test.class, com.proto.TestOuterClass.Test.Builder.class);
+              com.proto.Test.TestReq.class, com.proto.Test.TestReq.Builder.class);
     }
 
     public static final int ID_FIELD_NUMBER = 1;
@@ -211,10 +211,10 @@ public final class TestOuterClass {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof com.proto.TestOuterClass.Test)) {
+      if (!(obj instanceof com.proto.Test.TestReq)) {
         return super.equals(obj);
       }
-      com.proto.TestOuterClass.Test other = (com.proto.TestOuterClass.Test) obj;
+      com.proto.Test.TestReq other = (com.proto.Test.TestReq) obj;
 
       if (getId()
           != other.getId()) return false;
@@ -240,69 +240,69 @@ public final class TestOuterClass {
       return hash;
     }
 
-    public static com.proto.TestOuterClass.Test parseFrom(
+    public static com.proto.Test.TestReq parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.proto.TestOuterClass.Test parseFrom(
+    public static com.proto.Test.TestReq parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.proto.TestOuterClass.Test parseFrom(
+    public static com.proto.Test.TestReq parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.proto.TestOuterClass.Test parseFrom(
+    public static com.proto.Test.TestReq parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.proto.TestOuterClass.Test parseFrom(byte[] data)
+    public static com.proto.Test.TestReq parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.proto.TestOuterClass.Test parseFrom(
+    public static com.proto.Test.TestReq parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.proto.TestOuterClass.Test parseFrom(java.io.InputStream input)
+    public static com.proto.Test.TestReq parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static com.proto.TestOuterClass.Test parseFrom(
+    public static com.proto.Test.TestReq parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.proto.TestOuterClass.Test parseDelimitedFrom(java.io.InputStream input)
+    public static com.proto.Test.TestReq parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static com.proto.TestOuterClass.Test parseDelimitedFrom(
+    public static com.proto.Test.TestReq parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.proto.TestOuterClass.Test parseFrom(
+    public static com.proto.Test.TestReq parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static com.proto.TestOuterClass.Test parseFrom(
+    public static com.proto.Test.TestReq parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -315,7 +315,7 @@ public final class TestOuterClass {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(com.proto.TestOuterClass.Test prototype) {
+    public static Builder newBuilder(com.proto.Test.TestReq prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     @java.lang.Override
@@ -331,26 +331,26 @@ public final class TestOuterClass {
       return builder;
     }
     /**
-     * Protobuf type {@code Test}
+     * Protobuf type {@code TestReq}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:Test)
-        com.proto.TestOuterClass.TestOrBuilder {
+        // @@protoc_insertion_point(builder_implements:TestReq)
+        com.proto.Test.TestReqOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return com.proto.TestOuterClass.internal_static_Test_descriptor;
+        return com.proto.Test.internal_static_TestReq_descriptor;
       }
 
       @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.proto.TestOuterClass.internal_static_Test_fieldAccessorTable
+        return com.proto.Test.internal_static_TestReq_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                com.proto.TestOuterClass.Test.class, com.proto.TestOuterClass.Test.Builder.class);
+                com.proto.Test.TestReq.class, com.proto.Test.TestReq.Builder.class);
       }
 
-      // Construct using com.proto.TestOuterClass.Test.newBuilder()
+      // Construct using com.proto.Test.TestReq.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -378,17 +378,17 @@ public final class TestOuterClass {
       @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return com.proto.TestOuterClass.internal_static_Test_descriptor;
+        return com.proto.Test.internal_static_TestReq_descriptor;
       }
 
       @java.lang.Override
-      public com.proto.TestOuterClass.Test getDefaultInstanceForType() {
-        return com.proto.TestOuterClass.Test.getDefaultInstance();
+      public com.proto.Test.TestReq getDefaultInstanceForType() {
+        return com.proto.Test.TestReq.getDefaultInstance();
       }
 
       @java.lang.Override
-      public com.proto.TestOuterClass.Test build() {
-        com.proto.TestOuterClass.Test result = buildPartial();
+      public com.proto.Test.TestReq build() {
+        com.proto.Test.TestReq result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
@@ -396,8 +396,8 @@ public final class TestOuterClass {
       }
 
       @java.lang.Override
-      public com.proto.TestOuterClass.Test buildPartial() {
-        com.proto.TestOuterClass.Test result = new com.proto.TestOuterClass.Test(this);
+      public com.proto.Test.TestReq buildPartial() {
+        com.proto.Test.TestReq result = new com.proto.Test.TestReq(this);
         result.id_ = id_;
         result.msg_ = msg_;
         onBuilt();
@@ -438,16 +438,16 @@ public final class TestOuterClass {
       }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.proto.TestOuterClass.Test) {
-          return mergeFrom((com.proto.TestOuterClass.Test)other);
+        if (other instanceof com.proto.Test.TestReq) {
+          return mergeFrom((com.proto.Test.TestReq)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(com.proto.TestOuterClass.Test other) {
-        if (other == com.proto.TestOuterClass.Test.getDefaultInstance()) return this;
+      public Builder mergeFrom(com.proto.Test.TestReq other) {
+        if (other == com.proto.Test.TestReq.getDefaultInstance()) return this;
         if (other.getId() != 0) {
           setId(other.getId());
         }
@@ -470,11 +470,11 @@ public final class TestOuterClass {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.proto.TestOuterClass.Test parsedMessage = null;
+        com.proto.Test.TestReq parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.proto.TestOuterClass.Test) e.getUnfinishedMessage();
+          parsedMessage = (com.proto.Test.TestReq) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -591,51 +591,51 @@ public final class TestOuterClass {
       }
 
 
-      // @@protoc_insertion_point(builder_scope:Test)
+      // @@protoc_insertion_point(builder_scope:TestReq)
     }
 
-    // @@protoc_insertion_point(class_scope:Test)
-    private static final com.proto.TestOuterClass.Test DEFAULT_INSTANCE;
+    // @@protoc_insertion_point(class_scope:TestReq)
+    private static final com.proto.Test.TestReq DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new com.proto.TestOuterClass.Test();
+      DEFAULT_INSTANCE = new com.proto.Test.TestReq();
     }
 
-    public static com.proto.TestOuterClass.Test getDefaultInstance() {
+    public static com.proto.Test.TestReq getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
-    private static final com.google.protobuf.Parser<Test>
-        PARSER = new com.google.protobuf.AbstractParser<Test>() {
+    private static final com.google.protobuf.Parser<TestReq>
+        PARSER = new com.google.protobuf.AbstractParser<TestReq>() {
       @java.lang.Override
-      public Test parsePartialFrom(
+      public TestReq parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new Test(input, extensionRegistry);
+        return new TestReq(input, extensionRegistry);
       }
     };
 
-    public static com.google.protobuf.Parser<Test> parser() {
+    public static com.google.protobuf.Parser<TestReq> parser() {
       return PARSER;
     }
 
     @java.lang.Override
-    public com.google.protobuf.Parser<Test> getParserForType() {
+    public com.google.protobuf.Parser<TestReq> getParserForType() {
       return PARSER;
     }
 
     @java.lang.Override
-    public com.proto.TestOuterClass.Test getDefaultInstanceForType() {
+    public com.proto.Test.TestReq getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
   }
 
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_Test_descriptor;
+    internal_static_TestReq_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_Test_fieldAccessorTable;
+      internal_static_TestReq_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -645,18 +645,18 @@ public final class TestOuterClass {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\ntest.proto\"\037\n\004Test\022\n\n\002id\030\001 \001(\005\022\013\n\003msg\030" +
-      "\002 \001(\tB\013\n\tcom.protob\006proto3"
+      "\n\ntest.proto\"\"\n\007TestReq\022\n\n\002id\030\001 \001(\005\022\013\n\003m" +
+      "sg\030\002 \001(\tB\021\n\tcom.protoB\004Testb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         });
-    internal_static_Test_descriptor =
+    internal_static_TestReq_descriptor =
       getDescriptor().getMessageTypes().get(0);
-    internal_static_Test_fieldAccessorTable = new
+    internal_static_TestReq_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_Test_descriptor,
+        internal_static_TestReq_descriptor,
         new java.lang.String[] { "Id", "Msg", });
   }
 

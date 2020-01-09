@@ -8,7 +8,7 @@ link_directories(${LOG4CPP_ROOT} ${Boost_LIBRARY_DIRS} ${PROTOBUFF_ROOT}/cmake/b
 
 file(GLOB_RECURSE CURRENT_HEADERS *.h *.hpp)
 file(GLOB_RECURSE CURRENT_SRC *.cpp *cc)
-add_executable(Gateway ${CURRENT_HEADERS} ${CURRENT_SRC} ${PROTO_SRC})
+add_executable(Gateway ${CURRENT_HEADERS} ${CURRENT_SRC})
 target_link_libraries(Gateway log4cpp GameUtil libzmq-v142-mt-4_3_3)
 target_link_libraries(Gateway debug libprotobufd optimized libprotobuf)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)

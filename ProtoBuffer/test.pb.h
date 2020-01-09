@@ -54,32 +54,32 @@ struct TableStruct_test_2eproto {
   static const ::PROTOBUF_NAMESPACE_ID::uint32 offsets[];
 };
 extern const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_test_2eproto;
-class Test;
-class TestDefaultTypeInternal;
-extern TestDefaultTypeInternal _Test_default_instance_;
+class TestReq;
+class TestReqDefaultTypeInternal;
+extern TestReqDefaultTypeInternal _TestReq_default_instance_;
 PROTOBUF_NAMESPACE_OPEN
-template<> ::Test* Arena::CreateMaybeMessage<::Test>(Arena*);
+template<> ::TestReq* Arena::CreateMaybeMessage<::TestReq>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 
 // ===================================================================
 
-class Test :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Test) */ {
+class TestReq :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:TestReq) */ {
  public:
-  Test();
-  virtual ~Test();
+  TestReq();
+  virtual ~TestReq();
 
-  Test(const Test& from);
-  Test(Test&& from) noexcept
-    : Test() {
+  TestReq(const TestReq& from);
+  TestReq(TestReq&& from) noexcept
+    : TestReq() {
     *this = ::std::move(from);
   }
 
-  inline Test& operator=(const Test& from) {
+  inline TestReq& operator=(const TestReq& from) {
     CopyFrom(from);
     return *this;
   }
-  inline Test& operator=(Test&& from) noexcept {
+  inline TestReq& operator=(TestReq&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -97,37 +97,37 @@ class Test :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return GetMetadataStatic().reflection;
   }
-  static const Test& default_instance();
+  static const TestReq& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const Test* internal_default_instance() {
-    return reinterpret_cast<const Test*>(
-               &_Test_default_instance_);
+  static inline const TestReq* internal_default_instance() {
+    return reinterpret_cast<const TestReq*>(
+               &_TestReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     0;
 
-  friend void swap(Test& a, Test& b) {
+  friend void swap(TestReq& a, TestReq& b) {
     a.Swap(&b);
   }
-  inline void Swap(Test* other) {
+  inline void Swap(TestReq* other) {
     if (other == this) return;
     InternalSwap(other);
   }
 
   // implements Message ----------------------------------------------
 
-  inline Test* New() const final {
-    return CreateMaybeMessage<Test>(nullptr);
+  inline TestReq* New() const final {
+    return CreateMaybeMessage<TestReq>(nullptr);
   }
 
-  Test* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
-    return CreateMaybeMessage<Test>(arena);
+  TestReq* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<TestReq>(arena);
   }
   void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
   void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
-  void CopyFrom(const Test& from);
-  void MergeFrom(const Test& from);
+  void CopyFrom(const TestReq& from);
+  void MergeFrom(const TestReq& from);
   PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
   bool IsInitialized() const final;
 
@@ -148,10 +148,10 @@ class Test :
   inline void SharedCtor();
   inline void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(Test* other);
+  void InternalSwap(TestReq* other);
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "Test";
+    return "TestReq";
   }
   private:
   inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
@@ -195,7 +195,7 @@ class Test :
   ::PROTOBUF_NAMESPACE_ID::int32 id() const;
   void set_id(::PROTOBUF_NAMESPACE_ID::int32 value);
 
-  // @@protoc_insertion_point(class_scope:Test)
+  // @@protoc_insertion_point(class_scope:TestReq)
  private:
   class _Internal;
 
@@ -214,71 +214,71 @@ class Test :
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
-// Test
+// TestReq
 
 // int32 id = 1;
-inline void Test::clear_id() {
+inline void TestReq::clear_id() {
   id_ = 0;
 }
-inline ::PROTOBUF_NAMESPACE_ID::int32 Test::id() const {
-  // @@protoc_insertion_point(field_get:Test.id)
+inline ::PROTOBUF_NAMESPACE_ID::int32 TestReq::id() const {
+  // @@protoc_insertion_point(field_get:TestReq.id)
   return id_;
 }
-inline void Test::set_id(::PROTOBUF_NAMESPACE_ID::int32 value) {
+inline void TestReq::set_id(::PROTOBUF_NAMESPACE_ID::int32 value) {
   
   id_ = value;
-  // @@protoc_insertion_point(field_set:Test.id)
+  // @@protoc_insertion_point(field_set:TestReq.id)
 }
 
 // string msg = 2;
-inline void Test::clear_msg() {
+inline void TestReq::clear_msg() {
   msg_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
-inline const std::string& Test::msg() const {
-  // @@protoc_insertion_point(field_get:Test.msg)
+inline const std::string& TestReq::msg() const {
+  // @@protoc_insertion_point(field_get:TestReq.msg)
   return msg_.GetNoArena();
 }
-inline void Test::set_msg(const std::string& value) {
+inline void TestReq::set_msg(const std::string& value) {
   
   msg_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:Test.msg)
+  // @@protoc_insertion_point(field_set:TestReq.msg)
 }
-inline void Test::set_msg(std::string&& value) {
+inline void TestReq::set_msg(std::string&& value) {
   
   msg_.SetNoArena(
     &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:Test.msg)
+  // @@protoc_insertion_point(field_set_rvalue:TestReq.msg)
 }
-inline void Test::set_msg(const char* value) {
+inline void TestReq::set_msg(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
   
   msg_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:Test.msg)
+  // @@protoc_insertion_point(field_set_char:TestReq.msg)
 }
-inline void Test::set_msg(const char* value, size_t size) {
+inline void TestReq::set_msg(const char* value, size_t size) {
   
   msg_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:Test.msg)
+  // @@protoc_insertion_point(field_set_pointer:TestReq.msg)
 }
-inline std::string* Test::mutable_msg() {
+inline std::string* TestReq::mutable_msg() {
   
-  // @@protoc_insertion_point(field_mutable:Test.msg)
+  // @@protoc_insertion_point(field_mutable:TestReq.msg)
   return msg_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
-inline std::string* Test::release_msg() {
-  // @@protoc_insertion_point(field_release:Test.msg)
+inline std::string* TestReq::release_msg() {
+  // @@protoc_insertion_point(field_release:TestReq.msg)
   
   return msg_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
-inline void Test::set_allocated_msg(std::string* msg) {
+inline void TestReq::set_allocated_msg(std::string* msg) {
   if (msg != nullptr) {
     
   } else {
     
   }
   msg_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), msg);
-  // @@protoc_insertion_point(field_set_allocated:Test.msg)
+  // @@protoc_insertion_point(field_set_allocated:TestReq.msg)
 }
 
 #ifdef __GNUC__

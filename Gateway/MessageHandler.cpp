@@ -1,4 +1,4 @@
-#include "ProtoBufferMgr.h"
+#include "MessageHandler.h"
 #include "Network.h"
 
 #include "proto.h"
@@ -24,7 +24,7 @@ void writeIntEx(std::vector<char>* data, int val) {
 	}
 }
 
-int ProtoBufferMgr::parseProtoData(int connId, std::vector<char> *recData)
+int MessageHandler::parseProtoData(int connId, std::vector<char> *recData)
 {
 	char* data = recData->data();
 	int dataLen = recData->size();
@@ -41,11 +41,10 @@ int ProtoBufferMgr::parseProtoData(int connId, std::vector<char> *recData)
 	return msgLen + 8;
 }
 
-void ProtoBufferMgr::dispatchMsg(int connId, int msgId, int msgLen, std::vector<char>* recData) {
-	if (msgId == MSG_ID_LOGIN) {
+void MessageHandler::dispatchMsg(int connId, int msgId, int msgLen, std::vector<char>* recData) {
+	if (msgId == MSG_ID_LOGIN_REQ) {
 
 	}
-	LoginRsp rsp;
 	std::vector<char> tmp;
 	writeIntEx(&tmp, connId);
 	writeIntEx(&tmp, msgId);
@@ -57,7 +56,7 @@ void ProtoBufferMgr::dispatchMsg(int connId, int msgId, int msgLen, std::vector<
 	ZmqInst::getZmqInstance()->sendData("scene", tmp.data(), msgLen + 8);
 }
 
-void ProtoBufferMgr::onRecvData(char* sender, char* data, int dataLen) {
+void MessageHandler::onRecvData(char* sender, char* data, int dataLen) {
 	if (dataLen <= 8) {
 		Logger::logError("$recv msg format error, data len < 8");
 		return;
@@ -68,7 +67,7 @@ void ProtoBufferMgr::onRecvData(char* sender, char* data, int dataLen) {
 	Logger::logInfo("$recv msg, sender:%s,  msgId:%d", sender, msgId);
 }
 
-void ProtoBufferMgr::sendPacket(int connID, int msgId, char* data, int dataLen) {
+void MessageHandler::sendPacket(int connID, int msgId, char* data, int dataLen) {
 	int msgLen = dataLen + 8;
 	std::vector<char> buff;
 	writeInt(&buff, msgLen);
