@@ -1,9 +1,5 @@
 #pragma once
 
-#ifdef DBPLUGIN_EXPORT
-#define DBPLUNGIN_API __declspec(dllexport)
-#else
-#define DBPLUNGIN_API
-#endif
+#include "DBExport.h"
 
 DBPLUNGIN_API void initDbModule();

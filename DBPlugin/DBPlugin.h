@@ -2,13 +2,7 @@
 
 #include <stdio.h>
 #include "Logger.h"
-
-
-#ifdef DBPLUGIN_EXPORT
-	#define DBPLUNGIN_API __declspec(dllexport)
-#else
-	#define DBPLUNGIN_API
-#endif
+#include "DBExport.h"
 
 class DBPLUNGIN_API DBPlugin
 {

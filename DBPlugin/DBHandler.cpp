@@ -313,7 +313,7 @@ void DBHandler::del(ReflectObject tbl)
 	st->execute(sqlStr);
 }
 
-void DBHandler::executeSql(std::string sql)
+void DBHandler::executeSql(std::string sql, std::function<void(Statement*, bool)> handler)
 {
 	Connection* conn = getDBConnection(m_dbName);
 	if (conn == NULL) {
@@ -323,32 +323,36 @@ void DBHandler::executeSql(std::string sql)
 	Statement* st = conn->createStatement();
 	sql::SQLString sqlStr = sql::SQLString(sql.c_str());
 	bool isResultSet = st->execute(sqlStr);
-
-	while (true) {
-		if (isResultSet) {
-			ResultSet* rs = st->getResultSet();
-			ResultSetMetaData* metaData = rs->getMetaData();
-			std::map<std::string, int> fieldTypeMap;
-			for (int i = 1; i <= metaData->getColumnCount(); i++) {
-				std::string fieldName = metaData->getColumnName(i);
-				int colType = metaData->getColumnType(i);
-				if (colType == DataType::INTEGER) {
-				}
-			}
-			while (rs->next()) {
-				
-			}
-		}
-		else {
-			int updateCount = st->getUpdateCount();
-			if (updateCount < 0) {
-				break;
-			}
-			Logger::logError("$exec sql success, sql: %s, update count:%d", sql.c_str(), updateCount);
-		}
-		
-		isResultSet = st->getMoreResults();
+	if (handler != NULL) {
+		handler(st, isResultSet);
 	}
-
+	Logger::logInfo("$exec sql success, sql: %s", sql.c_str());
 	st->close();
+
+	//while (true) {
+	//	if (isResultSet) {
+	//		ResultSet* rs = st->getResultSet();
+	//		ResultSetMetaData* metaData = rs->getMetaData();
+	//		std::map<std::string, int> fieldTypeMap;
+	//		for (int i = 1; i <= metaData->getColumnCount(); i++) {
+	//			std::string fieldName = metaData->getColumnName(i);
+	//			int colType = metaData->getColumnType(i);
+	//			if (colType == DataType::INTEGER) {
+	//			}
+	//		}
+	//		while (rs->next()) {
+	//			
+	//		}
+	//	}
+	//	else {
+	//		int updateCount = st->getUpdateCount();
+	//		if (updateCount < 0) {
+	//			break;
+	//		}
+	//		//Logger::logError("$exec sql success, sql: %s, update count:%d", sql.c_str(), updateCount);
+	//	}
+	//	
+	//	isResultSet = st->getMoreResults();
+	//}
+	
 }
