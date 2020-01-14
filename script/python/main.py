@@ -1,9 +1,9 @@
 #-*- ecoding:utf-8 -*-
 import os
 import sys
-import db.TbMgr
+# import db.TbMgr
 import logger
-import Timer
+# import Timer
 import py_cffi.cffi_test
 import game.service.db_service
 import game.service.scene_service

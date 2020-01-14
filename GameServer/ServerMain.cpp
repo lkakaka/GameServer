@@ -53,7 +53,7 @@ int main(int argc, char** argv)
 	PyObject* scriptObj = NULL;
 	std::string funcName = Config::getConfigStr(cfgName, "script_init_func");
 	if (funcName.length() > 0) {
-		initPython(funcName.c_str());
+		initPython();
 		auto py_state = PyGILState_Ensure();
 		scriptObj = callPyFunction("main", funcName.c_str(), NULL);
 		PyGILState_Release(py_state);

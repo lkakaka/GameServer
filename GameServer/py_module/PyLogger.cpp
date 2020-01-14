@@ -1,6 +1,7 @@
 
 #include "PyModule.h"
 #include "Logger.h"
+#include "../PythonPlugin.h"
 
 static PyObject* ModuleError;
 static char* ModuleName = "Logger";
@@ -9,7 +10,7 @@ static PyObject* logInfo(PyObject* self, PyObject* args)
 {
 	char* msg = NULL;
 	if (!PyArg_ParseTuple(args, "s", &msg)) {
-		PyErr_SetString(ModuleError, "logInfo failed");
+		//PyErr_SetString(ModuleError, "logInfo failed");
 		Py_RETURN_FALSE;
 	}
 
@@ -21,7 +22,7 @@ static PyObject* logError(PyObject* self, PyObject* args)
 {
 	char* msg = NULL;
 	if (!PyArg_ParseTuple(args, "s", &msg)) {
-		PyErr_SetString(ModuleError, "logError failed");
+		//PyErr_SetString(ModuleError, "logError failed");
 		Py_RETURN_FALSE;
 	}
 
@@ -33,7 +34,7 @@ static PyObject* logDebug(PyObject* self, PyObject* args)
 {
 	char* msg = NULL;
 	if (!PyArg_ParseTuple(args, "s", &msg)) {
-		PyErr_SetString(ModuleError, "logDebug failed");
+		//PyErr_SetString(ModuleError, "logDebug failed");
 		Py_RETURN_FALSE;
 	}
 
@@ -48,6 +49,14 @@ static PyMethodDef module_methods[] = {
 	{NULL, NULL, 0, NULL}
 
 };
+
+
+static PyObject* log_repr(PyObject* aa)
+{
+	return Py_BuildValue("s", "PyDb handler, log_repr");
+}
+
+
 
 static struct PyModuleDef module_def =
 {
@@ -81,4 +90,5 @@ PyMODINIT_FUNC PyInit_Logger(void)
 void initLoggerModule() {
 	PyImport_AppendInittab(ModuleName, PyInit_Logger);  // python3
 }
+
 

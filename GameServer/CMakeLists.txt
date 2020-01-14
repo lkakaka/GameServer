@@ -2,7 +2,7 @@
 # set(PROTOBUFF_ROOT ../../protobuf-3.9.0)
 # set(BOOST_ROOT ../../boost_1_70_0)
 # set(PYTHON_LIBRARY C:/Python34/libs)
-set(DBPLUGIN_ROOT ${PROJECT_SOURCE_DIR}/DBPlugin)
+# set(DBPLUGIN_ROOT ${PROJECT_SOURCE_DIR}/DBPlugin)
 # find_package(Boost REQUIRED)
 # find_package(PythonLibs REQUIRED)
 

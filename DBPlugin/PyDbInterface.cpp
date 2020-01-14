@@ -10,14 +10,28 @@
 #include "jdbc/cppconn/statement.h"
 #include "jdbc/cppconn/datatype.h"
 
+#include "PyCustomObj.h"
+
 static PyObject* ModuleError;
 static char* ModuleName = "PyDb";
 
-typedef struct {
-	PyObject_HEAD
+//class PyCustomObjBase {
+//public:
+//	PyObject_HEAD
+//};
+
+class PyDbObject : public PyCustomObjBase {
+public:
+	//PyObject_HEAD
 	DBHandler* db_inst;
 	PyObject* name;
-} PyDbObject;
+};
+
+//class PyModuleObj {
+//	PyTypeObject  pyTypeObj;
+//	int custom_type_size;
+//
+//};
 
 static PyObject* test(PyObject* self, PyObject* args)
 {
@@ -241,83 +255,121 @@ PyDb_GenericGetAttr(PyObject* obj, PyObject* name) {
 	return PyObject_GenericGetAttr(obj, name);
 }
 
-static PyTypeObject PyDb_Type = {
-	PyVarObject_HEAD_INIT(NULL, 0)
-	"PyDb",                                      /* tp_name */
-	sizeof(PyDbObject), //offsetof(PyLongObject, ob_digit),           /* tp_basicsize */
-	0,//sizeof(digit),                              /* tp_itemsize */
-	0,                                          /* tp_dealloc */
-	0,                                          /* tp_vectorcall_offset */
-	0,                                          /* tp_getattr */
-	0,                                          /* tp_setattr */
-	0,                                          /* tp_as_async */
-	db_repr,                     /* tp_repr */
-	0,                            /* tp_as_number */
-	0,                                          /* tp_as_sequence */
-	0,                                          /* tp_as_mapping */
-	0,                        /* tp_hash */
-	0,                                          /* tp_call */
-	db_repr,                                          /* tp_str */
-	PyDb_GenericGetAttr,                    /* tp_getattro */
-	0,                                          /* tp_setattro */
-	0,                                          /* tp_as_buffer */
-	Py_TPFLAGS_DEFAULT,               /* tp_flags */
-	"",                                   /* tp_doc */
-	0,                                          /* tp_traverse */
-	0,                                          /* tp_clear */
-	0,                           /* tp_richcompare */
-	0,                                          /* tp_weaklistoffset */
-	0,                                          /* tp_iter */
-	0,                                          /* tp_iternext */
-	db_methods,                               /* tp_methods */
-	db_members,                                          /* tp_members */
-	0,                                /* tp_getset */
-	0,                                          /* tp_base */
-	0,                                          /* tp_dict */
-	0,                                          /* tp_descr_get */
-	0,                                          /* tp_descr_set */
-	0,                                          /* tp_dictoffset */
-	0,                                          /* tp_init */
-	0,                                          /* tp_alloc */
-	PyDbInst_New,                                   /* tp_new */
-	PyDbInst_Free,                               /* tp_free */
-};
+static PyTypeObject PyDb_Type;
 
+
+//static PyTypeObject PyDb_Type = {
+//	PyVarObject_HEAD_INIT(NULL, 0)
+//	"PyDb",                                      /* tp_name */
+//	sizeof(PyDbObject), //offsetof(PyLongObject, ob_digit),           /* tp_basicsize */
+//	0,//sizeof(digit),                              /* tp_itemsize */
+//	0,                                          /* tp_dealloc */
+//	0,                                          /* tp_vectorcall_offset */
+//	0,                                          /* tp_getattr */
+//	0,                                          /* tp_setattr */
+//	0,                                          /* tp_as_async */
+//	db_repr,                     /* tp_repr */
+//	0,                            /* tp_as_number */
+//	0,                                          /* tp_as_sequence */
+//	0,                                          /* tp_as_mapping */
+//	0,                        /* tp_hash */
+//	0,                                          /* tp_call */
+//	db_repr,                                          /* tp_str */
+//	PyDb_GenericGetAttr,                    /* tp_getattro */
+//	0,                                          /* tp_setattro */
+//	0,                                          /* tp_as_buffer */
+//	Py_TPFLAGS_DEFAULT,               /* tp_flags */
+//	"",                                   /* tp_doc */
+//	0,                                          /* tp_traverse */
+//	0,                                          /* tp_clear */
+//	0,                           /* tp_richcompare */
+//	0,                                          /* tp_weaklistoffset */
+//	0,                                          /* tp_iter */
+//	0,                                          /* tp_iternext */
+//	db_methods,                               /* tp_methods */
+//	db_members,                                          /* tp_members */
+//	0,                                /* tp_getset */
+//	0,                                          /* tp_base */
+//	0,                                          /* tp_dict */
+//	0,                                          /* tp_descr_get */
+//	0,                                          /* tp_descr_set */
+//	0,                                          /* tp_dictoffset */
+//	0,                                          /* tp_init */
+//	0,                                          /* tp_alloc */
+//	PyDbInst_New,                                   /* tp_new */
+//	PyDbInst_Free,                               /* tp_free */
+//};
+
+static void initPyDb_Type()
+{
+	memset(&PyDb_Type, 0, sizeof(PyDb_Type));
+	PyDb_Type.ob_base = { PyObject_HEAD_INIT(NULL) 0 };
+	PyDb_Type.tp_name = "PyDb";
+	PyDb_Type.tp_basicsize = sizeof(PyDbObject);
+	PyDb_Type.tp_repr = db_repr;
+	PyDb_Type.tp_getattro = PyDb_GenericGetAttr;
+	PyDb_Type.tp_flags = Py_TPFLAGS_DEFAULT;
+	PyDb_Type.tp_methods = db_methods;
+	PyDb_Type.tp_members = db_members;
+	PyDb_Type.tp_new = PyDbInst_New;
+	PyDb_Type.tp_free = PyDbInst_Free;
+}
+
+static PyModuleObj pyModObj;
+
+static PyObject* g_moudle = NULL;
 
 PyMODINIT_FUNC PyInit_PyDb(void)
 {
+	/*initPyDb_Type();
 	if (PyType_Ready(&PyDb_Type) < 0) {
 		return NULL;
-	}
+	}*/
 	
-	PyObject* moudle = PyModule_Create(&module_def);
-	if (moudle == NULL) {
+	g_moudle = PyModule_Create(&module_def);
+	if (g_moudle == NULL) {
 		Logger::logInfo("$init module %s failed", module_def.m_name);
 		return NULL;
 	}
 
 	ModuleError = PyErr_NewException("Db.error", NULL, NULL);
 	Py_XINCREF(ModuleError);
-	if (PyModule_AddObject(moudle, "error", ModuleError) < 0) {
+	if (PyModule_AddObject(g_moudle, "error", ModuleError) < 0) {
 		Py_XDECREF(ModuleError);
 		Py_CLEAR(ModuleError);
-		Py_DECREF(moudle);
+		Py_DECREF(g_moudle);
 		return NULL;
 	}
 
-	Py_INCREF(&PyDb_Type);
-	//PyObject* obj = PyObject_New(PyObject, &PyDb_Type);;
-	if (PyModule_AddObject(moudle, "DbInst", (PyObject*)&PyDb_Type) < 0){ 
-		Py_DECREF(&PyDb_Type);
-		Py_DECREF(moudle);
-		return NULL;
-	}
+	//Py_INCREF(&PyDb_Type);
+	////PyObject* obj = PyObject_New(PyObject, &PyDb_Type);;
+	//if (PyModule_AddObject(moudle, "DbInst", (PyObject*)&PyDb_Type) < 0){ 
+	//	Py_DECREF(&PyDb_Type);
+	//	Py_DECREF(moudle);
+	//	return NULL;
+	//}
 
-	return moudle;
+	//initPyDb_Type();
+	//PyModuleObj* moduleObj = new PyModuleObj();
+	//pyModObj.pyTypeObj = &PyDb_Type;
+
+	//addModuleObj(moudle, "DbInst", pyModObj);
+	pyModObj.obj_name = "DbInst";
+	pyModObj.tp_methods = db_methods;
+	pyModObj.tp_members = db_members;
+	pyModObj.tp_new = PyDbInst_New;
+	pyModObj.tp_free = PyDbInst_Free;
+	pyModObj.tp_repr = db_repr;
+	pyModObj.tp_basicsize = sizeof(PyDbObject);
+	pyModObj.tp_name = "PyDb.DbInst";
+	pyModObj.addToModule(g_moudle);
+
+	return g_moudle;
 }
 
 void initDbModule() {
 	PyImport_AppendInittab(ModuleName, PyInit_PyDb);  // python3
+	//PyObject* module = PyImport_ImportModule("PyDb");
 	Logger::initLog();
 }
 
