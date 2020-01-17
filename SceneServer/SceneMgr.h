@@ -13,7 +13,7 @@ private:
 public:
 	static SceneMgr* getSceneMgr();
 	int allocSceneUid();
-	GameScene* createScene(int sceneId);
+	GameScene* createScene(int sceneId, void* scriptObj);
 	void destroyScene(int sceneUid);
 };
 

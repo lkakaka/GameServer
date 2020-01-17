@@ -15,3 +15,8 @@ message LoginRsp {
 	int32 conn_id = 3;
 	int32 err_code = 4;
 }
+
+message Disconnect {
+	int32 conn_id = 1;
+	string reason = 2;
+}

@@ -7,6 +7,7 @@ import logger
 import py_cffi.cffi_test
 import game.service.db_service
 import game.service.scene_service
+import game.service.login_service
 
 timer_id = 0
 
@@ -37,6 +38,12 @@ def create_db_service():
 
 def create_scene_service():
     service_inst = game.service.scene_service.SceneService()
+    service_inst.on_service_start()
+    return service_inst
+
+
+def create_login_service():
+    service_inst = game.service.login_service.LoginService()
     service_inst.on_service_start()
     return service_inst
 

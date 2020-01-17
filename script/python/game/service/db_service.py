@@ -1,7 +1,6 @@
 import logger
 from game.service.service_base import ServiceBase
 from proto.message import message
-import Game
 from game.db.db_handler import DBHandler
 from game.db.db_builder import DbInfo
 
@@ -15,6 +14,7 @@ class DBService(ServiceBase):
     _cmd = game.util.cmd_util.CmdDispatch("db_service")
 
     def __init__(self):
+        ServiceBase.__init__(self)
         self._db_handler = None
         self._db_info = None
 
@@ -75,7 +75,6 @@ class DBService(ServiceBase):
 
     @_cmd.reg_cmd(message.MSG_ID_LOGIN_REQ)
     def _on_recv_login_req(self, sender, msg_id, msg):
-        print("_cmd.reg_cmd-------MSG_ID_LOGIN_REQ")
         rsp_msg = message.create_msg_by_id(message.MSG_ID_LOGIN_RSP)
         rsp_msg.account = msg.account
         db_res = self._db_handler.execute_sql("select * from player where account='{}'".format(msg.account))
@@ -89,7 +88,6 @@ class DBService(ServiceBase):
             rsp_msg.user_id = db_res[0].role_id
             rsp_msg.conn_id = msg.conn_id
             rsp_msg.err_code = 0
-        rsp_str = rsp_msg.SerializeToString()
-        Game.sendMsgToService(sender, message.MSG_ID_LOGIN_RSP, rsp_str)
+        self.send_msg_to_service(sender, message.MSG_ID_LOGIN_RSP, rsp_msg)
 
 

@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=_b('\n\tcom.protoB\005Login'),
-  serialized_pb=_b('\n\x0blogin.proto\"9\n\x08LoginReq\x12\x0f\n\x07\x61\x63\x63ount\x18\x01 \x01(\t\x12\x0b\n\x03pwd\x18\x02 \x01(\t\x12\x0f\n\x07\x63onn_id\x18\x03 \x01(\x05\"O\n\x08LoginRsp\x12\x0f\n\x07\x61\x63\x63ount\x18\x01 \x01(\t\x12\x0f\n\x07user_id\x18\x02 \x01(\x05\x12\x0f\n\x07\x63onn_id\x18\x03 \x01(\x05\x12\x10\n\x08\x65rr_code\x18\x04 \x01(\x05\x42\x12\n\tcom.protoB\x05Loginb\x06proto3')
+  serialized_pb=_b('\n\x0blogin.proto\"9\n\x08LoginReq\x12\x0f\n\x07\x61\x63\x63ount\x18\x01 \x01(\t\x12\x0b\n\x03pwd\x18\x02 \x01(\t\x12\x0f\n\x07\x63onn_id\x18\x03 \x01(\x05\"O\n\x08LoginRsp\x12\x0f\n\x07\x61\x63\x63ount\x18\x01 \x01(\t\x12\x0f\n\x07user_id\x18\x02 \x01(\x05\x12\x0f\n\x07\x63onn_id\x18\x03 \x01(\x05\x12\x10\n\x08\x65rr_code\x18\x04 \x01(\x05\"-\n\nDisconnect\x12\x0f\n\x07\x63onn_id\x18\x01 \x01(\x05\x12\x0e\n\x06reason\x18\x02 \x01(\tB\x12\n\tcom.protoB\x05Loginb\x06proto3')
 )
 
 
@@ -122,8 +122,47 @@ _LOGINRSP = _descriptor.Descriptor(
   serialized_end=153,
 )
 
+
+_DISCONNECT = _descriptor.Descriptor(
+  name='Disconnect',
+  full_name='Disconnect',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='conn_id', full_name='Disconnect.conn_id', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='reason', full_name='Disconnect.reason', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=155,
+  serialized_end=200,
+)
+
 DESCRIPTOR.message_types_by_name['LoginReq'] = _LOGINREQ
 DESCRIPTOR.message_types_by_name['LoginRsp'] = _LOGINRSP
+DESCRIPTOR.message_types_by_name['Disconnect'] = _DISCONNECT
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 LoginReq = _reflection.GeneratedProtocolMessageType('LoginReq', (_message.Message,), {
@@ -139,6 +178,13 @@ LoginRsp = _reflection.GeneratedProtocolMessageType('LoginRsp', (_message.Messag
   # @@protoc_insertion_point(class_scope:LoginRsp)
   })
 _sym_db.RegisterMessage(LoginRsp)
+
+Disconnect = _reflection.GeneratedProtocolMessageType('Disconnect', (_message.Message,), {
+  'DESCRIPTOR' : _DISCONNECT,
+  '__module__' : 'login_pb2'
+  # @@protoc_insertion_point(class_scope:Disconnect)
+  })
+_sym_db.RegisterMessage(Disconnect)
 
 
 DESCRIPTOR._options = None

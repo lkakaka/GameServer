@@ -6,7 +6,7 @@
 #include "ZmqInst.h"
 
 
-inline int readInt(char* data) {
+int readInt(char* data) {
 	return *(int*)data;
 }
 
@@ -24,38 +24,6 @@ void writeIntEx(std::vector<char>* data, int val) {
 	}
 }
 
-int MessageHandler::parseProtoData(int connId, std::vector<char> *recData)
-{
-	char* data = recData->data();
-	int dataLen = recData->size();
-	if (dataLen < 8) {
-		return 0;
-	}
-	int msgLen = readInt(&data[4]);
-	if (dataLen - 8 < msgLen) {
-		return 0;
-	}
-	int msgId = readInt(data);
-	dispatchMsg(connId, msgId, msgLen, recData);
-	Logger::logInfo("$receive client msg, connId:%d, msgId:%d", connId, msgId);
-	return msgLen + 8;
-}
-
-void MessageHandler::dispatchMsg(int connId, int msgId, int msgLen, std::vector<char>* recData) {
-	if (msgId == MSG_ID_LOGIN_REQ) {
-
-	}
-	std::vector<char> tmp;
-	writeIntEx(&tmp, connId);
-	writeIntEx(&tmp, msgId);
-	auto iter1 = recData->begin();
-	std::advance(iter1, 8);
-	auto iter2 = recData->begin();
-	std::advance(iter2, msgLen + 8);
-	std::copy(iter1, iter2, std::back_inserter(tmp));
-	ZmqInst::getZmqInstance()->sendData("scene", tmp.data(), msgLen + 8);
-}
-
 void MessageHandler::onRecvData(char* sender, char* data, int dataLen) {
 	if (dataLen <= 8) {
 		Logger::logError("$recv msg format error, data len < 8");
@@ -63,20 +31,16 @@ void MessageHandler::onRecvData(char* sender, char* data, int dataLen) {
 	}
 	int connId = readInt(data);
 	int msgId = readInt(&data[4]);
-	sendPacket(connId, msgId, &data[8], dataLen - 8);
+	TcpConnection* connection = Network::getConnById(connId);
+	if (connection == NULL) {
+		Logger::logError("$send packet error, connId(%d) is not exist, msgId:%d", connId, msgId);
+		return;
+	}
+	connection->sendMsgToClient(msgId, &data[8], dataLen - 8);
+
+	if (msgId == MSG_ID_DISCONNECT) {
+		Network::getNetworkInstance()->removeConnection(connId, "server disconnect");
+	}
 	Logger::logInfo("$recv msg, sender:%s,  msgId:%d", sender, msgId);
 }
 
-void MessageHandler::sendPacket(int connID, int msgId, char* data, int dataLen) {
-	int msgLen = dataLen + 8;
-	std::vector<char> buff;
-	writeInt(&buff, msgLen);
-	writeInt(&buff, msgId);
-	std::copy(data, data+dataLen, std::back_inserter(buff));
-	TcpConnection* connection = Network::getConnById(connID);
-	if (connection == NULL) {
-		Logger::logError("$send packet error, connId(%d) is not exist, msgId:%d", connID, msgId);
-		return;
-	}
-	connection->sendData(std::move(buff), buff.size());
-}

@@ -3,7 +3,7 @@
 #include "boost/asio/ip/tcp.hpp"
 #include "Logger.h"
 
-typedef std::function<void(int)> closeFuncType;
+typedef std::function<void(int, const char*)> ConnCloseFunc;
 
 using boost::asio::ip::tcp;
 
@@ -15,18 +15,21 @@ private:
 	std::vector<char> m_readData;
 	int m_connID;
 	//std::shared_ptr<Network> m_network;
-	closeFuncType m_closeFunc;
+	ConnCloseFunc m_closeFunc;
 
 	void parseRecvData();
 
 public:
-	TcpConnection(boost::asio::io_service& io, int connID, closeFuncType closeFunc);
+	TcpConnection(boost::asio::io_service& io, int connID, ConnCloseFunc closeFunc);
 	~TcpConnection();
 
 	tcp::socket& getSocket();
 	int getConnID() const;
 	void doRead();
+	int parseProtoData();
+	void dispatchMsg(int msgId, int msgLen, const char* msgData);
+	void sendMsgToClient(int msgId, char* data, int dataLen);
 	void sendData(std::vector<char>&& dat, size_t datLen);
-	void doShutDown();
+	void doShutDown(const char* reason);
 };
 

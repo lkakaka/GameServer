@@ -7,6 +7,8 @@ std::shared_ptr<google::protobuf::Message> CreateMsgById(int msgId)
 {
 	switch (msgId)
 	{
+		case MSG_ID_DISCONNECT:
+		return std::shared_ptr<google::protobuf::Message>(new Disconnect());
 		case MSG_ID_LOGIN_REQ:
 		return std::shared_ptr<google::protobuf::Message>(new LoginReq());
 		case MSG_ID_LOGIN_RSP:

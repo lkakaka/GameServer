@@ -33,7 +33,7 @@ void Network::doAccept()
 {
 	//boost::shared_ptr<tcp::socket> psocket(new tcp::socket(*m_io));
 	
-	std::shared_ptr<TcpConnection> conn(new TcpConnection(*m_io, allocConnID(), std::bind(&Network::closeConnection, this, std::placeholders::_1)));
+	std::shared_ptr<TcpConnection> conn(new TcpConnection(*m_io, allocConnID(), std::bind(&Network::closeConnection, this, std::placeholders::_1, std::placeholders::_2)));
 	m_acceptor.async_accept(conn->getSocket(), std::bind(&Network::acceptHandler, this, conn, std::placeholders::_1));
 }
 
@@ -48,7 +48,7 @@ void Network::acceptHandler(std::shared_ptr<TcpConnection> conn, error_code ec)
 	doAccept();
 }
 
-void Network::onConnectionClose(int connID)
+void Network::onConnectionClose(int connID, const char* reason)
 {
 	decltype(m_connMap.begin()->second) conn;
 	auto iter = m_connMap.find(connID);
@@ -60,13 +60,17 @@ void Network::onConnectionClose(int connID)
 
 	if (conn)
 	{
-		conn->doShutDown();
+		conn->doShutDown(reason);
 	}
 }
 
-void Network::closeConnection(int connID)
+void Network::closeConnection(int connID, const char* reason)
 {
-	onConnectionClose(connID);
+	onConnectionClose(connID, reason);
+}
+
+void Network::removeConnection(int connID, const char* reason) {
+	onConnectionClose(connID, reason);
 }
 
 TcpConnection* Network::getConnById(int connId)

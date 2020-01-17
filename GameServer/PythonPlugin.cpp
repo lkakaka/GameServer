@@ -5,6 +5,7 @@
 #include "Logger.h"
 #include "py_module/PyModule.h"
 #include "PyTimer.h"
+#include "PyScene.h"
 
 static PyObject* TestError = NULL;
 
@@ -91,6 +92,7 @@ void initPython()
 	initLoggerModule();
 	initTimerModule();
 	initGameModule();
+	initSceneModule();
 
 	Py_Initialize();
 	if (!PyEval_ThreadsInitialized()) {

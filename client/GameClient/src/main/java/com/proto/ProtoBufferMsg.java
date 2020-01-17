@@ -1,16 +1,19 @@
 package com.proto;
 
 public class ProtoBufferMsg {
-	public static final int MSG_ID_LOGIN_REQ = 1;
-	public static final int MSG_ID_LOGIN_RSP = 2;
-	public static final int MSG_ID_RPC_MSG = 3;
-	public static final int MSG_ID_RPC_MSG_RSP = 4;
-	public static final int MSG_ID_TEST_REQ = 5;
+	public static final int MSG_ID_DISCONNECT = 1;
+	public static final int MSG_ID_LOGIN_REQ = 2;
+	public static final int MSG_ID_LOGIN_RSP = 3;
+	public static final int MSG_ID_RPC_MSG = 4;
+	public static final int MSG_ID_RPC_MSG_RSP = 5;
+	public static final int MSG_ID_TEST_REQ = 6;
 
 	public static Object createMsgById(int msgId, byte[] dat) {
 		try {
 			switch (msgId)
 			{
+				case MSG_ID_DISCONNECT:
+					return Login.Disconnect.parseFrom(dat);
 				case MSG_ID_LOGIN_REQ:
 					return Login.LoginReq.parseFrom(dat);
 				case MSG_ID_LOGIN_RSP:
@@ -30,6 +33,8 @@ public class ProtoBufferMsg {
 
 	public static Object createBuilderById(int msgId) {
 		switch (msgId) {
+			case MSG_ID_DISCONNECT:
+				return Login.Disconnect.newBuilder();
 			case MSG_ID_LOGIN_REQ:
 				return Login.LoginReq.newBuilder();
 			case MSG_ID_LOGIN_RSP:
@@ -42,6 +47,10 @@ public class ProtoBufferMsg {
 				return Test.TestReq.newBuilder();
 		}
 		return null;
+	}
+	
+	public static Login.Disconnect.Builder createDisconnectBuilder() {
+		return Login.Disconnect.newBuilder();
 	}
 	
 	public static Login.LoginReq.Builder createLoginReqBuilder() {
