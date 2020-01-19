@@ -11,6 +11,7 @@ class GamePlayer:
 
     def __init__(self, e_player, game_scene, conn_id, role_id, name):
         self.native_obj = Scene.Player(e_player, self)
+        self.actor_id = e_player[1]
         self.game_scene = game_scene
         self.conn_id = conn_id
         self.role_id = role_id
@@ -24,6 +25,9 @@ class GamePlayer:
             logger.logError("$player on_recv_client_msg error, not found cmd func, msgId:{}", msg_id)
             return
         func(self, msg_id, msg)
+
+    def send_msg_to_client(self, msg_id, msg):
+        self.game_scene.service.send_msg_to_client(self.conn_id, msg_id, msg)
 
     @_c_cmd.reg_cmd(message.MSG_ID_DISCONNECT)
     def _on_recv_disconnect(self, msg_id, msg):

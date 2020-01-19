@@ -14,6 +14,7 @@ public:
 	static SceneMgr* getSceneMgr();
 	int allocSceneUid();
 	GameScene* createScene(int sceneId, void* scriptObj);
+	GameScene* getScene(int sceneUid);
 	void destroyScene(int sceneUid);
 };
 

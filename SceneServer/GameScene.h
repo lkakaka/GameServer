@@ -18,6 +18,7 @@ public:
 
 	void onDestory();
 	GamePlayer* createPlayer(int connId, int roleId, const char* name);
+	GameActor* getActor(int actorId);
 	void removeActor(int actorId);
 };
 

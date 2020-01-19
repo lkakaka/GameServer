@@ -22,14 +22,16 @@ class GameScene:
         logger.logInfo("$player enter scene, role_id:{}, name:{}", role_id, name)
 
     def create_player(self, conn_id, role_id, name):
-        e_player = self.scene_obj.createPlayer(conn_id, role_id, name)
-        game_player = game.scene.game_player.GamePlayer(e_player, self, conn_id, role_id, name)
+        player_info = self.scene_obj.createPlayer(conn_id, role_id, name)
+        game_player = game.scene.game_player.GamePlayer(player_info, self, conn_id, role_id, name)
         return game_player
 
     def remove_player(self, role_id, reason):
         player = self.get_player_by_role_id(role_id)
         if player is None:
             return
+        # self.scene_obj.removePlayer()
+        self.scene_obj.removeActor(player.actor_id)
         self.player_dict.pop(role_id, None)
         self.player_conn_dict.pop(player.conn_id, None)
         self.service.on_remove_player(player.conn_id)

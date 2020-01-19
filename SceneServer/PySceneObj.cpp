@@ -36,18 +36,34 @@ static PyObject* createPlayer(PyObject* self, PyObject* args)
 	PyObject* scriptObj;
 	if (!PyArg_ParseTuple(args, "iis", &connId, &roleId, &name)) {
 		//PyErr_SetString(ModuleError, "create scene obj failed");
-		Logger::logError("$create scene obj failed, arg error");
+		Logger::logError("$create player failed, arg error");
 		Py_RETURN_NONE;
 	}
 	GameScene* gameScene = ((PySceneObj*)self)->gameScene;
 	GamePlayer* gamePlayer = gameScene->createPlayer(connId, roleId, name);
-	int x = sizeof(long long);
-	return PyLong_FromSize_t((long long)gamePlayer);
+	//return PyLong_FromSize_t((long long)gamePlayer);
+	PyObject* tuple = PyTuple_New(2);
+	PyTuple_SetItem(tuple, 0, PyLong_FromLong(gameScene->getSceneUid()));
+	PyTuple_SetItem(tuple, 1, PyLong_FromLong(gamePlayer->getActorId()));
+	return tuple;
+}
+
+static PyObject* removeActor(PyObject* self, PyObject* args)
+{
+	int actorId;
+	if (!PyArg_ParseTuple(args, "i", &actorId)) {
+		Logger::logError("$remove actor failed, arg error");
+		Py_RETURN_FALSE;
+	}
+	GameScene* gameScene = ((PySceneObj*)self)->gameScene;
+	gameScene->removeActor(actorId);
+	Py_RETURN_TRUE;
 }
 
 static PyMethodDef tp_methods[] = {
 	//{"getSceneById", getSceneById, METH_VARARGS, ""},
 	{"createPlayer", (PyCFunction)createPlayer, METH_VARARGS, ""},
+	{"removeActor", (PyCFunction)removeActor, METH_VARARGS, ""},
 	{NULL, NULL}           /* sentinel */
 };
 
