@@ -8,6 +8,20 @@ m_scriptObj(scriptObj)
 
 }
 
+void GameScene::onCreate()
+{
+	m_AOIMgr.addNode(1, 20, 20);
+	m_AOIMgr.addNode(2, 30, 10);
+	m_AOIMgr.addNode(3, 10, 30);
+	m_AOIMgr.dump();
+
+	m_AOIMgr.moveNode(2, 15, 25);
+	m_AOIMgr.dump();
+
+	/*m_AOIMgr.removeNode(2);
+	m_AOIMgr.dump();*/
+}
+
 void GameScene::onDestory()
 {
 	Logger::logInfo("$destory scene, sceneId:%d, sceneUid:%d", m_sceneId, m_sceneUid);
@@ -43,3 +57,4 @@ void GameScene::removeActor(int actorId) {
 	m_actors.erase(iter);
 	Logger::logInfo("$remove actor, sceneId:%d, sceneUid:%d, actorId:%d", m_sceneId, m_sceneUid, actorId);
 }
+

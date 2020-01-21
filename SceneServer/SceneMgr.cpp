@@ -29,6 +29,7 @@ GameScene* SceneMgr::createScene(int sceneId, void* scriptObj)
 	}
 	GameScene* gameScene = new GameScene(sceneId, sceneUid, scriptObj);
 	m_scenes.emplace(std::make_pair(sceneUid, gameScene));
+	gameScene->onCreate();
 	Logger::logInfo("$create scene, scene_uid:%d, sceneId:%d", sceneUid, sceneId);
 	return gameScene;
 }
