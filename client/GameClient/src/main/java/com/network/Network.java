@@ -1,6 +1,7 @@
 package com.network;
 
-import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
+//import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
+import java.io.ByteArrayOutputStream;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -108,7 +109,7 @@ public class Network {
 
     private boolean onRead(){
         try {
-            ByteOutputStream byteOutputStream = new ByteOutputStream();
+        	ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
             int len = m_sc.read(m_buffer);
             while (len > 0) {
                 total_len += len;
@@ -118,7 +119,7 @@ public class Network {
                 len = m_sc.read(m_buffer);
             }
             if (m_eventHandler != null) {
-                m_eventHandler.onRecv(byteOutputStream.getBytes(), byteOutputStream.getCount());
+                m_eventHandler.onRecv(byteOutputStream.toByteArray(), byteOutputStream.size());
             } else {
                 System.out.println("event hander is null");
             }

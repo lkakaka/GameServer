@@ -8,6 +8,7 @@ import py_cffi.cffi_test
 import service.db_service
 import service.scene_service
 from proto.message import message
+import Game
 
 timer_id = 0
 
@@ -40,12 +41,16 @@ def create_scene_service():
     service_inst.on_service_start()
     return service_inst
 
-def on_recv_client_msg(service, conn_id, msg_id, msg):
-    print("on_recv_client_msg---", service, conn_id, msg_id, msg)
+def on_recv_client_msg(service, conn_id, msg_id, msg_data):
+    print("on_recv_client_msg---", service, conn_id, msg_id, msg_data)
     msg = message.create_msg_by_id(msg_id)
-    msg.ParseFromString(msg)
+    msg.ParseFromString(msg_data)
     if msg_id == message.MSG_ID_LOGIN:
         rsp_msg = message.create_msg_by_id(message.MSG_ID_LOGINRSP)
+        rsp_msg.account = msg.account
+        rsp_msg.user_id = 11
+        str = rsp_msg.SerializeToString()
+        Game.sendMessage(conn_id, message.MSG_ID_LOGINRSP, len(str), str)
     # service.on_recv_msg(sender, msg)
     # import proto.test_pb2
     # test = proto.test_pb2.Test()

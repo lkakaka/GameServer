@@ -138,7 +138,7 @@ class DescriptorBase(six.with_metaclass(DescriptorMetaclass)):
   def GetOptions(self):
     """Retrieves descriptor options.
 
-    This method returns the options set or creates the default options for the
+    This method returns the options set or creates the defaults options for the
     descriptor.
     """
     if self._options:

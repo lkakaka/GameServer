@@ -10,4 +10,5 @@ message Login {
 message LoginRsp {
 	string account = 1;
 	int32 user_id = 2;
-}
+}  
+
