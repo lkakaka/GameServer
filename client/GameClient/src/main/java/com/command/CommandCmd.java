@@ -3,7 +3,7 @@ package com.command;
 import com.game.GameRobot;
 import com.game.RobotMgr;
 import com.proto.ProtoBufferMsg;
-import com.proto.TestOuterClass;
+import com.proto.Test;
 
 public class CommandCmd extends CmdDispatch {
     public String cmd;
@@ -66,9 +66,9 @@ public class CommandCmd extends CmdDispatch {
 
     @CmdAnnotation(inputCmd = "test")
     private void test() {
-        TestOuterClass.Test.Builder builder = TestOuterClass.Test.newBuilder();
+        Test.TestReq.Builder builder = Test.TestReq.newBuilder();
         builder.setId(10).setMsg("hello");
         GameRobot robot = RobotMgr.getInstance().getRobot("test");
-        robot.sendProto(ProtoBufferMsg.MSG_ID_TEST, builder.build());
+        robot.sendProto(ProtoBufferMsg.MSG_ID_TEST_REQ, builder.build());
     }
 }

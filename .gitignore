@@ -4,6 +4,7 @@ script/python/__pycache__/
 *.pyc
 */__pycache__/
 script/python/py_cffi/Release/
+script/python/.idea/
 client/GameClient/target/
 client/GameClient/.idea
 *.log

@@ -41,8 +41,9 @@ public:
 	int startListen();
 	void doAccept();
 	void acceptHandler(std::shared_ptr<TcpConnection> conn, error_code ec);
-	void onConnectionClose(int connID);
-	void closeConnection(int connID);
+	void onConnectionClose(int connID, const char* reason);
+	void closeConnection(int connID, const char* reason);
+	void removeConnection(int connID, const char* reason);
 };
 
 GATEWAY_API void startNetwork(boost::asio::io_service* io, int port);

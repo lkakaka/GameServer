@@ -1,8 +1,9 @@
 syntax="proto3";
 
 option java_package="com.proto";
+option java_outer_classname = "Test";
 
-message Test{
+message TestReq {
 	int32 id=1;
 	string msg=2;
 }

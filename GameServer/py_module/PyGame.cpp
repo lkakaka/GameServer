@@ -1,44 +1,14 @@
 
 #include "PyModule.h"
 #include "Logger.h"
-#include "../MessageMgr.h"
+#include "PyService.h"
 
 static PyObject* ModuleError;
 static char* ModuleName = "Game";
 
-static PyObject* sendMessage(PyObject* self, PyObject* args)
-{
-	int connId;
-	int msgId;
-	int msgLen;
-	char* msg = NULL;
-	if (!PyArg_ParseTuple(args, "iiis", &connId, &msgId, &msgLen, &msg)) {
-		PyErr_SetString(ModuleError, "sendMessage failed");
-		Py_RETURN_FALSE;
-	}
-
-	MessageMgr::sendToClient(connId, msgId, msg, msgLen);
-	Py_RETURN_TRUE;
-}
-
-static PyObject* sendMessageToServer(PyObject* self, PyObject* args)
-{
-	char* serviceName = NULL;
-	int msgId;
-	int msgLen;
-	char* msg = NULL;
-	if (!PyArg_ParseTuple(args, "siis", &serviceName, &msgId, &msgLen, &msg)) {
-		PyErr_SetString(ModuleError, "sendMessageToServer failed");
-		Py_RETURN_FALSE;
-	}
-
-	MessageMgr::sendToServer(serviceName, msgId, msg, msgLen);
-	Py_RETURN_TRUE;
-}
-
 static PyMethodDef module_methods[] = {
-	{"sendMessage", (PyCFunction)sendMessage, METH_VARARGS, ""},
-	{"sendMessageToServer", (PyCFunction)sendMessageToServer, METH_VARARGS, ""},
+	/*{"sendMsgToClient", (PyCFunction)sendMsgToClient, METH_VARARGS, ""},
+	{"sendMsgToService", (PyCFunction)sendMsgToService, METH_VARARGS, ""},*/
 	{NULL, NULL, 0, NULL}
 
 };
@@ -63,13 +33,20 @@ PyMODINIT_FUNC PyInit_Game(void)
 	ModuleError = PyErr_NewException("Game.error", NULL, NULL);
 	Py_XINCREF(ModuleError);
 	if (PyModule_AddObject(moudle, "error", ModuleError) < 0) {
-		Py_XDECREF(ModuleError);
-		Py_CLEAR(ModuleError);
-		Py_DECREF(moudle);
-		return NULL;
+		goto error;
+	}
+
+	if (!addPyServiceObj(moudle)) {
+		goto error;
 	}
 
 	return moudle;
+
+error:
+	Py_XDECREF(ModuleError);
+	Py_CLEAR(ModuleError);
+	Py_DECREF(moudle);
+	return NULL;
 }
 
 void initGameModule() {

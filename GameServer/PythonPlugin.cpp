@@ -1,39 +1,13 @@
 
 #include "PythonPlugin.h"
 #include "PyDbInterface.h"
-#include "py_module/PyModule.h"
+//#include "py_module/PyModule.h"
 #include "Logger.h"
+#include "py_module/PyModule.h"
 #include "PyTimer.h"
+#include "PyScene.h"
 
-static PyObject* TestError;
-
-static PyObject* addList_add(PyObject* self, PyObject* args) {
-
-	PyObject* listObj;
-
-	//The input arguments come as a tuple, we parse the args to get the various variables
-	//In this case it's only one list variable, which will now be referenced by listObj
-	if (!PyArg_ParseTuple(args, "O", &listObj))
-		return NULL;
-
-	//length of the list
-	long length = PyList_Size(listObj);
-
-	//iterate over all the elements
-	int i, sum = 0;
-	for (i = 0; i < length; i++) {
-		//get an element out of the list - the element is also a python objects
-		PyObject* temp = PyList_GetItem(listObj, i);
-		//we know that object represents an integer - so convert it into C long
-		long elem = PyLong_AsLong(temp);
-		sum += elem;
-	}
-
-	//value returned back to python code - another python object
-	//build value here converts the C long to a python integer
-	return Py_BuildValue("i", sum);
-
-}
+static PyObject* TestError = NULL;
 
 static PyObject* test(PyObject* self, PyObject* args) 
 {
@@ -46,29 +20,7 @@ static PyObject* test(PyObject* self, PyObject* args)
 	return obj;
 }
 
-//static PyObject* initTable(PyObject* self, PyObject* args)
-//{
-//	char* tbName = NULL;
-//	PyObject* fieldTuple;
-//	if (!PyArg_ParseTuple(args, "sO", &tbName, &fieldTuple)) {
-//		PyErr_SetString(TestError, "init table failed");
-//		Py_RETURN_FALSE;
-//	}
-//	long length = PyTuple_Size(fieldTuple);
-//	for (int i = 0; i < length; i++) {
-//		//get an element out of the list - the element is also a python objects
-//		PyObject* fieldInfo = PyTuple_GetItem(fieldTuple, i);
-//		PyObject* val = PyDict_GetItemString(fieldInfo, "fieldName");
-//		char* fieldName = PyBytes_AsString(val);
-//		val = PyDict_GetItemString(fieldInfo, "filedType");
-//		int fieldType = PyLong_AsLong(val);
-//		Logger::logInfo("$init table %s, field:%s, fieldType:%d", tbName, fieldName, fieldType);
-//	}
-//	Py_RETURN_TRUE;
-//}
-
 static PyMethodDef module_methods[] = {
-	{"add", (PyCFunction)addList_add, METH_VARARGS, ""},
 	{"test", (PyCFunction)test, METH_VARARGS, ""},
 	//{"initTable", (PyCFunction)initTable, METH_VARARGS, ""},
 	{NULL, NULL, 0, NULL}
@@ -79,29 +31,29 @@ static struct PyModuleDef module_def =
 {
 	PyModuleDef_HEAD_INIT,
 	"Test", /* name of module */
-	"usage: Combinations.uniqueCombinations(lstSortableItems, comboSize)\n", /* module documentation, may be NULL */
+	"test module", /* module documentation, may be NULL */
 	-1,   /* size of per-interpreter state of the module, or -1 if the module keeps state in global variables. */
 	module_methods
 };
 
 PyMODINIT_FUNC PyInit_Test(void)
 {
-	PyObject* moudle = PyModule_Create(&module_def);
-	if (moudle == NULL) {
+	PyObject* module = PyModule_Create(&module_def);
+	if (module == NULL) {
 		Logger::logInfo("$init module %s failed", module_def.m_name);
 		return NULL;
 	}
 
-	TestError = PyErr_NewException("Test.error", NULL, NULL);
+	TestError = PyErr_NewException("Game.error", NULL, NULL);
 	Py_XINCREF(TestError);
-	if (PyModule_AddObject(moudle, "error", TestError) < 0) {
+	if (PyModule_AddObject(module, "error", TestError) < 0) {
 		Py_XDECREF(TestError);
 		Py_CLEAR(TestError);
-		Py_DECREF(moudle);
+		Py_DECREF(module);
 		return NULL;
 	}
 
-	return moudle;
+	return module;
 }
 
 
@@ -132,7 +84,7 @@ PyObject* callPyFunction(const char* module, const char* func, PyObject* arg)
 	return result;
 }
 
-void initPython(const char* funcName)
+void initPython()
 {	
 	PyImport_AppendInittab("Test", PyInit_Test);  // python3
 
@@ -140,6 +92,7 @@ void initPython(const char* funcName)
 	initLoggerModule();
 	initTimerModule();
 	initGameModule();
+	initSceneModule();
 
 	Py_Initialize();
 	if (!PyEval_ThreadsInitialized()) {
@@ -148,10 +101,10 @@ void initPython(const char* funcName)
 	//Py_InitModule("Test", module_methods);	// python2
 	PyRun_SimpleString("import sys");
 	PyRun_SimpleString("import os");
-	PyRun_SimpleString("print(os.getcwd())");
+	//PyRun_SimpleString("print(os.getcwd())");
 	PyRun_SimpleString("sys.path.append(os.path.abspath('../..') + '\\script\\python')");
 	PyRun_SimpleString("print(sys.path)");
-	callPyFunction("main", funcName, NULL);
+	//callPyFunction("main", funcName, NULL);
 	// 启动子线程前执行，为了释放PyEval_InitThreads获得的全局锁，否则子线程可能无法获取到全局锁。
 	PyEval_ReleaseThread(PyThreadState_Get());
 }

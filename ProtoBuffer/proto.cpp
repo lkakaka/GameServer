@@ -7,12 +7,18 @@ std::shared_ptr<google::protobuf::Message> CreateMsgById(int msgId)
 {
 	switch (msgId)
 	{
-		case MSG_ID_LOGIN:
-		return std::shared_ptr<google::protobuf::Message>(new Login());
-		case MSG_ID_LOGINRSP:
+		case MSG_ID_DISCONNECT:
+		return std::shared_ptr<google::protobuf::Message>(new Disconnect());
+		case MSG_ID_LOGIN_REQ:
+		return std::shared_ptr<google::protobuf::Message>(new LoginReq());
+		case MSG_ID_LOGIN_RSP:
 		return std::shared_ptr<google::protobuf::Message>(new LoginRsp());
-		case MSG_ID_TEST:
-		return std::shared_ptr<google::protobuf::Message>(new Test());
+		case MSG_ID_RPC_MSG:
+		return std::shared_ptr<google::protobuf::Message>(new RpcMsg());
+		case MSG_ID_RPC_MSG_RSP:
+		return std::shared_ptr<google::protobuf::Message>(new RpcMsgRsp());
+		case MSG_ID_TEST_REQ:
+		return std::shared_ptr<google::protobuf::Message>(new TestReq());
 	}
 	return NULL;
 }

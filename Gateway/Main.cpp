@@ -10,7 +10,7 @@
 #include "ZmqInst.h"
 #include "Timer.h"
 #include "Config.h"
-#include "ProtoBufferMgr.h"
+#include "MessageHandler.h"
 
 using namespace std;
 
@@ -43,7 +43,7 @@ int main(int argc, char** argv)
 	TimerMgr::initTimerMgr(&io);
 	
 	ZmqInst::initZmqInstance(serviceName.c_str(), routerAddr.c_str());
-	ZmqInst::getZmqInstance()->setRecvCallback(ProtoBufferMgr::onRecvData);
+	ZmqInst::getZmqInstance()->setRecvCallback(MessageHandler::onRecvData);
 
 	//Network::initNetwork(&io);
 	int port = Config::getConfigInt(cfgName, "port");

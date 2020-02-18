@@ -19,29 +19,29 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='test.proto',
   package='',
   syntax='proto3',
-  serialized_options=_b('\n\tcom.proto'),
-  serialized_pb=_b('\n\ntest.proto\"\x1f\n\x04Test\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x0b\n\x03msg\x18\x02 \x01(\tB\x0b\n\tcom.protob\x06proto3')
+  serialized_options=_b('\n\tcom.protoB\004Test'),
+  serialized_pb=_b('\n\ntest.proto\"\"\n\x07TestReq\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x0b\n\x03msg\x18\x02 \x01(\tB\x11\n\tcom.protoB\x04Testb\x06proto3')
 )
 
 
 
 
-_TEST = _descriptor.Descriptor(
-  name='Test',
-  full_name='Test',
+_TESTREQ = _descriptor.Descriptor(
+  name='TestReq',
+  full_name='TestReq',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='id', full_name='Test.id', index=0,
+      name='id', full_name='TestReq.id', index=0,
       number=1, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='msg', full_name='Test.msg', index=1,
+      name='msg', full_name='TestReq.msg', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -60,18 +60,18 @@ _TEST = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=14,
-  serialized_end=45,
+  serialized_end=48,
 )
 
-DESCRIPTOR.message_types_by_name['Test'] = _TEST
+DESCRIPTOR.message_types_by_name['TestReq'] = _TESTREQ
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
-Test = _reflection.GeneratedProtocolMessageType('Test', (_message.Message,), {
-  'DESCRIPTOR' : _TEST,
+TestReq = _reflection.GeneratedProtocolMessageType('TestReq', (_message.Message,), {
+  'DESCRIPTOR' : _TESTREQ,
   '__module__' : 'test_pb2'
-  # @@protoc_insertion_point(class_scope:Test)
+  # @@protoc_insertion_point(class_scope:TestReq)
   })
-_sym_db.RegisterMessage(Test)
+_sym_db.RegisterMessage(TestReq)
 
 
 DESCRIPTOR._options = None

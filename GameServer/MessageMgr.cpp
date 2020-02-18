@@ -4,6 +4,7 @@
 #include "Logger.h"
 #include "ZmqInst.h"
 #include "PythonPlugin.h"
+#include "GameService.h"
 
 extern std::string g_service_name;
 
@@ -96,13 +97,14 @@ void MessageMgr::onRecvData(char* sender, char* data, int dataLen) {
 		char* msgData = &data[8];
 		int msgLen = dataLen - 8;
 		if (!handleMsg(connId, msgId, msgData, msgLen)) {
-			PyObject* arg = PyTuple_New(4);
 			auto py_state = PyGILState_Ensure();
-			PyTuple_SetItem(arg, 0, Py_BuildValue("s", g_service_name.c_str()));
-			PyTuple_SetItem(arg, 1, PyLong_FromLong(connId));
-			PyTuple_SetItem(arg, 2, PyLong_FromLong(msgId));
-			PyTuple_SetItem(arg, 3, Py_BuildValue("y#", msgData, msgLen));
-			callPyFunction("main", "on_recv_client_msg", arg);
+			PyObject* arg = PyTuple_New(3);
+			//PyTuple_SetItem(arg, 0, Py_BuildValue("s", g_service_name.c_str()));
+			PyTuple_SetItem(arg, 0, PyLong_FromLong(connId));
+			PyTuple_SetItem(arg, 1, PyLong_FromLong(msgId));
+			PyTuple_SetItem(arg, 2, Py_BuildValue("y#", msgData, msgLen));
+			//callPyFunction("main", "on_recv_client_msg", arg);
+			GameService::g_gameService->callPyFunction("on_recv_client_msg", arg);
 			PyGILState_Release(py_state);
 		}
 	}
@@ -111,13 +113,13 @@ void MessageMgr::onRecvData(char* sender, char* data, int dataLen) {
 		char* msgData = &data[4];
 		int msgLen = dataLen - 4;
 		if (!handleServiceMsg(msgId, msgData, msgLen)) {
-			PyObject* arg = PyTuple_New(4);
 			auto py_state = PyGILState_Ensure();
-			PyTuple_SetItem(arg, 0, Py_BuildValue("s", g_service_name.c_str()));
-			PyTuple_SetItem(arg, 1, Py_BuildValue("s", sender));
-			PyTuple_SetItem(arg, 2, PyLong_FromLong(msgId));
-			PyTuple_SetItem(arg, 3, Py_BuildValue("y#", msgData, msgLen));
-			callPyFunction("main", "on_recv_service_msg", arg);
+			PyObject* arg = PyTuple_New(3);
+			PyTuple_SetItem(arg, 0, Py_BuildValue("s", sender));
+			PyTuple_SetItem(arg, 1, PyLong_FromLong(msgId));
+			PyTuple_SetItem(arg, 2, Py_BuildValue("y#", msgData, msgLen));
+			//callPyFunction("main", "on_recv_service_msg", arg);
+			GameService::g_gameService->callPyFunction("on_recv_service_msg", arg);
 			PyGILState_Release(py_state);
 		}
 	}

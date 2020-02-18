@@ -3,12 +3,8 @@
 #include <Reflect.h>
 #include <functional>
 #include <vector>
-
-#ifdef DBPLUGIN_EXPORT
-#define DBPLUNGIN_API __declspec(dllexport)
-#else
-#define DBPLUNGIN_API
-#endif
+#include "DBExport.h"
+#include "jdbc/cppconn/statement.h"
 
 class DBPLUNGIN_API DBHandler
 {
@@ -27,7 +23,7 @@ public:
 	void select(ReflectObject data);
 	void update(ReflectObject src, ReflectObject dst);
 	void del(ReflectObject data);
-	void executeSql(std::string sql);
+	void executeSql(std::string sql, std::function<void(sql::Statement*, bool) > handler);
 };
 
 class DBField
