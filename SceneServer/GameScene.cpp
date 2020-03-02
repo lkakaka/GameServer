@@ -10,12 +10,17 @@ m_scriptObj(scriptObj)
 
 void GameScene::onCreate()
 {
-	m_AOIMgr.addNode(1, 20, 20);
-	m_AOIMgr.addNode(2, 30, 10);
-	m_AOIMgr.addNode(3, 10, 30);
+	std::vector<int> neighbours1;
+	m_AOIMgr.addNode(1, 20, 20, neighbours1);
+	printf("addr=%p.\n", &neighbours1);
+	neighbours1.clear();
+	m_AOIMgr.addNode(2, 30, 10, neighbours1);
+	neighbours1.clear();
+	m_AOIMgr.addNode(3, 10, 30, neighbours1);
 	m_AOIMgr.dump();
 
-	m_AOIMgr.moveNode(2, 15, 25);
+	std::vector<int> enters, leaves;
+	m_AOIMgr.moveNode(2, 15, 25, enters, leaves);
 	m_AOIMgr.dump();
 
 	/*m_AOIMgr.removeNode(2);

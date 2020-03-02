@@ -1,5 +1,9 @@
 #include "AOIMgr.h"
 #include "Logger.h"
+#include <algorithm>
+
+#define X_VIEW_RANGE 5
+#define Y_VIEW_RANGE 5
 
 AOINode::AOINode(int actorId, int x, int y) : actorId(actorId), x(x), y(y), 
 x_pre(nullptr), x_next(nullptr), y_pre(nullptr), y_next(nullptr)
@@ -31,7 +35,7 @@ x_tail(std::make_shared<AOINode>(-1, 0x0fffffff, 0)), y_tail(std::make_shared<AO
 	y_tail->y_pre = y_head;
 }
 
-void AOIMgr::addNode(int actorId, int x, int y)
+void AOIMgr::addNode(int actorId, int x, int y, std::vector<int>& neighbours)
 {
 	if (m_nodes.find(actorId) != m_nodes.end()) {
 		Logger::logError("$add aoi node repeat, actorId:%d", actorId);
@@ -67,46 +71,48 @@ void AOIMgr::addNode(int actorId, int x, int y)
 		y_cur_node = y_cur_node->y_next;
 	}
 
+
+	getNeighbours(node, neighbours);
+
 	Logger::logInfo("$add aoi node, actorId:%d", actorId);
+	printf("neighbours addr=%p\n", &neighbours);
 }
 
-void AOIMgr::removeNode(int actorId)
+void AOIMgr::removeNode(int actorId, std::vector<int>& neighbours)
 {
-	std::shared_ptr<AOINode> x_cur_node = x_head->x_next;
-	while (x_cur_node != NULL) {
-		if (x_cur_node->actorId == actorId) {
-			x_cur_node->x_pre->x_next = x_cur_node->x_next;
-			x_cur_node->x_next->x_pre = x_cur_node->x_pre;
-			break;
-		}
-		x_cur_node = x_cur_node->x_next;
+	auto iter = m_nodes.find(actorId);
+	if (iter == m_nodes.end()) {
+		return;
 	}
+
+	std::shared_ptr<AOINode> x_cur_node = iter->second;
+	getNeighbours(x_cur_node, neighbours);
+
+	// 从X链上移除
+	x_cur_node->x_pre->x_next = x_cur_node->x_next;
+	x_cur_node->x_next->x_pre = x_cur_node->x_pre;
 
 	printf("remove x link\n");
-	std::shared_ptr<AOINode> y_cur_node = y_head->y_next;
-	while (y_cur_node != NULL) {
-		if (y_cur_node->actorId == actorId) {
-			y_cur_node->y_pre->y_next = y_cur_node->y_next;
-			y_cur_node->y_next->y_pre = y_cur_node->y_pre;
-			break;
-		}
-		y_cur_node = y_cur_node->y_next;
-	}
+	std::shared_ptr<AOINode> y_cur_node = iter->second;
+	// 从Y链上移除
+	y_cur_node->y_pre->y_next = y_cur_node->y_next;
+	y_cur_node->y_next->y_pre = y_cur_node->y_pre;
 
-	if (m_nodes.find(actorId) != m_nodes.end()) {
-		m_nodes.erase(actorId);
-	}
+	m_nodes.erase(actorId);
 	printf("remove y link\n");
 	Logger::logInfo("$remove aoi node, actorId:%d", actorId);
 }
 
-void AOIMgr::moveNode(int actorId, int x, int y)
+void AOIMgr::moveNode(int actorId, int x, int y, std::vector<int>& leaveIds, std::vector<int>& enterIds)
 {
 	auto iter = m_nodes.find(actorId);
 	if (iter == m_nodes.end()) {
 		return;
 	}
 	std::shared_ptr<AOINode> aoi_node = iter->second;
+	std::vector<int> orgNeighbours;
+	getNeighbours(aoi_node, orgNeighbours);
+
 	int org_x = aoi_node->x;
 	int org_y = aoi_node->y;
 	aoi_node->x = x;
@@ -176,6 +182,51 @@ void AOIMgr::moveNode(int actorId, int x, int y)
 			node = node->y_pre;
 		}
 	}
+
+	std::vector<int> newNeighbours;
+	getNeighbours(aoi_node, newNeighbours);
+
+	std::set<int> orgNeighSet;
+	for (auto iter = orgNeighbours.begin(); iter != orgNeighbours.end(); iter++) {
+		orgNeighSet.emplace(*iter);
+	}
+
+	std::set<int> newNeighSet;
+	for (auto iter = newNeighbours.begin(); iter != newNeighbours.end(); iter++) {
+		newNeighSet.emplace(*iter);
+	}
+
+	std::set_difference(orgNeighbours.begin(), orgNeighbours.end(), newNeighbours.begin(), newNeighbours.end(), std::back_inserter(leaveIds));
+	std::set_difference(newNeighbours.begin(), newNeighbours.end(), orgNeighbours.begin(), orgNeighbours.end(), std::back_inserter(enterIds));
+}
+
+void AOIMgr::getNeighbours(std::shared_ptr<AOINode>& node, std::vector<int>& neighbours) {
+	int x = node->x;
+	std::set<int> xNeighbours;
+	// 往后找在X_VIEW_RANGE范围类的玩家
+	for (auto x_node = node->x_next; x_node != NULL; x_node = x_node->x_next) {
+		if (x_node->x - x > X_VIEW_RANGE) break;
+		xNeighbours.emplace(x_node->actorId);
+	}
+	//往前找在X_VIEW_RANGE范围类的玩家
+	for (auto x_node = node->x_pre; x_node != NULL; x_node = x_node->x_pre) {
+		if (x - x_node->x > X_VIEW_RANGE) break;
+		xNeighbours.emplace(x_node->actorId);
+	}
+
+	int y = node->y;
+	std::set<int> yNeighbours;
+	// 往后找在Y_VIEW_RANGE范围类的玩家
+	for (auto y_node = node->y_next; y_node != NULL; y_node = y_node->y_next) {
+		if (y_node->y - y > Y_VIEW_RANGE) break;
+		yNeighbours.emplace(y_node->actorId);
+	}
+	//往前找在Y_VIEW_RANGE范围类的玩家
+	for (auto y_node = node->y_pre; y_node != NULL; y_node = y_node->y_pre) {
+		if (y - y_node->y > Y_VIEW_RANGE) break;
+		yNeighbours.emplace(y_node->actorId);
+	}
+	std::set_intersection(xNeighbours.begin(), xNeighbours.end(), yNeighbours.begin(), yNeighbours.end(), std::back_inserter(neighbours));
 }
 
 void AOIMgr::dump() 

@@ -3,6 +3,8 @@
 #include <memory>
 #include <string>
 #include <map>
+#include <set>
+#include <vector>
 
 class AOINode
 {
@@ -26,9 +28,11 @@ private:
 	std::map<int, std::shared_ptr<AOINode>> m_nodes;
 public:
 	AOIMgr::AOIMgr();
-	void addNode(int actorId, int x, int y);
-	void removeNode(int actorId);
-	void moveNode(int actorId, int x, int y);
+	void addNode(int actorId, int x, int y, std::vector<int>& neighbours);
+	void removeNode(int actorId, std::vector<int>& neighbours);
+	void moveNode(int actorId, int x, int y, std::vector<int>& leaveIds, std::vector<int>& enterIds);
+
+	void getNeighbours(std::shared_ptr<AOINode>& node, std::vector<int>& neighbours);
 
 	void dump();
 };
