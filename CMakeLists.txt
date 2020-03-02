@@ -12,6 +12,7 @@ set(GAMEUTIL_ROOT ${PROJECT_SOURCE_DIR}/GameUtil)
 set(PROTO_ROOT ${PROJECT_SOURCE_DIR}/ProtoBuffer)
 set(DBPLUGIN_ROOT ${PROJECT_SOURCE_DIR}/DBPlugin)
 set(SCENE_ROOT ${PROJECT_SOURCE_DIR}/SceneServer)
+set(HTTP_SERVER_ROOT ${PROJECT_SOURCE_DIR}/HttpServer)
 
 set(BOOST_ROOT ../boost_1_70_0)
 set(PROTOBUFF_ROOT ../../protobuf-3.9.0)
@@ -30,6 +31,7 @@ add_subdirectory(Gateway)
 add_subdirectory(SceneServer)
 add_subdirectory(GameServer)
 add_subdirectory(ZmqRouter)
+add_subdirectory(HttpServer)
 
 add_subdirectory(TestZmq)
 

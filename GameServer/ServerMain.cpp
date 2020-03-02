@@ -14,6 +14,7 @@
 #include "Config.h"
 #include "MessageMgr.h"
 #include "GameService.h"
+#include "server.hpp"
 
 using namespace std;
 std::string g_service_name = "";
@@ -63,6 +64,18 @@ int main(int argc, char** argv)
 
 	ZmqInst::initZmqInstance(serviceName.c_str(), routerAddr.c_str());
 	ZmqInst::getZmqInstance()->setRecvCallback(MessageMgr::onRecvData);
+
+	// Initialise the http server.
+	std::string httpServerIp = Config::getConfigStr(cfgName, "http_server_ip");
+	std::string httpServerPort = Config::getConfigStr(cfgName, "http_server_port");
+	std::shared_ptr<std::thread> http_thread;
+	std::shared_ptr<http::server::server> http_server;
+	if (httpServerIp.length() > 0 && httpServerPort.length() > 0) {
+		http_server.reset(new http::server::server(httpServerIp, httpServerPort, ""));
+
+		// Run the server until stopped.
+		http_thread.reset(new std::thread([&http_server] { http_server->run(); }));
+	}
 
 	/*DBPlugin* dbPlugin = new DBPlugin();
 	dbPlugin->initDBPlugin("");*/
