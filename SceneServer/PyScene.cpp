@@ -59,3 +59,12 @@ error:
 void initSceneModule() {
 	PyImport_AppendInittab(ModuleName, PyInit_Scene);  // python3
 }
+
+PyObject* callPyFunction(PyObject* scriptObj, const char* funcName, PyObject* args) {
+	auto func = PyObject_GetAttrString(scriptObj, funcName);
+	PyObject* obj = PyObject_Call(func, args, NULL);
+	if (obj == NULL) {
+		PyErr_Print();
+	}
+	return obj;
+}

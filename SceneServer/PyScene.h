@@ -4,3 +4,4 @@
 #include "SceneExport.h"
 
 SCENE_API void initSceneModule();
+PyObject* callPyFunction(PyObject* scriptObj, const char* funcName, PyObject* args);

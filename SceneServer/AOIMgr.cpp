@@ -26,7 +26,7 @@ std::string AOINode::toString()
 }
 
 
-AOIMgr::AOIMgr() : x_head(std::make_shared<AOINode>(-1, 0, 0)), y_head(std::make_shared<AOINode>(-1, 0, 0)),
+AOIMgr::AOIMgr() : x_head(std::make_shared<AOINode>(-1, 0x8fffffff, 0)), y_head(std::make_shared<AOINode>(-1, 0, 0x8fffffff)),
 x_tail(std::make_shared<AOINode>(-1, 0x0fffffff, 0)), y_tail(std::make_shared<AOINode>(-1, 0, 0x0fffffff))
 {
 	x_head->x_next = x_tail;

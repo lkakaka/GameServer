@@ -35,6 +35,9 @@ class SceneService(ServiceBase):
     def on_recv_msg(self, sender, msg):
         logger.logInfo("$DBService on_recv_msg!!!")
 
+    def on_recv_client_msg_ex(self, conn_id, msg_id, msg):
+        print("on_recv_client_msg_ex, conn_id:{}, msg_id:{} msg:{}", conn_id, msg_id, msg)
+
     def on_recv_client_msg(self, conn_id, msg_id, msg_data):
         logger.logInfo("$recv client msg, conn_id:{}, msg_id:{}", conn_id, msg_id)
         func = SceneService._c_cmd.get_cmd_func(msg_id)
@@ -75,14 +78,14 @@ class SceneService(ServiceBase):
     @_s_cmd.reg_cmd(message.MSG_ID_LOGIN_RSP)
     def _on_recv_login_rsp(self, sender, msg_id, msg):
         if msg.err_code == 0:
-            self.enter_scene(msg.conn_id, msg.user_id, "")
+            self.on_player_load(msg.conn_id, msg.user_id, "")
         conn_id = msg.conn_id
         msg.conn_id = 0
         self.send_msg_to_client(conn_id, message.MSG_ID_LOGIN_RSP, msg)
 
-    def enter_scene(self, conn_id, role_id, name):
+    def on_player_load(self, conn_id, role_id, name):
         scene = random.choice(list(self._scenes.values()))
-        scene.on_player_enter(conn_id, role_id, name)
+        scene.on_player_load(conn_id, role_id, name)
         self._player_to_scene[conn_id] = scene.scene_id
 
     def on_remove_player(self, conn_id):

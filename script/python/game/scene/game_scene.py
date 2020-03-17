@@ -15,14 +15,18 @@ class GameScene:
         self.player_conn_dict = {}
         # print("scene obj =", self.scene_obj)
 
-    def on_player_enter(self, conn_id, role_id, name):
+    def on_player_load(self, conn_id, role_id, name):
         game_player = self.create_player(conn_id, role_id, name)
         self.player_dict[role_id] = game_player
         self.player_conn_dict[conn_id] = weakref.ref(game_player)
+        self.on_player_enter(game_player)
         logger.logInfo("$player enter scene, role_id:{}, name:{}", role_id, name)
 
+    def on_player_enter(self, game_player):
+        self.scene_obj.onPlayerEnter(game_player.actor_id)
+
     def create_player(self, conn_id, role_id, name):
-        player_info = self.scene_obj.createPlayer(conn_id, role_id, name)
+        player_info = self.scene_obj.createPlayer(conn_id, role_id, name, 0, 0)
         game_player = game.scene.game_player.GamePlayer(player_info, self, conn_id, role_id, name)
         return game_player
 
@@ -64,5 +68,12 @@ class GameScene:
 
         player.on_recv_client_msg(msg_id, msg_data)
 
+    def on_actor_enter(self, actor_id, enter_ids):
+        print("on_actor_enter", actor_id, enter_ids)
 
+    def on_actor_leave(self, actor_id, leave_ids):
+        print("on_actor_leave", actor_id, leave_ids)
+
+    def on_actor_move(self, actor_id, enter_ids, leave_ids):
+        print("on_actor_move", actor_id, enter_ids, leave_ids)
 
