@@ -43,6 +43,12 @@ void Network::acceptHandler(std::shared_ptr<TcpConnection> conn, error_code ec)
 		//TcpConnection* conn = new TcpConnection(std::move(psocket.get()));
 		m_connMap.insert(std::make_pair(conn->getConnID(), conn));
 		conn->doRead();
+
+		/*std::string rsp = "hello world";
+		std::vector<char> buf;
+		std::copy(rsp.begin(), rsp.end(), std::back_inserter(buf));
+		conn->sendData(buf);*/
+
 		Logger::logDebug("$client connected, %s", conn->getSocket().remote_endpoint().address());
 	}
 	doAccept();

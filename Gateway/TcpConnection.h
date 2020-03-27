@@ -11,13 +11,15 @@ class TcpConnection : public std::enable_shared_from_this<TcpConnection>
 {
 private:
 	tcp::socket m_socket;
-	std::vector<char>	m_vecData;
-	std::vector<char> m_readData;
+	std::vector<char> m_vecData;
+	std::vector<char> m_readBuf;
+	std::vector<char> m_sendBuf;
 	int m_connID;
 	//std::shared_ptr<Network> m_network;
 	ConnCloseFunc m_closeFunc;
 
 	void parseRecvData();
+	void doSend();
 
 public:
 	TcpConnection(boost::asio::io_service& io, int connID, ConnCloseFunc closeFunc);
@@ -29,7 +31,7 @@ public:
 	int parseProtoData();
 	void dispatchMsg(int msgId, int msgLen, const char* msgData);
 	void sendMsgToClient(int msgId, char* data, int dataLen);
-	void sendData(std::vector<char>&& dat, size_t datLen);
+	void sendData(std::vector<char>& dat);
 	void doShutDown(const char* reason);
 };
 

@@ -49,7 +49,7 @@ void TcpConnection::doRead()
 			//Logger::logInfo("$receive data, len:%d, %s", datLen, m_vecData.data());
 			auto iter = m_vecData.begin();
 			std::advance(iter, datLen);
-			std::copy(m_vecData.begin(), iter, std::back_inserter(m_readData));
+			std::copy(m_vecData.begin(), iter, std::back_inserter(m_readBuf));
 			parseRecvData();
 		}
 		else {
@@ -65,17 +65,17 @@ void TcpConnection::parseRecvData()
 	do {
 		len = parseProtoData();
 		if (len > 0) {
-			auto removeIter = m_readData.begin();
+			auto removeIter = m_readBuf.begin();
 			std::advance(removeIter, len);
-			m_readData.erase(m_readData.begin(), removeIter);
+			m_readBuf.erase(m_readBuf.begin(), removeIter);
 		}
 	} while (len > 0);
 }
 
 int TcpConnection::parseProtoData()
 {
-	char* data = m_readData.data();
-	int dataLen = m_readData.size();
+	char* data = m_readBuf.data();
+	int dataLen = m_readBuf.size();
 	if (dataLen < 8) {
 		return 0;
 	}
@@ -106,18 +106,30 @@ void TcpConnection::sendMsgToClient(int msgId, char* data, int dataLen) {
 	writeInt(&buff, msgLen);
 	writeInt(&buff, msgId);
 	std::copy(data, data + dataLen, std::back_inserter(buff));
-	sendData(std::move(buff), buff.size());
+	std::copy(buff.begin(), buff.end(), std::back_inserter(m_sendBuf));
+	doSend();
 }
 
-void TcpConnection::sendData(std::vector<char>&& dat, size_t datLen)
+void TcpConnection::sendData(std::vector<char>& dat)
 {
-	boost::asio::const_buffer buf(&dat.front(), datLen);
-	m_socket.async_write_some(buf, [](boost::system::error_code err_code, size_t datLen) {
+	std::copy(dat.begin(), dat.end(), std::back_inserter(m_sendBuf));
+	doSend();
+}
+
+void TcpConnection::doSend() {
+	if (m_sendBuf.size() == 0) return;
+	boost::asio::const_buffer buf(&m_sendBuf.front(), m_sendBuf.size());
+	m_socket.async_write_some(buf, [this](boost::system::error_code err_code, size_t datLen) {
 		if (err_code)
 		{
 			const std::string err_str = err_code.message();
 			Logger::logError("$send data error, %s", err_str.data());
 			//Logger::logInfo("$send data len:%d", datLen);
+			return;
+		}
+		if (datLen > 0) {
+			m_sendBuf.erase(m_sendBuf.begin(), m_sendBuf.begin() + datLen);
+			if(m_sendBuf.size() > 0) doSend();
 		}
 	});
 }
