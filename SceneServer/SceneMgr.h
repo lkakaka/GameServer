@@ -1,9 +1,9 @@
 #pragma once
 #include <map>
 #include "GameScene.h"
-#include "SceneExport.h"
+#include "../Common/ServerExports.h"
 
-class SCENE_API SceneMgr
+class SERVER_EXPORT_API SceneMgr
 {
 private:
 	static SceneMgr* g_sceneMgr;

@@ -1,5 +1,5 @@
 #pragma once
 
-#include "DBExport.h"
+#include "../Common/ServerExports.h"
 
-DBPLUNGIN_API void initDbModule();
+SERVER_EXPORT_API void initDbModule();

@@ -1,7 +1,7 @@
 #pragma once
 #define PY_SSIZE_T_CLEAN
 #include "Python.h"
-#include "SceneExport.h"
+#include "../Common/ServerExports.h"
 
-SCENE_API void initSceneModule();
+SERVER_EXPORT_API void initSceneModule();
 PyObject* callPyFunction(PyObject* scriptObj, const char* funcName, PyObject* args);

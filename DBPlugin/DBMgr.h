@@ -3,7 +3,7 @@
 #include <Reflect.h>
 #include "DBHandler.h"
 
-class DBPLUNGIN_API DBMgr
+class SERVER_EXPORT_API DBMgr
 {
 private:
 	std::string m_dbName;

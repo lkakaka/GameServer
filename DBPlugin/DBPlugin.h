@@ -2,9 +2,9 @@
 
 #include <stdio.h>
 #include "Logger.h"
-#include "DBExport.h"
+#include "../Common/ServerExports.h"
 
-class DBPLUNGIN_API DBPlugin
+class SERVER_EXPORT_API DBPlugin
 {
 private:
 	//sql::Connection* m_dbConn;

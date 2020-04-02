@@ -3,10 +3,10 @@
 #include <Reflect.h>
 #include <functional>
 #include <vector>
-#include "DBExport.h"
+#include "../Common/ServerExports.h"
 #include "jdbc/cppconn/statement.h"
 
-class DBPLUNGIN_API DBHandler
+class SERVER_EXPORT_API DBHandler
 {
 private:
 	std::string m_dbName;
