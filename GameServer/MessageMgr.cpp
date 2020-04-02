@@ -5,26 +5,10 @@
 #include "ZmqInst.h"
 #include "PythonPlugin.h"
 #include "GameService.h"
+#include "MyBuffer.h"
 
 extern std::string g_service_name;
 
-inline int readInt(char* data) {
-	return *(int*)data;
-}
-
-void writeInt(std::vector<char>* data, int val) {
-	char* p = (char*)& val;
-	for (int i = 3; i >= 0; i--) {
-		data->push_back(p[i]);
-	}
-}
-
-void writeIntEx(std::vector<char>* data, int val) {
-	char* p = (char*)& val;
-	for (int i = 0; i < 4; i++) {
-		data->push_back(p[i]);
-	}
-}
 
 std::shared_ptr<google::protobuf::Message> createMessage(int msgId, char* data, int dataLen)
 {
@@ -84,9 +68,10 @@ void MessageMgr::onRecvData(char* sender, char* data, int dataLen) {
 	}
 
 	int msgId = 0;
+	MyBuffer buffer(data, dataLen);
 	if (strcmp(sender, "gateway") == 0) {
-		int connId = readInt(data);
-		msgId = readInt(&data[4]);
+		int connId = buffer.readIntEx();
+		msgId = buffer.readIntEx();
 		////google::protobuf::Message* msg = (google::protobuf::Message*)CreateMsgById(msgId);
 		//std::shared_ptr<google::protobuf::Message> msg = CreateMsgById(msgId);
 		//if (msg == NULL) {
@@ -109,7 +94,7 @@ void MessageMgr::onRecvData(char* sender, char* data, int dataLen) {
 		}
 	}
 	else {
-		msgId = readInt(data);
+		msgId = buffer.readIntEx();
 		char* msgData = &data[4];
 		int msgLen = dataLen - 4;
 		if (!handleServiceMsg(msgId, msgData, msgLen)) {
@@ -131,30 +116,21 @@ void MessageMgr::sendToClient(int connID, int msgId, google::protobuf::Message* 
 	std::string msgData;
 	msg->SerializeToString(&msgData);
 	sendToClient(connID, msgId, msgData.c_str(), msgData.length());
-	/*int msgLen = msgData.size() + 8;
-	std::vector<char> data;
-	writeIntEx(&data, connID);
-	writeIntEx(&data, msgId);
-	std::copy(msgData.begin(), msgData.end(), std::back_inserter(data));*/
-	
-	//ZmqInst::getZmqInstance()->sendData("gateway", data.data(), msgLen);
 }
 
 void MessageMgr::sendToClient(int connID, int msgId, const char* msg, int msgLen) {
-	msgLen += 8;
-	std::vector<char> data;
-	writeIntEx(&data, connID);
-	writeIntEx(&data, msgId);
-	std::copy(msg, msg + msgLen, std::back_inserter(data));
-
-	ZmqInst::getZmqInstance()->sendData("gateway", data.data(), msgLen);
+	MyBuffer buffer;
+	buffer.writeInt(connID);
+	buffer.writeInt(msgId);
+	buffer.writeString(msg, msgLen);
+	ZmqInst::getZmqInstance()->sendData("gateway", buffer.data(), buffer.size());
 }
 
 void MessageMgr::sendToServer(const char *serviceName, int msgId, const char* msg, int msgLen)
 {
-	std::vector<char> data;
-	writeIntEx(&data, msgId);
-	std::copy(msg, msg + msgLen, std::back_inserter(data));
-	ZmqInst::getZmqInstance()->sendData(serviceName, data.data(), msgLen + 4);
+	MyBuffer buffer;
+	buffer.writeInt(msgId);
+	buffer.writeString(msg, msgLen);
+	ZmqInst::getZmqInstance()->sendData(serviceName, buffer.data(), buffer.size());
 }
 

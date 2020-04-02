@@ -6,31 +6,14 @@
 #include "ZmqInst.h"
 
 
-int readInt(char* data) {
-	return *(int*)data;
-}
-
-void writeInt(std::vector<char>* data, int val) {
-	char* p = (char*)& val;
-	for (int i = 3; i >= 0; i--) {
-		data->push_back(p[i]);
-	}
-}
-
-void writeIntEx(std::vector<char>* data, int val) {
-	char* p = (char*)& val;
-	for (int i = 0; i < 4; i++) {
-		data->push_back(p[i]);
-	}
-}
-
 void MessageHandler::onRecvData(char* sender, char* data, int dataLen) {
 	if (dataLen <= 8) {
 		Logger::logError("$recv msg format error, data len < 8");
 		return;
 	}
-	int connId = readInt(data);
-	int msgId = readInt(&data[4]);
+	MyBuffer buffer(data, dataLen);
+	int connId = buffer.readIntEx();
+	int msgId = buffer.readIntEx();
 	TcpConnection* connection = Network::getConnById(connId);
 	if (connection == NULL) {
 		Logger::logError("$send packet error, connId(%d) is not exist, msgId:%d", connId, msgId);

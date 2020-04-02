@@ -3,6 +3,8 @@
 #include "proto.h"
 #include "ZmqInst.h"
 
+#define MAX_PACKET_LEN (64 * 1024)		// 数据包最大长度
+
 TcpConnection::TcpConnection(boost::asio::io_service& io, int connID, ConnCloseFunc closeFunc):
 	m_connID(connID),
 	m_socket(io),
@@ -36,21 +38,19 @@ void TcpConnection::doRead()
 	m_vecData.resize(1024);
 	m_vecData.assign(m_vecData.size(), 0);
 	auto buf = boost::asio::buffer(m_vecData, m_vecData.size());
-	m_socket.async_receive(buf, [buf, this](const boost::system::error_code& error, size_t datLen) {
+	m_socket.async_receive(buf, [buf, this](const boost::system::error_code& error, size_t bytes_transferred) {
 		if (error)
 		{
 			const std::string err_str = error.message();
 			Logger::logError("$close connection, %s", err_str.data());
-			m_closeFunc(getConnID(), "client disconnect");
+			close("client disconnect");
 			return;
 		}
-		if (datLen > 0)
+		if (bytes_transferred > 0)
 		{
 			//Logger::logInfo("$receive data, len:%d, %s", datLen, m_vecData.data());
-			auto iter = m_vecData.begin();
-			std::advance(iter, datLen);
-			std::copy(m_vecData.begin(), iter, std::back_inserter(m_readBuf));
-			parseRecvData();
+			m_readBuf.append(m_vecData, bytes_transferred);
+			parsePacket();
 		}
 		else {
 			Logger::logInfo("$receive data len is 0");
@@ -59,54 +59,51 @@ void TcpConnection::doRead()
 	});
 }
 
-void TcpConnection::parseRecvData()
+// 协议数据包格式: 数据总长度(int)|msgId(int)|msg
+void TcpConnection::parsePacket()
 {
-	int len = 0;
-	do {
-		len = parseProtoData();
-		if (len > 0) {
-			auto removeIter = m_readBuf.begin();
-			std::advance(removeIter, len);
-			m_readBuf.erase(m_readBuf.begin(), removeIter);
-		}
-	} while (len > 0);
-}
-
-int TcpConnection::parseProtoData()
-{
-	char* data = m_readBuf.data();
 	int dataLen = m_readBuf.size();
-	if (dataLen < 8) {
-		return 0;
+	while (dataLen > 0) {
+		if (dataLen < 4) return;
+		
+		int packetLen = m_readBuf.readInt();
+		if (packetLen < 8 || packetLen > MAX_PACKET_LEN) {
+			Logger::logInfo("$packet len(%d) error", packetLen);
+			close("packet format error");
+			return;
+		}
+		// 当前数据长度小于协议包长度
+		if (dataLen < packetLen) return;
+
+		m_readBuf.remove(4); // 移除数据总长度字段
+		int msgId = m_readBuf.readIntEx();
+		int msgLen = packetLen - 8;
+		dispatchMsg(msgId, msgLen, m_readBuf.data());
+		m_readBuf.remove(msgLen);
+		dataLen = m_readBuf.size();
+		Logger::logInfo("$receive client msg, connId:%d, msgId:%d", m_connID, msgId);
 	}
-	int msgLen = readInt(&data[4]);
-	if (dataLen - 8 < msgLen) {
-		return 0;
-	}
-	int msgId = readInt(data);
-	dispatchMsg(msgId, msgLen, data + 8);
-	Logger::logInfo("$receive client msg, connId:%d, msgId:%d", m_connID, msgId);
-	return msgLen + 8;
 }
 
 void TcpConnection::dispatchMsg(int msgId, int msgLen, const char* msgData) {
 	if (msgId == MSG_ID_LOGIN_REQ) {
 
 	}
-	std::vector<char> tmp;
-	writeIntEx(&tmp, m_connID);
-	writeIntEx(&tmp, msgId);
-	std::copy(msgData, msgData + msgLen, std::back_inserter(tmp));
-	ZmqInst::getZmqInstance()->sendData("scene", tmp.data(), msgLen + 8);
+
+	MyBuffer buffer;
+	buffer.writeInt(m_connID);
+	buffer.writeInt(msgId);
+	buffer.writeString(msgData, msgLen);
+	ZmqInst::getZmqInstance()->sendData("scene", buffer.data(), buffer.size());
 }
 
 void TcpConnection::sendMsgToClient(int msgId, char* data, int dataLen) {
-	int msgLen = dataLen + 8;
-	std::vector<char> buff;
-	writeInt(&buff, msgLen);
-	writeInt(&buff, msgId);
-	std::copy(data, data + dataLen, std::back_inserter(buff));
-	std::copy(buff.begin(), buff.end(), std::back_inserter(m_sendBuf));
+	int packetLen = dataLen + 8;
+	MyBuffer buffer;
+	buffer.writeInt(packetLen);
+	buffer.writeInt(msgId);
+	buffer.writeString(data, dataLen);
+	std::copy(buffer.data(), buffer.data() + buffer.size(), std::back_inserter(m_sendBuf));
 	doSend();
 }
 
@@ -132,6 +129,10 @@ void TcpConnection::doSend() {
 			if(m_sendBuf.size() > 0) doSend();
 		}
 	});
+}
+
+void TcpConnection::close(const char* reason) {
+	m_closeFunc(getConnID(), reason);
 }
 
 void TcpConnection::doShutDown(const char* reason)

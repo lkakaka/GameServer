@@ -10,6 +10,7 @@ import com.util.Util;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 
 public class GameRobot {
     private Network m_network;
@@ -84,17 +85,17 @@ public class GameRobot {
         ByteArrayInputStream buffer = new ByteArrayInputStream(allBytes);
         DataInputStream dataInputStream = new DataInputStream(buffer);
         try {
-            int iMsgLen = dataInputStream.readInt();
-            if (m_buffer.size() < iMsgLen) {
+            int iPacketLen = dataInputStream.readInt();
+            if (m_buffer.size() < iPacketLen) {
                 return false;
             }
             int iMsgId = dataInputStream.readInt();
-            int dataLen = iMsgLen - 8;
-            byte[] dat = new byte[dataLen];
-            dataInputStream.read(dat,0, dataLen);
+            int iMsgLen = iPacketLen - 8;
+            byte[] dat = new byte[iMsgLen];
+            dataInputStream.read(dat,0, iMsgLen);
             onMsg(iMsgId, dat);
             m_buffer.reset();
-            m_buffer.write(allBytes, iMsgLen, allBytes.length - iMsgLen);
+            m_buffer.write(allBytes, iPacketLen, allBytes.length - iPacketLen);
             return true;
         }catch (Exception e) {
             e.printStackTrace();
@@ -114,16 +115,26 @@ public class GameRobot {
     }
 
     public void sendProto(int iMsgId, com.google.protobuf.GeneratedMessageV3 msg) {
-        int size = msg.getSerializedSize();
-        System.out.println(size);
+//        int size = msg.getSerializedSize();
+//        System.out.println(size);
+        try {
+            byte[] msgData = msg.toByteArray();
+            int iMsgLen = msgData.length;
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
+            dataOutputStream.writeInt(iMsgLen + 8);
+            dataOutputStream.writeInt(iMsgId);
+            dataOutputStream.write(msgData, 0, iMsgLen);
 
-        byte[] data = new byte[size+8];
-        Util.intToByteArray(iMsgId, data, 0);
-        Util.intToByteArray(size, data, 4);
+//        byte[] data = new byte[size+8];
+//        Util.intToByteArray(iMsgId, data, 0);
+//        Util.intToByteArray(size, data, 4);
 
-        byte[] msgData = msg.toByteArray();
-        Util.copyByteArray(msgData, data, 8);
-        sendData(data);
+//        Util.copyByteArray(msgData, data, 8);
+            sendData(outputStream.toByteArray());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void setServerIP(String m_serverIP) {
