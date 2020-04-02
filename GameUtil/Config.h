@@ -1,10 +1,11 @@
 #pragma once
 #include <string>
-#include "GameUtil.h"
+//#include "GameUtil.h"
+#include "../Common/ServerExports.h"
 
 #define ERROR_CONFIG_INT -0x0FFFFFFF
 
-class GAMEUTIL_API Config
+class SERVER_EXPORT_API Config
 {
 public:
 	static bool checkFileExist(char* fileName);

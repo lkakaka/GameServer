@@ -1,9 +1,9 @@
 #pragma once
 #include <vector>
 #include <string>
-#include "GameUtil.h"
+#include "../Common/ServerExports.h"
 
-class GAMEUTIL_API MyBuffer
+class SERVER_EXPORT_API MyBuffer
 {
 private:
 	std::vector<char> buffer;

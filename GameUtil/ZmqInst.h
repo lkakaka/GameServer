@@ -2,14 +2,15 @@
 
 #include "zmq.h"
 #include "Logger.h"
-#include "GameUtil.h"
+//#include "GameUtil.h"
+#include "../Common/ServerExports.h"
 
 #include <thread>
 #include <functional>
 
 #define ZmqRecvCallback std::function<void(char*, char*, int)>
 
-class GAMEUTIL_API ZmqInst {
+class SERVER_EXPORT_API ZmqInst {
 private:
 	static ZmqInst* zmqInstance;
 	void* zmq_context;

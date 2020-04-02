@@ -1,6 +1,6 @@
 # aux_source_directory(. DIR_LIB_SRCS)
 file(GLOB_RECURSE CURRENT_HEADERS *.h *.hpp)
 file(GLOB_RECURSE CURRENT_SRC *.cpp *cc)
-add_definitions(-DMATH_EXPORT)
-add_library(MathFunction SHARED ${CURRENT_HEADERS} ${CURRENT_SRC})
+add_definitions(-DMATH_EXPORT -DSERVER_EXPORT)
+add_library(MathFunction SHARED ${CURRENT_HEADERS} ${CURRENT_SRC} ${COMMON_SRC})
 SET(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)

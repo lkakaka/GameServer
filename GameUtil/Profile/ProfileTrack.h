@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string>
 
-#include "../GameUtil.h"
+#include "../../Common/ServerExports.h"
 
 #ifdef OPEN_PROFILE_TRACK
 #define PROFILE_TRACK(name) _PROFILE_TRACK(name, 0, __COUNTER__)
@@ -15,7 +15,7 @@
 #endif // OPEN_PROFILE_TRACK
 
 
-class GAMEUTIL_API ProfileTrack
+class SERVER_EXPORT_API ProfileTrack
 {
 	long m_startTime;
 	std::string m_name;

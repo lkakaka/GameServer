@@ -19,6 +19,7 @@ set(PROTOBUFF_ROOT ../../protobuf-3.9.0)
 find_package(Boost REQUIRED)
 
 file(GLOB_RECURSE PROTO_SRC ProtoBuffer/*.cpp ProtoBuffer/*.cc ProtoBuffer/*.h ProtoBuffer/*.hpp)
+file(GLOB_RECURSE COMMON_SRC Common/*.cpp Common/*.h)
 
 message(STATUS ${PROTO_SRC})
 

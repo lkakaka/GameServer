@@ -1,17 +1,19 @@
 #ifndef POWER_H
 #define POWER_H
 
-#ifdef MATH_EXPORT
-#define MATH_API __declspec(dllexport)
-#else
-#define MATH_API
-#endif
+#include "../Common/ServerExports.h"
+
+//#ifdef MATH_EXPORT
+//#define MATH_API __declspec(dllexport)
+//#else
+//#define MATH_API
+//#endif
 
 #ifdef __cplusplus
 extern "C" { 
 #endif
-	MATH_API double power(double base, int exponent);
-	MATH_API int add(int a, int b);
+	SERVER_EXPORT_API double power(double base, int exponent);
+	SERVER_EXPORT_API int add(int a, int b);
 #ifdef __cplusplus
 }
 #endif

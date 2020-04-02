@@ -1,10 +1,7 @@
 #pragma once
 
-//#ifdef GAMEUTIL_EXPORT
-//#define GAMEUTIL_API __declspec(dllexport)
-//#else
-//#define GAMEUTIL_API
-//#endif
-#include "GameUtil.h"
+//#include "GameUtil.h"
 
-GAMEUTIL_API void initTimerModule();
+#include "../Common/ServerExports.h"
+
+SERVER_EXPORT_API void initTimerModule();
