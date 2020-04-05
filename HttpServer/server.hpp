@@ -16,13 +16,14 @@
 #include "connection.hpp"
 #include "connection_manager.hpp"
 #include "request_handler.hpp"
-#include "HttpServerExport.h"
+//#include "HttpServerExport.h"
+#include "../Common/ServerExports.h"
 
 namespace http {
 namespace server {
 
 /// The top-level class of the HTTP server.
-class HTTP_SERVER_API server
+class SERVER_EXPORT_API server
 {
 public:
   server(const server&) = delete;

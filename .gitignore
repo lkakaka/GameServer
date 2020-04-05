@@ -11,3 +11,4 @@ client/GameClient/.settings
 client/GameClient/.classpath
 client/GameClient/.project
 *.log
+shell/coredump*

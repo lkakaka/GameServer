@@ -40,7 +40,8 @@ bool Logger::isPrint(const char* fmt)
 
 void Logger::formatLog(char* buff, const char* fmt, va_list va)
 {
-	_vsnprintf_s(buff, FORMAT_BUFF_SIZE-1, _TRUNCATE, fmt, va);
+	//_vsnprintf_s(buff, FORMAT_BUFF_SIZE-1, _TRUNCATE, fmt, va);
+	vsnprintf(buff, FORMAT_BUFF_SIZE-1, fmt, va);
 }
 
 void Logger::logDebug(const char* fmt, ...)

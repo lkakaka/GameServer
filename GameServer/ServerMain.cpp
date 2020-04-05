@@ -5,7 +5,7 @@
 #include "boost/asio.hpp"
 #include "DBPlugin.h"
 #include "Logger.h"
-#include "DBTableDef.h"
+//#include "DBTableDef.h"
 //#include "DBMgr.h"
 #include "PythonPlugin.h"
 #include "ZmqInst.h"

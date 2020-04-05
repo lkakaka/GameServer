@@ -36,6 +36,7 @@ add_subdirectory(HttpServer)
 
 add_subdirectory(TestZmq)
 
+
 # if (NOT WIN32)
 # 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}-pthread")
 # 	MESSAGE(STATUS ${CMAKE_CXX_FLAGS})

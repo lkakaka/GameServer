@@ -1,5 +1,7 @@
 #include "MyBuffer.h"
+#include <stdexcept>
 
+#define THROW_EXCEPTION(msg) {std::logic_error ex(msg); throw std::exception(ex);}
 
 
 MyBuffer::MyBuffer() {
@@ -12,7 +14,7 @@ MyBuffer::MyBuffer(const char* data, int len) {
 
 
 int MyBuffer::readInt() {
-	if (buffer.size() < 4) throw std::exception("mybyffer read int error");
+	if (buffer.size() < 4) THROW_EXCEPTION("mybuffer read int error");
 	int c1 = buffer[0];
 	int c2 = buffer[1];
 	int c3 = buffer[2];

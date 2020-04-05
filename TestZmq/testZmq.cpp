@@ -1,6 +1,7 @@
 
 #include "zmq.h"
 #include <string>
+#include <string.h>
 
 #include "Device.h"
 #include <thread>

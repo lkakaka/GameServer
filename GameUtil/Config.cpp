@@ -1,7 +1,8 @@
 #include "Config.h"
 #include <fstream>
 #include <iostream>
-#include <string>
+#include <string.h>
+#include <stdlib.h>
 
 bool Config::checkFileExist(char* fileName)
 {

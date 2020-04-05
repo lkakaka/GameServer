@@ -49,7 +49,7 @@ void Network::acceptHandler(std::shared_ptr<TcpConnection> conn, error_code ec)
 		std::copy(rsp.begin(), rsp.end(), std::back_inserter(buf));
 		conn->sendData(buf);*/
 
-		Logger::logDebug("$client connected, %s", conn->getSocket().remote_endpoint().address());
+		Logger::logDebug("$client connected, %s", conn->getSocket().remote_endpoint().address().to_string().c_str());
 	}
 	doAccept();
 }
