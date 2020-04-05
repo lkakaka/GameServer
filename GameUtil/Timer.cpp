@@ -59,7 +59,7 @@ long TimerMgr::addTimer(int firstInterval, int interval, int loopCnt, TimerCallb
 	timer.interval = interval;
 	timer.loopCnt = loopCnt;
 	timer.triggerCnt = 0;
-	std::unique_lock<std::shared_mutex> lock(m_timerMutex);
+	std::unique_lock<std::mutex> lock(m_timerMutex);
 	long timerId = allocTimerId();
 	if (m_timerMap.find(timerId) != m_timerMap.end()) {
 		delete t;
@@ -73,7 +73,7 @@ long TimerMgr::addTimer(int firstInterval, int interval, int loopCnt, TimerCallb
 
 void TimerMgr::removeTimer(long timerId, bool needCancel)
 {
-	std::unique_lock<std::shared_mutex> lock(m_timerMutex);
+	std::unique_lock<std::mutex> lock(m_timerMutex);
 	auto iter = m_timerMap.find(timerId);
 	if (iter == m_timerMap.end()) {
 		return;

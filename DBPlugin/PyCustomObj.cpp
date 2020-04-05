@@ -41,7 +41,7 @@ bool PyModuleObj::addToModule(PyObject* mod)
 {
 	initPyObj_Type();
 	if (PyType_Ready(&pyTypeObj) < 0) {
-		assert(false, "assert");
+		//assert(false, "assert");
 		return false;
 	}
 

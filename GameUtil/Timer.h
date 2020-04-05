@@ -1,7 +1,7 @@
 #pragma once
 
 #include <unordered_map>
-#include <shared_mutex>
+#include <mutex>
 #include "boost/asio.hpp"
 
 //#include "GameUtil.h"
@@ -27,7 +27,7 @@ private:
 	long m_curTimerId;
 	std::unordered_map<long, Timer> m_timerMap;
 
-	std::shared_mutex m_timerMutex;
+	std::mutex m_timerMutex;
 public:
 	TimerMgr(boost::asio::io_service* io);
 	long allocTimerId();

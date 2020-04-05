@@ -8,3 +8,4 @@ script/python/.idea/
 client/GameClient/target/
 client/GameClient/.idea
 *.log
+shell/coredump*

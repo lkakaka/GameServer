@@ -8,8 +8,13 @@
 
 add_definitions(-DOPEN_PROFILE_TRACK)
 
+if (CMAKE_COMPILER_IS_GNUCXX)
+ 	set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
+ 	MESSAGE(STATUS ${CMAKE_CXX_FLAGS})
+endif (CMAKE_COMPILER_IS_GNUCXX)
+
 link_directories(${Boost_LIBRARY_DIRS} ${PYTHON_ROOT}/libs ${LOG4CPP_ROOT} ${PROTOBUFF_ROOT}/cmake/build 
-${DEPENDS_ROOT}/mysql/lib64/vs14 ${DBPLUGIN_ROOT} ${ZMQ_ROOT}/libs ${GAMEUTIL_ROOT} ${SCENE_ROOT} ${HTTP_SERVER_ROOT})
+${DEPENDS_ROOT}/mysql/lib64 ${DBPLUGIN_ROOT} ${ZMQ_ROOT}/libs ${GAMEUTIL_ROOT} ${SCENE_ROOT} ${HTTP_SERVER_ROOT})
 include_directories(${Boost_INCLUDE_DIRS} ${PYTHON_ROOT}/include ${LOG4CPP_ROOT}/include ${PROTOBUFF_ROOT}/src 
 ${DBPLUGIN_ROOT} ${DBPLUGIN_ROOT}/include ${ZMQ_ROOT}/include ${GAMEUTIL_ROOT} ${PROTO_ROOT} ${SCENE_ROOT} ${HTTP_SERVER_ROOT})
 
@@ -32,8 +37,14 @@ add_executable(GameServer ${CURRENT_HEADERS} ${CURRENT_SRC} ${PROTO_SRC})
 # message(STATUS ${CURRENT_HEADERS})
 # SOURCE_GROUP("include" FILES ${CURRENT_HEADERS})
 
-target_link_libraries(GameServer MathFunction log4cpp DBPlugin GameUtil libzmq-v142-mt-4_3_3 SceneServer HttpServer)
-target_link_libraries(GameServer debug libprotobufd optimized libprotobuf)
+target_link_libraries(GameServer MathFunction log4cpp DBPlugin GameUtil SceneServer HttpServer)
+if(WIN32)
+	target_link_libraries(GameServer debug libprotobufd optimized libprotobuf)
+	target_link_libraries(GameServer libzmq-v142-mt-4_3_3)
+else()
+	target_link_libraries(GameServer protobuf)
+	target_link_libraries(GameServer zmq)
+endif()
 
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 set_target_properties(GameServer PROPERTIES DEBUG_POSTFIX "_d")

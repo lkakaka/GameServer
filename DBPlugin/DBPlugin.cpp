@@ -19,7 +19,7 @@ void DBPlugin::initDBPlugin(std::string dbDir)
 
 	try {
 		Driver* driver = get_driver_instance();
-		Connection* m_dbConn = driver->connect("tcp://127.0.0.1:3306/test1", "root", "");
+		Connection* m_dbConn = driver->connect("tcp://127.0.0.1:3306/test1", "root", "123456");
 		if (m_dbConn == NULL) {
 			Logger::logError("$connect mysql failed");
 			return;

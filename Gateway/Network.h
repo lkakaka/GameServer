@@ -7,7 +7,9 @@
 #include "Logger.h"
 #include <map>
 #include <unordered_map>
+#include "../Common/ServerExports.h"
 
+/*
 #ifdef GATEWAY_EXPORT
 #ifndef GATEWAY_API
 #define GATEWAY_API extern "C" __declspec(dllexport)
@@ -15,6 +17,7 @@
 #else
 #define GATEWAY_API _declspec(dllimport)
 #endif
+*/
 
 using boost::asio::ip::tcp;
 using boost::system::error_code;
@@ -46,5 +49,5 @@ public:
 	void removeConnection(int connID, const char* reason);
 };
 
-GATEWAY_API void startNetwork(boost::asio::io_service* io, int port);
+SERVER_EXPORT_API void startNetwork(boost::asio::io_service* io, int port);
 

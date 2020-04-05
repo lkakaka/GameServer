@@ -27,7 +27,7 @@ private:
 	std::shared_ptr<AOINode> y_head, y_tail;
 	std::map<int, std::shared_ptr<AOINode>> m_nodes;
 public:
-	AOIMgr::AOIMgr();
+	AOIMgr();
 	void addNode(int actorId, int x, int y, std::vector<int>& neighbours);
 	void removeNode(int actorId, std::vector<int>& neighbours);
 	void moveNode(int actorId, int x, int y, std::vector<int>& leaveIds, std::vector<int>& enterIds);

@@ -21,8 +21,8 @@ class SERVER_EXPORT_API ProfileTrack
 	std::string m_name;
 	int m_trackTime;
 public:
-	inline ProfileTrack(const char* name);
-	inline ProfileTrack(const char* name, int trackTime);
-	inline ~ProfileTrack();
+	ProfileTrack(const char* name);
+	ProfileTrack(const char* name, int trackTime);
+	~ProfileTrack();
 };
 

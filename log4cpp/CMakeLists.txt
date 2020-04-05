@@ -30,6 +30,12 @@ ELSE ( CMAKE_BUILD_TYPE MATCHES "Debug" )
   SET ( LOG4CPP_LIBRARY_NAME "log4cpp" )
 ENDIF ( CMAKE_BUILD_TYPE MATCHES "Debug" )
 
+
+if (CMAKE_COMPILER_IS_GNUCXX)
+ 	set(CMAKE_CXX_FLAGS "-fPIC ${CMAKE_CXX_FLAGS}")
+ 	MESSAGE(STATUS ${CMAKE_CXX_FLAGS})
+endif (CMAKE_COMPILER_IS_GNUCXX)
+
 ADD_LIBRARY ( ${LOG4CPP_LIBRARY_NAME}
   src/Appender.cpp
   src/AppenderSkeleton.cpp
@@ -78,7 +84,7 @@ ADD_LIBRARY ( ${LOG4CPP_LIBRARY_NAME}
   src/PThreads.cpp
   src/PortabilityImpl.cpp
   src/AbortAppender.cpp
-  logger/logger.cpp
+  logger/Logger.cpp
 )
 
 IF (WIN32)

@@ -21,7 +21,7 @@ Connection* getDBConnection(std::string dbName)
 		url += "/" + dbName;
 	}
 	sql::SQLString sqlUrl = sql::SQLString(url.c_str());
-	Connection* m_dbConn = driver->connect(sqlUrl, "root", "");
+	Connection* m_dbConn = driver->connect(sqlUrl, "root", "123456");
 	return m_dbConn;
 }
 
@@ -53,7 +53,7 @@ void DBHandler::createTable(ReflectObject* tbl)
 	std::string sql = "CREATE TABLE IF NOT EXISTS " + tbl->getTypeName() + "(";
 	std::map<std::string, Field> fieldMap = tbl->getFieldMap();
 	if (fieldMap.size() == 0) {
-		Logger::logError("$create table %s failed, not define any field ", tbl->getTypeName());
+		Logger::logError("$create table %s failed, not define any field ", tbl->getTypeName().c_str());
 		return;
 	}
 	for (auto iter = fieldMap.begin(); iter != fieldMap.end(); iter++) {
@@ -68,7 +68,7 @@ void DBHandler::createTable(ReflectObject* tbl)
 			filedStr += " VARCHAR(128),";
 			break;
 		default:
-			Logger::logError("$create table %s failed, unsupport db field type: %s", tbl->getTypeName(), field.type);
+			Logger::logError("$create table %s failed, unsupport db field type: %s", tbl->getTypeName().c_str(), field.type);
 			return;
 		}
 		sql += filedStr;
@@ -116,7 +116,7 @@ void DBHandler::insertOne(ReflectObject tbl)
 			val = val + "\"" + tbl.getString(field.name) + "\",";
 			break;
 		default:
-			Logger::logError("insert table %s failed, unsupport db field type: %s", tbl.getTypeName(), field.type);
+			Logger::logError("insert table %s failed, unsupport db field type: %s", tbl.getTypeName().c_str(), field.type);
 			return;
 		}
 	}
@@ -159,7 +159,7 @@ void DBHandler::select(ReflectObject tbl)
 			conditions += "\"" + tbl.getString(field.name) + "\"";
 			break;
 		default:
-			Logger::logError("insert table %s failed, unsupport db field type: %s", tbl.getTypeName(), field.type);
+			Logger::logError("insert table %s failed, unsupport db field type: %s", tbl.getTypeName().c_str(), field.type);
 			return;
 		}
 	}
@@ -197,7 +197,7 @@ void DBHandler::select(ReflectObject tbl)
 				val1 = result->getString(field1.name);
 				break;
 			default:
-				Logger::logError("insert table %s failed, unsupport db field type: %s", tbl.getTypeName(), field1.type);
+				Logger::logError("insert table %s failed, unsupport db field type: %s", tbl.getTypeName().c_str(), field1.type);
 				return;
 			}
 		}
@@ -228,7 +228,7 @@ void DBHandler::update(ReflectObject src, ReflectObject dst)
 				conditions += "\"" + src.getString(field.name) + "\"";
 				break;
 			default:
-				Logger::logError("update table %s failed, unsupport db field type: %s", src.getTypeName(), field.type);
+				Logger::logError("update table %s failed, unsupport db field type: %s", src.getTypeName().c_str(), field.type);
 				return;
 			}
 		}
@@ -250,7 +250,7 @@ void DBHandler::update(ReflectObject src, ReflectObject dst)
 				conditions += "\"" + dst.getString(field.name) + "\"";
 				break;
 			default:
-				Logger::logError("update table %s failed, unsupport db field type: %s", dst.getTypeName(), field.type);
+				Logger::logError("update table %s failed, unsupport db field type: %s", dst.getTypeName().c_str(), field.type);
 				return;
 			}
 		}
@@ -292,13 +292,13 @@ void DBHandler::del(ReflectObject tbl)
 			conditions += "\"" + tbl.getString(field.name) + "\"";
 			break;
 		default:
-			Logger::logError("insert table %s failed, unsupport db field type: %s", tbl.getTypeName(), field.type);
+			Logger::logError("insert table %s failed, unsupport db field type: %s", tbl.getTypeName().c_str(), field.type);
 			return;
 		}
 	}
 
 	if (conditions == "") {
-		Logger::logError("del table %s failed, not assign condition", tbl.getTypeName());
+		Logger::logError("del table %s failed, not assign condition", tbl.getTypeName().c_str());
 		return;
 	}
 
