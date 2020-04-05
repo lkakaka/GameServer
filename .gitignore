@@ -7,4 +7,7 @@ script/python/py_cffi/Release/
 script/python/.idea/
 client/GameClient/target/
 client/GameClient/.idea
+client/GameClient/.settings
+client/GameClient/.classpath
+client/GameClient/.project
 *.log
