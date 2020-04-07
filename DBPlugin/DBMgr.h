@@ -12,6 +12,10 @@ private:
 public:
 
 	DBMgr();
+	static std::string m_dbUserName;
+	static std::string m_dbPassword;
+	static std::string m_dbUrl;
+	static int m_dbPort;
 	static DBMgr* getDBMgrInstance();
 	static DBHandler* createDBHander(char* dbName);
 	static DBHandler* getDBHander(char* dbName);

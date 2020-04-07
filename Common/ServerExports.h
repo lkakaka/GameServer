@@ -9,5 +9,9 @@
 		#endif
 	#endif
 #else
-#define SERVER_EXPORT_API
+#ifdef WIN32
+#define SERVER_EXPORT_API __declspec(dllimport)
+#else
+#define SERVER_EXPORT_API 
 #endif
+#endif //(SERVER_EXPORT)

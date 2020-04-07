@@ -3,10 +3,10 @@
 #include <thread>
 
 #include "boost/asio.hpp"
-#include "DBPlugin.h"
+//#include "DBPlugin.h"
 #include "Logger.h"
 //#include "DBTableDef.h"
-//#include "DBMgr.h"
+#include "DBMgr.h"
 #include "PythonPlugin.h"
 #include "ZmqInst.h"
 #include "Timer.h"
@@ -41,6 +41,15 @@ int main(int argc, char** argv)
 		return 0;
 	}
 	//g_game_service.service_name = serviceName;
+
+	std::string dbUrl = Config::getConfigStr(cfgName, "db_url");
+	if (dbUrl.length() > 0) {
+		DBMgr::m_dbUrl = dbUrl;
+		DBMgr::m_dbUserName = Config::getConfigStr(cfgName, "db_username");;
+		DBMgr::m_dbPassword = Config::getConfigStr(cfgName, "db_password");;
+		DBMgr::m_dbPort = Config::getConfigInt(cfgName, "db_port");
+		Logger::logInfo("$db config, url: %s, port:%d", dbUrl.c_str(), DBMgr::m_dbPort);
+	}
 
 	std::string routerAddr = Config::getConfigStr(cfgName, "router_addr");
 	if (routerAddr.length() == 0) {

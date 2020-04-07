@@ -12,23 +12,44 @@
 
 using namespace sql;
 
-Connection* getDBConnection(std::string dbName)
+//Connection* getDBConnection(std::string dbName)
+//{
+//	Driver* driver = get_driver_instance();
+//	std::string url = "tcp://127.0.0.1:3306";
+//	if (!dbName.empty())
+//	{
+//		url += "/" + dbName;
+//	}
+//	sql::SQLString sqlUrl = sql::SQLString(url.c_str());
+//	Connection* m_dbConn = driver->connect(sqlUrl, "root", "");
+//	return m_dbConn;
+//}
+
+Connection* DBHandler::getDBConnection()
 {
+	if (m_dbConn.get() != NULL) {
+		return m_dbConn.get();
+	}
 	Driver* driver = get_driver_instance();
-	std::string url = "tcp://127.0.0.1:3306";
-	if (!dbName.empty())
+	char urlBuf[32]{0};
+	sprintf(urlBuf, "tcp://%s:%d", m_dbUrl.c_str(), m_dbPort);
+	std::string url = urlBuf; //"tcp://127.0.0.1:3306";
+	if (!m_dbName.empty())
 	{
-		url += "/" + dbName;
+		url += "/" + m_dbName;
 	}
 	sql::SQLString sqlUrl = sql::SQLString(url.c_str());
-	Connection* m_dbConn = driver->connect(sqlUrl, "root", "123456");
-	return m_dbConn;
+	sql::SQLString dbUserName = sql::SQLString(m_dbUserName.c_str());
+	sql::SQLString dbPassword = sql::SQLString(m_dbPassword.c_str());
+	Connection* dbConn = driver->connect(sqlUrl, dbUserName, dbPassword);
+	m_dbConn.reset(dbConn);
+	return dbConn;
 }
 
-DBHandler::DBHandler(std::string dbName)
+DBHandler::DBHandler(std::string& dbUrl, int dbPort, std::string& dbUserName, std::string& dbPassword, std::string dbName) :
+	m_dbUrl(dbUrl), m_dbPort(dbPort), m_dbUserName(dbUserName), m_dbPassword(dbPassword), m_dbName(dbName)
 {
-	m_dbName = dbName;
-	Connection* conn = getDBConnection("");
+	Connection* conn = getDBConnection();
 	if (conn != NULL) {
 		Statement* st = conn->createStatement();
 		std::string sql = "CREATE DATABASE IF NOT EXISTS ";
@@ -76,7 +97,7 @@ void DBHandler::createTable(ReflectObject* tbl)
 	sql.pop_back();
 	sql += ")";
 	sql::SQLString sqlStr = sql::SQLString(sql.c_str());
-	Connection* conn = getDBConnection(m_dbName);
+	Connection* conn = getDBConnection();
 	if (conn == NULL) {
 		Logger::logError("$exec sql failed, conn is null, sql: %s", sql.c_str());
 		return;
@@ -125,7 +146,7 @@ void DBHandler::insertOne(ReflectObject tbl)
 
 	sql += ")" + val + ")";
 	sql::SQLString sqlStr = sql::SQLString(sql.c_str());
-	Connection* conn = getDBConnection(m_dbName);
+	Connection* conn = getDBConnection();
 	if (conn == NULL) {
 		Logger::logError("$exec sql failed, conn is null, sql: %s", sql.c_str());
 		return;
@@ -169,7 +190,7 @@ void DBHandler::select(ReflectObject tbl)
 	}
 
 	sql::SQLString sqlStr = sql::SQLString(sql.c_str());
-	Connection* conn = getDBConnection(m_dbName);
+	Connection* conn = getDBConnection();
 	if (conn == NULL) {
 		Logger::logError("$exec sql failed, conn is null, sql: %s", sql.c_str());
 		return;
@@ -258,7 +279,7 @@ void DBHandler::update(ReflectObject src, ReflectObject dst)
 
 	sql += " SET " + val + " WHERE " + conditions;
 	sql::SQLString sqlStr = sql::SQLString(sql.c_str());
-	Connection* conn = getDBConnection(m_dbName);
+	Connection* conn = getDBConnection();
 	if (conn == NULL) {
 		Logger::logError("$exec sql failed, conn is null, sql: %s", sql.c_str());
 		return;
@@ -304,7 +325,7 @@ void DBHandler::del(ReflectObject tbl)
 
 	sql += " WHERE " + conditions;
 	sql::SQLString sqlStr = sql::SQLString(sql.c_str());
-	Connection* conn = getDBConnection(m_dbName);
+	Connection* conn = getDBConnection();
 	if (conn == NULL) {
 		Logger::logError("$exec sql failed, conn is null, sql: %s", sql.c_str());
 		return;
@@ -315,7 +336,7 @@ void DBHandler::del(ReflectObject tbl)
 
 void DBHandler::executeSql(std::string sql, std::function<void(Statement*, bool)> handler)
 {
-	Connection* conn = getDBConnection(m_dbName);
+	Connection* conn = getDBConnection();
 	if (conn == NULL) {
 		Logger::logError("$exec sql failed, conn is null, sql: %s", sql.c_str());
 		return;

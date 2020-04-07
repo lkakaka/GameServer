@@ -9,12 +9,18 @@
 class SERVER_EXPORT_API DBHandler
 {
 private:
+	std::string m_dbUrl;
+	int m_dbPort;
+	std::string m_dbUserName;
+	std::string m_dbPassword;
 	std::string m_dbName;
+	std::shared_ptr<sql::Connection> m_dbConn;
+
 	void createTable(ReflectObject* tbl);
-	//sql::Connection* getDBConnection();
+	sql::Connection* getDBConnection();
 
 public:
-	DBHandler(std::string dbName);
+	DBHandler(std::string& dbUrl, int dbPort, std::string& dbUserName, std::string& dbPassword, std::string dbName);
 	inline std::string getDbName();
 	void initDbTable(std::vector<ReflectObject*> tblDefs);
 
