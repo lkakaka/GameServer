@@ -44,6 +44,11 @@
 		make
 		make install
 		
+		python版安装
+		cd protobuf-3.9.0/python
+		python3 setup.py build
+		python setup.py install (不知为什么需要安装,否则会崩)
+		
 		3、ZMQ(4.3.3) https://github.com/zeromq/libzmq
 		cd libzmq
 		mkdir build
