@@ -2,7 +2,7 @@
 #include <vector>
 #include <Reflect.h>
 #include <functional>
-#include <vector>
+#include <memory>
 #include "../Common/ServerExports.h"
 #include "jdbc/cppconn/statement.h"
 

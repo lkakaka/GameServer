@@ -10,6 +10,7 @@
 # (5) Need to include changes in include/log4cpp/Portability.hh for OSX to build
 
 # PROJECT ( LOG4CPP )
+set(CMAKE_DEBUG_POSTFIX "_d")
 
 INCLUDE_DIRECTORIES ( include )
 INCLUDE_DIRECTORIES ( . )
@@ -25,7 +26,7 @@ ELSE (WIN32)
 ENDIF (WIN32)
 
 IF ( CMAKE_BUILD_TYPE MATCHES "Debug" )
-  SET ( LOG4CPP_LIBRARY_NAME "log4cppD" )
+  SET ( LOG4CPP_LIBRARY_NAME "log4cpp" )
 ELSE ( CMAKE_BUILD_TYPE MATCHES "Debug" )
   SET ( LOG4CPP_LIBRARY_NAME "log4cpp" )
 ENDIF ( CMAKE_BUILD_TYPE MATCHES "Debug" )

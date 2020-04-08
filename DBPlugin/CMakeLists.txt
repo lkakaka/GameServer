@@ -8,6 +8,8 @@ add_definitions(-DSERVER_EXPORT)
 if (CMAKE_COMPILER_IS_GNUCXX)
  	set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
  	MESSAGE(STATUS ${CMAKE_CXX_FLAGS})
+	SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g2 -ggdb")
+	SET(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")
 endif (CMAKE_COMPILER_IS_GNUCXX)
 
 include_directories(../log4cpp/include ../Depends/mysql/include include ${PYTHON_ROOT}/include)
