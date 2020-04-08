@@ -43,7 +43,8 @@ class ProtoBuilder():
         os.system("protoc --cpp_out {} --proto_path {} {}".format(OUTPUT_PATH, PROTO_PATH, file_name))
         os.system("protoc --java_out {} --proto_path {} {}".format(JAVA_OUTPUT_PATH, PROTO_PATH, file_name))
         os.system("protoc --python_out {} --proto_path {} {}".format(PY_OUTPUT_PATH, PROTO_PATH, file_name))
-        os.system("protoc --cpp_out {} --proto_path {} {}".format(COCOS_PATH, PROTO_PATH, file_name))
+        if os.path.exists(COCOS_PATH):
+            os.system("protoc --cpp_out {} --proto_path {} {}".format(COCOS_PATH, PROTO_PATH, file_name))
         match_obj = re.search("/?(\w+).proto$", file_name)
         ProtoBuilder.render_obj["proto_files"].append(match_obj.group(1))
         org_file_name = match_obj.group(1)
@@ -84,9 +85,9 @@ class ProtoBuilder():
         ProtoBuilder.render_file("proto_template.cpp", OUTPUT_PATH + "/proto.cpp", ProtoBuilder.render_obj)
         ProtoBuilder.render_file("proto_template.java", JAVA_OUTPUT_PATH + "/com/proto/ProtoBufferMsg.java", ProtoBuilder.render_obj)
         ProtoBuilder.render_file("proto_template.py", PY_OUTPUT_PATH + "/message.py", ProtoBuilder.render_obj)
-        
-        ProtoBuilder.render_file("proto_template.h", COCOS_PATH + "/proto.h", ProtoBuilder.render_obj)
-        ProtoBuilder.render_file("proto_template.cpp", COCOS_PATH + "/proto.cpp", ProtoBuilder.render_obj)
+        if os.path.exists(COCOS_PATH):
+            ProtoBuilder.render_file("proto_template.h", COCOS_PATH + "/proto.h", ProtoBuilder.render_obj)
+            ProtoBuilder.render_file("proto_template.cpp", COCOS_PATH + "/proto.cpp", ProtoBuilder.render_obj)
 
     @staticmethod
     def render_file(template_file, save_file, render_obj):
