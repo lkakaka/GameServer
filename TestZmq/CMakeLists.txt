@@ -1,10 +1,7 @@
 
 set(CMAKE_DEBUG_POSTFIX "_d") 
 
-if (CMAKE_COMPILER_IS_GNUCXX)
- 	set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
- 	MESSAGE(STATUS ${CMAKE_CXX_FLAGS})
-endif (CMAKE_COMPILER_IS_GNUCXX)
+gnu_setting(false)
 
 include_directories(${PROJECT_SOURCE_DIR}/log4cpp/include ${ZMQ_ROOT}/include)
 link_directories(${LOG4CPP_ROOT} ${ZMQ_ROOT}/libs)

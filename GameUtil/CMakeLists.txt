@@ -3,10 +3,7 @@ set(CMAKE_DEBUG_POSTFIX "_d")
 
 add_definitions(-DSERVER_EXPORT -DOPEN_PROFILE_TRACK)
 
-if (CMAKE_COMPILER_IS_GNUCXX)
- 	set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
- 	MESSAGE(STATUS ${CMAKE_CXX_FLAGS})
-endif (CMAKE_COMPILER_IS_GNUCXX)
+gnu_setting(false)
 
 include_directories(${LOG4CPP_ROOT}/include ${PYTHON_ROOT}/include ${Boost_INCLUDE_DIRS} ${ZMQ_ROOT}/include)
 link_directories(${LOG4CPP_ROOT} ${PYTHON_ROOT}/libs ${Boost_LIBRARY_DIRS} ${ZMQ_ROOT}/libs)

@@ -1,6 +1,19 @@
 cmake_minimum_required(VERSION 3.0)
 project(MyServer)
 
+macro(gnu_setting pthread)
+	if (CMAKE_COMPILER_IS_GNUCXX)
+ 		set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
+		if (${pthread})
+ 			set(CMAKE_CXX_FLAGS "-pthread ${CMAKE_CXX_FLAGS}")
+		 	#MESSAGE(STATUS "set pthread")
+		endif()
+	 	#MESSAGE(STATUS ${CMAKE_CXX_FLAGS})
+		SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g2 -ggdb")
+		#SET(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")
+	endif (CMAKE_COMPILER_IS_GNUCXX)
+endmacro()
+
 message(STATUS ${PROJECT_SOURCE_DIR})
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -35,6 +48,8 @@ add_subdirectory(ZmqRouter)
 add_subdirectory(HttpServer)
 
 add_subdirectory(TestZmq)
+
+
 
 
 # if (NOT WIN32)
