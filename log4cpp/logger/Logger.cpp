@@ -11,7 +11,7 @@
 #define FORMAT_BUFF_SIZE 1024
 
 
-int Logger::initLog()
+int Logger::initLog(const char* serverName)
 {
 	log4cpp::Category& root = log4cpp::Category::getRoot();
 	log4cpp::Category& sub = log4cpp::Category::getInstance("sub1");
@@ -22,8 +22,9 @@ int Logger::initLog()
 	root.setPriority(log4cpp::Priority::NOTICE);
 	sub.setPriority(log4cpp::Priority::NOTICE);
 #endif
-
-	log4cpp::Appender* rootAppender = new log4cpp::DailyRollingFileAppender("MyServer", "Server.log");
+	std::string logFileName = serverName;
+	logFileName += ".log";
+	log4cpp::Appender* rootAppender = new log4cpp::DailyRollingFileAppender("MyServer", logFileName.c_str());
 	root.addAppender(rootAppender);
 	log4cpp::Appender* subAppender = new log4cpp::OstreamAppender("MyServer", &std::cout);
 	sub.addAppender(subAppender);

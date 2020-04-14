@@ -16,23 +16,22 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-	Logger::initLog();
-
 	if (argc < 2) {
-		Logger::logError("$arg count error");
+		printf("arg count error");
 		return 0;
 	}
 	char* cfgName = argv[1];
 	if (!Config::checkFileExist(cfgName)) {
-		Logger::logError("$cfg file not exist, file name: %s", cfgName);
+		printf("cfg file not exist, file name: %s", cfgName);
 		return 0;
 	}
 
 	std::string serviceName = Config::getConfigStr(cfgName, "service_name");
 	if (serviceName.length() == 0) {
-		Logger::logError("$not config zmq name, file name: %s", cfgName);
+		printf("not config zmq name, file name: %s", cfgName);
 		return 0;
 	}
+	Logger::initLog(serviceName.c_str());
 	std::string routerAddr = Config::getConfigStr(cfgName, "router_addr");
 	if (routerAddr.length() == 0) {
 		Logger::logError("$not config router addr, file name: %s", cfgName);

@@ -93,6 +93,5 @@ TcpConnection* Network::getConnById(int connId)
 
 void startNetwork(boost::asio::io_service* io, int port)
 {
-	//Logger::initLog();
 	Network::initNetwork(io, port);
 }

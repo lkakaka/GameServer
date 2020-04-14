@@ -7,7 +7,6 @@ SceneMgr* SceneMgr::getSceneMgr() {
 	if (SceneMgr::g_sceneMgr != NULL) {
 		return SceneMgr::g_sceneMgr;
 	}
-	//Logger::initLog();
 	SceneMgr::g_sceneMgr = new SceneMgr();
 	return SceneMgr::g_sceneMgr;
 }

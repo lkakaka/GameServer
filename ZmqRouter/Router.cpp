@@ -5,32 +5,33 @@
 
 int main(int argc, char** argv)
 {
-	Logger::initLog();
-	int major, minor, patch;
-	zmq_version(&major, &minor, &patch);
-	Logger::logInfo("$Current ZMQ version is %d.%d.%d\n", major, minor, patch);
-	Logger::logInfo("$===========================================\n\n");
-
 	if (argc < 2) {
-		Logger::logError("$arg count error");
+		printf("arg count error");
 		return 0;
 	}
 	char* cfgName = argv[1];
 	if (!Config::checkFileExist(cfgName)) {
-		Logger::logError("$cfg file not exist, file name: %s", cfgName);
+		printf("$cfg file not exist, file name: %s", cfgName);
 		return 0;
 	}
 
 	std::string serviceName = Config::getConfigStr(cfgName, "service_name");
 	if (serviceName == "") {
-		Logger::logError("$not config zmq addr, cfg name: %s", cfgName);
+		printf("$not config zmq addr, cfg name: %s", cfgName);
 		return 0;
 	}
+	Logger::initLog(serviceName.c_str());
+
 	int port = Config::getConfigInt(cfgName, "port");
 	if (port <= 0) {
 		Logger::logError("$not config zmq router port, cfg name: %s", cfgName);
 		return 0;
 	}
+
+	int major, minor, patch;
+	zmq_version(&major, &minor, &patch);
+	Logger::logInfo("$Current ZMQ version is %d.%d.%d\n", major, minor, patch);
+	Logger::logInfo("$===========================================\n\n");
 	
 	void* zmq_context = zmq_init(1);
 	void* router_socket = zmq_socket(zmq_context, ZMQ_ROUTER);

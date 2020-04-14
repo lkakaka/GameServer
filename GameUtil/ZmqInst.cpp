@@ -17,7 +17,6 @@ void ZmqInst::initZmqInstance(const char* name, const char* router_addr)
 	if (zmqInstance != NULL) {
 		return;
 	}
-	//Logger::initLog();
 	ZmqInst::zmqInstance = new ZmqInst();
 	ZmqInst::zmqInstance->startZmqInst(name, router_addr);
 }
