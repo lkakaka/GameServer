@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <string.h>
+#include <stdarg.h>
 //#include "log4cpp/Category.hh"
 //#include "log4cpp/FileAppender.hh"
 //#include "log4cpp/SimpleLayout.hh"
@@ -9,7 +10,7 @@
 //#include <log4cpp/PatternLayout.hh>
 //#include "log4cpp/DailyRollingFileAppender.hh"
 //#include "log4cpp/OstreamAppender.hh"
-#include "../Common/ServerExports.h"
+#include "../../Common/ServerExports.h"
 
 class SERVER_EXPORT_API Logger
 {
