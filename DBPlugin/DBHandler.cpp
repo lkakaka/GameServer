@@ -63,7 +63,7 @@ inline std::string DBHandler::getDbName() { return m_dbName; }
 
 void DBHandler::initDbTable(std::vector<ReflectObject*> tblDefs)
 {
-	Logger::initLog();
+	//Logger::initLog();
 	for (auto iter = tblDefs.begin(); iter != tblDefs.end(); iter++) {
 		createTable(*iter);
 	}

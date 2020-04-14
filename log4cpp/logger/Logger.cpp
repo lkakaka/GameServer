@@ -1,4 +1,12 @@
 #include "../include/Logger.h"
+#include "log4cpp/Category.hh"
+#include "log4cpp/FileAppender.hh"
+#include "log4cpp/SimpleLayout.hh"
+#include "log4cpp/PropertyConfigurator.hh"
+#include <log4cpp/Portability.hh>
+#include <log4cpp/PatternLayout.hh>
+#include "log4cpp/DailyRollingFileAppender.hh"
+#include "log4cpp/OstreamAppender.hh"
 
 #define FORMAT_BUFF_SIZE 1024
 

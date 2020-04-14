@@ -9,7 +9,7 @@ using namespace sql;
 
 void DBPlugin::initDBPlugin(std::string dbDir)
 {
-	Logger::initLog();
+	//Logger::initLog();
 
 	RelectTest test;
 	test.setInt("id", 1);

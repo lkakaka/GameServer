@@ -370,6 +370,6 @@ PyMODINIT_FUNC PyInit_PyDb(void)
 void initDbModule() {
 	PyImport_AppendInittab(ModuleName, PyInit_PyDb);  // python3
 	//PyObject* module = PyImport_ImportModule("PyDb");
-	Logger::initLog();
+	//Logger::initLog();
 }
 

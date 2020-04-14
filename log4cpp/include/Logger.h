@@ -1,20 +1,21 @@
 #pragma once
 #include <iostream>
 #include <string.h>
-#include "log4cpp/Category.hh"
-#include "log4cpp/FileAppender.hh"
-#include "log4cpp/SimpleLayout.hh"
-#include "log4cpp/PropertyConfigurator.hh"
-#include <log4cpp/Portability.hh>
-#include <log4cpp/PatternLayout.hh>
-#include "log4cpp/DailyRollingFileAppender.hh"
-#include "log4cpp/OstreamAppender.hh"
+//#include "log4cpp/Category.hh"
+//#include "log4cpp/FileAppender.hh"
+//#include "log4cpp/SimpleLayout.hh"
+//#include "log4cpp/PropertyConfigurator.hh"
+//#include <log4cpp/Portability.hh>
+//#include <log4cpp/PatternLayout.hh>
+//#include "log4cpp/DailyRollingFileAppender.hh"
+//#include "log4cpp/OstreamAppender.hh"
+#include "../Common/ServerExports.h"
 
-class Logger
+class SERVER_EXPORT_API Logger
 {
 private:
 	static Logger* g_log;
-	static const log4cpp::Category& root;
+	//static const log4cpp::Category& root;
 
 	static bool isPrint(const char* fmt);
 public:
