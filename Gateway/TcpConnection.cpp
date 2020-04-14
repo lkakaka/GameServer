@@ -6,6 +6,7 @@
 #define MAX_PACKET_LEN (64 * 1024)		// 数据包最大长度
 
 TcpConnection::TcpConnection(boost::asio::io_service& io, int connID, ConnCloseFunc closeFunc):
+	m_isClosed(false),
 	m_connID(connID),
 	m_socket(io),
 	m_closeFunc(closeFunc)
@@ -15,12 +16,12 @@ TcpConnection::TcpConnection(boost::asio::io_service& io, int connID, ConnCloseF
 
 TcpConnection::~TcpConnection()
 {
-	try {
+	/*try {
 		this->m_socket.close();
 	}catch (boost::system::system_error e) {
 		Logger::logError("socket close error, %s", e.what());
-	}
-	printf("delete TcpConnection\n");
+	}*/
+	//printf("delete TcpConnection\n");
 }
 
 tcp::socket& TcpConnection::getSocket()
@@ -41,9 +42,11 @@ void TcpConnection::doRead()
 	m_socket.async_receive(buf, [buf, this](const boost::system::error_code& error, size_t bytes_transferred) {
 		if (error)
 		{
+			std::string reason;
 			const std::string err_str = error.message();
-			Logger::logError("$close connection, %s", err_str.data());
-			close("client disconnect");
+			//Logger::logError("$close connection, %s", err_str.data());
+			reason = "read error," + err_str;
+			close(reason.c_str());
 			return;
 		}
 		if (bytes_transferred > 0)
@@ -55,7 +58,9 @@ void TcpConnection::doRead()
 		else {
 			Logger::logInfo("$receive data len is 0");
 		}
-		this->doRead();
+		if (!m_isClosed) {
+			this->doRead();
+		}
 	});
 }
 
@@ -137,6 +142,8 @@ void TcpConnection::close(const char* reason) {
 
 void TcpConnection::doShutDown(const char* reason)
 {
+	if (m_isClosed) return;
+	m_isClosed = true;
 	try {
 		this->m_socket.shutdown(m_socket.shutdown_both);
 	}

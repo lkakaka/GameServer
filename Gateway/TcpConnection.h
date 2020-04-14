@@ -17,6 +17,7 @@ private:
 	MyBuffer m_readBuf;
 	std::vector<char> m_sendBuf;
 	int m_connID;
+	bool m_isClosed;
 	//std::shared_ptr<Network> m_network;
 	ConnCloseFunc m_closeFunc;
 

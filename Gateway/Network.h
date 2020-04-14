@@ -33,6 +33,7 @@ private:
 	std::unordered_map<int, std::shared_ptr<TcpConnection>> m_connMap;
 
 	inline int allocConnID() { return m_curConnId++; }
+	void doCloseConnection(int connID, const char* reason);
 
 public:
 	Network(boost::asio::io_service* io, int port);
@@ -44,7 +45,6 @@ public:
 	int startListen();
 	void doAccept();
 	void acceptHandler(std::shared_ptr<TcpConnection> conn, error_code ec);
-	void onConnectionClose(int connID, const char* reason);
 	void closeConnection(int connID, const char* reason);
 	void removeConnection(int connID, const char* reason);
 };

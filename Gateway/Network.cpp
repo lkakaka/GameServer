@@ -54,7 +54,7 @@ void Network::acceptHandler(std::shared_ptr<TcpConnection> conn, error_code ec)
 	doAccept();
 }
 
-void Network::onConnectionClose(int connID, const char* reason)
+void Network::doCloseConnection(int connID, const char* reason)
 {
 	decltype(m_connMap.begin()->second) conn;
 	auto iter = m_connMap.find(connID);
@@ -68,15 +68,17 @@ void Network::onConnectionClose(int connID, const char* reason)
 	{
 		conn->doShutDown(reason);
 	}
+
+	Logger::logInfo("$close connection(%d), reason:%s", connID, reason);
 }
 
 void Network::closeConnection(int connID, const char* reason)
 {
-	onConnectionClose(connID, reason);
+	doCloseConnection(connID, reason);
 }
 
 void Network::removeConnection(int connID, const char* reason) {
-	onConnectionClose(connID, reason);
+	doCloseConnection(connID, reason);
 }
 
 TcpConnection* Network::getConnById(int connId)
