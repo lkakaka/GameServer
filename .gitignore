@@ -13,3 +13,4 @@ client/GameClient/.project
 *.log
 shell/coredump*
 shell/Server.log*
+log/

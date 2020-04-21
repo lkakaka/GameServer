@@ -2,8 +2,8 @@
 
 call config.bat
 
-taskkill /f /t /im %GatewayCmd%
-taskkill /f /t /im %ServerCmd%
-taskkill /f /t /im %RouterCmd%
+taskkill /f /t /im %GatewayExe%
+taskkill /f /t /im %GameServerExe%
+taskkill /f /t /im %RouterExe%
 
 ::EXIT

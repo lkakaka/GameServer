@@ -23,7 +23,7 @@ int Logger::initLog(const char* serverName)
 	sub.setPriority(log4cpp::Priority::NOTICE);
 #endif
 	std::string logFileName = serverName;
-	logFileName += ".log";
+	logFileName = "../log/" + logFileName + ".log";
 	log4cpp::Appender* rootAppender = new log4cpp::DailyRollingFileAppender("MyServer", logFileName.c_str());
 	root.addAppender(rootAppender);
 	log4cpp::Appender* subAppender = new log4cpp::OstreamAppender("MyServer", &std::cout);

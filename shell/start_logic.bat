@@ -1,10 +1,10 @@
 @echo off
 
 call config.bat
-set ConfigFile="../../conf/scene.cfg"
+::set ConfigFile="../../conf/scene.cfg"
 
-cd ../bin/Debug
+::cd ../bin/Debug
 :: md %BUILD_PATH%
 
-%ServerCmd% %ConfigFile%
+%ServerCmd% %SceneConfig%
 ::pause

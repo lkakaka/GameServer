@@ -1,9 +1,9 @@
 @echo off
 
 call config.bat
-set ConfigFile="../../conf/gateway.cfg"
+::set ConfigFile="../../conf/gateway.cfg"
 
-cd ../bin/Debug
+::cd ../bin/Debug
 
-%GatewayCmd% %ConfigFile%
+%GatewayCmd% %GatewayConfig%
 ::pause

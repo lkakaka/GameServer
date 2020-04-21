@@ -1,16 +1,11 @@
-@ECHO OFF
+@echo off
 
 call config.bat
 
-set RouterConfig="../../conf/router.cfg"
-set ServerConfig="../../conf/scene.cfg"
-set GatewayConfig="../../conf/gateway.cfg"
-set DBConfig="../../conf/db.cfg"
-
-cd ../bin/Debug
+::cd ../bin/Debug
 start %RouterCmd% %RouterConfig%
 start %ServerCmd% %DBConfig%
-start %ServerCmd% %ServerConfig%
+start %ServerCmd% %SceneConfig%
 start %GatewayCmd% %GatewayConfig%
 
 ::EXIT
