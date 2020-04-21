@@ -2,6 +2,8 @@
 #include "Logger.h"
 #include "Config.h"
 
+#define MAX_MSG_LEN (64 * 1024)
+
 
 int main(int argc, char** argv)
 {
@@ -55,6 +57,7 @@ int main(int argc, char** argv)
 
 	char src_name[128]{ 0 };
 	char dst_name[128]{ 0 };
+	char msg[MAX_MSG_LEN + 1]{ 0 };
 
 	while (1) {
 		zmq_recv(router_socket, src_name, sizeof(src_name), 0);
@@ -62,9 +65,13 @@ int main(int argc, char** argv)
 		zmq_recv(router_socket, dst_name, sizeof(dst_name), 0);
 		int msgLen = 0;
 		zmq_recv(router_socket, (void*)&msgLen, 4, 0);
+		if (msgLen <= 0 || msgLen > MAX_MSG_LEN) {
+			Logger::logError("$error msg len(%d), src_name:%s, dst_name:%s", msgLen, src_name, dst_name);
+			continue;
+		}
 		//zmq_recv(router_socket, NULL, 0, 0);
-		char* msg = new char[msgLen];
 		zmq_recv(router_socket, msg, msgLen, 0);
+		msg[msgLen] = '\0';
 
 		Logger::logInfo("$recv msg, src_name:%s, dst_name:%s, msg:%s", src_name, dst_name, msg);
 		
@@ -77,7 +84,6 @@ int main(int argc, char** argv)
 
 		memset(src_name, 0, sizeof(src_name));
 		memset(dst_name, 0, sizeof(dst_name));
-		delete[] msg;
 	}
 
 	return 1;
