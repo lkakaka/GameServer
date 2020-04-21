@@ -10,7 +10,4 @@ client/GameClient/.idea
 client/GameClient/.settings
 client/GameClient/.classpath
 client/GameClient/.project
-*.log
 shell/coredump*
-shell/Server.log*
-log/
