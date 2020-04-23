@@ -27,7 +27,7 @@ class Network : std::enable_shared_from_this<Network>
 private:
 	int m_curConnId = 0;
 
-	tcp::acceptor m_acceptor;
+	std::shared_ptr<tcp::acceptor> m_acceptor;
 	boost::asio::io_service* m_io;
 	
 	std::unordered_map<int, std::shared_ptr<TcpConnection>> m_connMap;
