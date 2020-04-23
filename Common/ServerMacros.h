@@ -10,7 +10,9 @@
 #endif //(WIN32)
 
 #ifdef WIN32
-#define MKDIR(dirName, mode) _mkdir(dirName)
+#define M_ACCESS(fileName, mode) _access(fileName, mode)
+#define M_MKDIR(dirName, mode) _mkdir(dirName)
 #else
-#define MKDIR(dirName, mode) mkdir(dirName, mode)
+#define M_MKDIR(dirName, mode) mkdir(dirName, mode)
+#define M_ACCESS(fileName, mode) access(fileName, mode)
 #endif //(WIN32)
