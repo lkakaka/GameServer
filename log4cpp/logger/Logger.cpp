@@ -27,7 +27,7 @@ int Logger::initLog(const char* serverName)
 #endif
 	std::string logFileName = serverName;
 	std::string logDirName = "../log/";
-	if (M_ACCESS(logDirName.c_str(), 0) == -1 && M_MKDIR(logDirName.c_str(), 666) == -1) {
+	if (M_ACCESS(logDirName.c_str(), 0) == -1 && M_MKDIR(logDirName.c_str(), 0755) == -1) {
 		printf("create log dir failed\n");
 	}
 	logFileName = logDirName + logFileName + ".log";
