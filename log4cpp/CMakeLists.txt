@@ -44,6 +44,8 @@ if (CMAKE_COMPILER_IS_GNUCXX)
  	MESSAGE(STATUS ${CMAKE_CXX_FLAGS})
 endif (CMAKE_COMPILER_IS_GNUCXX)
 
+gnu_setting(false)
+
 ADD_LIBRARY ( ${LOG4CPP_LIBRARY_NAME} SHARED 
   src/Appender.cpp
   src/AppenderSkeleton.cpp
