@@ -8,6 +8,9 @@
 #include "log4cpp/DailyRollingFileAppender.hh"
 #include "log4cpp/OstreamAppender.hh"
 
+#include "../Common/ServerMacros.h"
+
+
 #define FORMAT_BUFF_SIZE 1024
 
 
@@ -23,7 +26,11 @@ int Logger::initLog(const char* serverName)
 	sub.setPriority(log4cpp::Priority::NOTICE);
 #endif
 	std::string logFileName = serverName;
-	logFileName = "../log/" + logFileName + ".log";
+	std::string logDirName = "../log/";
+	if (_access(logDirName.c_str(), 0) == -1 && MKDIR(logDirName.c_str()) == -1) {
+		printf("create log dir failed\n");
+	}
+	logFileName = logDirName + logFileName + ".log";
 	log4cpp::Appender* rootAppender = new log4cpp::DailyRollingFileAppender("MyServer", logFileName.c_str());
 	root.addAppender(rootAppender);
 	log4cpp::Appender* subAppender = new log4cpp::OstreamAppender("MyServer", &std::cout);
