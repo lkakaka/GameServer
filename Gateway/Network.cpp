@@ -5,10 +5,14 @@ static Network* g_network = NULL;
 
 Network::Network(boost::asio::io_service* io, int port)
 	: m_io(io),
-	m_acceptor(*io, tcp::endpoint(tcp::v4(), port)),
+	//m_acceptor(*io, tcp::endpoint(tcp::v4(), port)),
 	m_curConnId(0)
 {
-	
+	try {
+		m_acceptor.reset(new tcp::acceptor(*io, tcp::endpoint(tcp::v4(), port)));
+	} catch(std::exception& e) {
+		Logger::logError("$%s, port:%d", e.what(), port);
+	}
 }
 
 void Network::initNetwork(boost::asio::io_service* io, int port)
@@ -34,7 +38,7 @@ void Network::doAccept()
 	//boost::shared_ptr<tcp::socket> psocket(new tcp::socket(*m_io));
 	
 	std::shared_ptr<TcpConnection> conn(new TcpConnection(*m_io, allocConnID(), std::bind(&Network::closeConnection, this, std::placeholders::_1, std::placeholders::_2)));
-	m_acceptor.async_accept(conn->getSocket(), std::bind(&Network::acceptHandler, this, conn, std::placeholders::_1));
+	m_acceptor->async_accept(conn->getSocket(), std::bind(&Network::acceptHandler, this, conn, std::placeholders::_1));
 }
 
 void Network::acceptHandler(std::shared_ptr<TcpConnection> conn, error_code ec)
@@ -49,7 +53,7 @@ void Network::acceptHandler(std::shared_ptr<TcpConnection> conn, error_code ec)
 		std::copy(rsp.begin(), rsp.end(), std::back_inserter(buf));
 		conn->sendData(buf);*/
 
-		Logger::logDebug("$client connected, %s", conn->getSocket().remote_endpoint().address().to_string().c_str());
+		Logger::logInfo("$client connected, %s", conn->getSocket().remote_endpoint().address().to_string().c_str());
 	}
 	doAccept();
 }
