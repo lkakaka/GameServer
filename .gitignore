@@ -5,10 +5,10 @@ script/python/__pycache__/
 */__pycache__/
 script/python/py_cffi/Release/
 script/python/.idea/
-client/GameClient/target/
-client/GameClient/.idea
-client/GameClient/.settings
-client/GameClient/.classpath
-client/GameClient/.project
+tool/robot/JavaRobot/target/
+tool/robot/JavaRobot/.idea
+tool/robot/JavaRobot/.settings
+tool/robot/JavaRobot/.classpath
+tool/robot/JavaRobot/.project
 shell/coredump*
 log/

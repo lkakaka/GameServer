@@ -5,7 +5,7 @@ from jinja2 import FileSystemLoader
 
 PROTO_PATH = "./proto"
 OUTPUT_PATH = "../ProtoBuffer"
-JAVA_OUTPUT_PATH="../client/GameClient/src/main/java"
+JAVA_OUTPUT_PATH="./robot/JavaRobot/src/main/java"
 PY_OUTPUT_PATH="../script/python/proto"
 COCOS_PATH = "../../CocosGameDemo/Classes/proto"
 

@@ -103,8 +103,10 @@ void initPython()
 	PyRun_SimpleString("import os");
 	//PyRun_SimpleString("print(os.getcwd())");
 #ifdef WIN32
-	PyRun_SimpleString("sys.path.append(os.path.abspath('..') + '/script/python')");
-	PyRun_SimpleString("sys.path.append(os.path.abspath('..') + '/Depends/Python38')");
+	/*PyRun_SimpleString("sys.path.append(os.path.abspath('..') + '/script/python')");
+	PyRun_SimpleString("sys.path.append(os.path.abspath('..') + '/Depends/Python38')");*/
+	PyRun_SimpleString("sys.path.append(os.path.abspath('../..') + '/script/python')");
+	PyRun_SimpleString("sys.path.append(os.path.abspath('../..') + '/Depends/Python38')");
 #else
 	PyRun_SimpleString("sys.path.append(os.path.abspath('..') + '/script/python')");
 	PyRun_SimpleString("sys.path.append(os.path.abspath('..') + '/Depends/Python38')");
