@@ -52,8 +52,11 @@ void Network::acceptHandler(std::shared_ptr<TcpConnection> conn, error_code ec)
 		std::vector<char> buf;
 		std::copy(rsp.begin(), rsp.end(), std::back_inserter(buf));
 		conn->sendData(buf);*/
-
-		Logger::logInfo("$client connected, %s", conn->getSocket().remote_endpoint().address().to_string().c_str());
+		try {
+			Logger::logInfo("$client connected, %s", conn->getSocket().remote_endpoint().address().to_string().c_str());
+		} catch (std::exception e) {
+			Logger::logInfo("$client connected, cannot get remote addr,connId:%d, e:%s", conn->getConnID(), e.what());
+		}
 	}
 	doAccept();
 }

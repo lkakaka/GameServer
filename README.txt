@@ -16,6 +16,11 @@
 	   cd build
 	   cmake ..
 	   打开工程protobuf.sln, 编译
+	   
+	   python版安装（先生成protoc.exe，放到protobuf-3.9.0/src/目录下）
+		cd protobuf-3.9.0/python
+		python3 setup.py build
+		python setup.py install (不知为什么需要安装,否则release会崩)
 	    
 		3、ZMQ(4.3.3) https://github.com/zeromq/libzmq
 		cd libzmq
