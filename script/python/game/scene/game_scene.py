@@ -3,7 +3,7 @@ import Scene
 import game.scene.game_player
 import weakref
 import logger
-from proto.message import Message
+from proto.pb_message import Message
 
 
 class GameScene:

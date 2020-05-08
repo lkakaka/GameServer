@@ -1,6 +1,6 @@
 
 import Game
-from proto.message import Message
+from proto.pb_message import Message
 # import game.util.cmd_util
 import logger
 

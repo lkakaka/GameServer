@@ -1,11 +1,11 @@
 import logger
-import proto.message
+import proto.pb_message
 from game.service.service_base import ServiceBase
 import game.util.cmd_util
 from game.db.db_handler import DBHandler
 from game.db.db_builder import DbInfo
 
-Message = proto.message.Message
+Message = proto.pb_message.Message
 
 CUR_DB_VERSION = 1
 

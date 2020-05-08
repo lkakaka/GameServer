@@ -1,6 +1,6 @@
 
 from game.service.service_base import ServiceBase
-from proto.message import Message
+from proto.pb_message import Message
 import game.util.cmd_util
 import logger
 
