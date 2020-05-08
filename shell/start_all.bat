@@ -6,6 +6,7 @@ call config.bat
 start "Router-"%RouterCmd% %RouterCmd% %RouterConfig%
 start "DBServer-"%ServerCmd% %ServerCmd% %DBConfig%
 start "SceneServer-"%ServerCmd% %ServerCmd% %SceneConfig%
+start "LoginServer-"%ServerCmd% %ServerCmd% %LoginConfig%
 start "Gateway-"%GatewayCmd% %GatewayCmd% %GatewayConfig%
 
 ::EXIT

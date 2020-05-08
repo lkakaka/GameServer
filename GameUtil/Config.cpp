@@ -18,6 +18,9 @@ std::string Config::getConfigStr(char* configFileName, char* key)
 	std::string line;
 	while (getline(in, line))
 	{
+		if (line.size() == 0 || line[0] == '#') {
+			continue;
+		}
 		int index = line.find('=', 0);
 		if (index <= 0) {
 			continue;

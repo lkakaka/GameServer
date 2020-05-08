@@ -91,15 +91,15 @@ void TcpConnection::parsePacket()
 }
 
 void TcpConnection::dispatchMsg(int msgId, int msgLen, const char* msgData) {
-	if (msgId == MSG_ID_LOGIN_REQ) {
-
-	}
-
 	MyBuffer buffer;
 	buffer.writeInt(m_connID);
 	buffer.writeInt(msgId);
 	buffer.writeString(msgData, msgLen);
-	ZmqInst::getZmqInstance()->sendData("scene", buffer.data(), buffer.size());
+	if (msgId == MSG_ID_LOGIN_REQ) {
+		ZmqInst::getZmqInstance()->sendData("login", buffer.data(), buffer.size());
+	} else {
+		ZmqInst::getZmqInstance()->sendData("scene", buffer.data(), buffer.size());
+	}
 }
 
 void TcpConnection::sendMsgToClient(int msgId, char* data, int dataLen) {

@@ -7,9 +7,9 @@ std::shared_ptr<google::protobuf::Message> CreateMsgById(int msgId)
 {
 	switch (msgId)
 	{
-	{% for item in msg_def %}
-	case {{ item[0] }}:
-		return std::shared_ptr<google::protobuf::Message>(new {{ item[2] }}());
+	{% for proto_obj in render_obj.proto_list %}
+	case {{ proto_obj.msg_id_var }}:
+		return std::shared_ptr<google::protobuf::Message>(new {{ proto_obj.proto_name }}());
 	{% endfor %}
 }
 	return NULL;

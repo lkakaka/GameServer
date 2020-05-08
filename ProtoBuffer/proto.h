@@ -3,8 +3,9 @@
 
 #pragma once
 
-#include "common.pb.h"
 #include "login.pb.h"
+#include "server_only/login_srv.pb.h"
+#include "server_only/common.pb.h"
 #include "test.pb.h"
 
 #ifdef PROTO_BUFFER_EXPORT
@@ -16,12 +17,14 @@
 #endif
 
 enum PROTO_MSG_ID {
-	MSG_ID_DISCONNECT=1,
-	MSG_ID_LOGIN_REQ=2,
-	MSG_ID_LOGIN_RSP=3,
-	MSG_ID_RPC_MSG=4,
-	MSG_ID_RPC_MSG_RSP=5,
-	MSG_ID_TEST_REQ=6,
+	MSG_ID_DISCONNECT = 1,
+	MSG_ID_LOAD_ROLE_REQ = 2,
+	MSG_ID_LOAD_ROLE_RSP = 3,
+	MSG_ID_LOGIN_REQ = 4,
+	MSG_ID_LOGIN_RSP = 5,
+	MSG_ID_RPC_MSG = 6,
+	MSG_ID_RPC_MSG_RSP = 7,
+	MSG_ID_TEST_REQ = 8,
 	
 };
 

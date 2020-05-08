@@ -9,6 +9,10 @@ std::shared_ptr<google::protobuf::Message> CreateMsgById(int msgId)
 	{
 		case MSG_ID_DISCONNECT:
 		return std::shared_ptr<google::protobuf::Message>(new Disconnect());
+		case MSG_ID_LOAD_ROLE_REQ:
+		return std::shared_ptr<google::protobuf::Message>(new LoadRoleReq());
+		case MSG_ID_LOAD_ROLE_RSP:
+		return std::shared_ptr<google::protobuf::Message>(new LoadRoleRsp());
 		case MSG_ID_LOGIN_REQ:
 		return std::shared_ptr<google::protobuf::Message>(new LoginReq());
 		case MSG_ID_LOGIN_RSP:

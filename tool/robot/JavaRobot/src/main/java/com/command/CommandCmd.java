@@ -40,7 +40,7 @@ public class CommandCmd extends CmdDispatch {
         dispatchCmd(cmd);
     }
 
-    @CmdAnnotation(inputCmd = "add_robot")
+    @CmdAnnotation(inputCmd = "add")
     private void addRobot() {
         if (params == null || params.length < 1) {
             System.out.println("addRobot error, params: " + params);

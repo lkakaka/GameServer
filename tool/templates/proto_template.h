@@ -3,7 +3,7 @@
 
 #pragma once
 
-{% for file_name in proto_files %}
+{% for file_name in render_obj.proto_files %}
 #include "{{ file_name }}.pb.h"
 {% endfor %}
 
@@ -16,8 +16,8 @@
 #endif
 
 enum PROTO_MSG_ID {
-{% for item in msg_def %}
-	{{ item[0] }}={{ item[1] }},
+{% for proto_obj in render_obj.proto_list %}
+	{{ proto_obj.msg_id_var }} = {{ proto_obj.msg_id }},
 {% endfor %}	
 };
 

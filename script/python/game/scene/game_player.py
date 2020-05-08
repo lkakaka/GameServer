@@ -1,9 +1,8 @@
 
 import Scene
-from proto.message import message
+from proto.message import Message
 import game.util.cmd_util
 import logger
-
 
 class GamePlayer:
 
@@ -18,7 +17,7 @@ class GamePlayer:
         self.name = name
 
     def on_recv_client_msg(self, msg_id, msg_data):
-        msg = message.create_msg_by_id(msg_id)
+        msg = Message.create_msg_by_id(msg_id)
         msg.ParseFromString(msg_data)
         func = GamePlayer._c_cmd.get_cmd_func(msg_id)
         if func is None:
@@ -29,7 +28,7 @@ class GamePlayer:
     def send_msg_to_client(self, msg_id, msg):
         self.game_scene.service.send_msg_to_client(self.conn_id, msg_id, msg)
 
-    @_c_cmd.reg_cmd(message.MSG_ID_DISCONNECT)
+    @_c_cmd.reg_cmd(Message.MSG_ID_DISCONNECT)
     def _on_recv_disconnect(self, msg_id, msg):
         logger.logError("$player disconnect, role_id:{},reason:{}", self.role_id, msg.reason)
         self.game_scene.remove_player(self.role_id, msg.reason)

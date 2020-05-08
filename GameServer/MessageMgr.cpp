@@ -104,7 +104,9 @@ void MessageMgr::onRecvData(char* sender, char* data, int dataLen) {
 			PyTuple_SetItem(arg, 1, PyLong_FromLong(msgId));
 			PyTuple_SetItem(arg, 2, Py_BuildValue("y#", msgData, msgLen));
 			//callPyFunction("main", "on_recv_service_msg", arg);
+			//Py_INCREF(arg);
 			GameService::g_gameService->callPyFunction("on_recv_service_msg", arg);
+			//Py_DECREF(arg);
 			PyGILState_Release(py_state);
 		}
 	}

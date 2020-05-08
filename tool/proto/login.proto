@@ -16,6 +16,17 @@ message LoginRsp {
 	int32 err_code = 4;
 }
 
+message _RoleInfo {
+	int32 role_id = 1;
+	string role_name = 2;
+}
+
+message LoadRoleRsp {
+	string account = 1;
+	int32 err_code = 2;
+	repeated _RoleInfo role_list = 3;
+}
+
 message Disconnect {
 	int32 conn_id = 1;
 	string reason = 2;

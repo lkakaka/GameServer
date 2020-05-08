@@ -1,6 +1,6 @@
 
 import logger
-from proto.message import message
+from proto.message import Message
 from game.service.service_base import ServiceBase
 import game.util.cmd_util
 import game.scene.game_scene
@@ -14,7 +14,7 @@ class SceneService(ServiceBase):
     _c_cmd = game.util.cmd_util.CmdDispatch("c_scene")
 
     def __init__(self):
-        ServiceBase.__init__(self)
+        ServiceBase.__init__(self, SceneService._s_cmd, SceneService._c_cmd)
         self._scenes = {}
         self._player_to_scene = {}
 
@@ -42,7 +42,7 @@ class SceneService(ServiceBase):
         logger.logInfo("$recv client msg, conn_id:{}, msg_id:{}", conn_id, msg_id)
         func = SceneService._c_cmd.get_cmd_func(msg_id)
         if func is not None:
-            msg = message.create_msg_by_id(msg_id)
+            msg = Message.create_msg_by_id(msg_id)
             msg.ParseFromString(msg_data)
             func(self, conn_id, msg_id, msg)
             return
@@ -53,35 +53,41 @@ class SceneService(ServiceBase):
             return
         game_scene.on_recv_client_msg(conn_id, msg_id, msg_data)
 
-    def on_recv_service_msg(self, sender, msg_id, msg_data):
-        logger.logInfo("$recv service msg, sender:{}, msg_id:{}", sender, msg_id)
-        func = SceneService._s_cmd.get_cmd_func(msg_id)
-        if func is None:
-            logger.logInfo("$on_recv_service_msg error, not found cmd func, msgId:{}", msg_id)
-            return
-        msg = message.create_msg_by_id(msg_id)
-        msg.ParseFromString(msg_data)
-        func(self, sender, msg_id, msg)
+    # def on_recv_service_msg(self, sender, msg_id, msg_data):
+    #     logger.logInfo("$recv service msg, sender:{}, msg_id:{}", sender, msg_id)
+    #     func = SceneService._s_cmd.get_cmd_func(msg_id)
+    #     if func is None:
+    #         logger.logInfo("$on_recv_service_msg error, not found cmd func, msgId:{}", msg_id)
+    #         return
+    #     msg = Message.create_msg_by_id(msg_id)
+    #     msg.ParseFromString(msg_data)
+    #     func(self, sender, msg_id, msg)
 
-    @_c_cmd.reg_cmd(message.MSG_ID_LOGIN_REQ)
-    def _on_recv_login_req(self, conn_id, msg_id, msg):
-        msg.conn_id = conn_id
-        self.send_msg_to_service("db", msg_id, msg)
+    @_s_cmd.reg_cmd(Message.MSG_ID_LOGIN_REQ)
+    def _on_recv_login_req(self, sender, msg_id, msg):
+        # msg.conn_id = conn_id
+        # self.send_msg_to_service("db", msg_id, msg)
+        rsp_msg = Message.create_msg_by_id(Message.MSG_ID_LOGIN_RSP)
+        rsp_msg.account = msg.account
+        rsp_msg.user_id = 1
+        rsp_msg.conn_id = msg.conn_id
+        rsp_msg.err_code = 0
+        self.send_msg_to_service(sender, Message.MSG_ID_LOGIN_RSP, rsp_msg)
 
-    @_c_cmd.reg_cmd(message.MSG_ID_TEST_REQ)
+    @_c_cmd.reg_cmd(Message.MSG_ID_TEST_REQ)
     def _on_recv_test_req(self, conn_id, msg_id, msg):
-        rsp_msg = message.create_msg_by_id(message.MSG_ID_TEST_REQ)
+        rsp_msg = Message.create_msg_by_id(Message.MSG_ID_TEST_REQ)
         rsp_msg.id = 10
         rsp_msg.msg = "hello"
-        self.send_msg_to_client(conn_id, message.MSG_ID_TEST_REQ, rsp_msg)
+        self.send_msg_to_client(conn_id, Message.MSG_ID_TEST_REQ, rsp_msg)
 
-    @_s_cmd.reg_cmd(message.MSG_ID_LOGIN_RSP)
-    def _on_recv_login_rsp(self, sender, msg_id, msg):
-        if msg.err_code == 0:
-            self.on_player_load(msg.conn_id, msg.user_id, "")
-        conn_id = msg.conn_id
-        msg.conn_id = 0
-        self.send_msg_to_client(conn_id, message.MSG_ID_LOGIN_RSP, msg)
+    # @_s_cmd.reg_cmd(Message.MSG_ID_LOGIN_RSP)
+    # def _on_recv_login_rsp(self, sender, msg_id, msg):
+    #     if msg.err_code == 0:
+    #         self.on_player_load(msg.conn_id, msg.user_id, "")
+    #     conn_id = msg.conn_id
+    #     msg.conn_id = 0
+    #     self.send_msg_to_client(conn_id, message.MSG_ID_LOGIN_RSP, msg)
 
     def on_player_load(self, conn_id, role_id, name):
         scene = random.choice(list(self._scenes.values()))

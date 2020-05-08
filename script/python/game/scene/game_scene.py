@@ -3,7 +3,7 @@ import Scene
 import game.scene.game_player
 import weakref
 import logger
-from proto.message import message
+from proto.message import Message
 
 
 class GameScene:
@@ -47,9 +47,9 @@ class GameScene:
         if player is None:
             return
         self.remove_player(role_id, reason)
-        msg = message.create_msg_by_id(message.MSG_ID_DISCONNECT)
+        msg = Message.create_msg_by_id(Message.MSG_ID_DISCONNECT)
         msg.reason = reason
-        self.service.send_msg_to_client(player.conn_id, message.MSG_ID_DISCONNECT, msg)
+        self.service.send_msg_to_client(player.conn_id, Message.MSG_ID_DISCONNECT, msg)
 
     def get_player_by_conn_id(self, conn_id):
         weak_player = self.player_conn_dict.get(conn_id)

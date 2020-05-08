@@ -5,9 +5,6 @@ import sys
 import logger
 # import Timer
 import py_cffi.cffi_test
-import game.service.db_service
-import game.service.scene_service
-import game.service.login_service
 
 timer_id = 0
 
@@ -31,18 +28,21 @@ def test_timer():
 
 
 def create_db_service():
+    import game.service.db_service
     service_inst = game.service.db_service.DBService()
     service_inst.on_service_start()
     return service_inst
 
 
 def create_scene_service():
+    import game.service.scene_service
     service_inst = game.service.scene_service.SceneService()
     service_inst.on_service_start()
     return service_inst
     
 
 def create_login_service():
+    import game.service.login_service
     service_inst = game.service.login_service.LoginService()
     service_inst.on_service_start()
     return service_inst
