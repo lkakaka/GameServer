@@ -1,11 +1,10 @@
 import logger
-import proto.pb_message
+from proto.pb_message import Message
 from game.service.service_base import ServiceBase
 import game.util.cmd_util
 from game.db.db_handler import DBHandler
 from game.db.db_builder import DbInfo
 
-Message = proto.pb_message.Message
 
 CUR_DB_VERSION = 1
 
@@ -64,16 +63,16 @@ class DBService(ServiceBase):
     def upgrade_db(self, db_ver):
         return True
 
-    # 使用基类方法(windows release版会崩,为何？)
-    def on_recv_service_msg(self, sender, msg_id, msg_data):
-        logger.logInfo("$DBService on_recv_msg, sender:{}, msg_id:{}", sender, msg_id)
-        msg = Message.create_msg_by_id(msg_id)
-        msg.ParseFromString(msg_data)
-        func = DBService._s_cmd.get_cmd_func(msg_id)
-        if func is None:
-            logger.logError("$not cmd func found, msg_id:{}", msg_id)
-            return
-        func(self, sender, msg_id, msg)
+    # # 使用基类方法(windows release版会崩,为何？)
+    # def on_recv_service_msg(self, sender, msg_id, msg_data):
+    #     logger.logInfo("$DBService on_recv_msg, sender:{}, msg_id:{}", sender, msg_id)
+    #     msg = Message.create_msg_by_id(msg_id)
+    #     msg.ParseFromString(msg_data)
+    #     func = DBService._s_cmd.get_cmd_func(msg_id)
+    #     if func is None:
+    #         logger.logError("$not cmd func found, msg_id:{}", msg_id)
+    #         return
+    #     func(self, sender, msg_id, msg)
 
     @_s_cmd.reg_cmd(Message.MSG_ID_LOGIN_REQ)
     def _on_recv_login_req(self, sender, msg_id, msg):

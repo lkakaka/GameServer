@@ -26,6 +26,16 @@ class SceneService(ServiceBase):
         scene = game.scene.game_scene.GameScene(self, sceneId)
         self._scenes[sceneId] = scene
 
+        def reg_callback(msg):
+            print("rpc callback-------", msg)
+
+        def timeout_cb():
+            print("rpc callback-------timeout")
+
+        future = self.rpc_call("scene_ctrl", "RegScene", "{}".format(sceneId), 10.0, scene_id=sceneId)
+        future.finish_cb += reg_callback
+        future.timeout_cb += timeout_cb
+
     def get_player_scene(self, conn_id):
         scene_id = self._player_to_scene.get(conn_id)
         if scene_id is None:

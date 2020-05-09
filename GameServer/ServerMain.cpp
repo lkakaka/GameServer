@@ -60,6 +60,9 @@ int main(int argc, char** argv)
 
 	boost::asio::io_service io;
 	TimerMgr::initTimerMgr(&io);
+
+	ZmqInst::initZmqInstance(serviceName.c_str(), routerAddr.c_str());
+	ZmqInst::getZmqInstance()->setRecvCallback(MessageMgr::onRecvData);
 	
 	PyObject* scriptObj = NULL;
 	std::string funcName = Config::getConfigStr(cfgName, "script_init_func");
@@ -71,9 +74,6 @@ int main(int argc, char** argv)
 	}
 
 	GameService::g_gameService = new GameService(serviceName, scriptObj);
-
-	ZmqInst::initZmqInstance(serviceName.c_str(), routerAddr.c_str());
-	ZmqInst::getZmqInstance()->setRecvCallback(MessageMgr::onRecvData);
 
 	// Initialise the http server.
 	std::string httpServerIp = Config::getConfigStr(cfgName, "http_server_ip");

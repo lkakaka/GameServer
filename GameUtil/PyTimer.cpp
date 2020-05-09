@@ -10,6 +10,21 @@
 static PyObject* ModuleError;
 static char* ModuleName = "Timer";
 
+class _CallbackHander {
+public:
+	PyObject* m_cb;
+	_CallbackHander(PyObject* cb) {
+		m_cb = cb;
+		Py_INCREF(m_cb);
+	}
+	~_CallbackHander() {
+		auto py_state = PyGILState_Ensure();
+		Py_DECREF(m_cb);
+		PyGILState_Release(py_state);
+		//printf("~_CallbackHander------------\n");
+	}
+};
+
 static PyObject* pyAddTimer(PyObject* self, PyObject* args)
 {
 	int firstInterval = 0;
@@ -21,11 +36,18 @@ static PyObject* pyAddTimer(PyObject* self, PyObject* args)
 		return Py_BuildValue("l", -1);
 	}
 
-	long timerId = TimerMgr::getTimerInstance()->addTimer(firstInterval, interval, loopCnt, [callback](int timerId){
+	if (!PyCallable_Check(callback)) {
+		PyErr_SetString(ModuleError, "args callback error");
+		return Py_BuildValue("l", -1);
+	}
+
+	std::shared_ptr<_CallbackHander> callbackHander(new _CallbackHander(callback));
+
+	long timerId = TimerMgr::getTimerInstance()->addTimer(firstInterval, interval, loopCnt, [callbackHander](int timerId){
 		auto py_state = PyGILState_Ensure();
 		{
 			PROFILE_TRACK_WITH_TIME("py_timer", 10);
-			PyObject_CallObject(callback, NULL);
+			PyObject_CallObject(callbackHander->m_cb, NULL);
 		}
 		PyGILState_Release(py_state);
 		});

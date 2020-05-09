@@ -133,7 +133,7 @@ class ProtoBuilder(object):
         ProtoBuilder.render_file("proto_template.h", OUTPUT_PATH + "/proto.h", template_render_obj)
         ProtoBuilder.render_file("proto_template.cpp", OUTPUT_PATH + "/proto.cpp", template_render_obj)
         ProtoBuilder.render_file("proto_template.java", JAVA_OUTPUT_PATH + "/com/proto/ProtoBufferMsg.java", c_template_render_obj)
-        ProtoBuilder.render_file("proto_template.py", PY_OUTPUT_PATH + "/message.py", template_render_obj)
+        ProtoBuilder.render_file("proto_template.py", PY_OUTPUT_PATH + "/pb_message.py", template_render_obj)
         if os.path.exists(COCOS_PATH):
             ProtoBuilder.render_file("proto_template.h", COCOS_PATH + "/proto.h", c_template_render_obj)
             ProtoBuilder.render_file("proto_template.cpp", COCOS_PATH + "/proto.cpp", c_template_render_obj)

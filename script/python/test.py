@@ -9,3 +9,10 @@ def match_func(matched):
 
 proto_name = "LoginReq"
 print(re.sub('(?P<value>\w)', match_func, proto_name))
+
+
+def test_kw(x, a=1):
+    print("test kw--", a)
+
+d = {'a': 10}
+test_kw(0, **d)

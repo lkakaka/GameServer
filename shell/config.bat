@@ -1,5 +1,5 @@
 
-set version=debug
+set version=release
 
 if %version%==debug (
 #debug
@@ -20,6 +20,7 @@ set GatewayCmd=%ExePath%%GatewayExe%
 set ServerCmd=%ExePath%%GameServerExe%
 
 set RouterConfig="../conf/router.cfg"
+set SceneCtrlConfig="../conf/scene_ctrl.cfg"
 set SceneConfig="../conf/scene.cfg"
 set GatewayConfig="../conf/gateway.cfg"
 set DBConfig="../conf/db.cfg"
