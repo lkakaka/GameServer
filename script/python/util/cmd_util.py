@@ -1,4 +1,4 @@
-import logger
+from util import logger
 
 
 class CmdDispatch:
@@ -8,8 +8,8 @@ class CmdDispatch:
 
     def reg_cmd(self, cmd_id):
         def wrap_func(func):
-            def cmd_func(*args):
-                return func(*args)
+            def cmd_func(*args, **kwargs):
+                return func(*args, **kwargs)
 
             if cmd_id in self._cmd_funcs:
                 logger.logError("$cmd func has existed!!!, name:{}, cmd_id:{}", self._name, cmd_id)

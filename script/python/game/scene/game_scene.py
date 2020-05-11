@@ -1,8 +1,8 @@
+import weakref
 
 import Scene
 import game.scene.game_player
-import weakref
-import logger
+from util import logger
 from proto.pb_message import Message
 
 
@@ -13,7 +13,11 @@ class GameScene:
         self.scene_obj = Scene.SceneObj(scene_id, self)
         self.player_dict = {}
         self.player_conn_dict = {}
-        # print("scene obj =", self.scene_obj)
+        # print("scene obj =", self.scene_obj, self.scene_obj.scene_uid)
+
+    @property
+    def scene_uid(self):
+        return self.scene_obj.scene_uid
 
     def on_player_load(self, conn_id, role_id, name):
         game_player = self.create_player(conn_id, role_id, name)

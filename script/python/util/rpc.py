@@ -1,8 +1,8 @@
+import weakref
 
 from proto.pb_message import Message
-import Timer
-import weakref
-import logger
+from util import logger
+import util.timer
 
 
 class _FutureCallback(object):
@@ -21,14 +21,15 @@ class _Future(object):
         self._rpc_mgr = weakref.ref(rpc_mgr)
         self._rpc_id = rpc_id
         self._time_out = RpcMgr.DEFAULT_TIME_OUT if time_out <= 0 else time_out
-        self._timer_id = Timer.addTimer(int(self._time_out * 1000), 0, 0, self._on_future_timeout)
+        self._timer_id = util.timer.add_timer(self._time_out, self._on_future_timeout)
         self.finish_cb = _FutureCallback()
         self.timeout_cb = _FutureCallback()
 
     def on_recv_rsp(self, rpc_data):
         self.remove_timeout_timer()
+        params = eval(rpc_data) if rpc_data != "" else ()
         for fin_cb in self.finish_cb.future_cb:
-            fin_cb(rpc_data)
+            fin_cb(*params)
         logger.logInfo("$future finish, rpc_id:{}", self._rpc_id)
 
     def _on_future_timeout(self):
@@ -40,7 +41,7 @@ class _Future(object):
     def remove_timeout_timer(self):
         if self._timer_id < 0:
             return
-        Timer.removeTimer(self._timer_id)
+        util.timer.remove_timer(self._timer_id)
         self._timer_id = -1
 
 
@@ -70,20 +71,19 @@ class RpcMgr(object):
     def remove_future(self, rpc_id):
         self._futures.pop(rpc_id, None)
 
-    def rpc_call(self, service_name, rpc_func_name, rpc_func_params, time_out=DEFAULT_TIME_OUT, **kwargs):
+    def rpc_call(self, service_name, rpc_func_name, time_out=DEFAULT_TIME_OUT, **kwargs):
         rpc_msg = Message.create_msg_by_id(Message.MSG_ID_RPC_MSG)
         rpc_id = self.alloc_rpc_id()
         rpc_msg.rpc_id = rpc_id
         rpc_msg.rpc_func = rpc_func_name
-        # rpc_msg.rpc_param = rpc_func_params
         rpc_msg.rpc_param = repr(kwargs)
         future = self._add_future(rpc_id, time_out)
         self.service.send_msg_to_service(service_name, Message.MSG_ID_RPC_MSG, rpc_msg)
         return future
 
-    def on_recv_rpc_rsp_msg(self, sender, msg):
-        future = self._futures.pop(msg.rpc_id, None)
+    def on_recv_rpc_rsp_msg(self, sender, rpc_id, rpc_data):
+        future = self._futures.pop(rpc_id, None)
         if future is None:
-            logger.logError("$not found rpc futurue, rpc_id:{}", msg.rpc_id)
+            logger.logError("$not found rpc futurue, rpc_id:{}", rpc_id)
             return
-        future.on_recv_rsp(msg.rpc_data)
+        future.on_recv_rsp(rpc_data)

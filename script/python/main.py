@@ -1,10 +1,8 @@
 #-*- ecoding:utf-8 -*-
 import os
-import sys
 # import db.TbMgr
-import logger
+from util import logger
 import Timer
-import py_cffi.cffi_test
 
 timer_id = 0
 

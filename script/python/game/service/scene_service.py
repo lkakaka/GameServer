@@ -1,17 +1,18 @@
+import random
 
-import logger
+from util import logger
 from proto.pb_message import Message
 from game.service.service_base import ServiceBase
-import game.util.cmd_util
+import util.cmd_util
 import game.scene.game_scene
-import random
 import game.scene.game_player
+import util.timer
 
 
 class SceneService(ServiceBase):
 
-    _s_cmd = game.util.cmd_util.CmdDispatch("s_scene")
-    _c_cmd = game.util.cmd_util.CmdDispatch("c_scene")
+    _s_cmd = util.cmd_util.CmdDispatch("s_scene")
+    _c_cmd = util.cmd_util.CmdDispatch("c_scene")
 
     def __init__(self):
         ServiceBase.__init__(self, SceneService._s_cmd, SceneService._c_cmd)
@@ -20,19 +21,19 @@ class SceneService(ServiceBase):
 
     def on_service_start(self):
         logger.logInfo("$Scene Service Start!!")
-        self.add_scene(1)
+        util.timer.add_timer(3, lambda: self.create_scene(1))
 
-    def add_scene(self, sceneId):
-        scene = game.scene.game_scene.GameScene(self, sceneId)
-        self._scenes[sceneId] = scene
+    def create_scene(self, scene_id):
+        scene = game.scene.game_scene.GameScene(self, scene_id)
+        self._scenes[scene_id] = scene
 
-        def reg_callback(msg):
-            print("rpc callback-------", msg)
+        def reg_callback(err_code):
+            logger.logInfo("$reg scene success, result:{}", err_code)
 
         def timeout_cb():
-            print("rpc callback-------timeout")
+            logger.logError("$reg scene timeout, scene_id:{}", scene_id)
 
-        future = self.rpc_call("scene_ctrl", "RegScene", "{}".format(sceneId), 10.0, scene_id=sceneId)
+        future = self.rpc_call("scene_ctrl", "RegScene", timeout=10.0, scene_id=scene_id, scene_uid=scene.scene_uid)
         future.finish_cb += reg_callback
         future.timeout_cb += timeout_cb
 
@@ -41,9 +42,6 @@ class SceneService(ServiceBase):
         if scene_id is None:
             return None
         return self._scenes.get(scene_id)
-
-    def on_recv_msg(self, sender, msg):
-        logger.logInfo("$DBService on_recv_msg!!!")
 
     def on_recv_client_msg_ex(self, conn_id, msg_id, msg):
         print("on_recv_client_msg_ex, conn_id:{}, msg_id:{} msg:{}", conn_id, msg_id, msg)
@@ -73,16 +71,16 @@ class SceneService(ServiceBase):
     #     msg.ParseFromString(msg_data)
     #     func(self, sender, msg_id, msg)
 
-    @_s_cmd.reg_cmd(Message.MSG_ID_LOGIN_REQ)
-    def _on_recv_login_req(self, sender, msg_id, msg):
-        # msg.conn_id = conn_id
-        # self.send_msg_to_service("db", msg_id, msg)
-        rsp_msg = Message.create_msg_by_id(Message.MSG_ID_LOGIN_RSP)
-        rsp_msg.account = msg.account
-        rsp_msg.user_id = 1
-        rsp_msg.conn_id = msg.conn_id
-        rsp_msg.err_code = 0
-        self.send_msg_to_service(sender, Message.MSG_ID_LOGIN_RSP, rsp_msg)
+    # @_s_cmd.reg_cmd(Message.MSG_ID_LOGIN_REQ)
+    # def _on_recv_login_req(self, sender, msg_id, msg):
+    #     # msg.conn_id = conn_id
+    #     # self.send_msg_to_service("db", msg_id, msg)
+    #     rsp_msg = Message.create_msg_by_id(Message.MSG_ID_LOGIN_RSP)
+    #     rsp_msg.account = msg.account
+    #     rsp_msg.user_id = 1
+    #     rsp_msg.conn_id = msg.conn_id
+    #     rsp_msg.err_code = 0
+    #     self.send_msg_to_service(sender, Message.MSG_ID_LOGIN_RSP, rsp_msg)
 
     @_c_cmd.reg_cmd(Message.MSG_ID_TEST_REQ)
     def _on_recv_test_req(self, conn_id, msg_id, msg):

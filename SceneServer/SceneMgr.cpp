@@ -11,7 +11,7 @@ SceneMgr* SceneMgr::getSceneMgr() {
 	return SceneMgr::g_sceneMgr;
 }
 
-SceneMgr::SceneMgr(): m_maxSceneUid(0)
+SceneMgr::SceneMgr(): m_maxSceneUid(1)
 {}
 
 

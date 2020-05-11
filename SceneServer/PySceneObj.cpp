@@ -19,6 +19,7 @@ static PyObject* PySceneObj_New(struct _typeobject* tobj, PyObject* args, PyObje
 	}
 	PyObject* obj = PyType_GenericNew(tobj, args, obj2);
 	((PySceneObj*)obj)->gameScene = gameScene;
+	((PySceneObj*)obj)->scene_uid = PyLong_FromLong(gameScene->getSceneUid());
 	return obj;
 }
 
@@ -81,6 +82,11 @@ static PyMethodDef tp_methods[] = {
 	{NULL, NULL}           /* sentinel */
 };
 
+static PyMemberDef tp_members[] = {
+	{"scene_uid", T_OBJECT_EX, offsetof(PySceneObj, scene_uid), 0, "scene uid"},
+	{NULL}
+};
+
 
 static void initPySceneObj_Type()
 {
@@ -91,6 +97,7 @@ static void initPySceneObj_Type()
 	PySceneObj_Type.tp_getattro = PyObject_GenericGetAttr;
 	PySceneObj_Type.tp_flags = Py_TPFLAGS_DEFAULT;
 	PySceneObj_Type.tp_methods = tp_methods;
+	PySceneObj_Type.tp_members = tp_members;
 	PySceneObj_Type.tp_new = PySceneObj_New;
 	PySceneObj_Type.tp_free = PySceneObj_Free;
 }

@@ -1,15 +1,11 @@
 
 import Game
 from proto.pb_message import Message
-# import game.util.cmd_util
-import logger
-from game.util.rpc import RpcMgr
+from util import logger
+from util.rpc import RpcMgr
 
 
 class ServiceBase:
-
-    # s_cmd = game.util.cmd_util.CmdDispatch("s_service")
-    # c_cmd = game.util.cmd_util.CmdDispatch("c_service")
 
     def __init__(self, s_cmd, c_cmd, rpc_proc=None):
         self._service_obj = Game.Service()
@@ -62,15 +58,18 @@ class ServiceBase:
             logger.logInfo("$on_recv_rpc_msg error, not found rpc proc func, rpc_func:{}", msg.rpc_func)
             return
         dict_param = eval(msg.rpc_param)
-        print(type(dict_param), dict_param)
-        rpc_data = func(self, sender, dict_param)
+        rpc_data = func(self, sender, **dict_param)
         rpc_rsp_msg = Message.create_msg_by_id(Message.MSG_ID_RPC_MSG_RSP)
         rpc_rsp_msg.rpc_id = msg.rpc_id
-        rpc_rsp_msg.rpc_data = rpc_data
+        if rpc_data is not None:
+            if type(rpc_data) in (tuple, list):
+                rpc_rsp_msg.rpc_data = repr(rpc_data)
+            else:
+                rpc_rsp_msg.rpc_data = repr((rpc_data,))
         self.send_msg_to_service(sender, Message.MSG_ID_RPC_MSG_RSP, rpc_rsp_msg)
 
     def _on_recv_rpc_rsp_msg(self, sender, msg_id, msg):
-        self._rpc_mgr.on_recv_rpc_rsp_msg(sender, msg)
+        self._rpc_mgr.on_recv_rpc_rsp_msg(sender, msg.rpc_id, msg.rpc_data)
 
     def send_msg_to_client(self, conn_id, msg_id, msg):
         msg_dat = msg.SerializeToString()
@@ -80,5 +79,5 @@ class ServiceBase:
         msg_dat = msg.SerializeToString()
         self._service_obj.sendMsgToService(dst_srv, msg_id, msg_dat)
 
-    def rpc_call(self, dst_srv, func_name, func_args, timeout=RpcMgr.DEFAULT_TIME_OUT, **kwargs):
-        return self._rpc_mgr.rpc_call(dst_srv, func_name, func_args, timeout, **kwargs)
+    def rpc_call(self, dst_srv, func_name, timeout=RpcMgr.DEFAULT_TIME_OUT, **kwargs):
+        return self._rpc_mgr.rpc_call(dst_srv, func_name, timeout, **kwargs)

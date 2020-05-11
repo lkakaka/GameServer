@@ -1,7 +1,8 @@
-import logger
+from util import logger
 from proto.pb_message import Message
 from game.service.service_base import ServiceBase
-import game.util.cmd_util
+import util.cmd_util
+import util.const
 from game.db.db_handler import DBHandler
 from game.db.db_builder import DbInfo
 
@@ -11,7 +12,7 @@ CUR_DB_VERSION = 1
 
 class DBService(ServiceBase):
 
-    _s_cmd = game.util.cmd_util.CmdDispatch("db_service")
+    _s_cmd = util.cmd_util.CmdDispatch("db_service")
 
     def __init__(self):
         ServiceBase.__init__(self, DBService._s_cmd, None)
@@ -63,17 +64,6 @@ class DBService(ServiceBase):
     def upgrade_db(self, db_ver):
         return True
 
-    # # 使用基类方法(windows release版会崩,为何？)
-    # def on_recv_service_msg(self, sender, msg_id, msg_data):
-    #     logger.logInfo("$DBService on_recv_msg, sender:{}, msg_id:{}", sender, msg_id)
-    #     msg = Message.create_msg_by_id(msg_id)
-    #     msg.ParseFromString(msg_data)
-    #     func = DBService._s_cmd.get_cmd_func(msg_id)
-    #     if func is None:
-    #         logger.logError("$not cmd func found, msg_id:{}", msg_id)
-    #         return
-    #     func(self, sender, msg_id, msg)
-
     @_s_cmd.reg_cmd(Message.MSG_ID_LOGIN_REQ)
     def _on_recv_login_req(self, sender, msg_id, msg):
         rsp_msg = Message.create_msg_by_id(Message.MSG_ID_LOGIN_RSP)
@@ -83,12 +73,12 @@ class DBService(ServiceBase):
             self._db_handler.execute_sql("insert into player(name, account) values('{}', '{}')".format("", msg.account))
             db_res = self._db_handler.execute_sql("select * from player where account='{}'".format(msg.account))
         if db_res is None or len(db_res) == 0:
-            rsp_msg.err_code = 1
+            rsp_msg.err_code = util.const.ErrorCode.CREATE_PLAYER_ERROR
             logger.logError("$create player error!!!")
         else:
             rsp_msg.user_id = db_res[0].role_id
             rsp_msg.conn_id = msg.conn_id
-            rsp_msg.err_code = 0
+            rsp_msg.err_code = util.const.ErrorCode.OK
         self.send_msg_to_service(sender, Message.MSG_ID_LOGIN_RSP, rsp_msg)
 
 

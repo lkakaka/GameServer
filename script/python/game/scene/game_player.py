@@ -1,12 +1,13 @@
 
 import Scene
 from proto.pb_message import Message
-import game.util.cmd_util
-import logger
+import util.cmd_util
+from util import logger
+
 
 class GamePlayer:
 
-    _c_cmd = game.util.cmd_util.CmdDispatch("c_player")
+    _c_cmd = util.cmd_util.CmdDispatch("c_player")
 
     def __init__(self, e_player, game_scene, conn_id, role_id, name):
         self.native_obj = Scene.Player(e_player, self)
