@@ -68,7 +68,7 @@ public class CommandCmd extends CmdDispatch {
     private void test() {
         Test.TestReq.Builder builder = Test.TestReq.newBuilder();
         builder.setId(10).setMsg("hello");
-        GameRobot robot = RobotMgr.getInstance().getRobot("test");
+        GameRobot robot = RobotMgr.getInstance().getOneRobot();
         robot.sendProto(ProtoBufferMsg.MSG_ID_TEST_REQ, builder.build());
     }
 }

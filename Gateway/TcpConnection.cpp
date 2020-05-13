@@ -95,7 +95,7 @@ void TcpConnection::dispatchMsg(int msgId, int msgLen, const char* msgData) {
 	buffer.writeInt(m_connID);
 	buffer.writeInt(msgId);
 	buffer.writeString(msgData, msgLen);
-	if (msgId == MSG_ID_LOGIN_REQ) {
+	if (msgId == MSG_ID_LOGIN_REQ || msgId == MSG_ID_CREATE_ROLE_REQ || msgId == MSG_ID_ENTER_GAME) {
 		ZmqInst::getZmqInstance()->sendData("login", buffer.data(), buffer.size());
 	} else {
 		ZmqInst::getZmqInstance()->sendData("scene", buffer.data(), buffer.size());

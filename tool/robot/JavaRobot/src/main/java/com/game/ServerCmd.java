@@ -23,12 +23,40 @@ public class ServerCmd extends CmdDispatch {
     @CmdAnnotation(serverCmd = ProtoBufferMsg.MSG_ID_LOGIN_RSP)
     private void onRecvLoginResp(Object param) {
         Login.LoginRsp loginRsp = (Login.LoginRsp) param;
-        Util.logInfo("recv login rsp proto, account:%s, userId:%d", loginRsp.getAccount(), loginRsp.getUserId());
+        Util.logInfo("recv login rsp proto, err_code:%s", loginRsp.getErrCode());
     }
 
     @CmdAnnotation(serverCmd = ProtoBufferMsg.MSG_ID_TEST_REQ)
     private void onRecvTest(Object param) {
         Test.TestReq test = (Test.TestReq) param;
         Util.logInfo("recv test proto, id:%d, :%s", test.getId(), test.getMsg());
+    }
+
+    @CmdAnnotation(serverCmd = ProtoBufferMsg.MSG_ID_LOAD_ROLE_LIST_RSP)
+    private void onRecvRoleList(Object param) {
+        Login.LoadRoleListRsp rsp = (Login.LoadRoleListRsp) param;
+        int errCode = rsp.getErrCode();
+        Util.logInfo("recv role list, err_code:%s", errCode);
+        if (errCode == 0) {
+            if  (rsp.getRoleListCount() == 0) {
+                Login.CreateRoleReq req = ProtoBufferMsg.createCreateRoleReqBuilder().setAccount(m_robot.getAccount())
+                        .setRoleName(m_robot.getAccount()).build();
+                m_robot.sendProto(ProtoBufferMsg.MSG_ID_CREATE_ROLE_REQ, req);
+                Util.logInfo("create role, role_name:%s", m_robot.getAccount());
+            } else {
+                Login.RoleInfo roleInfo = rsp.getRoleList(0);
+                Login.EnterGame enterGame = ProtoBufferMsg.createEnterGameBuilder().setAccount(m_robot.getAccount())
+                        .setRoleId(roleInfo.getRoleId()).build();
+                m_robot.sendProto(ProtoBufferMsg.MSG_ID_ENTER_GAME, enterGame);
+                Util.logInfo("send enter game, role_id:%d", roleInfo.getRoleId());
+            }
+        }
+    }
+
+    @CmdAnnotation(serverCmd = ProtoBufferMsg.MSG_ID_ENTER_GAME_RSP)
+    private void onRecvEnterGameRsp(Object param) {
+        Login.EnterGameRsp rsp = (Login.EnterGameRsp) param;
+        int errCode = rsp.getErrCode();
+        Util.logInfo("recv enter game rsp, err_code:%s", errCode);
     }
 }

@@ -66,17 +66,19 @@ class ServiceBase:
                 rpc_rsp_msg.rpc_data = repr(rpc_data)
             else:
                 rpc_rsp_msg.rpc_data = repr((rpc_data,))
-        self.send_msg_to_service(sender, Message.MSG_ID_RPC_MSG_RSP, rpc_rsp_msg)
+        self.send_msg_to_service(sender, rpc_rsp_msg)
 
     def _on_recv_rpc_rsp_msg(self, sender, msg_id, msg):
         self._rpc_mgr.on_recv_rpc_rsp_msg(sender, msg.rpc_id, msg.rpc_data)
 
-    def send_msg_to_client(self, conn_id, msg_id, msg):
+    def send_msg_to_client(self, conn_id, msg):
         msg_dat = msg.SerializeToString()
+        msg_id = Message.get_msg_id(msg)
         self._service_obj.sendMsgToClient(conn_id, msg_id, msg_dat)
 
-    def send_msg_to_service(self, dst_srv, msg_id, msg):
+    def send_msg_to_service(self, dst_srv, msg):
         msg_dat = msg.SerializeToString()
+        msg_id = Message.get_msg_id(msg)
         self._service_obj.sendMsgToService(dst_srv, msg_id, msg_dat)
 
     def rpc_call(self, dst_srv, func_name, timeout=RpcMgr.DEFAULT_TIME_OUT, **kwargs):

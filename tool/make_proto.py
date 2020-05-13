@@ -6,7 +6,7 @@ from jinja2 import FileSystemLoader
 PROTO_PATH = "./proto"
 OUTPUT_PATH = "../ProtoBuffer"
 JAVA_OUTPUT_PATH = "./robot/JavaRobot/src/main/java"
-PY_OUTPUT_PATH = "../script/python/proto"
+PY_OUTPUT_PATH = "../script/python"
 COCOS_PATH = "../../CocosGameDemo/Classes/proto"
 
 
@@ -64,7 +64,7 @@ class RenderObj(object):
 
 
 class ProtoBuilder(object):
-    env = Environment(loader=FileSystemLoader('templates'), trim_blocks=True)
+    env = Environment(loader=FileSystemLoader('templates', 'utf-8'), trim_blocks=True)
     _msg_id = 0
     proto_list = []
 
@@ -79,6 +79,8 @@ class ProtoBuilder(object):
             print(path, dir_names, file_list)
             for file_name in file_list:
                 ProtoBuilder.make_proto_file("{}/{}".format(path, file_name))
+                # ProtoBuilder.make_proto_file("{}/{}".format(path, file_name))
+                # ProtoBuilder.make_proto_file(path, file_name)
 
         ProtoBuilder.gen_proto_file()
 
@@ -87,14 +89,16 @@ class ProtoBuilder(object):
         if not file_name.endswith(".proto"):
             return
 
+        # file_name = PROTO_PATH + "/" + file_name
         print("make proto file: " + file_name)
-        os.system("protoc --cpp_out {} --proto_path {} {}".format(OUTPUT_PATH, PROTO_PATH, file_name))
-        os.system("protoc --python_out {} --proto_path {} {}".format(PY_OUTPUT_PATH, PROTO_PATH, file_name))
+        os.system("protoc --cpp_out={} --proto_path=./ --proto_path={} {}".format(OUTPUT_PATH, PROTO_PATH, file_name))
+        os.system("protoc --python_out={} --proto_path=./ --proto_path={} {}".format(PY_OUTPUT_PATH, PROTO_PATH, file_name))
         if file_name.find("server_only") < 0:
-            os.system("protoc --java_out {} --proto_path {} {}".format(JAVA_OUTPUT_PATH, PROTO_PATH, file_name))
+            os.system("protoc --java_out={} --proto_path=./ --proto_path={} {}".format(JAVA_OUTPUT_PATH, PROTO_PATH, file_name))
             if os.path.exists(COCOS_PATH):
-                os.system("protoc --cpp_out {} --proto_path {} {}".format(COCOS_PATH, PROTO_PATH, file_name))
+                os.system("protoc --cpp_out={} --proto_path=./ --proto_path={} {}".format(COCOS_PATH, PROTO_PATH, file_name))
 
+        # full_file_name = "{}/{}".format(path, file_name)
         with open(file_name) as f:
             for line in f.readlines():
                 match_obj = re.search(".*message\s+([\w\d]+).*", line)
@@ -133,7 +137,7 @@ class ProtoBuilder(object):
         ProtoBuilder.render_file("proto_template.h", OUTPUT_PATH + "/proto.h", template_render_obj)
         ProtoBuilder.render_file("proto_template.cpp", OUTPUT_PATH + "/proto.cpp", template_render_obj)
         ProtoBuilder.render_file("proto_template.java", JAVA_OUTPUT_PATH + "/com/proto/ProtoBufferMsg.java", c_template_render_obj)
-        ProtoBuilder.render_file("proto_template.py", PY_OUTPUT_PATH + "/pb_message.py", template_render_obj)
+        ProtoBuilder.render_file("proto_template.py", PY_OUTPUT_PATH + "/proto/pb_message.py", template_render_obj)
         if os.path.exists(COCOS_PATH):
             ProtoBuilder.render_file("proto_template.h", COCOS_PATH + "/proto.h", c_template_render_obj)
             ProtoBuilder.render_file("proto_template.cpp", COCOS_PATH + "/proto.cpp", c_template_render_obj)

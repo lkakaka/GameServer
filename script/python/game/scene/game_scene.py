@@ -4,9 +4,11 @@ import Scene
 import game.scene.game_player
 from util import logger
 from proto.pb_message import Message
+import util.cmd_util
 
 
 class GameScene:
+
     def __init__(self, service, scene_id):
         self.service = service
         self.scene_id = scene_id
@@ -19,15 +21,25 @@ class GameScene:
     def scene_uid(self):
         return self.scene_obj.scene_uid
 
-    def on_player_load(self, conn_id, role_id, name):
+    def prepare_enter_scene(self, conn_id, role_id):
+        msg = Message.create_msg_by_id(Message.MSG_ID_LOAD_ROLE_REQ)
+        msg.role_id = role_id
+        msg.conn_id = conn_id
+        self.service.send_msg_to_service("db", msg)
+        logger.logInfo("$prepare enter scene, role_id:{}, scene_uid:{}, scene_id:%d", role_id, self.scene_uid, self.scene_id)
+
+    def on_load_player(self, msg):
+        conn_id = msg.conn_id
+        role_id = msg.role_info.role_id
+        name = msg.role_info.role_name
         game_player = self.create_player(conn_id, role_id, name)
         self.player_dict[role_id] = game_player
         self.player_conn_dict[conn_id] = weakref.ref(game_player)
         self.on_player_enter(game_player)
-        logger.logInfo("$player enter scene, role_id:{}, name:{}", role_id, name)
 
     def on_player_enter(self, game_player):
         self.scene_obj.onPlayerEnter(game_player.actor_id)
+        logger.logInfo("$player enter scene, role_id:{}, scene_uid:{}, name:{}", game_player.role_id, self.scene_uid, game_player.name)
 
     def create_player(self, conn_id, role_id, name):
         player_info = self.scene_obj.createPlayer(conn_id, role_id, name, 0, 0)
@@ -53,7 +65,7 @@ class GameScene:
         self.remove_player(role_id, reason)
         msg = Message.create_msg_by_id(Message.MSG_ID_DISCONNECT)
         msg.reason = reason
-        self.service.send_msg_to_client(player.conn_id, Message.MSG_ID_DISCONNECT, msg)
+        self.service.send_msg_to_client(player.conn_id, msg)
 
     def get_player_by_conn_id(self, conn_id):
         weak_player = self.player_conn_dict.get(conn_id)

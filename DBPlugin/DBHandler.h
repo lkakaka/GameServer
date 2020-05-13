@@ -21,6 +21,7 @@ private:
 
 public:
 	DBHandler(std::string& dbUrl, int dbPort, std::string& dbUserName, std::string& dbPassword, std::string dbName);
+	~DBHandler();
 	inline std::string getDbName();
 	void initDbTable(std::vector<ReflectObject*> tblDefs);
 

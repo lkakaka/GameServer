@@ -3,6 +3,7 @@ import weakref
 from proto.pb_message import Message
 from util import logger
 import util.timer
+import util.const
 
 
 class _FutureCallback(object):
@@ -35,7 +36,7 @@ class _Future(object):
     def _on_future_timeout(self):
         self._rpc_mgr().remove_future(self._rpc_id)
         for tt_cb in self.timeout_cb.future_cb:
-            tt_cb()
+            tt_cb(util.const.ErrorCode.TIME_OUT)
         logger.logInfo("$future timeout, rpc_id:{}", self._rpc_id)
 
     def remove_timeout_timer(self):
@@ -78,7 +79,7 @@ class RpcMgr(object):
         rpc_msg.rpc_func = rpc_func_name
         rpc_msg.rpc_param = repr(kwargs)
         future = self._add_future(rpc_id, time_out)
-        self.service.send_msg_to_service(service_name, Message.MSG_ID_RPC_MSG, rpc_msg)
+        self.service.send_msg_to_service(service_name, rpc_msg)
         return future
 
     def on_recv_rpc_rsp_msg(self, sender, rpc_id, rpc_data):

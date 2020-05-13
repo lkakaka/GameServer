@@ -3,6 +3,8 @@ syntax="proto3";
 option java_package="com.proto";
 option java_outer_classname = "Login";
 
+//package proto;
+
 message LoginReq {
 	string account = 1;
 	string pwd = 2;
@@ -10,21 +12,38 @@ message LoginReq {
 }
 
 message LoginRsp {
-	string account = 1;
-	int32 user_id = 2;
-	int32 conn_id = 3;
-	int32 err_code = 4;
+	int32 err_code = 1;
 }
 
-message _RoleInfo {
+message RoleInfo {
 	int32 role_id = 1;
 	string role_name = 2;
 }
 
-message LoadRoleRsp {
+message LoadRoleListRsp {
 	string account = 1;
 	int32 err_code = 2;
-	repeated _RoleInfo role_list = 3;
+	repeated RoleInfo role_list = 3;
+}
+
+message CreateRoleReq {
+	string account = 1;
+	string role_name = 2;
+}
+
+message CreateRoleRsp {
+	int32 err_code = 1;
+	RoleInfo role_info = 2;
+}
+
+message EnterGame {
+	int32 role_id = 1;
+	string account = 2;
+}
+
+message EnterGameRsp {
+	int32 err_code = 1;
+	RoleInfo role_info = 2;
 }
 
 message Disconnect {

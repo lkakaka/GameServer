@@ -26,10 +26,18 @@ class GamePlayer:
             return
         func(self, msg_id, msg)
 
-    def send_msg_to_client(self, msg_id, msg):
-        self.game_scene.service.send_msg_to_client(self.conn_id, msg_id, msg)
+    def send_msg_to_client(self, msg):
+        self.game_scene.service.send_msg_to_client(self.conn_id, msg)
 
     @_c_cmd.reg_cmd(Message.MSG_ID_DISCONNECT)
     def _on_recv_disconnect(self, msg_id, msg):
         logger.logError("$player disconnect, role_id:{},reason:{}", self.role_id, msg.reason)
         self.game_scene.remove_player(self.role_id, msg.reason)
+
+    @_c_cmd.reg_cmd(Message.MSG_ID_TEST_REQ)
+    def _on_recv_test_req(self, msg_id, msg):
+        print("$player recv test req, role_id:{}, msg:{}", self.role_id, msg)
+        rsp_msg = Message.create_msg_by_id(Message.MSG_ID_TEST_REQ)
+        rsp_msg.id = 10
+        rsp_msg.msg = "welcome to game world, " + self.name
+        self.send_msg_to_client(rsp_msg)

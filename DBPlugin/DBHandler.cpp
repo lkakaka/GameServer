@@ -25,6 +25,11 @@ using namespace sql;
 //	return m_dbConn;
 //}
 
+DBHandler::~DBHandler()
+{
+	Logger::logInfo("$db hander destory!!!");
+}
+
 Connection* DBHandler::getDBConnection()
 {
 	if (m_dbConn.get() != NULL) {

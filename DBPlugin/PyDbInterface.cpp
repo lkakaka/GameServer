@@ -41,9 +41,12 @@ static PyObject* test(PyObject* self, PyObject* args)
 }
 
 
-static PyObject* db_repr(PyObject* aa)
+static PyObject* db_repr(PyObject* self)
 {
-	return Py_BuildValue("s", "PyDb handler, db_repr");
+	DBHandler* dbHandler = ((PyDbObject*)self)->db_inst;
+	char buf[64]{ 0 };
+	sprintf(buf, "<C++ Object DBHandler:%ld>", dbHandler);
+	return Py_BuildValue("s", buf);
 }
 
 static PyObject* createDB(PyObject* self, PyObject* args)

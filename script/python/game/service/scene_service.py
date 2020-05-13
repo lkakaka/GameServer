@@ -7,15 +7,17 @@ import util.cmd_util
 import game.scene.game_scene
 import game.scene.game_player
 import util.timer
+import util.const
 
 
 class SceneService(ServiceBase):
 
     _s_cmd = util.cmd_util.CmdDispatch("s_scene")
     _c_cmd = util.cmd_util.CmdDispatch("c_scene")
+    _rpc_proc = util.cmd_util.CmdDispatch("rpc_scene")
 
     def __init__(self):
-        ServiceBase.__init__(self, SceneService._s_cmd, SceneService._c_cmd)
+        ServiceBase.__init__(self, SceneService._s_cmd, SceneService._c_cmd, SceneService._rpc_proc)
         self._scenes = {}
         self._player_to_scene = {}
 
@@ -25,26 +27,23 @@ class SceneService(ServiceBase):
 
     def create_scene(self, scene_id):
         scene = game.scene.game_scene.GameScene(self, scene_id)
-        self._scenes[scene_id] = scene
+        self._scenes[scene.scene_uid] = scene
 
-        def reg_callback(err_code):
-            logger.logInfo("$reg scene success, result:{}", err_code)
-
-        def timeout_cb():
-            logger.logError("$reg scene timeout, scene_id:{}", scene_id)
+        def _reg_callback(err_code):
+            if err_code == util.const.ErrorCode.OK:
+                logger.logInfo("$reg scene success, result:{}", err_code)
+            else:
+                logger.logError("$reg scene error, err_code:{}, scene_id:{}", err_code, scene_id)
 
         future = self.rpc_call("scene_ctrl", "RegScene", timeout=10.0, scene_id=scene_id, scene_uid=scene.scene_uid)
-        future.finish_cb += reg_callback
-        future.timeout_cb += timeout_cb
+        future.finish_cb += _reg_callback
+        future.timeout_cb += _reg_callback
 
     def get_player_scene(self, conn_id):
         scene_id = self._player_to_scene.get(conn_id)
         if scene_id is None:
             return None
         return self._scenes.get(scene_id)
-
-    def on_recv_client_msg_ex(self, conn_id, msg_id, msg):
-        print("on_recv_client_msg_ex, conn_id:{}, msg_id:{} msg:{}", conn_id, msg_id, msg)
 
     def on_recv_client_msg(self, conn_id, msg_id, msg_data):
         logger.logInfo("$recv client msg, conn_id:{}, msg_id:{}", conn_id, msg_id)
@@ -71,38 +70,29 @@ class SceneService(ServiceBase):
     #     msg.ParseFromString(msg_data)
     #     func(self, sender, msg_id, msg)
 
-    # @_s_cmd.reg_cmd(Message.MSG_ID_LOGIN_REQ)
-    # def _on_recv_login_req(self, sender, msg_id, msg):
-    #     # msg.conn_id = conn_id
-    #     # self.send_msg_to_service("db", msg_id, msg)
-    #     rsp_msg = Message.create_msg_by_id(Message.MSG_ID_LOGIN_RSP)
-    #     rsp_msg.account = msg.account
-    #     rsp_msg.user_id = 1
-    #     rsp_msg.conn_id = msg.conn_id
-    #     rsp_msg.err_code = 0
-    #     self.send_msg_to_service(sender, Message.MSG_ID_LOGIN_RSP, rsp_msg)
+    # @_c_cmd.reg_cmd(Message.MSG_ID_TEST_REQ)
+    # def _on_recv_test_req(self, conn_id, msg_id, msg):
+    #     rsp_msg = Message.create_msg_by_id(Message.MSG_ID_TEST_REQ)
+    #     rsp_msg.id = 10
+    #     rsp_msg.msg = "hello"
+    #     self.send_msg_to_client(conn_id, rsp_msg)
 
-    @_c_cmd.reg_cmd(Message.MSG_ID_TEST_REQ)
-    def _on_recv_test_req(self, conn_id, msg_id, msg):
-        rsp_msg = Message.create_msg_by_id(Message.MSG_ID_TEST_REQ)
-        rsp_msg.id = 10
-        rsp_msg.msg = "hello"
-        self.send_msg_to_client(conn_id, Message.MSG_ID_TEST_REQ, rsp_msg)
-
-    # @_s_cmd.reg_cmd(Message.MSG_ID_LOGIN_RSP)
-    # def _on_recv_login_rsp(self, sender, msg_id, msg):
-    #     if msg.err_code == 0:
-    #         self.on_player_load(msg.conn_id, msg.user_id, "")
-    #     conn_id = msg.conn_id
-    #     msg.conn_id = 0
-    #     self.send_msg_to_client(conn_id, message.MSG_ID_LOGIN_RSP, msg)
-
-    def on_player_load(self, conn_id, role_id, name):
-        scene = random.choice(list(self._scenes.values()))
-        scene.on_player_load(conn_id, role_id, name)
-        self._player_to_scene[conn_id] = scene.scene_id
+    # def on_player_load(self, conn_id, role_id, name):
+    #     scene = random.choice(list(self._scenes.values()))
+    #     scene.on_player_load(conn_id, role_id, name)
+    #     self._player_to_scene[conn_id] = scene.scene_id
 
     def on_remove_player(self, conn_id):
         self._player_to_scene.pop(conn_id, None)
 
+    @_rpc_proc.reg_cmd("Scene_EnterScene")
+    def _on_recv_rpc_enter_scene(self, sender, conn_id, role_id, scene_uid):
+        scene = self._scenes.get(scene_uid)
+        self._player_to_scene[conn_id] = scene_uid
+        scene.prepare_enter_scene(conn_id, role_id)
+
+    @_s_cmd.reg_cmd(Message.MSG_ID_LOAD_ROLE_RSP)
+    def _on_recv_load_role_rsp(self, sender, msg_id, msg):
+        game_scene = self.get_player_scene(msg.conn_id)
+        game_scene.on_load_player(msg)
 

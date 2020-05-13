@@ -27,7 +27,7 @@ void PyModuleObj::initPyObj_Type()
 	memset(&pyTypeObj, 0, sizeof(pyTypeObj));
 	pyTypeObj.ob_base = { PyObject_HEAD_INIT(NULL) 0 };
 	pyTypeObj.tp_name = tp_name;
-	pyTypeObj.tp_basicsize = custom_type_size;
+	pyTypeObj.tp_basicsize = tp_basicsize;
 	pyTypeObj.tp_repr = tp_repr;
 	pyTypeObj.tp_getattro = tp_getattro;
 	pyTypeObj.tp_flags = Py_TPFLAGS_DEFAULT;
