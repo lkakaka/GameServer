@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n!proto/server_only/login_srv.proto\x1a\x11proto/login.proto\"\"\n\x0fLoadRoleListReq\x12\x0f\n\x07\x61\x63\x63ount\x18\x01 \x01(\t\"/\n\x0bLoadRoleReq\x12\x0f\n\x07role_id\x18\x01 \x01(\x05\x12\x0f\n\x07\x63onn_id\x18\x02 \x01(\x05\"<\n\x0bLoadRoleRsp\x12\x0f\n\x07\x63onn_id\x18\x01 \x01(\x05\x12\x1c\n\trole_info\x18\x02 \x01(\x0b\x32\t.RoleInfob\x06proto3')
+  serialized_pb=_b('\n!proto/server_only/login_srv.proto\x1a\x11proto/login.proto\"\"\n\x0fLoadRoleListReq\x12\x0f\n\x07\x61\x63\x63ount\x18\x01 \x01(\t\"/\n\x0bLoadRoleReq\x12\x0f\n\x07role_id\x18\x01 \x01(\x05\x12\x0f\n\x07\x63onn_id\x18\x02 \x01(\x05\"=\n\x0bLoadRoleRsp\x12\x0f\n\x07\x63onn_id\x18\x01 \x01(\x05\x12\x1d\n\trole_info\x18\x02 \x01(\x0b\x32\n._RoleInfo\"3\n\x10\x43lientDisconnect\x12\x0f\n\x07\x63onn_id\x18\x01 \x01(\x05\x12\x0e\n\x06reason\x18\x02 \x01(\tb\x06proto3')
   ,
   dependencies=[proto_dot_login__pb2.DESCRIPTOR,])
 
@@ -131,13 +131,52 @@ _LOADROLERSP = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=141,
-  serialized_end=201,
+  serialized_end=202,
 )
 
-_LOADROLERSP.fields_by_name['role_info'].message_type = proto_dot_login__pb2._ROLEINFO
+
+_CLIENTDISCONNECT = _descriptor.Descriptor(
+  name='ClientDisconnect',
+  full_name='ClientDisconnect',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='conn_id', full_name='ClientDisconnect.conn_id', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='reason', full_name='ClientDisconnect.reason', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=204,
+  serialized_end=255,
+)
+
+_LOADROLERSP.fields_by_name['role_info'].message_type = proto_dot_login__pb2.__ROLEINFO
 DESCRIPTOR.message_types_by_name['LoadRoleListReq'] = _LOADROLELISTREQ
 DESCRIPTOR.message_types_by_name['LoadRoleReq'] = _LOADROLEREQ
 DESCRIPTOR.message_types_by_name['LoadRoleRsp'] = _LOADROLERSP
+DESCRIPTOR.message_types_by_name['ClientDisconnect'] = _CLIENTDISCONNECT
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 LoadRoleListReq = _reflection.GeneratedProtocolMessageType('LoadRoleListReq', (_message.Message,), {
@@ -160,6 +199,13 @@ LoadRoleRsp = _reflection.GeneratedProtocolMessageType('LoadRoleRsp', (_message.
   # @@protoc_insertion_point(class_scope:LoadRoleRsp)
   })
 _sym_db.RegisterMessage(LoadRoleRsp)
+
+ClientDisconnect = _reflection.GeneratedProtocolMessageType('ClientDisconnect', (_message.Message,), {
+  'DESCRIPTOR' : _CLIENTDISCONNECT,
+  '__module__' : 'proto.server_only.login_srv_pb2'
+  # @@protoc_insertion_point(class_scope:ClientDisconnect)
+  })
+_sym_db.RegisterMessage(ClientDisconnect)
 
 
 # @@protoc_insertion_point(module_scope)

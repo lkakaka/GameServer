@@ -3,18 +3,18 @@
 package com.proto;
 
 public class ProtoBufferMsg {
-	public static final int MSG_ID_CREATE_ROLE_REQ = 1;
-	public static final int MSG_ID_CREATE_ROLE_RSP = 2;
-	public static final int MSG_ID_DISCONNECT = 3;
-	public static final int MSG_ID_ENTER_GAME = 4;
-	public static final int MSG_ID_ENTER_GAME_RSP = 5;
-	public static final int MSG_ID_ENTER_SCENE_REQ = 6;
-	public static final int MSG_ID_ENTER_SCENE_RSP = 7;
-	public static final int MSG_ID_LOAD_ROLE_LIST_RSP = 9;
-	public static final int MSG_ID_LOGIN_REQ = 12;
-	public static final int MSG_ID_LOGIN_RSP = 13;
-	public static final int MSG_ID_ROLE_INFO = 14;
-	public static final int MSG_ID_TEST_REQ = 17;
+	public static final int MSG_ID_CREATE_ROLE_REQ = 2;
+	public static final int MSG_ID_CREATE_ROLE_RSP = 3;
+	public static final int MSG_ID_DISCONNECT_REQ = 4;
+	public static final int MSG_ID_DISCONNECT_RSP = 5;
+	public static final int MSG_ID_ENTER_GAME = 6;
+	public static final int MSG_ID_ENTER_GAME_RSP = 7;
+	public static final int MSG_ID_ENTER_SCENE_REQ = 8;
+	public static final int MSG_ID_ENTER_SCENE_RSP = 9;
+	public static final int MSG_ID_LOAD_ROLE_LIST_RSP = 11;
+	public static final int MSG_ID_LOGIN_REQ = 14;
+	public static final int MSG_ID_LOGIN_RSP = 15;
+	public static final int MSG_ID_TEST_REQ = 18;
 
 	public static Object createMsgById(int msgId, byte[] dat) {
 		try {
@@ -24,8 +24,10 @@ public class ProtoBufferMsg {
 					return Login.CreateRoleReq.parseFrom(dat);
 				case MSG_ID_CREATE_ROLE_RSP:
 					return Login.CreateRoleRsp.parseFrom(dat);
-				case MSG_ID_DISCONNECT:
-					return Login.Disconnect.parseFrom(dat);
+				case MSG_ID_DISCONNECT_REQ:
+					return Login.DisconnectReq.parseFrom(dat);
+				case MSG_ID_DISCONNECT_RSP:
+					return Login.DisconnectRsp.parseFrom(dat);
 				case MSG_ID_ENTER_GAME:
 					return Login.EnterGame.parseFrom(dat);
 				case MSG_ID_ENTER_GAME_RSP:
@@ -40,8 +42,6 @@ public class ProtoBufferMsg {
 					return Login.LoginReq.parseFrom(dat);
 				case MSG_ID_LOGIN_RSP:
 					return Login.LoginRsp.parseFrom(dat);
-				case MSG_ID_ROLE_INFO:
-					return Login.RoleInfo.parseFrom(dat);
 				case MSG_ID_TEST_REQ:
 					return Test.TestReq.parseFrom(dat);
 			}
@@ -57,8 +57,10 @@ public class ProtoBufferMsg {
 				return Login.CreateRoleReq.newBuilder();
 			case MSG_ID_CREATE_ROLE_RSP:
 				return Login.CreateRoleRsp.newBuilder();
-			case MSG_ID_DISCONNECT:
-				return Login.Disconnect.newBuilder();
+			case MSG_ID_DISCONNECT_REQ:
+				return Login.DisconnectReq.newBuilder();
+			case MSG_ID_DISCONNECT_RSP:
+				return Login.DisconnectRsp.newBuilder();
 			case MSG_ID_ENTER_GAME:
 				return Login.EnterGame.newBuilder();
 			case MSG_ID_ENTER_GAME_RSP:
@@ -73,8 +75,6 @@ public class ProtoBufferMsg {
 				return Login.LoginReq.newBuilder();
 			case MSG_ID_LOGIN_RSP:
 				return Login.LoginRsp.newBuilder();
-			case MSG_ID_ROLE_INFO:
-				return Login.RoleInfo.newBuilder();
 			case MSG_ID_TEST_REQ:
 				return Test.TestReq.newBuilder();
 		}
@@ -89,8 +89,12 @@ public class ProtoBufferMsg {
 		return Login.CreateRoleRsp.newBuilder();
 	}
 	
-	public static Login.Disconnect.Builder createDisconnectBuilder() {
-		return Login.Disconnect.newBuilder();
+	public static Login.DisconnectReq.Builder createDisconnectReqBuilder() {
+		return Login.DisconnectReq.newBuilder();
+	}
+	
+	public static Login.DisconnectRsp.Builder createDisconnectRspBuilder() {
+		return Login.DisconnectRsp.newBuilder();
 	}
 	
 	public static Login.EnterGame.Builder createEnterGameBuilder() {
@@ -119,10 +123,6 @@ public class ProtoBufferMsg {
 	
 	public static Login.LoginRsp.Builder createLoginRspBuilder() {
 		return Login.LoginRsp.newBuilder();
-	}
-	
-	public static Login.RoleInfo.Builder createRoleInfoBuilder() {
-		return Login.RoleInfo.newBuilder();
 	}
 	
 	public static Test.TestReq.Builder createTestReqBuilder() {

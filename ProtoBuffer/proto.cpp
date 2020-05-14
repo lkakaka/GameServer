@@ -7,12 +7,16 @@ std::shared_ptr<google::protobuf::Message> CreateMsgById(int msgId)
 {
 	switch (msgId)
 	{
+		case MSG_ID_CLIENT_DISCONNECT:
+		return std::shared_ptr<google::protobuf::Message>(new ClientDisconnect());
 		case MSG_ID_CREATE_ROLE_REQ:
 		return std::shared_ptr<google::protobuf::Message>(new CreateRoleReq());
 		case MSG_ID_CREATE_ROLE_RSP:
 		return std::shared_ptr<google::protobuf::Message>(new CreateRoleRsp());
-		case MSG_ID_DISCONNECT:
-		return std::shared_ptr<google::protobuf::Message>(new Disconnect());
+		case MSG_ID_DISCONNECT_REQ:
+		return std::shared_ptr<google::protobuf::Message>(new DisconnectReq());
+		case MSG_ID_DISCONNECT_RSP:
+		return std::shared_ptr<google::protobuf::Message>(new DisconnectRsp());
 		case MSG_ID_ENTER_GAME:
 		return std::shared_ptr<google::protobuf::Message>(new EnterGame());
 		case MSG_ID_ENTER_GAME_RSP:
@@ -33,8 +37,6 @@ std::shared_ptr<google::protobuf::Message> CreateMsgById(int msgId)
 		return std::shared_ptr<google::protobuf::Message>(new LoginReq());
 		case MSG_ID_LOGIN_RSP:
 		return std::shared_ptr<google::protobuf::Message>(new LoginRsp());
-		case MSG_ID_ROLE_INFO:
-		return std::shared_ptr<google::protobuf::Message>(new RoleInfo());
 		case MSG_ID_RPC_MSG:
 		return std::shared_ptr<google::protobuf::Message>(new RpcMsg());
 		case MSG_ID_RPC_MSG_RSP:

@@ -15,7 +15,7 @@
 #include <google/protobuf/wire_format.h>
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
-extern PROTOBUF_INTERNAL_EXPORT_proto_2flogin_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_RoleInfo_proto_2flogin_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_proto_2flogin_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info__RoleInfo_proto_2flogin_2eproto;
 class LoadRoleListReqDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<LoadRoleListReq> _instance;
@@ -28,6 +28,24 @@ class LoadRoleRspDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<LoadRoleRsp> _instance;
 } _LoadRoleRsp_default_instance_;
+class ClientDisconnectDefaultTypeInternal {
+ public:
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<ClientDisconnect> _instance;
+} _ClientDisconnect_default_instance_;
+static void InitDefaultsscc_info_ClientDisconnect_proto_2fserver_5fonly_2flogin_5fsrv_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::_ClientDisconnect_default_instance_;
+    new (ptr) ::ClientDisconnect();
+    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::ClientDisconnect::InitAsDefaultInstance();
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_ClientDisconnect_proto_2fserver_5fonly_2flogin_5fsrv_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info_ClientDisconnect_proto_2fserver_5fonly_2flogin_5fsrv_2eproto}, {}};
+
 static void InitDefaultsscc_info_LoadRoleListReq_proto_2fserver_5fonly_2flogin_5fsrv_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
@@ -69,9 +87,9 @@ static void InitDefaultsscc_info_LoadRoleRsp_proto_2fserver_5fonly_2flogin_5fsrv
 
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_LoadRoleRsp_proto_2fserver_5fonly_2flogin_5fsrv_2eproto =
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, InitDefaultsscc_info_LoadRoleRsp_proto_2fserver_5fonly_2flogin_5fsrv_2eproto}, {
-      &scc_info_RoleInfo_proto_2flogin_2eproto.base,}};
+      &scc_info__RoleInfo_proto_2flogin_2eproto.base,}};
 
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_proto_2fserver_5fonly_2flogin_5fsrv_2eproto[3];
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_proto_2fserver_5fonly_2flogin_5fsrv_2eproto[4];
 static constexpr ::PROTOBUF_NAMESPACE_ID::EnumDescriptor const** file_level_enum_descriptors_proto_2fserver_5fonly_2flogin_5fsrv_2eproto = nullptr;
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_proto_2fserver_5fonly_2flogin_5fsrv_2eproto = nullptr;
 
@@ -96,31 +114,42 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_proto_2fserver_5fonly_2flogin_
   ~0u,  // no _weak_field_map_
   PROTOBUF_FIELD_OFFSET(::LoadRoleRsp, conn_id_),
   PROTOBUF_FIELD_OFFSET(::LoadRoleRsp, role_info_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::ClientDisconnect, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::ClientDisconnect, conn_id_),
+  PROTOBUF_FIELD_OFFSET(::ClientDisconnect, reason_),
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, sizeof(::LoadRoleListReq)},
   { 6, -1, sizeof(::LoadRoleReq)},
   { 13, -1, sizeof(::LoadRoleRsp)},
+  { 20, -1, sizeof(::ClientDisconnect)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_LoadRoleListReq_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_LoadRoleReq_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_LoadRoleRsp_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_ClientDisconnect_default_instance_),
 };
 
 const char descriptor_table_protodef_proto_2fserver_5fonly_2flogin_5fsrv_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n!proto/server_only/login_srv.proto\032\021pro"
   "to/login.proto\"\"\n\017LoadRoleListReq\022\017\n\007acc"
   "ount\030\001 \001(\t\"/\n\013LoadRoleReq\022\017\n\007role_id\030\001 \001"
-  "(\005\022\017\n\007conn_id\030\002 \001(\005\"<\n\013LoadRoleRsp\022\017\n\007co"
-  "nn_id\030\001 \001(\005\022\034\n\trole_info\030\002 \001(\0132\t.RoleInf"
-  "ob\006proto3"
+  "(\005\022\017\n\007conn_id\030\002 \001(\005\"=\n\013LoadRoleRsp\022\017\n\007co"
+  "nn_id\030\001 \001(\005\022\035\n\trole_info\030\002 \001(\0132\n._RoleIn"
+  "fo\"3\n\020ClientDisconnect\022\017\n\007conn_id\030\001 \001(\005\022"
+  "\016\n\006reason\030\002 \001(\tb\006proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_proto_2fserver_5fonly_2flogin_5fsrv_2eproto_deps[1] = {
   &::descriptor_table_proto_2flogin_2eproto,
 };
-static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_proto_2fserver_5fonly_2flogin_5fsrv_2eproto_sccs[3] = {
+static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_proto_2fserver_5fonly_2flogin_5fsrv_2eproto_sccs[4] = {
+  &scc_info_ClientDisconnect_proto_2fserver_5fonly_2flogin_5fsrv_2eproto.base,
   &scc_info_LoadRoleListReq_proto_2fserver_5fonly_2flogin_5fsrv_2eproto.base,
   &scc_info_LoadRoleReq_proto_2fserver_5fonly_2flogin_5fsrv_2eproto.base,
   &scc_info_LoadRoleRsp_proto_2fserver_5fonly_2flogin_5fsrv_2eproto.base,
@@ -128,10 +157,10 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_pro
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_proto_2fserver_5fonly_2flogin_5fsrv_2eproto_once;
 static bool descriptor_table_proto_2fserver_5fonly_2flogin_5fsrv_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_proto_2fserver_5fonly_2flogin_5fsrv_2eproto = {
-  &descriptor_table_proto_2fserver_5fonly_2flogin_5fsrv_2eproto_initialized, descriptor_table_protodef_proto_2fserver_5fonly_2flogin_5fsrv_2eproto, "proto/server_only/login_srv.proto", 209,
-  &descriptor_table_proto_2fserver_5fonly_2flogin_5fsrv_2eproto_once, descriptor_table_proto_2fserver_5fonly_2flogin_5fsrv_2eproto_sccs, descriptor_table_proto_2fserver_5fonly_2flogin_5fsrv_2eproto_deps, 3, 1,
+  &descriptor_table_proto_2fserver_5fonly_2flogin_5fsrv_2eproto_initialized, descriptor_table_protodef_proto_2fserver_5fonly_2flogin_5fsrv_2eproto, "proto/server_only/login_srv.proto", 263,
+  &descriptor_table_proto_2fserver_5fonly_2flogin_5fsrv_2eproto_once, descriptor_table_proto_2fserver_5fonly_2flogin_5fsrv_2eproto_sccs, descriptor_table_proto_2fserver_5fonly_2flogin_5fsrv_2eproto_deps, 4, 1,
   schemas, file_default_instances, TableStruct_proto_2fserver_5fonly_2flogin_5fsrv_2eproto::offsets,
-  file_level_metadata_proto_2fserver_5fonly_2flogin_5fsrv_2eproto, 3, file_level_enum_descriptors_proto_2fserver_5fonly_2flogin_5fsrv_2eproto, file_level_service_descriptors_proto_2fserver_5fonly_2flogin_5fsrv_2eproto,
+  file_level_metadata_proto_2fserver_5fonly_2flogin_5fsrv_2eproto, 4, file_level_enum_descriptors_proto_2fserver_5fonly_2flogin_5fsrv_2eproto, file_level_service_descriptors_proto_2fserver_5fonly_2flogin_5fsrv_2eproto,
 };
 
 // Force running AddDescriptors() at dynamic initialization time.
@@ -705,15 +734,15 @@ void LoadRoleReq::InternalSwap(LoadRoleReq* other) {
 // ===================================================================
 
 void LoadRoleRsp::InitAsDefaultInstance() {
-  ::_LoadRoleRsp_default_instance_._instance.get_mutable()->role_info_ = const_cast< ::RoleInfo*>(
-      ::RoleInfo::internal_default_instance());
+  ::_LoadRoleRsp_default_instance_._instance.get_mutable()->role_info_ = const_cast< ::_RoleInfo*>(
+      ::_RoleInfo::internal_default_instance());
 }
 class LoadRoleRsp::_Internal {
  public:
-  static const ::RoleInfo& role_info(const LoadRoleRsp* msg);
+  static const ::_RoleInfo& role_info(const LoadRoleRsp* msg);
 };
 
-const ::RoleInfo&
+const ::_RoleInfo&
 LoadRoleRsp::_Internal::role_info(const LoadRoleRsp* msg) {
   return *msg->role_info_;
 }
@@ -733,7 +762,7 @@ LoadRoleRsp::LoadRoleRsp(const LoadRoleRsp& from)
       _internal_metadata_(nullptr) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   if (from.has_role_info()) {
-    role_info_ = new ::RoleInfo(*from.role_info_);
+    role_info_ = new ::_RoleInfo(*from.role_info_);
   } else {
     role_info_ = nullptr;
   }
@@ -795,7 +824,7 @@ const char* LoadRoleRsp::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // .RoleInfo role_info = 2;
+      // ._RoleInfo role_info = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
           ptr = ctx->ParseMessage(mutable_role_info(), ptr);
@@ -845,7 +874,7 @@ bool LoadRoleRsp::MergePartialFromCodedStream(
         break;
       }
 
-      // .RoleInfo role_info = 2;
+      // ._RoleInfo role_info = 2;
       case 2: {
         if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (18 & 0xFF)) {
           DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadMessage(
@@ -888,7 +917,7 @@ void LoadRoleRsp::SerializeWithCachedSizes(
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32(1, this->conn_id(), output);
   }
 
-  // .RoleInfo role_info = 2;
+  // ._RoleInfo role_info = 2;
   if (this->has_role_info()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteMessageMaybeToArray(
       2, _Internal::role_info(this), output);
@@ -912,7 +941,7 @@ void LoadRoleRsp::SerializeWithCachedSizes(
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->conn_id(), target);
   }
 
-  // .RoleInfo role_info = 2;
+  // ._RoleInfo role_info = 2;
   if (this->has_role_info()) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessageToArray(
@@ -940,7 +969,7 @@ size_t LoadRoleRsp::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // .RoleInfo role_info = 2;
+  // ._RoleInfo role_info = 2;
   if (this->has_role_info()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
@@ -982,7 +1011,7 @@ void LoadRoleRsp::MergeFrom(const LoadRoleRsp& from) {
   (void) cached_has_bits;
 
   if (from.has_role_info()) {
-    mutable_role_info()->::RoleInfo::MergeFrom(from.role_info());
+    mutable_role_info()->::_RoleInfo::MergeFrom(from.role_info());
   }
   if (from.conn_id() != 0) {
     set_conn_id(from.conn_id());
@@ -1019,6 +1048,319 @@ void LoadRoleRsp::InternalSwap(LoadRoleRsp* other) {
 }
 
 
+// ===================================================================
+
+void ClientDisconnect::InitAsDefaultInstance() {
+}
+class ClientDisconnect::_Internal {
+ public:
+};
+
+ClientDisconnect::ClientDisconnect()
+  : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:ClientDisconnect)
+}
+ClientDisconnect::ClientDisconnect(const ClientDisconnect& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      _internal_metadata_(nullptr) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  reason_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from.reason().empty()) {
+    reason_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.reason_);
+  }
+  conn_id_ = from.conn_id_;
+  // @@protoc_insertion_point(copy_constructor:ClientDisconnect)
+}
+
+void ClientDisconnect::SharedCtor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_ClientDisconnect_proto_2fserver_5fonly_2flogin_5fsrv_2eproto.base);
+  reason_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  conn_id_ = 0;
+}
+
+ClientDisconnect::~ClientDisconnect() {
+  // @@protoc_insertion_point(destructor:ClientDisconnect)
+  SharedDtor();
+}
+
+void ClientDisconnect::SharedDtor() {
+  reason_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+void ClientDisconnect::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const ClientDisconnect& ClientDisconnect::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_ClientDisconnect_proto_2fserver_5fonly_2flogin_5fsrv_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void ClientDisconnect::Clear() {
+// @@protoc_insertion_point(message_clear_start:ClientDisconnect)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  reason_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  conn_id_ = 0;
+  _internal_metadata_.Clear();
+}
+
+#if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+const char* ClientDisconnect::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    CHK_(ptr);
+    switch (tag >> 3) {
+      // int32 conn_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
+          conn_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string reason = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8(mutable_reason(), ptr, ctx, "ClientDisconnect.reason");
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag, &_internal_metadata_, ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+#else  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+bool ClientDisconnect::MergePartialFromCodedStream(
+    ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!PROTOBUF_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+  // @@protoc_insertion_point(parse_start:ClientDisconnect)
+  for (;;) {
+    ::std::pair<::PROTOBUF_NAMESPACE_ID::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // int32 conn_id = 1;
+      case 1: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (8 & 0xFF)) {
+
+          DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
+                   ::PROTOBUF_NAMESPACE_ID::int32, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_INT32>(
+                 input, &conn_id_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string reason = 2;
+      case 2: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (18 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadString(
+                input, this->mutable_reason()));
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+            this->reason().data(), static_cast<int>(this->reason().length()),
+            ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::PARSE,
+            "ClientDisconnect.reason"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SkipField(
+              input, tag, _internal_metadata_.mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:ClientDisconnect)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:ClientDisconnect)
+  return false;
+#undef DO_
+}
+#endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+
+void ClientDisconnect::SerializeWithCachedSizes(
+    ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:ClientDisconnect)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 conn_id = 1;
+  if (this->conn_id() != 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32(1, this->conn_id(), output);
+  }
+
+  // string reason = 2;
+  if (this->reason().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->reason().data(), static_cast<int>(this->reason().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "ClientDisconnect.reason");
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringMaybeAliased(
+      2, this->reason(), output);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFields(
+        _internal_metadata_.unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:ClientDisconnect)
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* ClientDisconnect::InternalSerializeWithCachedSizesToArray(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:ClientDisconnect)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 conn_id = 1;
+  if (this->conn_id() != 0) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->conn_id(), target);
+  }
+
+  // string reason = 2;
+  if (this->reason().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->reason().data(), static_cast<int>(this->reason().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "ClientDisconnect.reason");
+    target =
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringToArray(
+        2, this->reason(), target);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:ClientDisconnect)
+  return target;
+}
+
+size_t ClientDisconnect::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:ClientDisconnect)
+  size_t total_size = 0;
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::ComputeUnknownFieldsSize(
+        _internal_metadata_.unknown_fields());
+  }
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string reason = 2;
+  if (this->reason().size() > 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->reason());
+  }
+
+  // int32 conn_id = 1;
+  if (this->conn_id() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->conn_id());
+  }
+
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void ClientDisconnect::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:ClientDisconnect)
+  GOOGLE_DCHECK_NE(&from, this);
+  const ClientDisconnect* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<ClientDisconnect>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:ClientDisconnect)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:ClientDisconnect)
+    MergeFrom(*source);
+  }
+}
+
+void ClientDisconnect::MergeFrom(const ClientDisconnect& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:ClientDisconnect)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.reason().size() > 0) {
+
+    reason_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.reason_);
+  }
+  if (from.conn_id() != 0) {
+    set_conn_id(from.conn_id());
+  }
+}
+
+void ClientDisconnect::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:ClientDisconnect)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void ClientDisconnect::CopyFrom(const ClientDisconnect& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:ClientDisconnect)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool ClientDisconnect::IsInitialized() const {
+  return true;
+}
+
+void ClientDisconnect::InternalSwap(ClientDisconnect* other) {
+  using std::swap;
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  reason_.Swap(&other->reason_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  swap(conn_id_, other->conn_id_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata ClientDisconnect::GetMetadata() const {
+  return GetMetadataStatic();
+}
+
+
 // @@protoc_insertion_point(namespace_scope)
 PROTOBUF_NAMESPACE_OPEN
 template<> PROTOBUF_NOINLINE ::LoadRoleListReq* Arena::CreateMaybeMessage< ::LoadRoleListReq >(Arena* arena) {
@@ -1029,6 +1371,9 @@ template<> PROTOBUF_NOINLINE ::LoadRoleReq* Arena::CreateMaybeMessage< ::LoadRol
 }
 template<> PROTOBUF_NOINLINE ::LoadRoleRsp* Arena::CreateMaybeMessage< ::LoadRoleRsp >(Arena* arena) {
   return Arena::CreateInternal< ::LoadRoleRsp >(arena);
+}
+template<> PROTOBUF_NOINLINE ::ClientDisconnect* Arena::CreateMaybeMessage< ::ClientDisconnect >(Arena* arena) {
+  return Arena::CreateInternal< ::ClientDisconnect >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
 

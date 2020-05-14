@@ -31,7 +31,8 @@ public:
 	int getConnID() const;
 	void doRead();
 	void parsePacket();
-	void dispatchMsg(int msgId, int msgLen, const char* msgData);
+	void dispatchClientMsg(int msgId, int msgLen, const char* msgData);
+	void sendMsgToService(int msgId, int msgLen, const char* msgData, const char* serviceName);
 	void sendMsgToClient(int msgId, char* data, int dataLen);
 	void sendData(std::vector<char>& dat);
 	void doShutDown(const char* reason);

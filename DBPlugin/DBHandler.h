@@ -14,7 +14,7 @@ private:
 	std::string m_dbUserName;
 	std::string m_dbPassword;
 	std::string m_dbName;
-	std::shared_ptr<sql::Connection> m_dbConn;
+	sql::Connection* m_dbConn;
 
 	void createTable(ReflectObject* tbl);
 	sql::Connection* getDBConnection();

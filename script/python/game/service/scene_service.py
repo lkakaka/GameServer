@@ -70,18 +70,6 @@ class SceneService(ServiceBase):
     #     msg.ParseFromString(msg_data)
     #     func(self, sender, msg_id, msg)
 
-    # @_c_cmd.reg_cmd(Message.MSG_ID_TEST_REQ)
-    # def _on_recv_test_req(self, conn_id, msg_id, msg):
-    #     rsp_msg = Message.create_msg_by_id(Message.MSG_ID_TEST_REQ)
-    #     rsp_msg.id = 10
-    #     rsp_msg.msg = "hello"
-    #     self.send_msg_to_client(conn_id, rsp_msg)
-
-    # def on_player_load(self, conn_id, role_id, name):
-    #     scene = random.choice(list(self._scenes.values()))
-    #     scene.on_player_load(conn_id, role_id, name)
-    #     self._player_to_scene[conn_id] = scene.scene_id
-
     def on_remove_player(self, conn_id):
         self._player_to_scene.pop(conn_id, None)
 
@@ -95,4 +83,10 @@ class SceneService(ServiceBase):
     def _on_recv_load_role_rsp(self, sender, msg_id, msg):
         game_scene = self.get_player_scene(msg.conn_id)
         game_scene.on_load_player(msg)
+
+    @_s_cmd.reg_cmd(Message.MSG_ID_CLIENT_DISCONNECT)
+    def _on_recv_disconnect(self, sender, msg_id, msg):
+        game_scene = self.get_player_scene(msg.conn_id)
+        player = game_scene.get_player_by_conn_id(msg.conn_id)
+        game_scene.remove_player(player.role_id, msg.reason)
 

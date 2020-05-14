@@ -40,26 +40,6 @@ class LoginService(ServiceBase):
         msg.account = account
         self.send_msg_to_service("db", msg)
 
-        # rsp_msg = MessageObj.create_msg_by_id(MessageObj.MSG_ID_LOAD_ROLE_LIST_RSP)
-        # rsp_msg.account = account
-        # # db_res = self._db_handler.execute_sql("select * from player where account='{}'".format(msg.account))
-        # # print("----", db_res)
-        # # if db_res is None:
-        # #     rsp_msg.err_code = util.const.ErrorCode.CREATE_PLAYER_ERROR
-        # #     logger.logError("$create player error!!!")
-        # # else:
-        # # db_res = (())
-        # rsp_msg.err_code = util.const.ErrorCode.OK
-        # # for res in db_res:
-        # role_info = rsp_msg.role_list.add()
-        # role_info.role_id = 1#res.role_id
-        # role_info.role_name = "test"#res.name
-        # print("----role info", role_info)
-        #     # rsp_msg.role_list.append(role_info)
-        # print("send------", rsp_msg)
-        # self.send_msg_to_service("db", MessageObj.MSG_ID_LOAD_ROLE_LIST_RSP, rsp_msg)
-        # print("send------end")
-
     @_s_cmd.reg_cmd(Message.MSG_ID_LOAD_ROLE_LIST_RSP)
     def _on_recv_load_role_rsp(self, sender, msg_id, msg):
         conn_id = self._account_dict.pop(msg.account, None)
@@ -67,22 +47,6 @@ class LoginService(ServiceBase):
             logger.logError("$not found account's conn id, account:{}", msg.account)
             return
         self.send_msg_to_client(conn_id, msg)
-        # if msg.err_code != util.const.ErrorCode.OK:
-        #     self.send_msg_to_client(conn_id, msg_id, msg)
-        #     return
-        #
-        # def _on_query_login_scene(err_code, scene_id=None, scene_uid=None):
-        #     if err_code != util.const.ErrorCode.OK:
-        #         msg.err_code = err_code
-        #         self.send_msg_to_client(conn_id, msg_id, msg)
-        #         return
-        #
-        # future = self.rpc_call("scene_ctrl", "QueryLoginScene", timeout=30, role_id=msg.user_id)
-        # future.finish_cb += _on_query_login_scene
-        # future.timeout_cb += _on_query_login_scene
-        # conn_id = msg.conn_id
-        # msg.conn_id = 0
-        # self.send_msg_to_client(conn_id, msg_id, msg)
 
     @_c_cmd.reg_cmd(Message.MSG_ID_CREATE_ROLE_REQ)
     def _on_recv_create_role_req(self, conn_id, msg_id, msg):
@@ -108,11 +72,10 @@ class LoginService(ServiceBase):
         db_msg.role_id = msg.role_id
         db_msg.conn_id = conn_id
         self.send_msg_to_service("db", db_msg)
-        print("send enter game to db----")
+        logger.logInfo("enter game req, conn_id:{}, account:{}", conn_id, account)
 
     @_s_cmd.reg_cmd(Message.MSG_ID_LOAD_ROLE_RSP)
     def _on_recv_load_role_rsp(self, sender, msg_id, msg):
-        print("_on_recv_load_role_rsp---")
         conn_id = msg.conn_id
         account = self._conn_dict.get(conn_id)
         if account is None:
@@ -129,6 +92,7 @@ class LoginService(ServiceBase):
         future = self.rpc_call("scene_ctrl", "EnterScene", timeout=30, conn_id=conn_id, role_id=msg.role_info.role_id)
         future.finish_cb += _on_query_login_scene
         future.timeout_cb += _on_query_login_scene
+        logger.logInfo("$send enter scene req to scene ctrl, conn_id:{}, account:{}", conn_id, account)
 
     def _send_enter_game_rsp(self, conn_id, err_code, role_info):
         msg = Message.create_msg_by_id(Message.MSG_ID_ENTER_GAME_RSP)

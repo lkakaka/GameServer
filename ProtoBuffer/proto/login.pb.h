@@ -47,7 +47,7 @@ struct TableStruct_proto_2flogin_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[9]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[10]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -60,9 +60,12 @@ extern CreateRoleReqDefaultTypeInternal _CreateRoleReq_default_instance_;
 class CreateRoleRsp;
 class CreateRoleRspDefaultTypeInternal;
 extern CreateRoleRspDefaultTypeInternal _CreateRoleRsp_default_instance_;
-class Disconnect;
-class DisconnectDefaultTypeInternal;
-extern DisconnectDefaultTypeInternal _Disconnect_default_instance_;
+class DisconnectReq;
+class DisconnectReqDefaultTypeInternal;
+extern DisconnectReqDefaultTypeInternal _DisconnectReq_default_instance_;
+class DisconnectRsp;
+class DisconnectRspDefaultTypeInternal;
+extern DisconnectRspDefaultTypeInternal _DisconnectRsp_default_instance_;
 class EnterGame;
 class EnterGameDefaultTypeInternal;
 extern EnterGameDefaultTypeInternal _EnterGame_default_instance_;
@@ -78,19 +81,20 @@ extern LoginReqDefaultTypeInternal _LoginReq_default_instance_;
 class LoginRsp;
 class LoginRspDefaultTypeInternal;
 extern LoginRspDefaultTypeInternal _LoginRsp_default_instance_;
-class RoleInfo;
-class RoleInfoDefaultTypeInternal;
-extern RoleInfoDefaultTypeInternal _RoleInfo_default_instance_;
+class _RoleInfo;
+class _RoleInfoDefaultTypeInternal;
+extern _RoleInfoDefaultTypeInternal __RoleInfo_default_instance_;
 PROTOBUF_NAMESPACE_OPEN
 template<> ::CreateRoleReq* Arena::CreateMaybeMessage<::CreateRoleReq>(Arena*);
 template<> ::CreateRoleRsp* Arena::CreateMaybeMessage<::CreateRoleRsp>(Arena*);
-template<> ::Disconnect* Arena::CreateMaybeMessage<::Disconnect>(Arena*);
+template<> ::DisconnectReq* Arena::CreateMaybeMessage<::DisconnectReq>(Arena*);
+template<> ::DisconnectRsp* Arena::CreateMaybeMessage<::DisconnectRsp>(Arena*);
 template<> ::EnterGame* Arena::CreateMaybeMessage<::EnterGame>(Arena*);
 template<> ::EnterGameRsp* Arena::CreateMaybeMessage<::EnterGameRsp>(Arena*);
 template<> ::LoadRoleListRsp* Arena::CreateMaybeMessage<::LoadRoleListRsp>(Arena*);
 template<> ::LoginReq* Arena::CreateMaybeMessage<::LoginReq>(Arena*);
 template<> ::LoginRsp* Arena::CreateMaybeMessage<::LoginRsp>(Arena*);
-template<> ::RoleInfo* Arena::CreateMaybeMessage<::RoleInfo>(Arena*);
+template<> ::_RoleInfo* Arena::CreateMaybeMessage<::_RoleInfo>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 
 // ===================================================================
@@ -383,23 +387,23 @@ class LoginRsp :
 };
 // -------------------------------------------------------------------
 
-class RoleInfo :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:RoleInfo) */ {
+class _RoleInfo :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:_RoleInfo) */ {
  public:
-  RoleInfo();
-  virtual ~RoleInfo();
+  _RoleInfo();
+  virtual ~_RoleInfo();
 
-  RoleInfo(const RoleInfo& from);
-  RoleInfo(RoleInfo&& from) noexcept
-    : RoleInfo() {
+  _RoleInfo(const _RoleInfo& from);
+  _RoleInfo(_RoleInfo&& from) noexcept
+    : _RoleInfo() {
     *this = ::std::move(from);
   }
 
-  inline RoleInfo& operator=(const RoleInfo& from) {
+  inline _RoleInfo& operator=(const _RoleInfo& from) {
     CopyFrom(from);
     return *this;
   }
-  inline RoleInfo& operator=(RoleInfo&& from) noexcept {
+  inline _RoleInfo& operator=(_RoleInfo&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -417,37 +421,37 @@ class RoleInfo :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return GetMetadataStatic().reflection;
   }
-  static const RoleInfo& default_instance();
+  static const _RoleInfo& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const RoleInfo* internal_default_instance() {
-    return reinterpret_cast<const RoleInfo*>(
-               &_RoleInfo_default_instance_);
+  static inline const _RoleInfo* internal_default_instance() {
+    return reinterpret_cast<const _RoleInfo*>(
+               &__RoleInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     2;
 
-  friend void swap(RoleInfo& a, RoleInfo& b) {
+  friend void swap(_RoleInfo& a, _RoleInfo& b) {
     a.Swap(&b);
   }
-  inline void Swap(RoleInfo* other) {
+  inline void Swap(_RoleInfo* other) {
     if (other == this) return;
     InternalSwap(other);
   }
 
   // implements Message ----------------------------------------------
 
-  inline RoleInfo* New() const final {
-    return CreateMaybeMessage<RoleInfo>(nullptr);
+  inline _RoleInfo* New() const final {
+    return CreateMaybeMessage<_RoleInfo>(nullptr);
   }
 
-  RoleInfo* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
-    return CreateMaybeMessage<RoleInfo>(arena);
+  _RoleInfo* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<_RoleInfo>(arena);
   }
   void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
   void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
-  void CopyFrom(const RoleInfo& from);
-  void MergeFrom(const RoleInfo& from);
+  void CopyFrom(const _RoleInfo& from);
+  void MergeFrom(const _RoleInfo& from);
   PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
   bool IsInitialized() const final;
 
@@ -468,10 +472,10 @@ class RoleInfo :
   inline void SharedCtor();
   inline void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(RoleInfo* other);
+  void InternalSwap(_RoleInfo* other);
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "RoleInfo";
+    return "_RoleInfo";
   }
   private:
   inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
@@ -515,7 +519,7 @@ class RoleInfo :
   ::PROTOBUF_NAMESPACE_ID::int32 role_id() const;
   void set_role_id(::PROTOBUF_NAMESPACE_ID::int32 value);
 
-  // @@protoc_insertion_point(class_scope:RoleInfo)
+  // @@protoc_insertion_point(class_scope:_RoleInfo)
  private:
   class _Internal;
 
@@ -644,15 +648,15 @@ class LoadRoleListRsp :
     kAccountFieldNumber = 1,
     kErrCodeFieldNumber = 2,
   };
-  // repeated .RoleInfo role_list = 3;
+  // repeated ._RoleInfo role_list = 3;
   int role_list_size() const;
   void clear_role_list();
-  ::RoleInfo* mutable_role_list(int index);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::RoleInfo >*
+  ::_RoleInfo* mutable_role_list(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::_RoleInfo >*
       mutable_role_list();
-  const ::RoleInfo& role_list(int index) const;
-  ::RoleInfo* add_role_list();
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::RoleInfo >&
+  const ::_RoleInfo& role_list(int index) const;
+  ::_RoleInfo* add_role_list();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::_RoleInfo >&
       role_list() const;
 
   // string account = 1;
@@ -676,7 +680,7 @@ class LoadRoleListRsp :
   class _Internal;
 
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::RoleInfo > role_list_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::_RoleInfo > role_list_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr account_;
   ::PROTOBUF_NAMESPACE_ID::int32 err_code_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
@@ -950,13 +954,13 @@ class CreateRoleRsp :
     kRoleInfoFieldNumber = 2,
     kErrCodeFieldNumber = 1,
   };
-  // .RoleInfo role_info = 2;
+  // ._RoleInfo role_info = 2;
   bool has_role_info() const;
   void clear_role_info();
-  const ::RoleInfo& role_info() const;
-  ::RoleInfo* release_role_info();
-  ::RoleInfo* mutable_role_info();
-  void set_allocated_role_info(::RoleInfo* role_info);
+  const ::_RoleInfo& role_info() const;
+  ::_RoleInfo* release_role_info();
+  ::_RoleInfo* mutable_role_info();
+  void set_allocated_role_info(::_RoleInfo* role_info);
 
   // int32 err_code = 1;
   void clear_err_code();
@@ -968,7 +972,7 @@ class CreateRoleRsp :
   class _Internal;
 
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
-  ::RoleInfo* role_info_;
+  ::_RoleInfo* role_info_;
   ::PROTOBUF_NAMESPACE_ID::int32 err_code_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_proto_2flogin_2eproto;
@@ -1235,13 +1239,13 @@ class EnterGameRsp :
     kRoleInfoFieldNumber = 2,
     kErrCodeFieldNumber = 1,
   };
-  // .RoleInfo role_info = 2;
+  // ._RoleInfo role_info = 2;
   bool has_role_info() const;
   void clear_role_info();
-  const ::RoleInfo& role_info() const;
-  ::RoleInfo* release_role_info();
-  ::RoleInfo* mutable_role_info();
-  void set_allocated_role_info(::RoleInfo* role_info);
+  const ::_RoleInfo& role_info() const;
+  ::_RoleInfo* release_role_info();
+  ::_RoleInfo* mutable_role_info();
+  void set_allocated_role_info(::_RoleInfo* role_info);
 
   // int32 err_code = 1;
   void clear_err_code();
@@ -1253,30 +1257,30 @@ class EnterGameRsp :
   class _Internal;
 
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
-  ::RoleInfo* role_info_;
+  ::_RoleInfo* role_info_;
   ::PROTOBUF_NAMESPACE_ID::int32 err_code_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_proto_2flogin_2eproto;
 };
 // -------------------------------------------------------------------
 
-class Disconnect :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Disconnect) */ {
+class DisconnectReq :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:DisconnectReq) */ {
  public:
-  Disconnect();
-  virtual ~Disconnect();
+  DisconnectReq();
+  virtual ~DisconnectReq();
 
-  Disconnect(const Disconnect& from);
-  Disconnect(Disconnect&& from) noexcept
-    : Disconnect() {
+  DisconnectReq(const DisconnectReq& from);
+  DisconnectReq(DisconnectReq&& from) noexcept
+    : DisconnectReq() {
     *this = ::std::move(from);
   }
 
-  inline Disconnect& operator=(const Disconnect& from) {
+  inline DisconnectReq& operator=(const DisconnectReq& from) {
     CopyFrom(from);
     return *this;
   }
-  inline Disconnect& operator=(Disconnect&& from) noexcept {
+  inline DisconnectReq& operator=(DisconnectReq&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -1294,37 +1298,37 @@ class Disconnect :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return GetMetadataStatic().reflection;
   }
-  static const Disconnect& default_instance();
+  static const DisconnectReq& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const Disconnect* internal_default_instance() {
-    return reinterpret_cast<const Disconnect*>(
-               &_Disconnect_default_instance_);
+  static inline const DisconnectReq* internal_default_instance() {
+    return reinterpret_cast<const DisconnectReq*>(
+               &_DisconnectReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     8;
 
-  friend void swap(Disconnect& a, Disconnect& b) {
+  friend void swap(DisconnectReq& a, DisconnectReq& b) {
     a.Swap(&b);
   }
-  inline void Swap(Disconnect* other) {
+  inline void Swap(DisconnectReq* other) {
     if (other == this) return;
     InternalSwap(other);
   }
 
   // implements Message ----------------------------------------------
 
-  inline Disconnect* New() const final {
-    return CreateMaybeMessage<Disconnect>(nullptr);
+  inline DisconnectReq* New() const final {
+    return CreateMaybeMessage<DisconnectReq>(nullptr);
   }
 
-  Disconnect* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
-    return CreateMaybeMessage<Disconnect>(arena);
+  DisconnectReq* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<DisconnectReq>(arena);
   }
   void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
   void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
-  void CopyFrom(const Disconnect& from);
-  void MergeFrom(const Disconnect& from);
+  void CopyFrom(const DisconnectReq& from);
+  void MergeFrom(const DisconnectReq& from);
   PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
   bool IsInitialized() const final;
 
@@ -1345,10 +1349,132 @@ class Disconnect :
   inline void SharedCtor();
   inline void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(Disconnect* other);
+  void InternalSwap(DisconnectReq* other);
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "Disconnect";
+    return "DisconnectReq";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_proto_2flogin_2eproto);
+    return ::descriptor_table_proto_2flogin_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:DisconnectReq)
+ private:
+  class _Internal;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_proto_2flogin_2eproto;
+};
+// -------------------------------------------------------------------
+
+class DisconnectRsp :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:DisconnectRsp) */ {
+ public:
+  DisconnectRsp();
+  virtual ~DisconnectRsp();
+
+  DisconnectRsp(const DisconnectRsp& from);
+  DisconnectRsp(DisconnectRsp&& from) noexcept
+    : DisconnectRsp() {
+    *this = ::std::move(from);
+  }
+
+  inline DisconnectRsp& operator=(const DisconnectRsp& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline DisconnectRsp& operator=(DisconnectRsp&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const DisconnectRsp& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const DisconnectRsp* internal_default_instance() {
+    return reinterpret_cast<const DisconnectRsp*>(
+               &_DisconnectRsp_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    9;
+
+  friend void swap(DisconnectRsp& a, DisconnectRsp& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(DisconnectRsp* other) {
+    if (other == this) return;
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline DisconnectRsp* New() const final {
+    return CreateMaybeMessage<DisconnectRsp>(nullptr);
+  }
+
+  DisconnectRsp* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<DisconnectRsp>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const DisconnectRsp& from);
+  void MergeFrom(const DisconnectRsp& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  #else
+  bool MergePartialFromCodedStream(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* InternalSerializeWithCachedSizesToArray(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(DisconnectRsp* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "DisconnectRsp";
   }
   private:
   inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
@@ -1373,10 +1499,9 @@ class Disconnect :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kReasonFieldNumber = 2,
-    kConnIdFieldNumber = 1,
+    kReasonFieldNumber = 1,
   };
-  // string reason = 2;
+  // string reason = 1;
   void clear_reason();
   const std::string& reason() const;
   void set_reason(const std::string& value);
@@ -1387,18 +1512,12 @@ class Disconnect :
   std::string* release_reason();
   void set_allocated_reason(std::string* reason);
 
-  // int32 conn_id = 1;
-  void clear_conn_id();
-  ::PROTOBUF_NAMESPACE_ID::int32 conn_id() const;
-  void set_conn_id(::PROTOBUF_NAMESPACE_ID::int32 value);
-
-  // @@protoc_insertion_point(class_scope:Disconnect)
+  // @@protoc_insertion_point(class_scope:DisconnectRsp)
  private:
   class _Internal;
 
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr reason_;
-  ::PROTOBUF_NAMESPACE_ID::int32 conn_id_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_proto_2flogin_2eproto;
 };
@@ -1549,71 +1668,71 @@ inline void LoginRsp::set_err_code(::PROTOBUF_NAMESPACE_ID::int32 value) {
 
 // -------------------------------------------------------------------
 
-// RoleInfo
+// _RoleInfo
 
 // int32 role_id = 1;
-inline void RoleInfo::clear_role_id() {
+inline void _RoleInfo::clear_role_id() {
   role_id_ = 0;
 }
-inline ::PROTOBUF_NAMESPACE_ID::int32 RoleInfo::role_id() const {
-  // @@protoc_insertion_point(field_get:RoleInfo.role_id)
+inline ::PROTOBUF_NAMESPACE_ID::int32 _RoleInfo::role_id() const {
+  // @@protoc_insertion_point(field_get:_RoleInfo.role_id)
   return role_id_;
 }
-inline void RoleInfo::set_role_id(::PROTOBUF_NAMESPACE_ID::int32 value) {
+inline void _RoleInfo::set_role_id(::PROTOBUF_NAMESPACE_ID::int32 value) {
   
   role_id_ = value;
-  // @@protoc_insertion_point(field_set:RoleInfo.role_id)
+  // @@protoc_insertion_point(field_set:_RoleInfo.role_id)
 }
 
 // string role_name = 2;
-inline void RoleInfo::clear_role_name() {
+inline void _RoleInfo::clear_role_name() {
   role_name_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
-inline const std::string& RoleInfo::role_name() const {
-  // @@protoc_insertion_point(field_get:RoleInfo.role_name)
+inline const std::string& _RoleInfo::role_name() const {
+  // @@protoc_insertion_point(field_get:_RoleInfo.role_name)
   return role_name_.GetNoArena();
 }
-inline void RoleInfo::set_role_name(const std::string& value) {
+inline void _RoleInfo::set_role_name(const std::string& value) {
   
   role_name_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:RoleInfo.role_name)
+  // @@protoc_insertion_point(field_set:_RoleInfo.role_name)
 }
-inline void RoleInfo::set_role_name(std::string&& value) {
+inline void _RoleInfo::set_role_name(std::string&& value) {
   
   role_name_.SetNoArena(
     &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:RoleInfo.role_name)
+  // @@protoc_insertion_point(field_set_rvalue:_RoleInfo.role_name)
 }
-inline void RoleInfo::set_role_name(const char* value) {
+inline void _RoleInfo::set_role_name(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
   
   role_name_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:RoleInfo.role_name)
+  // @@protoc_insertion_point(field_set_char:_RoleInfo.role_name)
 }
-inline void RoleInfo::set_role_name(const char* value, size_t size) {
+inline void _RoleInfo::set_role_name(const char* value, size_t size) {
   
   role_name_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:RoleInfo.role_name)
+  // @@protoc_insertion_point(field_set_pointer:_RoleInfo.role_name)
 }
-inline std::string* RoleInfo::mutable_role_name() {
+inline std::string* _RoleInfo::mutable_role_name() {
   
-  // @@protoc_insertion_point(field_mutable:RoleInfo.role_name)
+  // @@protoc_insertion_point(field_mutable:_RoleInfo.role_name)
   return role_name_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
-inline std::string* RoleInfo::release_role_name() {
-  // @@protoc_insertion_point(field_release:RoleInfo.role_name)
+inline std::string* _RoleInfo::release_role_name() {
+  // @@protoc_insertion_point(field_release:_RoleInfo.role_name)
   
   return role_name_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
-inline void RoleInfo::set_allocated_role_name(std::string* role_name) {
+inline void _RoleInfo::set_allocated_role_name(std::string* role_name) {
   if (role_name != nullptr) {
     
   } else {
     
   }
   role_name_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), role_name);
-  // @@protoc_insertion_point(field_set_allocated:RoleInfo.role_name)
+  // @@protoc_insertion_point(field_set_allocated:_RoleInfo.role_name)
 }
 
 // -------------------------------------------------------------------
@@ -1685,31 +1804,31 @@ inline void LoadRoleListRsp::set_err_code(::PROTOBUF_NAMESPACE_ID::int32 value) 
   // @@protoc_insertion_point(field_set:LoadRoleListRsp.err_code)
 }
 
-// repeated .RoleInfo role_list = 3;
+// repeated ._RoleInfo role_list = 3;
 inline int LoadRoleListRsp::role_list_size() const {
   return role_list_.size();
 }
 inline void LoadRoleListRsp::clear_role_list() {
   role_list_.Clear();
 }
-inline ::RoleInfo* LoadRoleListRsp::mutable_role_list(int index) {
+inline ::_RoleInfo* LoadRoleListRsp::mutable_role_list(int index) {
   // @@protoc_insertion_point(field_mutable:LoadRoleListRsp.role_list)
   return role_list_.Mutable(index);
 }
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::RoleInfo >*
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::_RoleInfo >*
 LoadRoleListRsp::mutable_role_list() {
   // @@protoc_insertion_point(field_mutable_list:LoadRoleListRsp.role_list)
   return &role_list_;
 }
-inline const ::RoleInfo& LoadRoleListRsp::role_list(int index) const {
+inline const ::_RoleInfo& LoadRoleListRsp::role_list(int index) const {
   // @@protoc_insertion_point(field_get:LoadRoleListRsp.role_list)
   return role_list_.Get(index);
 }
-inline ::RoleInfo* LoadRoleListRsp::add_role_list() {
+inline ::_RoleInfo* LoadRoleListRsp::add_role_list() {
   // @@protoc_insertion_point(field_add:LoadRoleListRsp.role_list)
   return role_list_.Add();
 }
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::RoleInfo >&
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::_RoleInfo >&
 LoadRoleListRsp::role_list() const {
   // @@protoc_insertion_point(field_list:LoadRoleListRsp.role_list)
   return role_list_;
@@ -1839,7 +1958,7 @@ inline void CreateRoleRsp::set_err_code(::PROTOBUF_NAMESPACE_ID::int32 value) {
   // @@protoc_insertion_point(field_set:CreateRoleRsp.err_code)
 }
 
-// .RoleInfo role_info = 2;
+// ._RoleInfo role_info = 2;
 inline bool CreateRoleRsp::has_role_info() const {
   return this != internal_default_instance() && role_info_ != nullptr;
 }
@@ -1849,29 +1968,29 @@ inline void CreateRoleRsp::clear_role_info() {
   }
   role_info_ = nullptr;
 }
-inline const ::RoleInfo& CreateRoleRsp::role_info() const {
-  const ::RoleInfo* p = role_info_;
+inline const ::_RoleInfo& CreateRoleRsp::role_info() const {
+  const ::_RoleInfo* p = role_info_;
   // @@protoc_insertion_point(field_get:CreateRoleRsp.role_info)
-  return p != nullptr ? *p : *reinterpret_cast<const ::RoleInfo*>(
-      &::_RoleInfo_default_instance_);
+  return p != nullptr ? *p : *reinterpret_cast<const ::_RoleInfo*>(
+      &::__RoleInfo_default_instance_);
 }
-inline ::RoleInfo* CreateRoleRsp::release_role_info() {
+inline ::_RoleInfo* CreateRoleRsp::release_role_info() {
   // @@protoc_insertion_point(field_release:CreateRoleRsp.role_info)
   
-  ::RoleInfo* temp = role_info_;
+  ::_RoleInfo* temp = role_info_;
   role_info_ = nullptr;
   return temp;
 }
-inline ::RoleInfo* CreateRoleRsp::mutable_role_info() {
+inline ::_RoleInfo* CreateRoleRsp::mutable_role_info() {
   
   if (role_info_ == nullptr) {
-    auto* p = CreateMaybeMessage<::RoleInfo>(GetArenaNoVirtual());
+    auto* p = CreateMaybeMessage<::_RoleInfo>(GetArenaNoVirtual());
     role_info_ = p;
   }
   // @@protoc_insertion_point(field_mutable:CreateRoleRsp.role_info)
   return role_info_;
 }
-inline void CreateRoleRsp::set_allocated_role_info(::RoleInfo* role_info) {
+inline void CreateRoleRsp::set_allocated_role_info(::_RoleInfo* role_info) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == nullptr) {
     delete role_info_;
@@ -1977,7 +2096,7 @@ inline void EnterGameRsp::set_err_code(::PROTOBUF_NAMESPACE_ID::int32 value) {
   // @@protoc_insertion_point(field_set:EnterGameRsp.err_code)
 }
 
-// .RoleInfo role_info = 2;
+// ._RoleInfo role_info = 2;
 inline bool EnterGameRsp::has_role_info() const {
   return this != internal_default_instance() && role_info_ != nullptr;
 }
@@ -1987,29 +2106,29 @@ inline void EnterGameRsp::clear_role_info() {
   }
   role_info_ = nullptr;
 }
-inline const ::RoleInfo& EnterGameRsp::role_info() const {
-  const ::RoleInfo* p = role_info_;
+inline const ::_RoleInfo& EnterGameRsp::role_info() const {
+  const ::_RoleInfo* p = role_info_;
   // @@protoc_insertion_point(field_get:EnterGameRsp.role_info)
-  return p != nullptr ? *p : *reinterpret_cast<const ::RoleInfo*>(
-      &::_RoleInfo_default_instance_);
+  return p != nullptr ? *p : *reinterpret_cast<const ::_RoleInfo*>(
+      &::__RoleInfo_default_instance_);
 }
-inline ::RoleInfo* EnterGameRsp::release_role_info() {
+inline ::_RoleInfo* EnterGameRsp::release_role_info() {
   // @@protoc_insertion_point(field_release:EnterGameRsp.role_info)
   
-  ::RoleInfo* temp = role_info_;
+  ::_RoleInfo* temp = role_info_;
   role_info_ = nullptr;
   return temp;
 }
-inline ::RoleInfo* EnterGameRsp::mutable_role_info() {
+inline ::_RoleInfo* EnterGameRsp::mutable_role_info() {
   
   if (role_info_ == nullptr) {
-    auto* p = CreateMaybeMessage<::RoleInfo>(GetArenaNoVirtual());
+    auto* p = CreateMaybeMessage<::_RoleInfo>(GetArenaNoVirtual());
     role_info_ = p;
   }
   // @@protoc_insertion_point(field_mutable:EnterGameRsp.role_info)
   return role_info_;
 }
-inline void EnterGameRsp::set_allocated_role_info(::RoleInfo* role_info) {
+inline void EnterGameRsp::set_allocated_role_info(::_RoleInfo* role_info) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == nullptr) {
     delete role_info_;
@@ -2030,76 +2149,68 @@ inline void EnterGameRsp::set_allocated_role_info(::RoleInfo* role_info) {
 
 // -------------------------------------------------------------------
 
-// Disconnect
+// DisconnectReq
 
-// int32 conn_id = 1;
-inline void Disconnect::clear_conn_id() {
-  conn_id_ = 0;
-}
-inline ::PROTOBUF_NAMESPACE_ID::int32 Disconnect::conn_id() const {
-  // @@protoc_insertion_point(field_get:Disconnect.conn_id)
-  return conn_id_;
-}
-inline void Disconnect::set_conn_id(::PROTOBUF_NAMESPACE_ID::int32 value) {
-  
-  conn_id_ = value;
-  // @@protoc_insertion_point(field_set:Disconnect.conn_id)
-}
+// -------------------------------------------------------------------
 
-// string reason = 2;
-inline void Disconnect::clear_reason() {
+// DisconnectRsp
+
+// string reason = 1;
+inline void DisconnectRsp::clear_reason() {
   reason_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
-inline const std::string& Disconnect::reason() const {
-  // @@protoc_insertion_point(field_get:Disconnect.reason)
+inline const std::string& DisconnectRsp::reason() const {
+  // @@protoc_insertion_point(field_get:DisconnectRsp.reason)
   return reason_.GetNoArena();
 }
-inline void Disconnect::set_reason(const std::string& value) {
+inline void DisconnectRsp::set_reason(const std::string& value) {
   
   reason_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:Disconnect.reason)
+  // @@protoc_insertion_point(field_set:DisconnectRsp.reason)
 }
-inline void Disconnect::set_reason(std::string&& value) {
+inline void DisconnectRsp::set_reason(std::string&& value) {
   
   reason_.SetNoArena(
     &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:Disconnect.reason)
+  // @@protoc_insertion_point(field_set_rvalue:DisconnectRsp.reason)
 }
-inline void Disconnect::set_reason(const char* value) {
+inline void DisconnectRsp::set_reason(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
   
   reason_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:Disconnect.reason)
+  // @@protoc_insertion_point(field_set_char:DisconnectRsp.reason)
 }
-inline void Disconnect::set_reason(const char* value, size_t size) {
+inline void DisconnectRsp::set_reason(const char* value, size_t size) {
   
   reason_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:Disconnect.reason)
+  // @@protoc_insertion_point(field_set_pointer:DisconnectRsp.reason)
 }
-inline std::string* Disconnect::mutable_reason() {
+inline std::string* DisconnectRsp::mutable_reason() {
   
-  // @@protoc_insertion_point(field_mutable:Disconnect.reason)
+  // @@protoc_insertion_point(field_mutable:DisconnectRsp.reason)
   return reason_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
-inline std::string* Disconnect::release_reason() {
-  // @@protoc_insertion_point(field_release:Disconnect.reason)
+inline std::string* DisconnectRsp::release_reason() {
+  // @@protoc_insertion_point(field_release:DisconnectRsp.reason)
   
   return reason_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
-inline void Disconnect::set_allocated_reason(std::string* reason) {
+inline void DisconnectRsp::set_allocated_reason(std::string* reason) {
   if (reason != nullptr) {
     
   } else {
     
   }
   reason_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), reason);
-  // @@protoc_insertion_point(field_set_allocated:Disconnect.reason)
+  // @@protoc_insertion_point(field_set_allocated:DisconnectRsp.reason)
 }
 
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

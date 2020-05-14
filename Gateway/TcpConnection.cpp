@@ -42,11 +42,9 @@ void TcpConnection::doRead()
 	m_socket.async_receive(buf, [buf, this](const boost::system::error_code& error, size_t bytes_transferred) {
 		if (error)
 		{
-			std::string reason;
 			const std::string err_str = error.message();
-			//Logger::logError("$close connection, %s", err_str.data());
-			reason = "read error," + err_str;
-			close(reason.c_str());
+			Logger::logError("$close connection, %s", err_str.c_str());
+			close("client disconnected");
 			return;
 		}
 		if (bytes_transferred > 0)
@@ -71,7 +69,7 @@ void TcpConnection::parsePacket()
 	while (dataLen > 0) {
 		if (dataLen < 4) return;
 		
-		int packetLen = m_readBuf.readInt();
+		int packetLen = m_readBuf.readInt(false);
 		if (packetLen < 8 || packetLen > MAX_PACKET_LEN) {
 			Logger::logInfo("$packet len(%d) error", packetLen);
 			close("packet format error");
@@ -81,17 +79,18 @@ void TcpConnection::parsePacket()
 		if (dataLen < packetLen) return;
 
 		m_readBuf.remove(4); // 移除数据总长度字段
-		int msgId = m_readBuf.readIntEx();
+		int msgId = m_readBuf.readInt(true);
 		int msgLen = packetLen - 8;
-		dispatchMsg(msgId, msgLen, m_readBuf.data());
+		dispatchClientMsg(msgId, msgLen, m_readBuf.data());
 		m_readBuf.remove(msgLen);
 		dataLen = m_readBuf.size();
 		Logger::logInfo("$receive client msg, connId:%d, msgId:%d", m_connID, msgId);
 	}
 }
 
-void TcpConnection::dispatchMsg(int msgId, int msgLen, const char* msgData) {
+void TcpConnection::dispatchClientMsg(int msgId, int msgLen, const char* msgData) {
 	MyBuffer buffer;
+	buffer.writeByte(0);
 	buffer.writeInt(m_connID);
 	buffer.writeInt(msgId);
 	buffer.writeString(msgData, msgLen);
@@ -100,6 +99,15 @@ void TcpConnection::dispatchMsg(int msgId, int msgLen, const char* msgData) {
 	} else {
 		ZmqInst::getZmqInstance()->sendData("scene", buffer.data(), buffer.size());
 	}
+}
+
+void TcpConnection::sendMsgToService(int msgId, int msgLen, const char* msgData, const char* serviceName) {
+	MyBuffer buffer;
+	buffer.writeByte(1);
+	buffer.writeInt(m_connID); // 统一格式
+	buffer.writeInt(msgId);
+	buffer.writeString(msgData, msgLen);
+	ZmqInst::getZmqInstance()->sendData(serviceName, buffer.data(), buffer.size());
 }
 
 void TcpConnection::sendMsgToClient(int msgId, char* data, int dataLen) {
@@ -151,9 +159,10 @@ void TcpConnection::doShutDown(const char* reason)
 		Logger::logError("socket shutdown error, %s", e.what());
 	}
 
-	Disconnect msg;
+	ClientDisconnect msg;
+	msg.set_conn_id(m_connID);
 	msg.set_reason(reason);
 	std::string msgData;
 	msg.SerializeToString(&msgData);
-	dispatchMsg(MSG_ID_DISCONNECT, msgData.length(), msgData.c_str());
+	sendMsgToService(MSG_ID_CLIENT_DISCONNECT, msgData.length(), msgData.c_str(), "scene");
 }

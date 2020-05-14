@@ -16,10 +16,11 @@ public:
 	inline char* data() { return buffer.data(); }
 	inline void remove(int len) { buffer.erase(buffer.begin(), buffer.begin() + len); }
 
-	int readInt();
-	int readIntEx();
+	int readInt(bool isRemove);
+	unsigned char readByte(bool isRemove);
 	
 	void writeInt(int val);
+	void writeByte(unsigned char val);
 	void writeString(const char* dat, int len);
 	void append(std::vector<char>& dat);
 	void append(std::vector<char>& dat, int len);

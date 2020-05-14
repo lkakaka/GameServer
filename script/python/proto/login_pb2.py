@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=_b('\n\tcom.protoB\005Login'),
-  serialized_pb=_b('\n\x11proto/login.proto\"9\n\x08LoginReq\x12\x0f\n\x07\x61\x63\x63ount\x18\x01 \x01(\t\x12\x0b\n\x03pwd\x18\x02 \x01(\t\x12\x0f\n\x07\x63onn_id\x18\x03 \x01(\x05\"\x1c\n\x08LoginRsp\x12\x10\n\x08\x65rr_code\x18\x01 \x01(\x05\".\n\x08RoleInfo\x12\x0f\n\x07role_id\x18\x01 \x01(\x05\x12\x11\n\trole_name\x18\x02 \x01(\t\"R\n\x0fLoadRoleListRsp\x12\x0f\n\x07\x61\x63\x63ount\x18\x01 \x01(\t\x12\x10\n\x08\x65rr_code\x18\x02 \x01(\x05\x12\x1c\n\trole_list\x18\x03 \x03(\x0b\x32\t.RoleInfo\"3\n\rCreateRoleReq\x12\x0f\n\x07\x61\x63\x63ount\x18\x01 \x01(\t\x12\x11\n\trole_name\x18\x02 \x01(\t\"?\n\rCreateRoleRsp\x12\x10\n\x08\x65rr_code\x18\x01 \x01(\x05\x12\x1c\n\trole_info\x18\x02 \x01(\x0b\x32\t.RoleInfo\"-\n\tEnterGame\x12\x0f\n\x07role_id\x18\x01 \x01(\x05\x12\x0f\n\x07\x61\x63\x63ount\x18\x02 \x01(\t\">\n\x0c\x45nterGameRsp\x12\x10\n\x08\x65rr_code\x18\x01 \x01(\x05\x12\x1c\n\trole_info\x18\x02 \x01(\x0b\x32\t.RoleInfo\"-\n\nDisconnect\x12\x0f\n\x07\x63onn_id\x18\x01 \x01(\x05\x12\x0e\n\x06reason\x18\x02 \x01(\tB\x12\n\tcom.protoB\x05Loginb\x06proto3')
+  serialized_pb=_b('\n\x11proto/login.proto\"9\n\x08LoginReq\x12\x0f\n\x07\x61\x63\x63ount\x18\x01 \x01(\t\x12\x0b\n\x03pwd\x18\x02 \x01(\t\x12\x0f\n\x07\x63onn_id\x18\x03 \x01(\x05\"\x1c\n\x08LoginRsp\x12\x10\n\x08\x65rr_code\x18\x01 \x01(\x05\"/\n\t_RoleInfo\x12\x0f\n\x07role_id\x18\x01 \x01(\x05\x12\x11\n\trole_name\x18\x02 \x01(\t\"S\n\x0fLoadRoleListRsp\x12\x0f\n\x07\x61\x63\x63ount\x18\x01 \x01(\t\x12\x10\n\x08\x65rr_code\x18\x02 \x01(\x05\x12\x1d\n\trole_list\x18\x03 \x03(\x0b\x32\n._RoleInfo\"3\n\rCreateRoleReq\x12\x0f\n\x07\x61\x63\x63ount\x18\x01 \x01(\t\x12\x11\n\trole_name\x18\x02 \x01(\t\"@\n\rCreateRoleRsp\x12\x10\n\x08\x65rr_code\x18\x01 \x01(\x05\x12\x1d\n\trole_info\x18\x02 \x01(\x0b\x32\n._RoleInfo\"-\n\tEnterGame\x12\x0f\n\x07role_id\x18\x01 \x01(\x05\x12\x0f\n\x07\x61\x63\x63ount\x18\x02 \x01(\t\"?\n\x0c\x45nterGameRsp\x12\x10\n\x08\x65rr_code\x18\x01 \x01(\x05\x12\x1d\n\trole_info\x18\x02 \x01(\x0b\x32\n._RoleInfo\"\x0f\n\rDisconnectReq\"\x1f\n\rDisconnectRsp\x12\x0e\n\x06reason\x18\x01 \x01(\tB\x12\n\tcom.protoB\x05Loginb\x06proto3')
 )
 
 
@@ -102,22 +102,22 @@ _LOGINRSP = _descriptor.Descriptor(
 )
 
 
-_ROLEINFO = _descriptor.Descriptor(
-  name='RoleInfo',
-  full_name='RoleInfo',
+__ROLEINFO = _descriptor.Descriptor(
+  name='_RoleInfo',
+  full_name='_RoleInfo',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='role_id', full_name='RoleInfo.role_id', index=0,
+      name='role_id', full_name='_RoleInfo.role_id', index=0,
       number=1, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='role_name', full_name='RoleInfo.role_name', index=1,
+      name='role_name', full_name='_RoleInfo.role_name', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -136,7 +136,7 @@ _ROLEINFO = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=110,
-  serialized_end=156,
+  serialized_end=157,
 )
 
 
@@ -180,8 +180,8 @@ _LOADROLELISTRSP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=158,
-  serialized_end=240,
+  serialized_start=159,
+  serialized_end=242,
 )
 
 
@@ -218,8 +218,8 @@ _CREATEROLEREQ = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=242,
-  serialized_end=293,
+  serialized_start=244,
+  serialized_end=295,
 )
 
 
@@ -256,8 +256,8 @@ _CREATEROLERSP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=295,
-  serialized_end=358,
+  serialized_start=297,
+  serialized_end=361,
 )
 
 
@@ -294,8 +294,8 @@ _ENTERGAME = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=360,
-  serialized_end=405,
+  serialized_start=363,
+  serialized_end=408,
 )
 
 
@@ -332,28 +332,45 @@ _ENTERGAMERSP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=407,
-  serialized_end=469,
+  serialized_start=410,
+  serialized_end=473,
 )
 
 
-_DISCONNECT = _descriptor.Descriptor(
-  name='Disconnect',
-  full_name='Disconnect',
+_DISCONNECTREQ = _descriptor.Descriptor(
+  name='DisconnectReq',
+  full_name='DisconnectReq',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=475,
+  serialized_end=490,
+)
+
+
+_DISCONNECTRSP = _descriptor.Descriptor(
+  name='DisconnectRsp',
+  full_name='DisconnectRsp',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='conn_id', full_name='Disconnect.conn_id', index=0,
-      number=1, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='reason', full_name='Disconnect.reason', index=1,
-      number=2, type=9, cpp_type=9, label=1,
+      name='reason', full_name='DisconnectRsp.reason', index=0,
+      number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -370,22 +387,23 @@ _DISCONNECT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=471,
-  serialized_end=516,
+  serialized_start=492,
+  serialized_end=523,
 )
 
-_LOADROLELISTRSP.fields_by_name['role_list'].message_type = _ROLEINFO
-_CREATEROLERSP.fields_by_name['role_info'].message_type = _ROLEINFO
-_ENTERGAMERSP.fields_by_name['role_info'].message_type = _ROLEINFO
+_LOADROLELISTRSP.fields_by_name['role_list'].message_type = __ROLEINFO
+_CREATEROLERSP.fields_by_name['role_info'].message_type = __ROLEINFO
+_ENTERGAMERSP.fields_by_name['role_info'].message_type = __ROLEINFO
 DESCRIPTOR.message_types_by_name['LoginReq'] = _LOGINREQ
 DESCRIPTOR.message_types_by_name['LoginRsp'] = _LOGINRSP
-DESCRIPTOR.message_types_by_name['RoleInfo'] = _ROLEINFO
+DESCRIPTOR.message_types_by_name['_RoleInfo'] = __ROLEINFO
 DESCRIPTOR.message_types_by_name['LoadRoleListRsp'] = _LOADROLELISTRSP
 DESCRIPTOR.message_types_by_name['CreateRoleReq'] = _CREATEROLEREQ
 DESCRIPTOR.message_types_by_name['CreateRoleRsp'] = _CREATEROLERSP
 DESCRIPTOR.message_types_by_name['EnterGame'] = _ENTERGAME
 DESCRIPTOR.message_types_by_name['EnterGameRsp'] = _ENTERGAMERSP
-DESCRIPTOR.message_types_by_name['Disconnect'] = _DISCONNECT
+DESCRIPTOR.message_types_by_name['DisconnectReq'] = _DISCONNECTREQ
+DESCRIPTOR.message_types_by_name['DisconnectRsp'] = _DISCONNECTRSP
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 LoginReq = _reflection.GeneratedProtocolMessageType('LoginReq', (_message.Message,), {
@@ -402,12 +420,12 @@ LoginRsp = _reflection.GeneratedProtocolMessageType('LoginRsp', (_message.Messag
   })
 _sym_db.RegisterMessage(LoginRsp)
 
-RoleInfo = _reflection.GeneratedProtocolMessageType('RoleInfo', (_message.Message,), {
-  'DESCRIPTOR' : _ROLEINFO,
+_RoleInfo = _reflection.GeneratedProtocolMessageType('_RoleInfo', (_message.Message,), {
+  'DESCRIPTOR' : __ROLEINFO,
   '__module__' : 'proto.login_pb2'
-  # @@protoc_insertion_point(class_scope:RoleInfo)
+  # @@protoc_insertion_point(class_scope:_RoleInfo)
   })
-_sym_db.RegisterMessage(RoleInfo)
+_sym_db.RegisterMessage(_RoleInfo)
 
 LoadRoleListRsp = _reflection.GeneratedProtocolMessageType('LoadRoleListRsp', (_message.Message,), {
   'DESCRIPTOR' : _LOADROLELISTRSP,
@@ -444,12 +462,19 @@ EnterGameRsp = _reflection.GeneratedProtocolMessageType('EnterGameRsp', (_messag
   })
 _sym_db.RegisterMessage(EnterGameRsp)
 
-Disconnect = _reflection.GeneratedProtocolMessageType('Disconnect', (_message.Message,), {
-  'DESCRIPTOR' : _DISCONNECT,
+DisconnectReq = _reflection.GeneratedProtocolMessageType('DisconnectReq', (_message.Message,), {
+  'DESCRIPTOR' : _DISCONNECTREQ,
   '__module__' : 'proto.login_pb2'
-  # @@protoc_insertion_point(class_scope:Disconnect)
+  # @@protoc_insertion_point(class_scope:DisconnectReq)
   })
-_sym_db.RegisterMessage(Disconnect)
+_sym_db.RegisterMessage(DisconnectReq)
+
+DisconnectRsp = _reflection.GeneratedProtocolMessageType('DisconnectRsp', (_message.Message,), {
+  'DESCRIPTOR' : _DISCONNECTRSP,
+  '__module__' : 'proto.login_pb2'
+  # @@protoc_insertion_point(class_scope:DisconnectRsp)
+  })
+_sym_db.RegisterMessage(DisconnectRsp)
 
 
 DESCRIPTOR._options = None

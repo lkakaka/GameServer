@@ -15,7 +15,7 @@ message LoginRsp {
 	int32 err_code = 1;
 }
 
-message RoleInfo {
+message _RoleInfo {
 	int32 role_id = 1;
 	string role_name = 2;
 }
@@ -23,7 +23,7 @@ message RoleInfo {
 message LoadRoleListRsp {
 	string account = 1;
 	int32 err_code = 2;
-	repeated RoleInfo role_list = 3;
+	repeated _RoleInfo role_list = 3;
 }
 
 message CreateRoleReq {
@@ -33,7 +33,7 @@ message CreateRoleReq {
 
 message CreateRoleRsp {
 	int32 err_code = 1;
-	RoleInfo role_info = 2;
+	_RoleInfo role_info = 2;
 }
 
 message EnterGame {
@@ -43,11 +43,14 @@ message EnterGame {
 
 message EnterGameRsp {
 	int32 err_code = 1;
-	RoleInfo role_info = 2;
+	_RoleInfo role_info = 2;
 }
 
-message Disconnect {
-	int32 conn_id = 1;
-	string reason = 2;
+message DisconnectReq {
+	
+}
+
+message DisconnectRsp {
+	string reason = 1;
 }
 

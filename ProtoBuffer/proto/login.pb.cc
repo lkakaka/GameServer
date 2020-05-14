@@ -15,7 +15,7 @@
 #include <google/protobuf/wire_format.h>
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
-extern PROTOBUF_INTERNAL_EXPORT_proto_2flogin_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_RoleInfo_proto_2flogin_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_proto_2flogin_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info__RoleInfo_proto_2flogin_2eproto;
 class LoginReqDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<LoginReq> _instance;
@@ -24,10 +24,10 @@ class LoginRspDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<LoginRsp> _instance;
 } _LoginRsp_default_instance_;
-class RoleInfoDefaultTypeInternal {
+class _RoleInfoDefaultTypeInternal {
  public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<RoleInfo> _instance;
-} _RoleInfo_default_instance_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<_RoleInfo> _instance;
+} __RoleInfo_default_instance_;
 class LoadRoleListRspDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<LoadRoleListRsp> _instance;
@@ -48,10 +48,14 @@ class EnterGameRspDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<EnterGameRsp> _instance;
 } _EnterGameRsp_default_instance_;
-class DisconnectDefaultTypeInternal {
+class DisconnectReqDefaultTypeInternal {
  public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<Disconnect> _instance;
-} _Disconnect_default_instance_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<DisconnectReq> _instance;
+} _DisconnectReq_default_instance_;
+class DisconnectRspDefaultTypeInternal {
+ public:
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<DisconnectRsp> _instance;
+} _DisconnectRsp_default_instance_;
 static void InitDefaultsscc_info_CreateRoleReq_proto_2flogin_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
@@ -79,21 +83,35 @@ static void InitDefaultsscc_info_CreateRoleRsp_proto_2flogin_2eproto() {
 
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_CreateRoleRsp_proto_2flogin_2eproto =
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, InitDefaultsscc_info_CreateRoleRsp_proto_2flogin_2eproto}, {
-      &scc_info_RoleInfo_proto_2flogin_2eproto.base,}};
+      &scc_info__RoleInfo_proto_2flogin_2eproto.base,}};
 
-static void InitDefaultsscc_info_Disconnect_proto_2flogin_2eproto() {
+static void InitDefaultsscc_info_DisconnectReq_proto_2flogin_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   {
-    void* ptr = &::_Disconnect_default_instance_;
-    new (ptr) ::Disconnect();
+    void* ptr = &::_DisconnectReq_default_instance_;
+    new (ptr) ::DisconnectReq();
     ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::Disconnect::InitAsDefaultInstance();
+  ::DisconnectReq::InitAsDefaultInstance();
 }
 
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Disconnect_proto_2flogin_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info_Disconnect_proto_2flogin_2eproto}, {}};
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_DisconnectReq_proto_2flogin_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info_DisconnectReq_proto_2flogin_2eproto}, {}};
+
+static void InitDefaultsscc_info_DisconnectRsp_proto_2flogin_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::_DisconnectRsp_default_instance_;
+    new (ptr) ::DisconnectRsp();
+    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::DisconnectRsp::InitAsDefaultInstance();
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_DisconnectRsp_proto_2flogin_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info_DisconnectRsp_proto_2flogin_2eproto}, {}};
 
 static void InitDefaultsscc_info_EnterGame_proto_2flogin_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -122,7 +140,7 @@ static void InitDefaultsscc_info_EnterGameRsp_proto_2flogin_2eproto() {
 
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_EnterGameRsp_proto_2flogin_2eproto =
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, InitDefaultsscc_info_EnterGameRsp_proto_2flogin_2eproto}, {
-      &scc_info_RoleInfo_proto_2flogin_2eproto.base,}};
+      &scc_info__RoleInfo_proto_2flogin_2eproto.base,}};
 
 static void InitDefaultsscc_info_LoadRoleListRsp_proto_2flogin_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -137,7 +155,7 @@ static void InitDefaultsscc_info_LoadRoleListRsp_proto_2flogin_2eproto() {
 
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_LoadRoleListRsp_proto_2flogin_2eproto =
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, InitDefaultsscc_info_LoadRoleListRsp_proto_2flogin_2eproto}, {
-      &scc_info_RoleInfo_proto_2flogin_2eproto.base,}};
+      &scc_info__RoleInfo_proto_2flogin_2eproto.base,}};
 
 static void InitDefaultsscc_info_LoginReq_proto_2flogin_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -167,21 +185,21 @@ static void InitDefaultsscc_info_LoginRsp_proto_2flogin_2eproto() {
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_LoginRsp_proto_2flogin_2eproto =
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info_LoginRsp_proto_2flogin_2eproto}, {}};
 
-static void InitDefaultsscc_info_RoleInfo_proto_2flogin_2eproto() {
+static void InitDefaultsscc_info__RoleInfo_proto_2flogin_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   {
-    void* ptr = &::_RoleInfo_default_instance_;
-    new (ptr) ::RoleInfo();
+    void* ptr = &::__RoleInfo_default_instance_;
+    new (ptr) ::_RoleInfo();
     ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::RoleInfo::InitAsDefaultInstance();
+  ::_RoleInfo::InitAsDefaultInstance();
 }
 
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_RoleInfo_proto_2flogin_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info_RoleInfo_proto_2flogin_2eproto}, {}};
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info__RoleInfo_proto_2flogin_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info__RoleInfo_proto_2flogin_2eproto}, {}};
 
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_proto_2flogin_2eproto[9];
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_proto_2flogin_2eproto[10];
 static constexpr ::PROTOBUF_NAMESPACE_ID::EnumDescriptor const** file_level_enum_descriptors_proto_2flogin_2eproto = nullptr;
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_proto_2flogin_2eproto = nullptr;
 
@@ -201,12 +219,12 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_proto_2flogin_2eproto::offsets
   ~0u,  // no _weak_field_map_
   PROTOBUF_FIELD_OFFSET(::LoginRsp, err_code_),
   ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::RoleInfo, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::_RoleInfo, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::RoleInfo, role_id_),
-  PROTOBUF_FIELD_OFFSET(::RoleInfo, role_name_),
+  PROTOBUF_FIELD_OFFSET(::_RoleInfo, role_id_),
+  PROTOBUF_FIELD_OFFSET(::_RoleInfo, role_name_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::LoadRoleListRsp, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -244,73 +262,80 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_proto_2flogin_2eproto::offsets
   PROTOBUF_FIELD_OFFSET(::EnterGameRsp, err_code_),
   PROTOBUF_FIELD_OFFSET(::EnterGameRsp, role_info_),
   ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::Disconnect, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::DisconnectReq, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::Disconnect, conn_id_),
-  PROTOBUF_FIELD_OFFSET(::Disconnect, reason_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::DisconnectRsp, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::DisconnectRsp, reason_),
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, sizeof(::LoginReq)},
   { 8, -1, sizeof(::LoginRsp)},
-  { 14, -1, sizeof(::RoleInfo)},
+  { 14, -1, sizeof(::_RoleInfo)},
   { 21, -1, sizeof(::LoadRoleListRsp)},
   { 29, -1, sizeof(::CreateRoleReq)},
   { 36, -1, sizeof(::CreateRoleRsp)},
   { 43, -1, sizeof(::EnterGame)},
   { 50, -1, sizeof(::EnterGameRsp)},
-  { 57, -1, sizeof(::Disconnect)},
+  { 57, -1, sizeof(::DisconnectReq)},
+  { 62, -1, sizeof(::DisconnectRsp)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_LoginReq_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_LoginRsp_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_RoleInfo_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::__RoleInfo_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_LoadRoleListRsp_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_CreateRoleReq_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_CreateRoleRsp_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_EnterGame_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_EnterGameRsp_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_Disconnect_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_DisconnectReq_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_DisconnectRsp_default_instance_),
 };
 
 const char descriptor_table_protodef_proto_2flogin_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n\021proto/login.proto\"9\n\010LoginReq\022\017\n\007accou"
   "nt\030\001 \001(\t\022\013\n\003pwd\030\002 \001(\t\022\017\n\007conn_id\030\003 \001(\005\"\034"
-  "\n\010LoginRsp\022\020\n\010err_code\030\001 \001(\005\".\n\010RoleInfo"
-  "\022\017\n\007role_id\030\001 \001(\005\022\021\n\trole_name\030\002 \001(\t\"R\n\017"
-  "LoadRoleListRsp\022\017\n\007account\030\001 \001(\t\022\020\n\010err_"
-  "code\030\002 \001(\005\022\034\n\trole_list\030\003 \003(\0132\t.RoleInfo"
-  "\"3\n\rCreateRoleReq\022\017\n\007account\030\001 \001(\t\022\021\n\tro"
-  "le_name\030\002 \001(\t\"\?\n\rCreateRoleRsp\022\020\n\010err_co"
-  "de\030\001 \001(\005\022\034\n\trole_info\030\002 \001(\0132\t.RoleInfo\"-"
-  "\n\tEnterGame\022\017\n\007role_id\030\001 \001(\005\022\017\n\007account\030"
-  "\002 \001(\t\">\n\014EnterGameRsp\022\020\n\010err_code\030\001 \001(\005\022"
-  "\034\n\trole_info\030\002 \001(\0132\t.RoleInfo\"-\n\nDisconn"
-  "ect\022\017\n\007conn_id\030\001 \001(\005\022\016\n\006reason\030\002 \001(\tB\022\n\t"
-  "com.protoB\005Loginb\006proto3"
+  "\n\010LoginRsp\022\020\n\010err_code\030\001 \001(\005\"/\n\t_RoleInf"
+  "o\022\017\n\007role_id\030\001 \001(\005\022\021\n\trole_name\030\002 \001(\t\"S\n"
+  "\017LoadRoleListRsp\022\017\n\007account\030\001 \001(\t\022\020\n\010err"
+  "_code\030\002 \001(\005\022\035\n\trole_list\030\003 \003(\0132\n._RoleIn"
+  "fo\"3\n\rCreateRoleReq\022\017\n\007account\030\001 \001(\t\022\021\n\t"
+  "role_name\030\002 \001(\t\"@\n\rCreateRoleRsp\022\020\n\010err_"
+  "code\030\001 \001(\005\022\035\n\trole_info\030\002 \001(\0132\n._RoleInf"
+  "o\"-\n\tEnterGame\022\017\n\007role_id\030\001 \001(\005\022\017\n\007accou"
+  "nt\030\002 \001(\t\"\?\n\014EnterGameRsp\022\020\n\010err_code\030\001 \001"
+  "(\005\022\035\n\trole_info\030\002 \001(\0132\n._RoleInfo\"\017\n\rDis"
+  "connectReq\"\037\n\rDisconnectRsp\022\016\n\006reason\030\001 "
+  "\001(\tB\022\n\tcom.protoB\005Loginb\006proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_proto_2flogin_2eproto_deps[1] = {
 };
-static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_proto_2flogin_2eproto_sccs[9] = {
+static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_proto_2flogin_2eproto_sccs[10] = {
   &scc_info_CreateRoleReq_proto_2flogin_2eproto.base,
   &scc_info_CreateRoleRsp_proto_2flogin_2eproto.base,
-  &scc_info_Disconnect_proto_2flogin_2eproto.base,
+  &scc_info_DisconnectReq_proto_2flogin_2eproto.base,
+  &scc_info_DisconnectRsp_proto_2flogin_2eproto.base,
   &scc_info_EnterGame_proto_2flogin_2eproto.base,
   &scc_info_EnterGameRsp_proto_2flogin_2eproto.base,
   &scc_info_LoadRoleListRsp_proto_2flogin_2eproto.base,
   &scc_info_LoginReq_proto_2flogin_2eproto.base,
   &scc_info_LoginRsp_proto_2flogin_2eproto.base,
-  &scc_info_RoleInfo_proto_2flogin_2eproto.base,
+  &scc_info__RoleInfo_proto_2flogin_2eproto.base,
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_proto_2flogin_2eproto_once;
 static bool descriptor_table_proto_2flogin_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_proto_2flogin_2eproto = {
-  &descriptor_table_proto_2flogin_2eproto_initialized, descriptor_table_protodef_proto_2flogin_2eproto, "proto/login.proto", 544,
-  &descriptor_table_proto_2flogin_2eproto_once, descriptor_table_proto_2flogin_2eproto_sccs, descriptor_table_proto_2flogin_2eproto_deps, 9, 0,
+  &descriptor_table_proto_2flogin_2eproto_initialized, descriptor_table_protodef_proto_2flogin_2eproto, "proto/login.proto", 551,
+  &descriptor_table_proto_2flogin_2eproto_once, descriptor_table_proto_2flogin_2eproto_sccs, descriptor_table_proto_2flogin_2eproto_deps, 10, 0,
   schemas, file_default_instances, TableStruct_proto_2flogin_2eproto::offsets,
-  file_level_metadata_proto_2flogin_2eproto, 9, file_level_enum_descriptors_proto_2flogin_2eproto, file_level_service_descriptors_proto_2flogin_2eproto,
+  file_level_metadata_proto_2flogin_2eproto, 10, file_level_enum_descriptors_proto_2flogin_2eproto, file_level_service_descriptors_proto_2flogin_2eproto,
 };
 
 // Force running AddDescriptors() at dynamic initialization time.
@@ -943,18 +968,18 @@ void LoginRsp::InternalSwap(LoginRsp* other) {
 
 // ===================================================================
 
-void RoleInfo::InitAsDefaultInstance() {
+void _RoleInfo::InitAsDefaultInstance() {
 }
-class RoleInfo::_Internal {
+class _RoleInfo::_Internal {
  public:
 };
 
-RoleInfo::RoleInfo()
+_RoleInfo::_RoleInfo()
   : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
   SharedCtor();
-  // @@protoc_insertion_point(constructor:RoleInfo)
+  // @@protoc_insertion_point(constructor:_RoleInfo)
 }
-RoleInfo::RoleInfo(const RoleInfo& from)
+_RoleInfo::_RoleInfo(const _RoleInfo& from)
   : ::PROTOBUF_NAMESPACE_ID::Message(),
       _internal_metadata_(nullptr) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
@@ -963,35 +988,35 @@ RoleInfo::RoleInfo(const RoleInfo& from)
     role_name_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.role_name_);
   }
   role_id_ = from.role_id_;
-  // @@protoc_insertion_point(copy_constructor:RoleInfo)
+  // @@protoc_insertion_point(copy_constructor:_RoleInfo)
 }
 
-void RoleInfo::SharedCtor() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_RoleInfo_proto_2flogin_2eproto.base);
+void _RoleInfo::SharedCtor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info__RoleInfo_proto_2flogin_2eproto.base);
   role_name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   role_id_ = 0;
 }
 
-RoleInfo::~RoleInfo() {
-  // @@protoc_insertion_point(destructor:RoleInfo)
+_RoleInfo::~_RoleInfo() {
+  // @@protoc_insertion_point(destructor:_RoleInfo)
   SharedDtor();
 }
 
-void RoleInfo::SharedDtor() {
+void _RoleInfo::SharedDtor() {
   role_name_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 
-void RoleInfo::SetCachedSize(int size) const {
+void _RoleInfo::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
-const RoleInfo& RoleInfo::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_RoleInfo_proto_2flogin_2eproto.base);
+const _RoleInfo& _RoleInfo::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info__RoleInfo_proto_2flogin_2eproto.base);
   return *internal_default_instance();
 }
 
 
-void RoleInfo::Clear() {
-// @@protoc_insertion_point(message_clear_start:RoleInfo)
+void _RoleInfo::Clear() {
+// @@protoc_insertion_point(message_clear_start:_RoleInfo)
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -1002,7 +1027,7 @@ void RoleInfo::Clear() {
 }
 
 #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-const char* RoleInfo::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* _RoleInfo::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
@@ -1019,7 +1044,7 @@ const char* RoleInfo::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::i
       // string role_name = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
-          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8(mutable_role_name(), ptr, ctx, "RoleInfo.role_name");
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8(mutable_role_name(), ptr, ctx, "_RoleInfo.role_name");
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -1043,11 +1068,11 @@ failure:
 #undef CHK_
 }
 #else  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-bool RoleInfo::MergePartialFromCodedStream(
+bool _RoleInfo::MergePartialFromCodedStream(
     ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!PROTOBUF_PREDICT_TRUE(EXPRESSION)) goto failure
   ::PROTOBUF_NAMESPACE_ID::uint32 tag;
-  // @@protoc_insertion_point(parse_start:RoleInfo)
+  // @@protoc_insertion_point(parse_start:_RoleInfo)
   for (;;) {
     ::std::pair<::PROTOBUF_NAMESPACE_ID::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -1074,7 +1099,7 @@ bool RoleInfo::MergePartialFromCodedStream(
           DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
             this->role_name().data(), static_cast<int>(this->role_name().length()),
             ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::PARSE,
-            "RoleInfo.role_name"));
+            "_RoleInfo.role_name"));
         } else {
           goto handle_unusual;
         }
@@ -1093,18 +1118,18 @@ bool RoleInfo::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:RoleInfo)
+  // @@protoc_insertion_point(parse_success:_RoleInfo)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:RoleInfo)
+  // @@protoc_insertion_point(parse_failure:_RoleInfo)
   return false;
 #undef DO_
 }
 #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
 
-void RoleInfo::SerializeWithCachedSizes(
+void _RoleInfo::SerializeWithCachedSizes(
     ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:RoleInfo)
+  // @@protoc_insertion_point(serialize_start:_RoleInfo)
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -1118,7 +1143,7 @@ void RoleInfo::SerializeWithCachedSizes(
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->role_name().data(), static_cast<int>(this->role_name().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "RoleInfo.role_name");
+      "_RoleInfo.role_name");
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringMaybeAliased(
       2, this->role_name(), output);
   }
@@ -1127,12 +1152,12 @@ void RoleInfo::SerializeWithCachedSizes(
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFields(
         _internal_metadata_.unknown_fields(), output);
   }
-  // @@protoc_insertion_point(serialize_end:RoleInfo)
+  // @@protoc_insertion_point(serialize_end:_RoleInfo)
 }
 
-::PROTOBUF_NAMESPACE_ID::uint8* RoleInfo::InternalSerializeWithCachedSizesToArray(
+::PROTOBUF_NAMESPACE_ID::uint8* _RoleInfo::InternalSerializeWithCachedSizesToArray(
     ::PROTOBUF_NAMESPACE_ID::uint8* target) const {
-  // @@protoc_insertion_point(serialize_to_array_start:RoleInfo)
+  // @@protoc_insertion_point(serialize_to_array_start:_RoleInfo)
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -1146,7 +1171,7 @@ void RoleInfo::SerializeWithCachedSizes(
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->role_name().data(), static_cast<int>(this->role_name().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "RoleInfo.role_name");
+      "_RoleInfo.role_name");
     target =
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringToArray(
         2, this->role_name(), target);
@@ -1156,12 +1181,12 @@ void RoleInfo::SerializeWithCachedSizes(
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields(), target);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:RoleInfo)
+  // @@protoc_insertion_point(serialize_to_array_end:_RoleInfo)
   return target;
 }
 
-size_t RoleInfo::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:RoleInfo)
+size_t _RoleInfo::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:_RoleInfo)
   size_t total_size = 0;
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -1192,23 +1217,23 @@ size_t RoleInfo::ByteSizeLong() const {
   return total_size;
 }
 
-void RoleInfo::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:RoleInfo)
+void _RoleInfo::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:_RoleInfo)
   GOOGLE_DCHECK_NE(&from, this);
-  const RoleInfo* source =
-      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<RoleInfo>(
+  const _RoleInfo* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<_RoleInfo>(
           &from);
   if (source == nullptr) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:RoleInfo)
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:_RoleInfo)
     ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
   } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:RoleInfo)
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:_RoleInfo)
     MergeFrom(*source);
   }
 }
 
-void RoleInfo::MergeFrom(const RoleInfo& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:RoleInfo)
+void _RoleInfo::MergeFrom(const _RoleInfo& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:_RoleInfo)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
@@ -1223,25 +1248,25 @@ void RoleInfo::MergeFrom(const RoleInfo& from) {
   }
 }
 
-void RoleInfo::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:RoleInfo)
+void _RoleInfo::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:_RoleInfo)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-void RoleInfo::CopyFrom(const RoleInfo& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:RoleInfo)
+void _RoleInfo::CopyFrom(const _RoleInfo& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:_RoleInfo)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool RoleInfo::IsInitialized() const {
+bool _RoleInfo::IsInitialized() const {
   return true;
 }
 
-void RoleInfo::InternalSwap(RoleInfo* other) {
+void _RoleInfo::InternalSwap(_RoleInfo* other) {
   using std::swap;
   _internal_metadata_.Swap(&other->_internal_metadata_);
   role_name_.Swap(&other->role_name_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
@@ -1249,7 +1274,7 @@ void RoleInfo::InternalSwap(RoleInfo* other) {
   swap(role_id_, other->role_id_);
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata RoleInfo::GetMetadata() const {
+::PROTOBUF_NAMESPACE_ID::Metadata _RoleInfo::GetMetadata() const {
   return GetMetadataStatic();
 }
 
@@ -1338,7 +1363,7 @@ const char* LoadRoleListRsp::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPAC
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // repeated .RoleInfo role_list = 3;
+      // repeated ._RoleInfo role_list = 3;
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
           ptr -= 1;
@@ -1408,7 +1433,7 @@ bool LoadRoleListRsp::MergePartialFromCodedStream(
         break;
       }
 
-      // repeated .RoleInfo role_list = 3;
+      // repeated ._RoleInfo role_list = 3;
       case 3: {
         if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (26 & 0xFF)) {
           DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadMessage(
@@ -1461,7 +1486,7 @@ void LoadRoleListRsp::SerializeWithCachedSizes(
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32(2, this->err_code(), output);
   }
 
-  // repeated .RoleInfo role_list = 3;
+  // repeated ._RoleInfo role_list = 3;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->role_list_size()); i < n; i++) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteMessageMaybeToArray(
@@ -1499,7 +1524,7 @@ void LoadRoleListRsp::SerializeWithCachedSizes(
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->err_code(), target);
   }
 
-  // repeated .RoleInfo role_list = 3;
+  // repeated ._RoleInfo role_list = 3;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->role_list_size()); i < n; i++) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
@@ -1528,7 +1553,7 @@ size_t LoadRoleListRsp::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // repeated .RoleInfo role_list = 3;
+  // repeated ._RoleInfo role_list = 3;
   {
     unsigned int count = static_cast<unsigned int>(this->role_list_size());
     total_size += 1UL * count;
@@ -1957,15 +1982,15 @@ void CreateRoleReq::InternalSwap(CreateRoleReq* other) {
 // ===================================================================
 
 void CreateRoleRsp::InitAsDefaultInstance() {
-  ::_CreateRoleRsp_default_instance_._instance.get_mutable()->role_info_ = const_cast< ::RoleInfo*>(
-      ::RoleInfo::internal_default_instance());
+  ::_CreateRoleRsp_default_instance_._instance.get_mutable()->role_info_ = const_cast< ::_RoleInfo*>(
+      ::_RoleInfo::internal_default_instance());
 }
 class CreateRoleRsp::_Internal {
  public:
-  static const ::RoleInfo& role_info(const CreateRoleRsp* msg);
+  static const ::_RoleInfo& role_info(const CreateRoleRsp* msg);
 };
 
-const ::RoleInfo&
+const ::_RoleInfo&
 CreateRoleRsp::_Internal::role_info(const CreateRoleRsp* msg) {
   return *msg->role_info_;
 }
@@ -1979,7 +2004,7 @@ CreateRoleRsp::CreateRoleRsp(const CreateRoleRsp& from)
       _internal_metadata_(nullptr) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   if (from.has_role_info()) {
-    role_info_ = new ::RoleInfo(*from.role_info_);
+    role_info_ = new ::_RoleInfo(*from.role_info_);
   } else {
     role_info_ = nullptr;
   }
@@ -2041,7 +2066,7 @@ const char* CreateRoleRsp::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // .RoleInfo role_info = 2;
+      // ._RoleInfo role_info = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
           ptr = ctx->ParseMessage(mutable_role_info(), ptr);
@@ -2091,7 +2116,7 @@ bool CreateRoleRsp::MergePartialFromCodedStream(
         break;
       }
 
-      // .RoleInfo role_info = 2;
+      // ._RoleInfo role_info = 2;
       case 2: {
         if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (18 & 0xFF)) {
           DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadMessage(
@@ -2134,7 +2159,7 @@ void CreateRoleRsp::SerializeWithCachedSizes(
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32(1, this->err_code(), output);
   }
 
-  // .RoleInfo role_info = 2;
+  // ._RoleInfo role_info = 2;
   if (this->has_role_info()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteMessageMaybeToArray(
       2, _Internal::role_info(this), output);
@@ -2158,7 +2183,7 @@ void CreateRoleRsp::SerializeWithCachedSizes(
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->err_code(), target);
   }
 
-  // .RoleInfo role_info = 2;
+  // ._RoleInfo role_info = 2;
   if (this->has_role_info()) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessageToArray(
@@ -2186,7 +2211,7 @@ size_t CreateRoleRsp::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // .RoleInfo role_info = 2;
+  // ._RoleInfo role_info = 2;
   if (this->has_role_info()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
@@ -2228,7 +2253,7 @@ void CreateRoleRsp::MergeFrom(const CreateRoleRsp& from) {
   (void) cached_has_bits;
 
   if (from.has_role_info()) {
-    mutable_role_info()->::RoleInfo::MergeFrom(from.role_info());
+    mutable_role_info()->::_RoleInfo::MergeFrom(from.role_info());
   }
   if (from.err_code() != 0) {
     set_err_code(from.err_code());
@@ -2581,15 +2606,15 @@ void EnterGame::InternalSwap(EnterGame* other) {
 // ===================================================================
 
 void EnterGameRsp::InitAsDefaultInstance() {
-  ::_EnterGameRsp_default_instance_._instance.get_mutable()->role_info_ = const_cast< ::RoleInfo*>(
-      ::RoleInfo::internal_default_instance());
+  ::_EnterGameRsp_default_instance_._instance.get_mutable()->role_info_ = const_cast< ::_RoleInfo*>(
+      ::_RoleInfo::internal_default_instance());
 }
 class EnterGameRsp::_Internal {
  public:
-  static const ::RoleInfo& role_info(const EnterGameRsp* msg);
+  static const ::_RoleInfo& role_info(const EnterGameRsp* msg);
 };
 
-const ::RoleInfo&
+const ::_RoleInfo&
 EnterGameRsp::_Internal::role_info(const EnterGameRsp* msg) {
   return *msg->role_info_;
 }
@@ -2603,7 +2628,7 @@ EnterGameRsp::EnterGameRsp(const EnterGameRsp& from)
       _internal_metadata_(nullptr) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   if (from.has_role_info()) {
-    role_info_ = new ::RoleInfo(*from.role_info_);
+    role_info_ = new ::_RoleInfo(*from.role_info_);
   } else {
     role_info_ = nullptr;
   }
@@ -2665,7 +2690,7 @@ const char* EnterGameRsp::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_I
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // .RoleInfo role_info = 2;
+      // ._RoleInfo role_info = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
           ptr = ctx->ParseMessage(mutable_role_info(), ptr);
@@ -2715,7 +2740,7 @@ bool EnterGameRsp::MergePartialFromCodedStream(
         break;
       }
 
-      // .RoleInfo role_info = 2;
+      // ._RoleInfo role_info = 2;
       case 2: {
         if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (18 & 0xFF)) {
           DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadMessage(
@@ -2758,7 +2783,7 @@ void EnterGameRsp::SerializeWithCachedSizes(
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32(1, this->err_code(), output);
   }
 
-  // .RoleInfo role_info = 2;
+  // ._RoleInfo role_info = 2;
   if (this->has_role_info()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteMessageMaybeToArray(
       2, _Internal::role_info(this), output);
@@ -2782,7 +2807,7 @@ void EnterGameRsp::SerializeWithCachedSizes(
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->err_code(), target);
   }
 
-  // .RoleInfo role_info = 2;
+  // ._RoleInfo role_info = 2;
   if (this->has_role_info()) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessageToArray(
@@ -2810,7 +2835,7 @@ size_t EnterGameRsp::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // .RoleInfo role_info = 2;
+  // ._RoleInfo role_info = 2;
   if (this->has_role_info()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
@@ -2852,7 +2877,7 @@ void EnterGameRsp::MergeFrom(const EnterGameRsp& from) {
   (void) cached_has_bits;
 
   if (from.has_role_info()) {
-    mutable_role_info()->::RoleInfo::MergeFrom(from.role_info());
+    mutable_role_info()->::_RoleInfo::MergeFrom(from.role_info());
   }
   if (from.err_code() != 0) {
     set_err_code(from.err_code());
@@ -2891,18 +2916,217 @@ void EnterGameRsp::InternalSwap(EnterGameRsp* other) {
 
 // ===================================================================
 
-void Disconnect::InitAsDefaultInstance() {
+void DisconnectReq::InitAsDefaultInstance() {
 }
-class Disconnect::_Internal {
+class DisconnectReq::_Internal {
  public:
 };
 
-Disconnect::Disconnect()
+DisconnectReq::DisconnectReq()
   : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
   SharedCtor();
-  // @@protoc_insertion_point(constructor:Disconnect)
+  // @@protoc_insertion_point(constructor:DisconnectReq)
 }
-Disconnect::Disconnect(const Disconnect& from)
+DisconnectReq::DisconnectReq(const DisconnectReq& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      _internal_metadata_(nullptr) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:DisconnectReq)
+}
+
+void DisconnectReq::SharedCtor() {
+}
+
+DisconnectReq::~DisconnectReq() {
+  // @@protoc_insertion_point(destructor:DisconnectReq)
+  SharedDtor();
+}
+
+void DisconnectReq::SharedDtor() {
+}
+
+void DisconnectReq::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const DisconnectReq& DisconnectReq::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_DisconnectReq_proto_2flogin_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void DisconnectReq::Clear() {
+// @@protoc_insertion_point(message_clear_start:DisconnectReq)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _internal_metadata_.Clear();
+}
+
+#if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+const char* DisconnectReq::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    CHK_(ptr);
+    switch (tag >> 3) {
+      default: {
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag, &_internal_metadata_, ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+#else  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+bool DisconnectReq::MergePartialFromCodedStream(
+    ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!PROTOBUF_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+  // @@protoc_insertion_point(parse_start:DisconnectReq)
+  for (;;) {
+    ::std::pair<::PROTOBUF_NAMESPACE_ID::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+  handle_unusual:
+    if (tag == 0) {
+      goto success;
+    }
+    DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SkipField(
+          input, tag, _internal_metadata_.mutable_unknown_fields()));
+  }
+success:
+  // @@protoc_insertion_point(parse_success:DisconnectReq)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:DisconnectReq)
+  return false;
+#undef DO_
+}
+#endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+
+void DisconnectReq::SerializeWithCachedSizes(
+    ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:DisconnectReq)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFields(
+        _internal_metadata_.unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:DisconnectReq)
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* DisconnectReq::InternalSerializeWithCachedSizesToArray(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:DisconnectReq)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:DisconnectReq)
+  return target;
+}
+
+size_t DisconnectReq::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:DisconnectReq)
+  size_t total_size = 0;
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::ComputeUnknownFieldsSize(
+        _internal_metadata_.unknown_fields());
+  }
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void DisconnectReq::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:DisconnectReq)
+  GOOGLE_DCHECK_NE(&from, this);
+  const DisconnectReq* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<DisconnectReq>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:DisconnectReq)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:DisconnectReq)
+    MergeFrom(*source);
+  }
+}
+
+void DisconnectReq::MergeFrom(const DisconnectReq& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:DisconnectReq)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+}
+
+void DisconnectReq::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:DisconnectReq)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void DisconnectReq::CopyFrom(const DisconnectReq& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:DisconnectReq)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool DisconnectReq::IsInitialized() const {
+  return true;
+}
+
+void DisconnectReq::InternalSwap(DisconnectReq* other) {
+  using std::swap;
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata DisconnectReq::GetMetadata() const {
+  return GetMetadataStatic();
+}
+
+
+// ===================================================================
+
+void DisconnectRsp::InitAsDefaultInstance() {
+}
+class DisconnectRsp::_Internal {
+ public:
+};
+
+DisconnectRsp::DisconnectRsp()
+  : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:DisconnectRsp)
+}
+DisconnectRsp::DisconnectRsp(const DisconnectRsp& from)
   : ::PROTOBUF_NAMESPACE_ID::Message(),
       _internal_metadata_(nullptr) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
@@ -2910,64 +3134,54 @@ Disconnect::Disconnect(const Disconnect& from)
   if (!from.reason().empty()) {
     reason_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.reason_);
   }
-  conn_id_ = from.conn_id_;
-  // @@protoc_insertion_point(copy_constructor:Disconnect)
+  // @@protoc_insertion_point(copy_constructor:DisconnectRsp)
 }
 
-void Disconnect::SharedCtor() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_Disconnect_proto_2flogin_2eproto.base);
+void DisconnectRsp::SharedCtor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_DisconnectRsp_proto_2flogin_2eproto.base);
   reason_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  conn_id_ = 0;
 }
 
-Disconnect::~Disconnect() {
-  // @@protoc_insertion_point(destructor:Disconnect)
+DisconnectRsp::~DisconnectRsp() {
+  // @@protoc_insertion_point(destructor:DisconnectRsp)
   SharedDtor();
 }
 
-void Disconnect::SharedDtor() {
+void DisconnectRsp::SharedDtor() {
   reason_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 
-void Disconnect::SetCachedSize(int size) const {
+void DisconnectRsp::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
-const Disconnect& Disconnect::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_Disconnect_proto_2flogin_2eproto.base);
+const DisconnectRsp& DisconnectRsp::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_DisconnectRsp_proto_2flogin_2eproto.base);
   return *internal_default_instance();
 }
 
 
-void Disconnect::Clear() {
-// @@protoc_insertion_point(message_clear_start:Disconnect)
+void DisconnectRsp::Clear() {
+// @@protoc_insertion_point(message_clear_start:DisconnectRsp)
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
   reason_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  conn_id_ = 0;
   _internal_metadata_.Clear();
 }
 
 #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-const char* Disconnect::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* DisconnectRsp::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     CHK_(ptr);
     switch (tag >> 3) {
-      // int32 conn_id = 1;
+      // string reason = 1;
       case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
-          conn_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
-          CHK_(ptr);
-        } else goto handle_unusual;
-        continue;
-      // string reason = 2;
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
-          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8(mutable_reason(), ptr, ctx, "Disconnect.reason");
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8(mutable_reason(), ptr, ctx, "DisconnectRsp.reason");
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -2991,38 +3205,25 @@ failure:
 #undef CHK_
 }
 #else  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-bool Disconnect::MergePartialFromCodedStream(
+bool DisconnectRsp::MergePartialFromCodedStream(
     ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!PROTOBUF_PREDICT_TRUE(EXPRESSION)) goto failure
   ::PROTOBUF_NAMESPACE_ID::uint32 tag;
-  // @@protoc_insertion_point(parse_start:Disconnect)
+  // @@protoc_insertion_point(parse_start:DisconnectRsp)
   for (;;) {
     ::std::pair<::PROTOBUF_NAMESPACE_ID::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // int32 conn_id = 1;
+      // string reason = 1;
       case 1: {
-        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (8 & 0xFF)) {
-
-          DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
-                   ::PROTOBUF_NAMESPACE_ID::int32, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_INT32>(
-                 input, &conn_id_)));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      // string reason = 2;
-      case 2: {
-        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (18 & 0xFF)) {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (10 & 0xFF)) {
           DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadString(
                 input, this->mutable_reason()));
           DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
             this->reason().data(), static_cast<int>(this->reason().length()),
             ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::PARSE,
-            "Disconnect.reason"));
+            "DisconnectRsp.reason"));
         } else {
           goto handle_unusual;
         }
@@ -3041,75 +3242,65 @@ bool Disconnect::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:Disconnect)
+  // @@protoc_insertion_point(parse_success:DisconnectRsp)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:Disconnect)
+  // @@protoc_insertion_point(parse_failure:DisconnectRsp)
   return false;
 #undef DO_
 }
 #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
 
-void Disconnect::SerializeWithCachedSizes(
+void DisconnectRsp::SerializeWithCachedSizes(
     ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:Disconnect)
+  // @@protoc_insertion_point(serialize_start:DisconnectRsp)
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // int32 conn_id = 1;
-  if (this->conn_id() != 0) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32(1, this->conn_id(), output);
-  }
-
-  // string reason = 2;
+  // string reason = 1;
   if (this->reason().size() > 0) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->reason().data(), static_cast<int>(this->reason().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "Disconnect.reason");
+      "DisconnectRsp.reason");
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringMaybeAliased(
-      2, this->reason(), output);
+      1, this->reason(), output);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFields(
         _internal_metadata_.unknown_fields(), output);
   }
-  // @@protoc_insertion_point(serialize_end:Disconnect)
+  // @@protoc_insertion_point(serialize_end:DisconnectRsp)
 }
 
-::PROTOBUF_NAMESPACE_ID::uint8* Disconnect::InternalSerializeWithCachedSizesToArray(
+::PROTOBUF_NAMESPACE_ID::uint8* DisconnectRsp::InternalSerializeWithCachedSizesToArray(
     ::PROTOBUF_NAMESPACE_ID::uint8* target) const {
-  // @@protoc_insertion_point(serialize_to_array_start:Disconnect)
+  // @@protoc_insertion_point(serialize_to_array_start:DisconnectRsp)
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // int32 conn_id = 1;
-  if (this->conn_id() != 0) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->conn_id(), target);
-  }
-
-  // string reason = 2;
+  // string reason = 1;
   if (this->reason().size() > 0) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->reason().data(), static_cast<int>(this->reason().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "Disconnect.reason");
+      "DisconnectRsp.reason");
     target =
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringToArray(
-        2, this->reason(), target);
+        1, this->reason(), target);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields(), target);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:Disconnect)
+  // @@protoc_insertion_point(serialize_to_array_end:DisconnectRsp)
   return target;
 }
 
-size_t Disconnect::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:Disconnect)
+size_t DisconnectRsp::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:DisconnectRsp)
   size_t total_size = 0;
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -3121,18 +3312,11 @@ size_t Disconnect::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // string reason = 2;
+  // string reason = 1;
   if (this->reason().size() > 0) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->reason());
-  }
-
-  // int32 conn_id = 1;
-  if (this->conn_id() != 0) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-        this->conn_id());
   }
 
   int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
@@ -3140,23 +3324,23 @@ size_t Disconnect::ByteSizeLong() const {
   return total_size;
 }
 
-void Disconnect::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:Disconnect)
+void DisconnectRsp::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:DisconnectRsp)
   GOOGLE_DCHECK_NE(&from, this);
-  const Disconnect* source =
-      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<Disconnect>(
+  const DisconnectRsp* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<DisconnectRsp>(
           &from);
   if (source == nullptr) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:Disconnect)
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:DisconnectRsp)
     ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
   } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:Disconnect)
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:DisconnectRsp)
     MergeFrom(*source);
   }
 }
 
-void Disconnect::MergeFrom(const Disconnect& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:Disconnect)
+void DisconnectRsp::MergeFrom(const DisconnectRsp& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:DisconnectRsp)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
@@ -3166,38 +3350,34 @@ void Disconnect::MergeFrom(const Disconnect& from) {
 
     reason_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.reason_);
   }
-  if (from.conn_id() != 0) {
-    set_conn_id(from.conn_id());
-  }
 }
 
-void Disconnect::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:Disconnect)
+void DisconnectRsp::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:DisconnectRsp)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-void Disconnect::CopyFrom(const Disconnect& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:Disconnect)
+void DisconnectRsp::CopyFrom(const DisconnectRsp& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:DisconnectRsp)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool Disconnect::IsInitialized() const {
+bool DisconnectRsp::IsInitialized() const {
   return true;
 }
 
-void Disconnect::InternalSwap(Disconnect* other) {
+void DisconnectRsp::InternalSwap(DisconnectRsp* other) {
   using std::swap;
   _internal_metadata_.Swap(&other->_internal_metadata_);
   reason_.Swap(&other->reason_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
     GetArenaNoVirtual());
-  swap(conn_id_, other->conn_id_);
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata Disconnect::GetMetadata() const {
+::PROTOBUF_NAMESPACE_ID::Metadata DisconnectRsp::GetMetadata() const {
   return GetMetadataStatic();
 }
 
@@ -3210,8 +3390,8 @@ template<> PROTOBUF_NOINLINE ::LoginReq* Arena::CreateMaybeMessage< ::LoginReq >
 template<> PROTOBUF_NOINLINE ::LoginRsp* Arena::CreateMaybeMessage< ::LoginRsp >(Arena* arena) {
   return Arena::CreateInternal< ::LoginRsp >(arena);
 }
-template<> PROTOBUF_NOINLINE ::RoleInfo* Arena::CreateMaybeMessage< ::RoleInfo >(Arena* arena) {
-  return Arena::CreateInternal< ::RoleInfo >(arena);
+template<> PROTOBUF_NOINLINE ::_RoleInfo* Arena::CreateMaybeMessage< ::_RoleInfo >(Arena* arena) {
+  return Arena::CreateInternal< ::_RoleInfo >(arena);
 }
 template<> PROTOBUF_NOINLINE ::LoadRoleListRsp* Arena::CreateMaybeMessage< ::LoadRoleListRsp >(Arena* arena) {
   return Arena::CreateInternal< ::LoadRoleListRsp >(arena);
@@ -3228,8 +3408,11 @@ template<> PROTOBUF_NOINLINE ::EnterGame* Arena::CreateMaybeMessage< ::EnterGame
 template<> PROTOBUF_NOINLINE ::EnterGameRsp* Arena::CreateMaybeMessage< ::EnterGameRsp >(Arena* arena) {
   return Arena::CreateInternal< ::EnterGameRsp >(arena);
 }
-template<> PROTOBUF_NOINLINE ::Disconnect* Arena::CreateMaybeMessage< ::Disconnect >(Arena* arena) {
-  return Arena::CreateInternal< ::Disconnect >(arena);
+template<> PROTOBUF_NOINLINE ::DisconnectReq* Arena::CreateMaybeMessage< ::DisconnectReq >(Arena* arena) {
+  return Arena::CreateInternal< ::DisconnectReq >(arena);
+}
+template<> PROTOBUF_NOINLINE ::DisconnectRsp* Arena::CreateMaybeMessage< ::DisconnectRsp >(Arena* arena) {
+  return Arena::CreateInternal< ::DisconnectRsp >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
 

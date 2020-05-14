@@ -65,12 +65,13 @@ void MessageMgr::onRecvData(char* sender, char* data, int dataLen) {
 	int msgId = 0;
 	MyBuffer buffer(data, dataLen);
 	if (strcmp(sender, "gateway") == 0) {
-		if (dataLen <= 8) {
-			Logger::logError("$recv msg format error, data len <= 8");
+		if (dataLen <= 9) {
+			Logger::logError("$recv gateway msg format error, data len <= 9");
 			return;
 		}
-		int connId = buffer.readIntEx();
-		msgId = buffer.readIntEx();
+		bool isClientMsg = (buffer.readByte(true) == 0);
+		int connId = buffer.readInt(true);
+		msgId = buffer.readInt(true);
 		////google::protobuf::Message* msg = (google::protobuf::Message*)CreateMsgById(msgId);
 		//std::shared_ptr<google::protobuf::Message> msg = CreateMsgById(msgId);
 		//if (msg == NULL) {
@@ -78,17 +79,26 @@ void MessageMgr::onRecvData(char* sender, char* data, int dataLen) {
 		//	return;
 		//}
 		//msg->ParseFromArray(&data[8], dataLen - 8);
-		char* msgData = &data[8];
-		int msgLen = dataLen - 8;
+		char* msgData = &data[9];
+		int msgLen = dataLen - 9;
 		if (!handleMsg(connId, msgId, msgData, msgLen)) {
 			auto py_state = PyGILState_Ensure();
 			PyObject* arg = PyTuple_New(3);
 			//PyTuple_SetItem(arg, 0, Py_BuildValue("s", g_service_name.c_str()));
-			PyTuple_SetItem(arg, 0, PyLong_FromLong(connId));
+			if (isClientMsg) {
+				PyTuple_SetItem(arg, 0, PyLong_FromLong(connId));
+			}
+			else {
+				PyTuple_SetItem(arg, 0, Py_BuildValue("s", sender));
+			}
 			PyTuple_SetItem(arg, 1, PyLong_FromLong(msgId));
 			PyTuple_SetItem(arg, 2, Py_BuildValue("y#", msgData, msgLen));
-			//callPyFunction("main", "on_recv_client_msg", arg);
-			GameService::g_gameService->callPyFunction("on_recv_client_msg", arg);
+			if (isClientMsg) {
+				GameService::g_gameService->callPyFunction("on_recv_client_msg", arg);
+			}
+			else {
+				GameService::g_gameService->callPyFunction("on_recv_service_msg", arg);
+			}
 			PyGILState_Release(py_state);
 		}
 	}
@@ -97,7 +107,7 @@ void MessageMgr::onRecvData(char* sender, char* data, int dataLen) {
 			Logger::logError("$recv msg format error, data len <= 4");
 			return;
 		}
-		msgId = buffer.readIntEx();
+		msgId = buffer.readInt(true);
 		char* msgData = &data[4];
 		int msgLen = dataLen - 4;
 		if (!handleServiceMsg(msgId, msgData, msgLen)) {
@@ -106,7 +116,6 @@ void MessageMgr::onRecvData(char* sender, char* data, int dataLen) {
 			PyTuple_SetItem(arg, 0, Py_BuildValue("s", sender));
 			PyTuple_SetItem(arg, 1, PyLong_FromLong(msgId));
 			PyTuple_SetItem(arg, 2, Py_BuildValue("y#", msgData, msgLen));
-			//callPyFunction("main", "on_recv_service_msg", arg);
 			GameService::g_gameService->callPyFunction("on_recv_service_msg", arg);
 			PyGILState_Release(py_state);
 		}

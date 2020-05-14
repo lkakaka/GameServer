@@ -29,10 +29,10 @@ class GamePlayer:
     def send_msg_to_client(self, msg):
         self.game_scene.service.send_msg_to_client(self.conn_id, msg)
 
-    @_c_cmd.reg_cmd(Message.MSG_ID_DISCONNECT)
+    @_c_cmd.reg_cmd(Message.MSG_ID_DISCONNECT_REQ)
     def _on_recv_disconnect(self, msg_id, msg):
         logger.logError("$player disconnect, role_id:{},reason:{}", self.role_id, msg.reason)
-        self.game_scene.remove_player(self.role_id, msg.reason)
+        self.game_scene.tick_player(self.role_id, "client req disconnect")
 
     @_c_cmd.reg_cmd(Message.MSG_ID_TEST_REQ)
     def _on_recv_test_req(self, msg_id, msg):

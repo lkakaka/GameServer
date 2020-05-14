@@ -63,7 +63,8 @@ class GameScene:
         if player is None:
             return
         self.remove_player(role_id, reason)
-        msg = Message.create_msg_by_id(Message.MSG_ID_DISCONNECT)
+        msg = Message.create_msg_by_id(Message.MSG_ID_CLIENT_DISCONNECT)
+        msg.conn_id = player.conn_id
         msg.reason = reason
         self.service.send_msg_to_client(player.conn_id, msg)
 

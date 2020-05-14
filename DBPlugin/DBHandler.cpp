@@ -12,47 +12,14 @@
 
 using namespace sql;
 
-//Connection* getDBConnection(std::string dbName)
-//{
-//	Driver* driver = get_driver_instance();
-//	std::string url = "tcp://127.0.0.1:3306";
-//	if (!dbName.empty())
-//	{
-//		url += "/" + dbName;
-//	}
-//	sql::SQLString sqlUrl = sql::SQLString(url.c_str());
-//	Connection* m_dbConn = driver->connect(sqlUrl, "root", "");
-//	return m_dbConn;
-//}
 
 DBHandler::~DBHandler()
 {
 	Logger::logInfo("$db hander destory!!!");
 }
 
-Connection* DBHandler::getDBConnection()
-{
-	if (m_dbConn.get() != NULL) {
-		return m_dbConn.get();
-	}
-	Driver* driver = get_driver_instance();
-	char urlBuf[32]{0};
-	sprintf(urlBuf, "tcp://%s:%d", m_dbUrl.c_str(), m_dbPort);
-	std::string url = urlBuf; //"tcp://127.0.0.1:3306";
-	if (!m_dbName.empty())
-	{
-		url += "/" + m_dbName;
-	}
-	sql::SQLString sqlUrl = sql::SQLString(url.c_str());
-	sql::SQLString dbUserName = sql::SQLString(m_dbUserName.c_str());
-	sql::SQLString dbPassword = sql::SQLString(m_dbPassword.c_str());
-	Connection* dbConn = driver->connect(sqlUrl, dbUserName, dbPassword);
-	m_dbConn.reset(dbConn);
-	return dbConn;
-}
-
 DBHandler::DBHandler(std::string& dbUrl, int dbPort, std::string& dbUserName, std::string& dbPassword, std::string dbName) :
-	m_dbUrl(dbUrl), m_dbPort(dbPort), m_dbUserName(dbUserName), m_dbPassword(dbPassword), m_dbName(dbName)
+	m_dbUrl(dbUrl), m_dbPort(dbPort), m_dbUserName(dbUserName), m_dbPassword(dbPassword), m_dbName(dbName), m_dbConn(NULL)
 {
 	Connection* conn = getDBConnection();
 	if (conn != NULL) {
@@ -65,6 +32,29 @@ DBHandler::DBHandler(std::string& dbUrl, int dbPort, std::string& dbUserName, st
 }
 
 inline std::string DBHandler::getDbName() { return m_dbName; }
+
+Connection* DBHandler::getDBConnection()
+{
+	if (m_dbConn != NULL) {
+		if (m_dbConn->isValid() || m_dbConn->reconnect()) {
+			return m_dbConn;
+		}
+		m_dbConn->close();
+	}
+	Driver* driver = get_driver_instance();
+	char urlBuf[32]{ 0 };
+	sprintf(urlBuf, "tcp://%s:%d", m_dbUrl.c_str(), m_dbPort);
+	std::string url = urlBuf; //"tcp://127.0.0.1:3306";
+	if (!m_dbName.empty())
+	{
+		url += "/" + m_dbName;
+	}
+	sql::SQLString sqlUrl = sql::SQLString(url.c_str());
+	sql::SQLString dbUserName = sql::SQLString(m_dbUserName.c_str());
+	sql::SQLString dbPassword = sql::SQLString(m_dbPassword.c_str());
+	m_dbConn = driver->connect(sqlUrl, dbUserName, dbPassword);
+	return m_dbConn;
+}
 
 void DBHandler::initDbTable(std::vector<ReflectObject*> tblDefs)
 {

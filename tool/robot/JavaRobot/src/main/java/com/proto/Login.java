@@ -1248,8 +1248,8 @@ public final class Login {
 
   }
 
-  public interface RoleInfoOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:RoleInfo)
+  public interface _RoleInfoOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:_RoleInfo)
       com.google.protobuf.MessageOrBuilder {
 
     /**
@@ -1268,18 +1268,18 @@ public final class Login {
         getRoleNameBytes();
   }
   /**
-   * Protobuf type {@code RoleInfo}
+   * Protobuf type {@code _RoleInfo}
    */
-  public  static final class RoleInfo extends
+  public  static final class _RoleInfo extends
       com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:RoleInfo)
-      RoleInfoOrBuilder {
+      // @@protoc_insertion_point(message_implements:_RoleInfo)
+      _RoleInfoOrBuilder {
   private static final long serialVersionUID = 0L;
-    // Use RoleInfo.newBuilder() to construct.
-    private RoleInfo(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+    // Use _RoleInfo.newBuilder() to construct.
+    private _RoleInfo(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-    private RoleInfo() {
+    private _RoleInfo() {
       roleName_ = "";
     }
 
@@ -1287,7 +1287,7 @@ public final class Login {
     @SuppressWarnings({"unused"})
     protected java.lang.Object newInstance(
         UnusedPrivateParameter unused) {
-      return new RoleInfo();
+      return new _RoleInfo();
     }
 
     @java.lang.Override
@@ -1295,7 +1295,7 @@ public final class Login {
     getUnknownFields() {
       return this.unknownFields;
     }
-    private RoleInfo(
+    private _RoleInfo(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -1345,15 +1345,15 @@ public final class Login {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.proto.Login.internal_static_RoleInfo_descriptor;
+      return com.proto.Login.internal_static__RoleInfo_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.proto.Login.internal_static_RoleInfo_fieldAccessorTable
+      return com.proto.Login.internal_static__RoleInfo_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.proto.Login.RoleInfo.class, com.proto.Login.RoleInfo.Builder.class);
+              com.proto.Login._RoleInfo.class, com.proto.Login._RoleInfo.Builder.class);
     }
 
     public static final int ROLE_ID_FIELD_NUMBER = 1;
@@ -1445,10 +1445,10 @@ public final class Login {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof com.proto.Login.RoleInfo)) {
+      if (!(obj instanceof com.proto.Login._RoleInfo)) {
         return super.equals(obj);
       }
-      com.proto.Login.RoleInfo other = (com.proto.Login.RoleInfo) obj;
+      com.proto.Login._RoleInfo other = (com.proto.Login._RoleInfo) obj;
 
       if (getRoleId()
           != other.getRoleId()) return false;
@@ -1474,69 +1474,69 @@ public final class Login {
       return hash;
     }
 
-    public static com.proto.Login.RoleInfo parseFrom(
+    public static com.proto.Login._RoleInfo parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.proto.Login.RoleInfo parseFrom(
+    public static com.proto.Login._RoleInfo parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.proto.Login.RoleInfo parseFrom(
+    public static com.proto.Login._RoleInfo parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.proto.Login.RoleInfo parseFrom(
+    public static com.proto.Login._RoleInfo parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.proto.Login.RoleInfo parseFrom(byte[] data)
+    public static com.proto.Login._RoleInfo parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.proto.Login.RoleInfo parseFrom(
+    public static com.proto.Login._RoleInfo parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.proto.Login.RoleInfo parseFrom(java.io.InputStream input)
+    public static com.proto.Login._RoleInfo parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static com.proto.Login.RoleInfo parseFrom(
+    public static com.proto.Login._RoleInfo parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.proto.Login.RoleInfo parseDelimitedFrom(java.io.InputStream input)
+    public static com.proto.Login._RoleInfo parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static com.proto.Login.RoleInfo parseDelimitedFrom(
+    public static com.proto.Login._RoleInfo parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.proto.Login.RoleInfo parseFrom(
+    public static com.proto.Login._RoleInfo parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static com.proto.Login.RoleInfo parseFrom(
+    public static com.proto.Login._RoleInfo parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -1549,7 +1549,7 @@ public final class Login {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(com.proto.Login.RoleInfo prototype) {
+    public static Builder newBuilder(com.proto.Login._RoleInfo prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     @java.lang.Override
@@ -1565,26 +1565,26 @@ public final class Login {
       return builder;
     }
     /**
-     * Protobuf type {@code RoleInfo}
+     * Protobuf type {@code _RoleInfo}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:RoleInfo)
-        com.proto.Login.RoleInfoOrBuilder {
+        // @@protoc_insertion_point(builder_implements:_RoleInfo)
+        com.proto.Login._RoleInfoOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return com.proto.Login.internal_static_RoleInfo_descriptor;
+        return com.proto.Login.internal_static__RoleInfo_descriptor;
       }
 
       @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.proto.Login.internal_static_RoleInfo_fieldAccessorTable
+        return com.proto.Login.internal_static__RoleInfo_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                com.proto.Login.RoleInfo.class, com.proto.Login.RoleInfo.Builder.class);
+                com.proto.Login._RoleInfo.class, com.proto.Login._RoleInfo.Builder.class);
       }
 
-      // Construct using com.proto.Login.RoleInfo.newBuilder()
+      // Construct using com.proto.Login._RoleInfo.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -1612,17 +1612,17 @@ public final class Login {
       @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return com.proto.Login.internal_static_RoleInfo_descriptor;
+        return com.proto.Login.internal_static__RoleInfo_descriptor;
       }
 
       @java.lang.Override
-      public com.proto.Login.RoleInfo getDefaultInstanceForType() {
-        return com.proto.Login.RoleInfo.getDefaultInstance();
+      public com.proto.Login._RoleInfo getDefaultInstanceForType() {
+        return com.proto.Login._RoleInfo.getDefaultInstance();
       }
 
       @java.lang.Override
-      public com.proto.Login.RoleInfo build() {
-        com.proto.Login.RoleInfo result = buildPartial();
+      public com.proto.Login._RoleInfo build() {
+        com.proto.Login._RoleInfo result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
@@ -1630,8 +1630,8 @@ public final class Login {
       }
 
       @java.lang.Override
-      public com.proto.Login.RoleInfo buildPartial() {
-        com.proto.Login.RoleInfo result = new com.proto.Login.RoleInfo(this);
+      public com.proto.Login._RoleInfo buildPartial() {
+        com.proto.Login._RoleInfo result = new com.proto.Login._RoleInfo(this);
         result.roleId_ = roleId_;
         result.roleName_ = roleName_;
         onBuilt();
@@ -1672,16 +1672,16 @@ public final class Login {
       }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.proto.Login.RoleInfo) {
-          return mergeFrom((com.proto.Login.RoleInfo)other);
+        if (other instanceof com.proto.Login._RoleInfo) {
+          return mergeFrom((com.proto.Login._RoleInfo)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(com.proto.Login.RoleInfo other) {
-        if (other == com.proto.Login.RoleInfo.getDefaultInstance()) return this;
+      public Builder mergeFrom(com.proto.Login._RoleInfo other) {
+        if (other == com.proto.Login._RoleInfo.getDefaultInstance()) return this;
         if (other.getRoleId() != 0) {
           setRoleId(other.getRoleId());
         }
@@ -1704,11 +1704,11 @@ public final class Login {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.proto.Login.RoleInfo parsedMessage = null;
+        com.proto.Login._RoleInfo parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.proto.Login.RoleInfo) e.getUnfinishedMessage();
+          parsedMessage = (com.proto.Login._RoleInfo) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -1825,41 +1825,41 @@ public final class Login {
       }
 
 
-      // @@protoc_insertion_point(builder_scope:RoleInfo)
+      // @@protoc_insertion_point(builder_scope:_RoleInfo)
     }
 
-    // @@protoc_insertion_point(class_scope:RoleInfo)
-    private static final com.proto.Login.RoleInfo DEFAULT_INSTANCE;
+    // @@protoc_insertion_point(class_scope:_RoleInfo)
+    private static final com.proto.Login._RoleInfo DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new com.proto.Login.RoleInfo();
+      DEFAULT_INSTANCE = new com.proto.Login._RoleInfo();
     }
 
-    public static com.proto.Login.RoleInfo getDefaultInstance() {
+    public static com.proto.Login._RoleInfo getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
-    private static final com.google.protobuf.Parser<RoleInfo>
-        PARSER = new com.google.protobuf.AbstractParser<RoleInfo>() {
+    private static final com.google.protobuf.Parser<_RoleInfo>
+        PARSER = new com.google.protobuf.AbstractParser<_RoleInfo>() {
       @java.lang.Override
-      public RoleInfo parsePartialFrom(
+      public _RoleInfo parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new RoleInfo(input, extensionRegistry);
+        return new _RoleInfo(input, extensionRegistry);
       }
     };
 
-    public static com.google.protobuf.Parser<RoleInfo> parser() {
+    public static com.google.protobuf.Parser<_RoleInfo> parser() {
       return PARSER;
     }
 
     @java.lang.Override
-    public com.google.protobuf.Parser<RoleInfo> getParserForType() {
+    public com.google.protobuf.Parser<_RoleInfo> getParserForType() {
       return PARSER;
     }
 
     @java.lang.Override
-    public com.proto.Login.RoleInfo getDefaultInstanceForType() {
+    public com.proto.Login._RoleInfo getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -1885,27 +1885,27 @@ public final class Login {
     int getErrCode();
 
     /**
-     * <code>repeated .RoleInfo role_list = 3;</code>
+     * <code>repeated ._RoleInfo role_list = 3;</code>
      */
-    java.util.List<com.proto.Login.RoleInfo> 
+    java.util.List<com.proto.Login._RoleInfo> 
         getRoleListList();
     /**
-     * <code>repeated .RoleInfo role_list = 3;</code>
+     * <code>repeated ._RoleInfo role_list = 3;</code>
      */
-    com.proto.Login.RoleInfo getRoleList(int index);
+    com.proto.Login._RoleInfo getRoleList(int index);
     /**
-     * <code>repeated .RoleInfo role_list = 3;</code>
+     * <code>repeated ._RoleInfo role_list = 3;</code>
      */
     int getRoleListCount();
     /**
-     * <code>repeated .RoleInfo role_list = 3;</code>
+     * <code>repeated ._RoleInfo role_list = 3;</code>
      */
-    java.util.List<? extends com.proto.Login.RoleInfoOrBuilder> 
+    java.util.List<? extends com.proto.Login._RoleInfoOrBuilder> 
         getRoleListOrBuilderList();
     /**
-     * <code>repeated .RoleInfo role_list = 3;</code>
+     * <code>repeated ._RoleInfo role_list = 3;</code>
      */
-    com.proto.Login.RoleInfoOrBuilder getRoleListOrBuilder(
+    com.proto.Login._RoleInfoOrBuilder getRoleListOrBuilder(
         int index);
   }
   /**
@@ -1969,11 +1969,11 @@ public final class Login {
             }
             case 26: {
               if (!((mutable_bitField0_ & 0x00000001) != 0)) {
-                roleList_ = new java.util.ArrayList<com.proto.Login.RoleInfo>();
+                roleList_ = new java.util.ArrayList<com.proto.Login._RoleInfo>();
                 mutable_bitField0_ |= 0x00000001;
               }
               roleList_.add(
-                  input.readMessage(com.proto.Login.RoleInfo.parser(), extensionRegistry));
+                  input.readMessage(com.proto.Login._RoleInfo.parser(), extensionRegistry));
               break;
             }
             default: {
@@ -2055,36 +2055,36 @@ public final class Login {
     }
 
     public static final int ROLE_LIST_FIELD_NUMBER = 3;
-    private java.util.List<com.proto.Login.RoleInfo> roleList_;
+    private java.util.List<com.proto.Login._RoleInfo> roleList_;
     /**
-     * <code>repeated .RoleInfo role_list = 3;</code>
+     * <code>repeated ._RoleInfo role_list = 3;</code>
      */
-    public java.util.List<com.proto.Login.RoleInfo> getRoleListList() {
+    public java.util.List<com.proto.Login._RoleInfo> getRoleListList() {
       return roleList_;
     }
     /**
-     * <code>repeated .RoleInfo role_list = 3;</code>
+     * <code>repeated ._RoleInfo role_list = 3;</code>
      */
-    public java.util.List<? extends com.proto.Login.RoleInfoOrBuilder> 
+    public java.util.List<? extends com.proto.Login._RoleInfoOrBuilder> 
         getRoleListOrBuilderList() {
       return roleList_;
     }
     /**
-     * <code>repeated .RoleInfo role_list = 3;</code>
+     * <code>repeated ._RoleInfo role_list = 3;</code>
      */
     public int getRoleListCount() {
       return roleList_.size();
     }
     /**
-     * <code>repeated .RoleInfo role_list = 3;</code>
+     * <code>repeated ._RoleInfo role_list = 3;</code>
      */
-    public com.proto.Login.RoleInfo getRoleList(int index) {
+    public com.proto.Login._RoleInfo getRoleList(int index) {
       return roleList_.get(index);
     }
     /**
-     * <code>repeated .RoleInfo role_list = 3;</code>
+     * <code>repeated ._RoleInfo role_list = 3;</code>
      */
-    public com.proto.Login.RoleInfoOrBuilder getRoleListOrBuilder(
+    public com.proto.Login._RoleInfoOrBuilder getRoleListOrBuilder(
         int index) {
       return roleList_.get(index);
     }
@@ -2560,22 +2560,22 @@ public final class Login {
         return this;
       }
 
-      private java.util.List<com.proto.Login.RoleInfo> roleList_ =
+      private java.util.List<com.proto.Login._RoleInfo> roleList_ =
         java.util.Collections.emptyList();
       private void ensureRoleListIsMutable() {
         if (!((bitField0_ & 0x00000001) != 0)) {
-          roleList_ = new java.util.ArrayList<com.proto.Login.RoleInfo>(roleList_);
+          roleList_ = new java.util.ArrayList<com.proto.Login._RoleInfo>(roleList_);
           bitField0_ |= 0x00000001;
          }
       }
 
       private com.google.protobuf.RepeatedFieldBuilderV3<
-          com.proto.Login.RoleInfo, com.proto.Login.RoleInfo.Builder, com.proto.Login.RoleInfoOrBuilder> roleListBuilder_;
+          com.proto.Login._RoleInfo, com.proto.Login._RoleInfo.Builder, com.proto.Login._RoleInfoOrBuilder> roleListBuilder_;
 
       /**
-       * <code>repeated .RoleInfo role_list = 3;</code>
+       * <code>repeated ._RoleInfo role_list = 3;</code>
        */
-      public java.util.List<com.proto.Login.RoleInfo> getRoleListList() {
+      public java.util.List<com.proto.Login._RoleInfo> getRoleListList() {
         if (roleListBuilder_ == null) {
           return java.util.Collections.unmodifiableList(roleList_);
         } else {
@@ -2583,7 +2583,7 @@ public final class Login {
         }
       }
       /**
-       * <code>repeated .RoleInfo role_list = 3;</code>
+       * <code>repeated ._RoleInfo role_list = 3;</code>
        */
       public int getRoleListCount() {
         if (roleListBuilder_ == null) {
@@ -2593,9 +2593,9 @@ public final class Login {
         }
       }
       /**
-       * <code>repeated .RoleInfo role_list = 3;</code>
+       * <code>repeated ._RoleInfo role_list = 3;</code>
        */
-      public com.proto.Login.RoleInfo getRoleList(int index) {
+      public com.proto.Login._RoleInfo getRoleList(int index) {
         if (roleListBuilder_ == null) {
           return roleList_.get(index);
         } else {
@@ -2603,10 +2603,10 @@ public final class Login {
         }
       }
       /**
-       * <code>repeated .RoleInfo role_list = 3;</code>
+       * <code>repeated ._RoleInfo role_list = 3;</code>
        */
       public Builder setRoleList(
-          int index, com.proto.Login.RoleInfo value) {
+          int index, com.proto.Login._RoleInfo value) {
         if (roleListBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -2620,10 +2620,10 @@ public final class Login {
         return this;
       }
       /**
-       * <code>repeated .RoleInfo role_list = 3;</code>
+       * <code>repeated ._RoleInfo role_list = 3;</code>
        */
       public Builder setRoleList(
-          int index, com.proto.Login.RoleInfo.Builder builderForValue) {
+          int index, com.proto.Login._RoleInfo.Builder builderForValue) {
         if (roleListBuilder_ == null) {
           ensureRoleListIsMutable();
           roleList_.set(index, builderForValue.build());
@@ -2634,9 +2634,9 @@ public final class Login {
         return this;
       }
       /**
-       * <code>repeated .RoleInfo role_list = 3;</code>
+       * <code>repeated ._RoleInfo role_list = 3;</code>
        */
-      public Builder addRoleList(com.proto.Login.RoleInfo value) {
+      public Builder addRoleList(com.proto.Login._RoleInfo value) {
         if (roleListBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -2650,10 +2650,10 @@ public final class Login {
         return this;
       }
       /**
-       * <code>repeated .RoleInfo role_list = 3;</code>
+       * <code>repeated ._RoleInfo role_list = 3;</code>
        */
       public Builder addRoleList(
-          int index, com.proto.Login.RoleInfo value) {
+          int index, com.proto.Login._RoleInfo value) {
         if (roleListBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -2667,10 +2667,10 @@ public final class Login {
         return this;
       }
       /**
-       * <code>repeated .RoleInfo role_list = 3;</code>
+       * <code>repeated ._RoleInfo role_list = 3;</code>
        */
       public Builder addRoleList(
-          com.proto.Login.RoleInfo.Builder builderForValue) {
+          com.proto.Login._RoleInfo.Builder builderForValue) {
         if (roleListBuilder_ == null) {
           ensureRoleListIsMutable();
           roleList_.add(builderForValue.build());
@@ -2681,10 +2681,10 @@ public final class Login {
         return this;
       }
       /**
-       * <code>repeated .RoleInfo role_list = 3;</code>
+       * <code>repeated ._RoleInfo role_list = 3;</code>
        */
       public Builder addRoleList(
-          int index, com.proto.Login.RoleInfo.Builder builderForValue) {
+          int index, com.proto.Login._RoleInfo.Builder builderForValue) {
         if (roleListBuilder_ == null) {
           ensureRoleListIsMutable();
           roleList_.add(index, builderForValue.build());
@@ -2695,10 +2695,10 @@ public final class Login {
         return this;
       }
       /**
-       * <code>repeated .RoleInfo role_list = 3;</code>
+       * <code>repeated ._RoleInfo role_list = 3;</code>
        */
       public Builder addAllRoleList(
-          java.lang.Iterable<? extends com.proto.Login.RoleInfo> values) {
+          java.lang.Iterable<? extends com.proto.Login._RoleInfo> values) {
         if (roleListBuilder_ == null) {
           ensureRoleListIsMutable();
           com.google.protobuf.AbstractMessageLite.Builder.addAll(
@@ -2710,7 +2710,7 @@ public final class Login {
         return this;
       }
       /**
-       * <code>repeated .RoleInfo role_list = 3;</code>
+       * <code>repeated ._RoleInfo role_list = 3;</code>
        */
       public Builder clearRoleList() {
         if (roleListBuilder_ == null) {
@@ -2723,7 +2723,7 @@ public final class Login {
         return this;
       }
       /**
-       * <code>repeated .RoleInfo role_list = 3;</code>
+       * <code>repeated ._RoleInfo role_list = 3;</code>
        */
       public Builder removeRoleList(int index) {
         if (roleListBuilder_ == null) {
@@ -2736,16 +2736,16 @@ public final class Login {
         return this;
       }
       /**
-       * <code>repeated .RoleInfo role_list = 3;</code>
+       * <code>repeated ._RoleInfo role_list = 3;</code>
        */
-      public com.proto.Login.RoleInfo.Builder getRoleListBuilder(
+      public com.proto.Login._RoleInfo.Builder getRoleListBuilder(
           int index) {
         return getRoleListFieldBuilder().getBuilder(index);
       }
       /**
-       * <code>repeated .RoleInfo role_list = 3;</code>
+       * <code>repeated ._RoleInfo role_list = 3;</code>
        */
-      public com.proto.Login.RoleInfoOrBuilder getRoleListOrBuilder(
+      public com.proto.Login._RoleInfoOrBuilder getRoleListOrBuilder(
           int index) {
         if (roleListBuilder_ == null) {
           return roleList_.get(index);  } else {
@@ -2753,9 +2753,9 @@ public final class Login {
         }
       }
       /**
-       * <code>repeated .RoleInfo role_list = 3;</code>
+       * <code>repeated ._RoleInfo role_list = 3;</code>
        */
-      public java.util.List<? extends com.proto.Login.RoleInfoOrBuilder> 
+      public java.util.List<? extends com.proto.Login._RoleInfoOrBuilder> 
            getRoleListOrBuilderList() {
         if (roleListBuilder_ != null) {
           return roleListBuilder_.getMessageOrBuilderList();
@@ -2764,33 +2764,33 @@ public final class Login {
         }
       }
       /**
-       * <code>repeated .RoleInfo role_list = 3;</code>
+       * <code>repeated ._RoleInfo role_list = 3;</code>
        */
-      public com.proto.Login.RoleInfo.Builder addRoleListBuilder() {
+      public com.proto.Login._RoleInfo.Builder addRoleListBuilder() {
         return getRoleListFieldBuilder().addBuilder(
-            com.proto.Login.RoleInfo.getDefaultInstance());
+            com.proto.Login._RoleInfo.getDefaultInstance());
       }
       /**
-       * <code>repeated .RoleInfo role_list = 3;</code>
+       * <code>repeated ._RoleInfo role_list = 3;</code>
        */
-      public com.proto.Login.RoleInfo.Builder addRoleListBuilder(
+      public com.proto.Login._RoleInfo.Builder addRoleListBuilder(
           int index) {
         return getRoleListFieldBuilder().addBuilder(
-            index, com.proto.Login.RoleInfo.getDefaultInstance());
+            index, com.proto.Login._RoleInfo.getDefaultInstance());
       }
       /**
-       * <code>repeated .RoleInfo role_list = 3;</code>
+       * <code>repeated ._RoleInfo role_list = 3;</code>
        */
-      public java.util.List<com.proto.Login.RoleInfo.Builder> 
+      public java.util.List<com.proto.Login._RoleInfo.Builder> 
            getRoleListBuilderList() {
         return getRoleListFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilderV3<
-          com.proto.Login.RoleInfo, com.proto.Login.RoleInfo.Builder, com.proto.Login.RoleInfoOrBuilder> 
+          com.proto.Login._RoleInfo, com.proto.Login._RoleInfo.Builder, com.proto.Login._RoleInfoOrBuilder> 
           getRoleListFieldBuilder() {
         if (roleListBuilder_ == null) {
           roleListBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
-              com.proto.Login.RoleInfo, com.proto.Login.RoleInfo.Builder, com.proto.Login.RoleInfoOrBuilder>(
+              com.proto.Login._RoleInfo, com.proto.Login._RoleInfo.Builder, com.proto.Login._RoleInfoOrBuilder>(
                   roleList_,
                   ((bitField0_ & 0x00000001) != 0),
                   getParentForChildren(),
@@ -3554,17 +3554,17 @@ public final class Login {
     int getErrCode();
 
     /**
-     * <code>.RoleInfo role_info = 2;</code>
+     * <code>._RoleInfo role_info = 2;</code>
      */
     boolean hasRoleInfo();
     /**
-     * <code>.RoleInfo role_info = 2;</code>
+     * <code>._RoleInfo role_info = 2;</code>
      */
-    com.proto.Login.RoleInfo getRoleInfo();
+    com.proto.Login._RoleInfo getRoleInfo();
     /**
-     * <code>.RoleInfo role_info = 2;</code>
+     * <code>._RoleInfo role_info = 2;</code>
      */
-    com.proto.Login.RoleInfoOrBuilder getRoleInfoOrBuilder();
+    com.proto.Login._RoleInfoOrBuilder getRoleInfoOrBuilder();
   }
   /**
    * Protobuf type {@code CreateRoleRsp}
@@ -3617,11 +3617,11 @@ public final class Login {
               break;
             }
             case 18: {
-              com.proto.Login.RoleInfo.Builder subBuilder = null;
+              com.proto.Login._RoleInfo.Builder subBuilder = null;
               if (roleInfo_ != null) {
                 subBuilder = roleInfo_.toBuilder();
               }
-              roleInfo_ = input.readMessage(com.proto.Login.RoleInfo.parser(), extensionRegistry);
+              roleInfo_ = input.readMessage(com.proto.Login._RoleInfo.parser(), extensionRegistry);
               if (subBuilder != null) {
                 subBuilder.mergeFrom(roleInfo_);
                 roleInfo_ = subBuilder.buildPartial();
@@ -3671,23 +3671,23 @@ public final class Login {
     }
 
     public static final int ROLE_INFO_FIELD_NUMBER = 2;
-    private com.proto.Login.RoleInfo roleInfo_;
+    private com.proto.Login._RoleInfo roleInfo_;
     /**
-     * <code>.RoleInfo role_info = 2;</code>
+     * <code>._RoleInfo role_info = 2;</code>
      */
     public boolean hasRoleInfo() {
       return roleInfo_ != null;
     }
     /**
-     * <code>.RoleInfo role_info = 2;</code>
+     * <code>._RoleInfo role_info = 2;</code>
      */
-    public com.proto.Login.RoleInfo getRoleInfo() {
-      return roleInfo_ == null ? com.proto.Login.RoleInfo.getDefaultInstance() : roleInfo_;
+    public com.proto.Login._RoleInfo getRoleInfo() {
+      return roleInfo_ == null ? com.proto.Login._RoleInfo.getDefaultInstance() : roleInfo_;
     }
     /**
-     * <code>.RoleInfo role_info = 2;</code>
+     * <code>._RoleInfo role_info = 2;</code>
      */
-    public com.proto.Login.RoleInfoOrBuilder getRoleInfoOrBuilder() {
+    public com.proto.Login._RoleInfoOrBuilder getRoleInfoOrBuilder() {
       return getRoleInfo();
     }
 
@@ -4049,29 +4049,29 @@ public final class Login {
         return this;
       }
 
-      private com.proto.Login.RoleInfo roleInfo_;
+      private com.proto.Login._RoleInfo roleInfo_;
       private com.google.protobuf.SingleFieldBuilderV3<
-          com.proto.Login.RoleInfo, com.proto.Login.RoleInfo.Builder, com.proto.Login.RoleInfoOrBuilder> roleInfoBuilder_;
+          com.proto.Login._RoleInfo, com.proto.Login._RoleInfo.Builder, com.proto.Login._RoleInfoOrBuilder> roleInfoBuilder_;
       /**
-       * <code>.RoleInfo role_info = 2;</code>
+       * <code>._RoleInfo role_info = 2;</code>
        */
       public boolean hasRoleInfo() {
         return roleInfoBuilder_ != null || roleInfo_ != null;
       }
       /**
-       * <code>.RoleInfo role_info = 2;</code>
+       * <code>._RoleInfo role_info = 2;</code>
        */
-      public com.proto.Login.RoleInfo getRoleInfo() {
+      public com.proto.Login._RoleInfo getRoleInfo() {
         if (roleInfoBuilder_ == null) {
-          return roleInfo_ == null ? com.proto.Login.RoleInfo.getDefaultInstance() : roleInfo_;
+          return roleInfo_ == null ? com.proto.Login._RoleInfo.getDefaultInstance() : roleInfo_;
         } else {
           return roleInfoBuilder_.getMessage();
         }
       }
       /**
-       * <code>.RoleInfo role_info = 2;</code>
+       * <code>._RoleInfo role_info = 2;</code>
        */
-      public Builder setRoleInfo(com.proto.Login.RoleInfo value) {
+      public Builder setRoleInfo(com.proto.Login._RoleInfo value) {
         if (roleInfoBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -4085,10 +4085,10 @@ public final class Login {
         return this;
       }
       /**
-       * <code>.RoleInfo role_info = 2;</code>
+       * <code>._RoleInfo role_info = 2;</code>
        */
       public Builder setRoleInfo(
-          com.proto.Login.RoleInfo.Builder builderForValue) {
+          com.proto.Login._RoleInfo.Builder builderForValue) {
         if (roleInfoBuilder_ == null) {
           roleInfo_ = builderForValue.build();
           onChanged();
@@ -4099,13 +4099,13 @@ public final class Login {
         return this;
       }
       /**
-       * <code>.RoleInfo role_info = 2;</code>
+       * <code>._RoleInfo role_info = 2;</code>
        */
-      public Builder mergeRoleInfo(com.proto.Login.RoleInfo value) {
+      public Builder mergeRoleInfo(com.proto.Login._RoleInfo value) {
         if (roleInfoBuilder_ == null) {
           if (roleInfo_ != null) {
             roleInfo_ =
-              com.proto.Login.RoleInfo.newBuilder(roleInfo_).mergeFrom(value).buildPartial();
+              com.proto.Login._RoleInfo.newBuilder(roleInfo_).mergeFrom(value).buildPartial();
           } else {
             roleInfo_ = value;
           }
@@ -4117,7 +4117,7 @@ public final class Login {
         return this;
       }
       /**
-       * <code>.RoleInfo role_info = 2;</code>
+       * <code>._RoleInfo role_info = 2;</code>
        */
       public Builder clearRoleInfo() {
         if (roleInfoBuilder_ == null) {
@@ -4131,33 +4131,33 @@ public final class Login {
         return this;
       }
       /**
-       * <code>.RoleInfo role_info = 2;</code>
+       * <code>._RoleInfo role_info = 2;</code>
        */
-      public com.proto.Login.RoleInfo.Builder getRoleInfoBuilder() {
+      public com.proto.Login._RoleInfo.Builder getRoleInfoBuilder() {
         
         onChanged();
         return getRoleInfoFieldBuilder().getBuilder();
       }
       /**
-       * <code>.RoleInfo role_info = 2;</code>
+       * <code>._RoleInfo role_info = 2;</code>
        */
-      public com.proto.Login.RoleInfoOrBuilder getRoleInfoOrBuilder() {
+      public com.proto.Login._RoleInfoOrBuilder getRoleInfoOrBuilder() {
         if (roleInfoBuilder_ != null) {
           return roleInfoBuilder_.getMessageOrBuilder();
         } else {
           return roleInfo_ == null ?
-              com.proto.Login.RoleInfo.getDefaultInstance() : roleInfo_;
+              com.proto.Login._RoleInfo.getDefaultInstance() : roleInfo_;
         }
       }
       /**
-       * <code>.RoleInfo role_info = 2;</code>
+       * <code>._RoleInfo role_info = 2;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          com.proto.Login.RoleInfo, com.proto.Login.RoleInfo.Builder, com.proto.Login.RoleInfoOrBuilder> 
+          com.proto.Login._RoleInfo, com.proto.Login._RoleInfo.Builder, com.proto.Login._RoleInfoOrBuilder> 
           getRoleInfoFieldBuilder() {
         if (roleInfoBuilder_ == null) {
           roleInfoBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-              com.proto.Login.RoleInfo, com.proto.Login.RoleInfo.Builder, com.proto.Login.RoleInfoOrBuilder>(
+              com.proto.Login._RoleInfo, com.proto.Login._RoleInfo.Builder, com.proto.Login._RoleInfoOrBuilder>(
                   getRoleInfo(),
                   getParentForChildren(),
                   isClean());
@@ -4845,17 +4845,17 @@ public final class Login {
     int getErrCode();
 
     /**
-     * <code>.RoleInfo role_info = 2;</code>
+     * <code>._RoleInfo role_info = 2;</code>
      */
     boolean hasRoleInfo();
     /**
-     * <code>.RoleInfo role_info = 2;</code>
+     * <code>._RoleInfo role_info = 2;</code>
      */
-    com.proto.Login.RoleInfo getRoleInfo();
+    com.proto.Login._RoleInfo getRoleInfo();
     /**
-     * <code>.RoleInfo role_info = 2;</code>
+     * <code>._RoleInfo role_info = 2;</code>
      */
-    com.proto.Login.RoleInfoOrBuilder getRoleInfoOrBuilder();
+    com.proto.Login._RoleInfoOrBuilder getRoleInfoOrBuilder();
   }
   /**
    * Protobuf type {@code EnterGameRsp}
@@ -4908,11 +4908,11 @@ public final class Login {
               break;
             }
             case 18: {
-              com.proto.Login.RoleInfo.Builder subBuilder = null;
+              com.proto.Login._RoleInfo.Builder subBuilder = null;
               if (roleInfo_ != null) {
                 subBuilder = roleInfo_.toBuilder();
               }
-              roleInfo_ = input.readMessage(com.proto.Login.RoleInfo.parser(), extensionRegistry);
+              roleInfo_ = input.readMessage(com.proto.Login._RoleInfo.parser(), extensionRegistry);
               if (subBuilder != null) {
                 subBuilder.mergeFrom(roleInfo_);
                 roleInfo_ = subBuilder.buildPartial();
@@ -4962,23 +4962,23 @@ public final class Login {
     }
 
     public static final int ROLE_INFO_FIELD_NUMBER = 2;
-    private com.proto.Login.RoleInfo roleInfo_;
+    private com.proto.Login._RoleInfo roleInfo_;
     /**
-     * <code>.RoleInfo role_info = 2;</code>
+     * <code>._RoleInfo role_info = 2;</code>
      */
     public boolean hasRoleInfo() {
       return roleInfo_ != null;
     }
     /**
-     * <code>.RoleInfo role_info = 2;</code>
+     * <code>._RoleInfo role_info = 2;</code>
      */
-    public com.proto.Login.RoleInfo getRoleInfo() {
-      return roleInfo_ == null ? com.proto.Login.RoleInfo.getDefaultInstance() : roleInfo_;
+    public com.proto.Login._RoleInfo getRoleInfo() {
+      return roleInfo_ == null ? com.proto.Login._RoleInfo.getDefaultInstance() : roleInfo_;
     }
     /**
-     * <code>.RoleInfo role_info = 2;</code>
+     * <code>._RoleInfo role_info = 2;</code>
      */
-    public com.proto.Login.RoleInfoOrBuilder getRoleInfoOrBuilder() {
+    public com.proto.Login._RoleInfoOrBuilder getRoleInfoOrBuilder() {
       return getRoleInfo();
     }
 
@@ -5340,29 +5340,29 @@ public final class Login {
         return this;
       }
 
-      private com.proto.Login.RoleInfo roleInfo_;
+      private com.proto.Login._RoleInfo roleInfo_;
       private com.google.protobuf.SingleFieldBuilderV3<
-          com.proto.Login.RoleInfo, com.proto.Login.RoleInfo.Builder, com.proto.Login.RoleInfoOrBuilder> roleInfoBuilder_;
+          com.proto.Login._RoleInfo, com.proto.Login._RoleInfo.Builder, com.proto.Login._RoleInfoOrBuilder> roleInfoBuilder_;
       /**
-       * <code>.RoleInfo role_info = 2;</code>
+       * <code>._RoleInfo role_info = 2;</code>
        */
       public boolean hasRoleInfo() {
         return roleInfoBuilder_ != null || roleInfo_ != null;
       }
       /**
-       * <code>.RoleInfo role_info = 2;</code>
+       * <code>._RoleInfo role_info = 2;</code>
        */
-      public com.proto.Login.RoleInfo getRoleInfo() {
+      public com.proto.Login._RoleInfo getRoleInfo() {
         if (roleInfoBuilder_ == null) {
-          return roleInfo_ == null ? com.proto.Login.RoleInfo.getDefaultInstance() : roleInfo_;
+          return roleInfo_ == null ? com.proto.Login._RoleInfo.getDefaultInstance() : roleInfo_;
         } else {
           return roleInfoBuilder_.getMessage();
         }
       }
       /**
-       * <code>.RoleInfo role_info = 2;</code>
+       * <code>._RoleInfo role_info = 2;</code>
        */
-      public Builder setRoleInfo(com.proto.Login.RoleInfo value) {
+      public Builder setRoleInfo(com.proto.Login._RoleInfo value) {
         if (roleInfoBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -5376,10 +5376,10 @@ public final class Login {
         return this;
       }
       /**
-       * <code>.RoleInfo role_info = 2;</code>
+       * <code>._RoleInfo role_info = 2;</code>
        */
       public Builder setRoleInfo(
-          com.proto.Login.RoleInfo.Builder builderForValue) {
+          com.proto.Login._RoleInfo.Builder builderForValue) {
         if (roleInfoBuilder_ == null) {
           roleInfo_ = builderForValue.build();
           onChanged();
@@ -5390,13 +5390,13 @@ public final class Login {
         return this;
       }
       /**
-       * <code>.RoleInfo role_info = 2;</code>
+       * <code>._RoleInfo role_info = 2;</code>
        */
-      public Builder mergeRoleInfo(com.proto.Login.RoleInfo value) {
+      public Builder mergeRoleInfo(com.proto.Login._RoleInfo value) {
         if (roleInfoBuilder_ == null) {
           if (roleInfo_ != null) {
             roleInfo_ =
-              com.proto.Login.RoleInfo.newBuilder(roleInfo_).mergeFrom(value).buildPartial();
+              com.proto.Login._RoleInfo.newBuilder(roleInfo_).mergeFrom(value).buildPartial();
           } else {
             roleInfo_ = value;
           }
@@ -5408,7 +5408,7 @@ public final class Login {
         return this;
       }
       /**
-       * <code>.RoleInfo role_info = 2;</code>
+       * <code>._RoleInfo role_info = 2;</code>
        */
       public Builder clearRoleInfo() {
         if (roleInfoBuilder_ == null) {
@@ -5422,33 +5422,33 @@ public final class Login {
         return this;
       }
       /**
-       * <code>.RoleInfo role_info = 2;</code>
+       * <code>._RoleInfo role_info = 2;</code>
        */
-      public com.proto.Login.RoleInfo.Builder getRoleInfoBuilder() {
+      public com.proto.Login._RoleInfo.Builder getRoleInfoBuilder() {
         
         onChanged();
         return getRoleInfoFieldBuilder().getBuilder();
       }
       /**
-       * <code>.RoleInfo role_info = 2;</code>
+       * <code>._RoleInfo role_info = 2;</code>
        */
-      public com.proto.Login.RoleInfoOrBuilder getRoleInfoOrBuilder() {
+      public com.proto.Login._RoleInfoOrBuilder getRoleInfoOrBuilder() {
         if (roleInfoBuilder_ != null) {
           return roleInfoBuilder_.getMessageOrBuilder();
         } else {
           return roleInfo_ == null ?
-              com.proto.Login.RoleInfo.getDefaultInstance() : roleInfo_;
+              com.proto.Login._RoleInfo.getDefaultInstance() : roleInfo_;
         }
       }
       /**
-       * <code>.RoleInfo role_info = 2;</code>
+       * <code>._RoleInfo role_info = 2;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          com.proto.Login.RoleInfo, com.proto.Login.RoleInfo.Builder, com.proto.Login.RoleInfoOrBuilder> 
+          com.proto.Login._RoleInfo, com.proto.Login._RoleInfo.Builder, com.proto.Login._RoleInfoOrBuilder> 
           getRoleInfoFieldBuilder() {
         if (roleInfoBuilder_ == null) {
           roleInfoBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-              com.proto.Login.RoleInfo, com.proto.Login.RoleInfo.Builder, com.proto.Login.RoleInfoOrBuilder>(
+              com.proto.Login._RoleInfo, com.proto.Login._RoleInfo.Builder, com.proto.Login._RoleInfoOrBuilder>(
                   getRoleInfo(),
                   getParentForChildren(),
                   isClean());
@@ -5509,46 +5509,30 @@ public final class Login {
 
   }
 
-  public interface DisconnectOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:Disconnect)
+  public interface DisconnectReqOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:DisconnectReq)
       com.google.protobuf.MessageOrBuilder {
-
-    /**
-     * <code>int32 conn_id = 1;</code>
-     */
-    int getConnId();
-
-    /**
-     * <code>string reason = 2;</code>
-     */
-    java.lang.String getReason();
-    /**
-     * <code>string reason = 2;</code>
-     */
-    com.google.protobuf.ByteString
-        getReasonBytes();
   }
   /**
-   * Protobuf type {@code Disconnect}
+   * Protobuf type {@code DisconnectReq}
    */
-  public  static final class Disconnect extends
+  public  static final class DisconnectReq extends
       com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:Disconnect)
-      DisconnectOrBuilder {
+      // @@protoc_insertion_point(message_implements:DisconnectReq)
+      DisconnectReqOrBuilder {
   private static final long serialVersionUID = 0L;
-    // Use Disconnect.newBuilder() to construct.
-    private Disconnect(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+    // Use DisconnectReq.newBuilder() to construct.
+    private DisconnectReq(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-    private Disconnect() {
-      reason_ = "";
+    private DisconnectReq() {
     }
 
     @java.lang.Override
     @SuppressWarnings({"unused"})
     protected java.lang.Object newInstance(
         UnusedPrivateParameter unused) {
-      return new Disconnect();
+      return new DisconnectReq();
     }
 
     @java.lang.Override
@@ -5556,7 +5540,7 @@ public final class Login {
     getUnknownFields() {
       return this.unknownFields;
     }
-    private Disconnect(
+    private DisconnectReq(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -5574,12 +5558,436 @@ public final class Login {
             case 0:
               done = true;
               break;
-            case 8: {
-
-              connId_ = input.readInt32();
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
               break;
             }
-            case 18: {
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.proto.Login.internal_static_DisconnectReq_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.proto.Login.internal_static_DisconnectReq_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.proto.Login.DisconnectReq.class, com.proto.Login.DisconnectReq.Builder.class);
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof com.proto.Login.DisconnectReq)) {
+        return super.equals(obj);
+      }
+      com.proto.Login.DisconnectReq other = (com.proto.Login.DisconnectReq) obj;
+
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static com.proto.Login.DisconnectReq parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.proto.Login.DisconnectReq parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.proto.Login.DisconnectReq parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.proto.Login.DisconnectReq parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.proto.Login.DisconnectReq parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.proto.Login.DisconnectReq parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.proto.Login.DisconnectReq parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.proto.Login.DisconnectReq parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.proto.Login.DisconnectReq parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static com.proto.Login.DisconnectReq parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.proto.Login.DisconnectReq parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.proto.Login.DisconnectReq parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(com.proto.Login.DisconnectReq prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code DisconnectReq}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:DisconnectReq)
+        com.proto.Login.DisconnectReqOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.proto.Login.internal_static_DisconnectReq_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.proto.Login.internal_static_DisconnectReq_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.proto.Login.DisconnectReq.class, com.proto.Login.DisconnectReq.Builder.class);
+      }
+
+      // Construct using com.proto.Login.DisconnectReq.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.proto.Login.internal_static_DisconnectReq_descriptor;
+      }
+
+      @java.lang.Override
+      public com.proto.Login.DisconnectReq getDefaultInstanceForType() {
+        return com.proto.Login.DisconnectReq.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public com.proto.Login.DisconnectReq build() {
+        com.proto.Login.DisconnectReq result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public com.proto.Login.DisconnectReq buildPartial() {
+        com.proto.Login.DisconnectReq result = new com.proto.Login.DisconnectReq(this);
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.proto.Login.DisconnectReq) {
+          return mergeFrom((com.proto.Login.DisconnectReq)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(com.proto.Login.DisconnectReq other) {
+        if (other == com.proto.Login.DisconnectReq.getDefaultInstance()) return this;
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.proto.Login.DisconnectReq parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (com.proto.Login.DisconnectReq) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:DisconnectReq)
+    }
+
+    // @@protoc_insertion_point(class_scope:DisconnectReq)
+    private static final com.proto.Login.DisconnectReq DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new com.proto.Login.DisconnectReq();
+    }
+
+    public static com.proto.Login.DisconnectReq getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<DisconnectReq>
+        PARSER = new com.google.protobuf.AbstractParser<DisconnectReq>() {
+      @java.lang.Override
+      public DisconnectReq parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new DisconnectReq(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<DisconnectReq> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<DisconnectReq> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.proto.Login.DisconnectReq getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface DisconnectRspOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:DisconnectRsp)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>string reason = 1;</code>
+     */
+    java.lang.String getReason();
+    /**
+     * <code>string reason = 1;</code>
+     */
+    com.google.protobuf.ByteString
+        getReasonBytes();
+  }
+  /**
+   * Protobuf type {@code DisconnectRsp}
+   */
+  public  static final class DisconnectRsp extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:DisconnectRsp)
+      DisconnectRspOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use DisconnectRsp.newBuilder() to construct.
+    private DisconnectRsp(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private DisconnectRsp() {
+      reason_ = "";
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new DisconnectRsp();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private DisconnectRsp(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10: {
               java.lang.String s = input.readStringRequireUtf8();
 
               reason_ = s;
@@ -5606,30 +6014,21 @@ public final class Login {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.proto.Login.internal_static_Disconnect_descriptor;
+      return com.proto.Login.internal_static_DisconnectRsp_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.proto.Login.internal_static_Disconnect_fieldAccessorTable
+      return com.proto.Login.internal_static_DisconnectRsp_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.proto.Login.Disconnect.class, com.proto.Login.Disconnect.Builder.class);
+              com.proto.Login.DisconnectRsp.class, com.proto.Login.DisconnectRsp.Builder.class);
     }
 
-    public static final int CONN_ID_FIELD_NUMBER = 1;
-    private int connId_;
-    /**
-     * <code>int32 conn_id = 1;</code>
-     */
-    public int getConnId() {
-      return connId_;
-    }
-
-    public static final int REASON_FIELD_NUMBER = 2;
+    public static final int REASON_FIELD_NUMBER = 1;
     private volatile java.lang.Object reason_;
     /**
-     * <code>string reason = 2;</code>
+     * <code>string reason = 1;</code>
      */
     public java.lang.String getReason() {
       java.lang.Object ref = reason_;
@@ -5644,7 +6043,7 @@ public final class Login {
       }
     }
     /**
-     * <code>string reason = 2;</code>
+     * <code>string reason = 1;</code>
      */
     public com.google.protobuf.ByteString
         getReasonBytes() {
@@ -5674,11 +6073,8 @@ public final class Login {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (connId_ != 0) {
-        output.writeInt32(1, connId_);
-      }
       if (!getReasonBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, reason_);
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, reason_);
       }
       unknownFields.writeTo(output);
     }
@@ -5689,12 +6085,8 @@ public final class Login {
       if (size != -1) return size;
 
       size = 0;
-      if (connId_ != 0) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, connId_);
-      }
       if (!getReasonBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, reason_);
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, reason_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -5706,13 +6098,11 @@ public final class Login {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof com.proto.Login.Disconnect)) {
+      if (!(obj instanceof com.proto.Login.DisconnectRsp)) {
         return super.equals(obj);
       }
-      com.proto.Login.Disconnect other = (com.proto.Login.Disconnect) obj;
+      com.proto.Login.DisconnectRsp other = (com.proto.Login.DisconnectRsp) obj;
 
-      if (getConnId()
-          != other.getConnId()) return false;
       if (!getReason()
           .equals(other.getReason())) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
@@ -5726,8 +6116,6 @@ public final class Login {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + CONN_ID_FIELD_NUMBER;
-      hash = (53 * hash) + getConnId();
       hash = (37 * hash) + REASON_FIELD_NUMBER;
       hash = (53 * hash) + getReason().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
@@ -5735,69 +6123,69 @@ public final class Login {
       return hash;
     }
 
-    public static com.proto.Login.Disconnect parseFrom(
+    public static com.proto.Login.DisconnectRsp parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.proto.Login.Disconnect parseFrom(
+    public static com.proto.Login.DisconnectRsp parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.proto.Login.Disconnect parseFrom(
+    public static com.proto.Login.DisconnectRsp parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.proto.Login.Disconnect parseFrom(
+    public static com.proto.Login.DisconnectRsp parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.proto.Login.Disconnect parseFrom(byte[] data)
+    public static com.proto.Login.DisconnectRsp parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.proto.Login.Disconnect parseFrom(
+    public static com.proto.Login.DisconnectRsp parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.proto.Login.Disconnect parseFrom(java.io.InputStream input)
+    public static com.proto.Login.DisconnectRsp parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static com.proto.Login.Disconnect parseFrom(
+    public static com.proto.Login.DisconnectRsp parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.proto.Login.Disconnect parseDelimitedFrom(java.io.InputStream input)
+    public static com.proto.Login.DisconnectRsp parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static com.proto.Login.Disconnect parseDelimitedFrom(
+    public static com.proto.Login.DisconnectRsp parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.proto.Login.Disconnect parseFrom(
+    public static com.proto.Login.DisconnectRsp parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static com.proto.Login.Disconnect parseFrom(
+    public static com.proto.Login.DisconnectRsp parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -5810,7 +6198,7 @@ public final class Login {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(com.proto.Login.Disconnect prototype) {
+    public static Builder newBuilder(com.proto.Login.DisconnectRsp prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     @java.lang.Override
@@ -5826,26 +6214,26 @@ public final class Login {
       return builder;
     }
     /**
-     * Protobuf type {@code Disconnect}
+     * Protobuf type {@code DisconnectRsp}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:Disconnect)
-        com.proto.Login.DisconnectOrBuilder {
+        // @@protoc_insertion_point(builder_implements:DisconnectRsp)
+        com.proto.Login.DisconnectRspOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return com.proto.Login.internal_static_Disconnect_descriptor;
+        return com.proto.Login.internal_static_DisconnectRsp_descriptor;
       }
 
       @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.proto.Login.internal_static_Disconnect_fieldAccessorTable
+        return com.proto.Login.internal_static_DisconnectRsp_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                com.proto.Login.Disconnect.class, com.proto.Login.Disconnect.Builder.class);
+                com.proto.Login.DisconnectRsp.class, com.proto.Login.DisconnectRsp.Builder.class);
       }
 
-      // Construct using com.proto.Login.Disconnect.newBuilder()
+      // Construct using com.proto.Login.DisconnectRsp.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -5863,8 +6251,6 @@ public final class Login {
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        connId_ = 0;
-
         reason_ = "";
 
         return this;
@@ -5873,17 +6259,17 @@ public final class Login {
       @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return com.proto.Login.internal_static_Disconnect_descriptor;
+        return com.proto.Login.internal_static_DisconnectRsp_descriptor;
       }
 
       @java.lang.Override
-      public com.proto.Login.Disconnect getDefaultInstanceForType() {
-        return com.proto.Login.Disconnect.getDefaultInstance();
+      public com.proto.Login.DisconnectRsp getDefaultInstanceForType() {
+        return com.proto.Login.DisconnectRsp.getDefaultInstance();
       }
 
       @java.lang.Override
-      public com.proto.Login.Disconnect build() {
-        com.proto.Login.Disconnect result = buildPartial();
+      public com.proto.Login.DisconnectRsp build() {
+        com.proto.Login.DisconnectRsp result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
@@ -5891,9 +6277,8 @@ public final class Login {
       }
 
       @java.lang.Override
-      public com.proto.Login.Disconnect buildPartial() {
-        com.proto.Login.Disconnect result = new com.proto.Login.Disconnect(this);
-        result.connId_ = connId_;
+      public com.proto.Login.DisconnectRsp buildPartial() {
+        com.proto.Login.DisconnectRsp result = new com.proto.Login.DisconnectRsp(this);
         result.reason_ = reason_;
         onBuilt();
         return result;
@@ -5933,19 +6318,16 @@ public final class Login {
       }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.proto.Login.Disconnect) {
-          return mergeFrom((com.proto.Login.Disconnect)other);
+        if (other instanceof com.proto.Login.DisconnectRsp) {
+          return mergeFrom((com.proto.Login.DisconnectRsp)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(com.proto.Login.Disconnect other) {
-        if (other == com.proto.Login.Disconnect.getDefaultInstance()) return this;
-        if (other.getConnId() != 0) {
-          setConnId(other.getConnId());
-        }
+      public Builder mergeFrom(com.proto.Login.DisconnectRsp other) {
+        if (other == com.proto.Login.DisconnectRsp.getDefaultInstance()) return this;
         if (!other.getReason().isEmpty()) {
           reason_ = other.reason_;
           onChanged();
@@ -5965,11 +6347,11 @@ public final class Login {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.proto.Login.Disconnect parsedMessage = null;
+        com.proto.Login.DisconnectRsp parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.proto.Login.Disconnect) e.getUnfinishedMessage();
+          parsedMessage = (com.proto.Login.DisconnectRsp) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -5979,35 +6361,9 @@ public final class Login {
         return this;
       }
 
-      private int connId_ ;
-      /**
-       * <code>int32 conn_id = 1;</code>
-       */
-      public int getConnId() {
-        return connId_;
-      }
-      /**
-       * <code>int32 conn_id = 1;</code>
-       */
-      public Builder setConnId(int value) {
-        
-        connId_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>int32 conn_id = 1;</code>
-       */
-      public Builder clearConnId() {
-        
-        connId_ = 0;
-        onChanged();
-        return this;
-      }
-
       private java.lang.Object reason_ = "";
       /**
-       * <code>string reason = 2;</code>
+       * <code>string reason = 1;</code>
        */
       public java.lang.String getReason() {
         java.lang.Object ref = reason_;
@@ -6022,7 +6378,7 @@ public final class Login {
         }
       }
       /**
-       * <code>string reason = 2;</code>
+       * <code>string reason = 1;</code>
        */
       public com.google.protobuf.ByteString
           getReasonBytes() {
@@ -6038,7 +6394,7 @@ public final class Login {
         }
       }
       /**
-       * <code>string reason = 2;</code>
+       * <code>string reason = 1;</code>
        */
       public Builder setReason(
           java.lang.String value) {
@@ -6051,7 +6407,7 @@ public final class Login {
         return this;
       }
       /**
-       * <code>string reason = 2;</code>
+       * <code>string reason = 1;</code>
        */
       public Builder clearReason() {
         
@@ -6060,7 +6416,7 @@ public final class Login {
         return this;
       }
       /**
-       * <code>string reason = 2;</code>
+       * <code>string reason = 1;</code>
        */
       public Builder setReasonBytes(
           com.google.protobuf.ByteString value) {
@@ -6086,41 +6442,41 @@ public final class Login {
       }
 
 
-      // @@protoc_insertion_point(builder_scope:Disconnect)
+      // @@protoc_insertion_point(builder_scope:DisconnectRsp)
     }
 
-    // @@protoc_insertion_point(class_scope:Disconnect)
-    private static final com.proto.Login.Disconnect DEFAULT_INSTANCE;
+    // @@protoc_insertion_point(class_scope:DisconnectRsp)
+    private static final com.proto.Login.DisconnectRsp DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new com.proto.Login.Disconnect();
+      DEFAULT_INSTANCE = new com.proto.Login.DisconnectRsp();
     }
 
-    public static com.proto.Login.Disconnect getDefaultInstance() {
+    public static com.proto.Login.DisconnectRsp getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
-    private static final com.google.protobuf.Parser<Disconnect>
-        PARSER = new com.google.protobuf.AbstractParser<Disconnect>() {
+    private static final com.google.protobuf.Parser<DisconnectRsp>
+        PARSER = new com.google.protobuf.AbstractParser<DisconnectRsp>() {
       @java.lang.Override
-      public Disconnect parsePartialFrom(
+      public DisconnectRsp parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new Disconnect(input, extensionRegistry);
+        return new DisconnectRsp(input, extensionRegistry);
       }
     };
 
-    public static com.google.protobuf.Parser<Disconnect> parser() {
+    public static com.google.protobuf.Parser<DisconnectRsp> parser() {
       return PARSER;
     }
 
     @java.lang.Override
-    public com.google.protobuf.Parser<Disconnect> getParserForType() {
+    public com.google.protobuf.Parser<DisconnectRsp> getParserForType() {
       return PARSER;
     }
 
     @java.lang.Override
-    public com.proto.Login.Disconnect getDefaultInstanceForType() {
+    public com.proto.Login.DisconnectRsp getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -6137,10 +6493,10 @@ public final class Login {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_LoginRsp_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_RoleInfo_descriptor;
+    internal_static__RoleInfo_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_RoleInfo_fieldAccessorTable;
+      internal_static__RoleInfo_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_LoadRoleListRsp_descriptor;
   private static final 
@@ -6167,10 +6523,15 @@ public final class Login {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_EnterGameRsp_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_Disconnect_descriptor;
+    internal_static_DisconnectReq_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_Disconnect_fieldAccessorTable;
+      internal_static_DisconnectReq_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_DisconnectRsp_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_DisconnectRsp_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -6182,18 +6543,18 @@ public final class Login {
     java.lang.String[] descriptorData = {
       "\n\021proto/login.proto\"9\n\010LoginReq\022\017\n\007accou" +
       "nt\030\001 \001(\t\022\013\n\003pwd\030\002 \001(\t\022\017\n\007conn_id\030\003 \001(\005\"\034" +
-      "\n\010LoginRsp\022\020\n\010err_code\030\001 \001(\005\".\n\010RoleInfo" +
-      "\022\017\n\007role_id\030\001 \001(\005\022\021\n\trole_name\030\002 \001(\t\"R\n\017" +
-      "LoadRoleListRsp\022\017\n\007account\030\001 \001(\t\022\020\n\010err_" +
-      "code\030\002 \001(\005\022\034\n\trole_list\030\003 \003(\0132\t.RoleInfo" +
-      "\"3\n\rCreateRoleReq\022\017\n\007account\030\001 \001(\t\022\021\n\tro" +
-      "le_name\030\002 \001(\t\"?\n\rCreateRoleRsp\022\020\n\010err_co" +
-      "de\030\001 \001(\005\022\034\n\trole_info\030\002 \001(\0132\t.RoleInfo\"-" +
-      "\n\tEnterGame\022\017\n\007role_id\030\001 \001(\005\022\017\n\007account\030" +
-      "\002 \001(\t\">\n\014EnterGameRsp\022\020\n\010err_code\030\001 \001(\005\022" +
-      "\034\n\trole_info\030\002 \001(\0132\t.RoleInfo\"-\n\nDisconn" +
-      "ect\022\017\n\007conn_id\030\001 \001(\005\022\016\n\006reason\030\002 \001(\tB\022\n\t" +
-      "com.protoB\005Loginb\006proto3"
+      "\n\010LoginRsp\022\020\n\010err_code\030\001 \001(\005\"/\n\t_RoleInf" +
+      "o\022\017\n\007role_id\030\001 \001(\005\022\021\n\trole_name\030\002 \001(\t\"S\n" +
+      "\017LoadRoleListRsp\022\017\n\007account\030\001 \001(\t\022\020\n\010err" +
+      "_code\030\002 \001(\005\022\035\n\trole_list\030\003 \003(\0132\n._RoleIn" +
+      "fo\"3\n\rCreateRoleReq\022\017\n\007account\030\001 \001(\t\022\021\n\t" +
+      "role_name\030\002 \001(\t\"@\n\rCreateRoleRsp\022\020\n\010err_" +
+      "code\030\001 \001(\005\022\035\n\trole_info\030\002 \001(\0132\n._RoleInf" +
+      "o\"-\n\tEnterGame\022\017\n\007role_id\030\001 \001(\005\022\017\n\007accou" +
+      "nt\030\002 \001(\t\"?\n\014EnterGameRsp\022\020\n\010err_code\030\001 \001" +
+      "(\005\022\035\n\trole_info\030\002 \001(\0132\n._RoleInfo\"\017\n\rDis" +
+      "connectReq\"\037\n\rDisconnectRsp\022\016\n\006reason\030\001 " +
+      "\001(\tB\022\n\tcom.protoB\005Loginb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -6211,11 +6572,11 @@ public final class Login {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_LoginRsp_descriptor,
         new java.lang.String[] { "ErrCode", });
-    internal_static_RoleInfo_descriptor =
+    internal_static__RoleInfo_descriptor =
       getDescriptor().getMessageTypes().get(2);
-    internal_static_RoleInfo_fieldAccessorTable = new
+    internal_static__RoleInfo_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_RoleInfo_descriptor,
+        internal_static__RoleInfo_descriptor,
         new java.lang.String[] { "RoleId", "RoleName", });
     internal_static_LoadRoleListRsp_descriptor =
       getDescriptor().getMessageTypes().get(3);
@@ -6247,12 +6608,18 @@ public final class Login {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_EnterGameRsp_descriptor,
         new java.lang.String[] { "ErrCode", "RoleInfo", });
-    internal_static_Disconnect_descriptor =
+    internal_static_DisconnectReq_descriptor =
       getDescriptor().getMessageTypes().get(8);
-    internal_static_Disconnect_fieldAccessorTable = new
+    internal_static_DisconnectReq_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_Disconnect_descriptor,
-        new java.lang.String[] { "ConnId", "Reason", });
+        internal_static_DisconnectReq_descriptor,
+        new java.lang.String[] { });
+    internal_static_DisconnectRsp_descriptor =
+      getDescriptor().getMessageTypes().get(9);
+    internal_static_DisconnectRsp_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_DisconnectRsp_descriptor,
+        new java.lang.String[] { "Reason", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

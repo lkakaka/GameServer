@@ -44,7 +44,7 @@ public class ServerCmd extends CmdDispatch {
                 m_robot.sendProto(ProtoBufferMsg.MSG_ID_CREATE_ROLE_REQ, req);
                 Util.logInfo("create role, role_name:%s", m_robot.getAccount());
             } else {
-                Login.RoleInfo roleInfo = rsp.getRoleList(0);
+                Login._RoleInfo roleInfo = rsp.getRoleList(0);
                 Login.EnterGame enterGame = ProtoBufferMsg.createEnterGameBuilder().setAccount(m_robot.getAccount())
                         .setRoleId(roleInfo.getRoleId()).build();
                 m_robot.sendProto(ProtoBufferMsg.MSG_ID_ENTER_GAME, enterGame);
