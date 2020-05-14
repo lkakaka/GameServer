@@ -119,6 +119,10 @@ void ZmqInst::startZmqInst(const char* name, const char* router_addr)
 		return;
 	}
 
+	int major, minor, patch;
+	zmq_version(&major, &minor, &patch);
+	Logger::logInfo("$Current ZMQ version is %d.%d.%d", major, minor, patch);
+
 	run();
 
 	Logger::logInfo("$create zmq instance, name: %s, router addr:%s", name, routerAddr.c_str());

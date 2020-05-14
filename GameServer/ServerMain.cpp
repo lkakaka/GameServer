@@ -9,12 +9,14 @@
 #include "DBMgr.h"
 #include "PythonPlugin.h"
 #include "ZmqInst.h"
+#include "ZmqRouter.h"
 #include "Timer.h"
 #include "UnitTest.h"
 #include "Config.h"
 #include "MessageMgr.h"
 #include "GameService.h"
 #include "server.hpp"
+#include "Network.h"
 
 using namespace std;
 std::string g_service_name = "";
@@ -52,17 +54,11 @@ int main(int argc, char** argv)
 		Logger::logInfo("$db config, url: %s, port:%d", dbUrl.c_str(), DBMgr::m_dbPort);
 	}
 
-	std::string routerAddr = Config::getConfigStr(cfgName, "router_addr");
-	if (routerAddr.length() == 0) {
-		Logger::logError("$not config router addr, file name: %s", cfgName);
-		return 0;
-	}
-
 	boost::asio::io_service io;
 	TimerMgr::initTimerMgr(&io);
 
-	ZmqInst::initZmqInstance(serviceName.c_str(), routerAddr.c_str());
-	ZmqInst::getZmqInstance()->setRecvCallback(MessageMgr::onRecvData);
+	/*ZmqInst::initZmqInstance(serviceName.c_str(), routerAddr.c_str());
+	ZmqInst::getZmqInstance()->setRecvCallback(MessageMgr::onRecvData);*/
 	
 	PyObject* scriptObj = NULL;
 	std::string funcName = Config::getConfigStr(cfgName, "script_init_func");
@@ -85,6 +81,29 @@ int main(int argc, char** argv)
 
 		// Run the server until stopped.
 		http_thread.reset(new std::thread([&http_server] { http_server->run(); }));
+	}
+
+	int router_port = Config::getConfigInt(cfgName, "router_port");
+	if (router_port > 0) {
+		ZmqRouter::initZmqRouter(serviceName.c_str(), router_port);
+	}
+	else {
+		std::string routerAddr = Config::getConfigStr(cfgName, "router_addr");
+		if (routerAddr.length() == 0) {
+			Logger::logError("$not config router addr, file name: %s", cfgName);
+			return 0;
+		}
+
+		ZmqInst::initZmqInstance(serviceName.c_str(), routerAddr.c_str());
+		int port = Config::getConfigInt(cfgName, "port");
+		if (port > 0) {
+			Logger::logInfo("$gateway port:%d", port);
+			Network::initNetwork(&io, port);
+			ZmqInst::getZmqInstance()->setRecvCallback(MessageMgr::onGatewayRecvData);
+		}
+		else {
+			ZmqInst::getZmqInstance()->setRecvCallback(MessageMgr::onRecvData);
+		}
 	}
 
 	/*DBPlugin* dbPlugin = new DBPlugin();

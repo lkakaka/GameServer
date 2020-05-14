@@ -5,5 +5,5 @@ call config.bat
 
 ::cd ../bin/Debug
 
-%GatewayCmd% %GatewayConfig%
+%ServerCmd% %GatewayConfig%
 ::pause

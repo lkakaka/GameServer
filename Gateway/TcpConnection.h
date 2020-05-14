@@ -3,12 +3,13 @@
 #include "boost/asio/ip/tcp.hpp"
 #include "Logger.h"
 #include "MyBuffer.h"
+#include "../Common/ServerExports.h"
 
 typedef std::function<void(int, const char*)> ConnCloseFunc;
 
 using boost::asio::ip::tcp;
 
-class TcpConnection : public std::enable_shared_from_this<TcpConnection>
+class SERVER_EXPORT_API TcpConnection : public std::enable_shared_from_this<TcpConnection>
 {
 private:
 	tcp::socket m_socket;

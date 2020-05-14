@@ -22,7 +22,7 @@
 using boost::asio::ip::tcp;
 using boost::system::error_code;
 
-class Network : std::enable_shared_from_this<Network>
+class SERVER_EXPORT_API Network : std::enable_shared_from_this<Network>
 {
 private:
 	int m_curConnId = 0;

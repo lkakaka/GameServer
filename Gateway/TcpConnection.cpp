@@ -1,5 +1,4 @@
 #include "TcpConnection.h"
-#include "MessageHandler.h"
 #include "proto.h"
 #include "ZmqInst.h"
 

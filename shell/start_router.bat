@@ -5,5 +5,5 @@ call config.bat
 
 ::cd ../bin/Debug
 
-%RouterCmd% %RouterConfig%
+%ServerCmd% %RouterConfig%
 ::pause
