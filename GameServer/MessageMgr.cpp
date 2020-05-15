@@ -66,7 +66,7 @@ void MessageMgr::onRecvData(char* sender, char* data, int dataLen) {
 	MyBuffer buffer(data, dataLen);
 	if (strcmp(sender, "gateway") == 0) {
 		if (dataLen <= 9) {
-			Logger::logError("$recv gateway msg format error, data len <= 9");
+			Logger::logError("$recv %s msg format error, data len <= 9", sender);
 			return;
 		}
 		bool isClientMsg = (buffer.readByte(true) == 0);
@@ -104,7 +104,7 @@ void MessageMgr::onRecvData(char* sender, char* data, int dataLen) {
 	}
 	else {
 		if (dataLen <= 4) {
-			Logger::logError("$recv msg format error, data len <= 4");
+			Logger::logError("$recv %s msg format error, data len <= 4", sender);
 			return;
 		}
 		msgId = buffer.readInt(true);
@@ -125,11 +125,13 @@ void MessageMgr::onRecvData(char* sender, char* data, int dataLen) {
 }
 
 void MessageMgr::onGatewayRecvData(char* sender, char* data, int dataLen) {
-	if (dataLen <= 8) {
-		Logger::logError("$recv msg format error, data len < 8");
+	MyBuffer buffer(data, dataLen);
+	if (dataLen < 8) {
+		int connId = -1;
+		if (dataLen >= 4) connId = buffer.readInt(true);
+		Logger::logError("$recv %s msg format error, data len(%d) < 8, connId:%d", sender, dataLen, connId);
 		return;
 	}
-	MyBuffer buffer(data, dataLen);
 	int connId = buffer.readInt(true);
 	int msgId = buffer.readInt(true);
 	if (msgId == MSG_ID_CLIENT_DISCONNECT) {

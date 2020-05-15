@@ -10,6 +10,7 @@ class ErrorCode(object):
     OK = 0
 
     TIME_OUT = -10000
+    DB_ERROR = -10001
 
     CREATE_PLAYER_ERROR = -20000
     ACCOUNT_IS_LOGINING = -20001

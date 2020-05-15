@@ -71,8 +71,8 @@ class DBService(ServiceBase):
         rsp_msg.account = msg.account
         db_res = self._db_handler.execute_sql("select * from player where account='{}'".format(msg.account))
         if db_res is None:
-            rsp_msg.err_code = util.const.ErrorCode.CREATE_PLAYER_ERROR
-            logger.logError("$create player error!!!, account:{}", msg.account)
+            rsp_msg.err_code = util.const.ErrorCode.DB_ERROR
+            logger.logError("$loader player list error!!!, account:{}", msg.account)
         else:
             rsp_msg.err_code = util.const.ErrorCode.OK
             for res in db_res:
