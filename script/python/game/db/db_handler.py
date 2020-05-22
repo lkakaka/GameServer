@@ -42,6 +42,18 @@ class DBHandler:
             db_res.append(db_row_res)
         return tuple(db_res)
 
+    def insert_row(self, tbl):
+        self._db_inst.insert_row(tbl)
+
+    def update_row(self, tbl):
+        self._db_inst.updateRow(tbl)
+
+    def get_row(self, tbl):
+        self._db_inst.getRow(tbl)
+
+    def delete_row(self, tbl):
+        self._db_inst.delete_row(tbl)
+
     @staticmethod
     def test_db():
         db_handler = DBHandler("test_db")

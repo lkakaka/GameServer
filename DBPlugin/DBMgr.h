@@ -3,12 +3,13 @@
 #include <Reflect.h>
 #include "DBHandler.h"
 
+using namespace DataBase;
+
 class SERVER_EXPORT_API DBMgr
 {
 private:
 	std::string m_dbName;
 	std::map<std::string, DBHandler*> m_dbHanders;
-
 public:
 
 	DBMgr();

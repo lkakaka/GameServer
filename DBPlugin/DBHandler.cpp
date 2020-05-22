@@ -7,10 +7,26 @@
 #include "jdbc/cppconn/resultset.h"
 #include "jdbc/cppconn/statement.h"
 #include "jdbc/cppconn/datatype.h"
+#include "jdbc/cppconn/prepared_statement.h"
 
 #include "Logger.h"
 
 using namespace sql;
+
+USING_DATA_BASE;
+
+typedef struct FieldMeta {
+	std::string field;
+	union FieldValue
+	{
+		int i;
+		double b;
+		//char s[64*1024];
+		std::string s;
+		FieldValue() {}
+		~FieldValue() {}
+	} val;
+}FieldMeta;
 
 
 DBHandler::~DBHandler()
@@ -19,16 +35,105 @@ DBHandler::~DBHandler()
 }
 
 DBHandler::DBHandler(std::string& dbUrl, int dbPort, std::string& dbUserName, std::string& dbPassword, std::string dbName) :
-	m_dbUrl(dbUrl), m_dbPort(dbPort), m_dbUserName(dbUserName), m_dbPassword(dbPassword), m_dbName(dbName), m_dbConn(NULL)
+	m_dbUrl(dbUrl), m_dbPort(dbPort), m_dbUserName(dbUserName), m_dbPassword(dbPassword), m_dbName(dbName), m_dbConn(NULL), 
+	m_redis(new Redis("127.0.0.1", 6379))
 {
 	Connection* conn = getDBConnection();
-	if (conn != NULL) {
-		Statement* st = conn->createStatement();
-		std::string sql = "CREATE DATABASE IF NOT EXISTS ";
-		sql += dbName;
-		sql::SQLString sqlStr = sql::SQLString(sql.c_str());
-		st->execute(sqlStr);
+	Statement* st = conn->createStatement();
+	std::string sql = "CREATE DATABASE IF NOT EXISTS ";
+	sql += dbName;
+	sql::SQLString sqlStr = sql::SQLString(sql.c_str());
+	st->execute(sqlStr);
+	initTableSchema();
+
+	Table tbl;
+	tbl.tableName = "player";
+	tbl.priKeyVal = 13;
+	TableField tblField;
+	tblField.fieldName = "account";
+	tblField.sval = "haha";
+	tbl.addField(tblField);
+	//insertRow(&tbl);
+	getRow("player", 1);
+}
+
+void DBHandler::initTableSchema() {
+	Connection* conn = getDBConnection();
+	char* sql = "select TABLE_NAME from information_schema.tables where table_schema = '%s' and table_type = 'BASE TABLE'";
+	StatementPtr ptr = executeSql(sql, m_dbName.c_str());
+	Statement* st = ptr->getStatement();
+
+	sql::ResultSet* rs = st->getResultSet();
+	std::vector<std::string> vecTables;
+	while (rs->next()) {
+		vecTables.push_back(rs->getString(1).c_str());
 	}
+
+	for (auto iter = vecTables.begin(); iter != vecTables.end(); iter++) {
+		std::shared_ptr<Table> ptrTable = std::make_shared<Table>();
+		m_tableSchema.emplace(*iter, ptrTable);
+		// 找主键
+		sql = "select column_name from information_schema.key_column_usage where constraint_schema = '%s' and table_name = '%s' and constraint_name='PRIMARY'";
+		ptr = executeSql(sql, m_dbName.c_str(), iter->c_str());
+		st = ptr->getStatement();
+		sql::ResultSet* rs = st->getResultSet();
+		if (!rs->next()) {
+			Logger::logError("$not primary key, table:%s", iter->c_str());
+			exit(1);
+		}
+
+		std::string priKey = rs->getString(1).c_str();
+		ptrTable->priKeyName = priKey;
+
+
+		// 获取字段信息
+		sql = "select column_name, data_type, column_default from information_schema.columns where table_schema = '%s' and table_name = '%s'";
+		ptr = executeSql(sql, m_dbName.c_str(), iter->c_str());
+		st = ptr->getStatement();
+		rs = st->getResultSet();
+		while (rs->next()) {
+			TableField field;
+			field.fieldName = rs->getString(1).c_str();
+			std::string type = rs->getString(2).c_str();
+			std::string defaultVal = rs->getString(3).c_str();
+			if (type == "int" || type == "bigint" || type == "tinyint") {
+				field.type = TableField::FieldType::TYPE_INT;
+			}
+			else if (type == "double") {
+				field.type = TableField::FieldType::TYPE_DOUBLE;
+			}
+			else {
+				field.type = TableField::FieldType::TYPE_STRING;
+			}
+			field.defaut_val = defaultVal;
+			ptrTable->fields.emplace(field.fieldName, field);
+		}
+	}
+	//sql::ResultSetMetaData* metaData = rs->getMetaData();
+}
+
+TableField* DBHandler::getTableField(const char* tableName, const char* fieldName) const {
+	auto iter = m_tableSchema.find(tableName);
+	if (iter == m_tableSchema.end()) {
+		Logger::logError("$not found table:%s", tableName);
+		return NULL; 
+	}
+	auto fieldIter = iter->second->fields.find(fieldName);
+	if (fieldIter == iter->second->fields.end()) {
+		Logger::logError("$not found table's field, table:%s, field:%s", tableName, fieldName);
+		return NULL;
+	}
+
+	return &fieldIter->second;
+}
+
+Table* DBHandler::getTableSchema(const char* tableName) const {
+	auto iter = m_tableSchema.find(tableName);
+	if (iter == m_tableSchema.end()) {
+		Logger::logError("$not found table schema:%s", tableName);
+		return NULL;
+	}
+	return iter->second.get();
 }
 
 inline std::string DBHandler::getDbName() { return m_dbName; }
@@ -328,46 +433,287 @@ void DBHandler::del(ReflectObject tbl)
 	st->execute(sqlStr);
 }
 
-void DBHandler::executeSql(std::string sql, std::function<void(Statement*, bool)> handler)
+StatementPtr DBHandler::executeSql(const char* sqlFormat, ...)
 {
+	va_list va;
+	va_start(va, sqlFormat);
+	int n = vsnprintf(m_sqlBuf, MAX_SQL_LENGTH, sqlFormat, va);
+	if (n >= MAX_SQL_LENGTH) {
+		Logger::logError("$sql length exceed %d, sql: %s", MAX_SQL_LENGTH, m_sqlBuf);
+	}
+	va_end(va);
 	Connection* conn = getDBConnection();
 	if (conn == NULL) {
-		Logger::logError("$exec sql failed, conn is null, sql: %s", sql.c_str());
-		return;
+		Logger::logError("$exec sql failed, conn is null, sql: %s", m_sqlBuf);
+		return NULL;
 	}
 	Statement* st = conn->createStatement();
-	sql::SQLString sqlStr = sql::SQLString(sql.c_str());
-	bool isResultSet = st->execute(sqlStr);
-	if (handler != NULL) {
-		handler(st, isResultSet);
+	sql::SQLString sqlStr = sql::SQLString(m_sqlBuf);
+	try {
+		bool isResultSet = st->execute(sqlStr);
+		Logger::logInfo("$exec sql success, sql: %s", m_sqlBuf);
+		return MAKE_STATEMENT_PTR(st, isResultSet);
 	}
-	Logger::logInfo("$exec sql success, sql: %s", sql.c_str());
-	st->close();
+	catch (std::exception& e) {
+		Logger::logError("$execute sql failed, sql:%s, ex: %s", m_sqlBuf, e.what());
+	}
+	return NULL;
+}
 
-	//while (true) {
-	//	if (isResultSet) {
-	//		ResultSet* rs = st->getResultSet();
-	//		ResultSetMetaData* metaData = rs->getMetaData();
-	//		std::map<std::string, int> fieldTypeMap;
-	//		for (int i = 1; i <= metaData->getColumnCount(); i++) {
-	//			std::string fieldName = metaData->getColumnName(i);
-	//			int colType = metaData->getColumnType(i);
-	//			if (colType == DataType::INTEGER) {
-	//			}
-	//		}
-	//		while (rs->next()) {
-	//			
-	//		}
-	//	}
-	//	else {
-	//		int updateCount = st->getUpdateCount();
-	//		if (updateCount < 0) {
-	//			break;
-	//		}
-	//		//Logger::logError("$exec sql success, sql: %s, update count:%d", sql.c_str(), updateCount);
-	//	}
-	//	
-	//	isResultSet = st->getMoreResults();
-	//}
-	
+void DBHandler::addUpdateRecord(std::string& tableName, long keyVal, std::set<std::string> stFields)
+{
+	auto iter = m_chgRecords.find(tableName);
+	if (iter == m_chgRecords.end()) {
+		std::map<long, std::set<std::string>> record;
+		m_chgRecords.emplace(tableName, record);
+		iter = m_chgRecords.find(tableName);
+	}
+
+	std::map<long, std::set<std::string>> mpRecord = iter->second;
+	auto mpIter = mpRecord.find(keyVal);
+	if (mpIter == mpRecord.end()) {
+		std::set<std::string> st;
+		mpRecord.emplace(keyVal, st);
+		mpIter = mpRecord.find(keyVal);
+	}
+
+	std::set<std::string> st = mpIter->second;
+	for (auto iter1 = stFields.begin(); iter1 != stFields.end(); iter1++) {
+		if (st.find(*iter1) != st.end()) continue;
+		st.insert(*iter1);
+	}
+}
+
+std::shared_ptr<Table> DBHandler::getRowFromRedis(std::string& tableName, long keyVal)
+{
+	std::string redisKey = Table::redisKey(tableName.c_str(), keyVal);
+	REDIS_REPLY_PTR reply_ptr = m_redis->execRedisCmd("hgetall %s", redisKey);
+	if (reply_ptr == NULL) return NULL;
+	std::shared_ptr<Table> tbl = std::make_shared<Table>();
+	redisReply* reply = reply_ptr->getReply();
+	for (int i = 0; i < reply->elements / 2; i+=2) {
+		redisReply* keyReply = reply->element[i];
+		TableField field;
+		if (keyReply->len > 0) {
+			std::copy(keyReply->str, keyReply->str + keyReply->len, std::back_inserter(field.fieldName));
+		}
+		redisReply* valReply = reply->element[i+1];
+		if (valReply->len > 0) {
+			std::copy(valReply->str, valReply->str + valReply->len, std::back_inserter(field.sval));
+		}
+		
+		tbl->addField(field);
+	}
+	return tbl;
+}
+
+void DBHandler::flushChgRedisRecordToDB()
+{
+	Logger::logInfo("$start flush redis record to db!!");
+	for (auto iter = m_chgRecords.begin(); iter != m_chgRecords.end(); iter++) {
+		std::string tableName = iter->first;
+		std::map<long, std::set<std::string>> mpRecord = iter->second;
+		Table* tblSchema = getTableSchema(tableName.c_str());
+		if (tblSchema == NULL) continue;
+		for (auto iter1 = mpRecord.begin(); iter1 != mpRecord.end(); iter1++) {
+			std::string sql = "update " + tableName + " ";
+			long keyVal = iter1->first;
+			std::set<std::string> st = iter1->second;
+			std::string redisKey = Table::redisKey(tableName.c_str(), iter1->first);
+			std::shared_ptr<Table> tbl = getRowFromRedis(tableName, keyVal);
+			
+			bool isFirst = true;
+			for (auto iter2 = st.begin(); iter2 != st.end(); iter2++) {
+				auto iter3 = tbl->fields.find(*iter2);
+				if (iter3 == tbl->fields.end()) continue;
+				if (!isFirst) {
+					sql += ",";
+					isFirst = true;
+				}
+				sql += *iter2 + "=" + iter3->second.sval;
+			}
+			sql += " where " + tblSchema->priKeyName + "=%ld";
+			executeSql(sql.c_str(), keyVal);
+		}
+	}
+	m_chgRecords.clear();
+	Logger::logInfo("$flush redis record to db finished!!");
+}
+
+bool DBHandler::checkRedisExistAndLoad(const char* tableName, long keyVal) {
+	std::string redisKey;
+	char buf[64];
+	snprintf(buf, 64, "%ld", keyVal);
+	redisKey.append(tableName).append(":").append(buf);
+	std::shared_ptr<RedisReply> reply = m_redis->execRedisCmd("EXISTS %s", redisKey.c_str());
+	if (reply == NULL) return false;
+	// redis中已经存在
+	if (reply->getReply()->integer == 1) return true;
+	// redis中不存在从数据库加载
+	Table* tbl = getTableSchema(tableName);
+	if (tbl == NULL) {
+		return false;
+	}
+	std::string formatSql = "SELECT * FROM %s WHERE %s=%s";
+	StatementPtr ptr = executeSql(formatSql.c_str(), tableName, tbl->priKeyName, keyVal);
+	if (ptr == NULL) return false;
+	Statement* st = ptr->getStatement();
+	sql::ResultSet* rs = st->getResultSet();
+	sql::ResultSetMetaData* metaData = rs->getMetaData();
+	int colCount = metaData->getColumnCount();
+	bool hasNext = rs->next();
+	std::string redisCmd = "hmset " + redisKey;
+	for (int i = 1; i <= colCount; i++) {
+		redisCmd += " " + metaData->getColumnLabel(i) + " ";
+		int colType = metaData->getColumnType(i);
+		if (colType >= sql::DataType::BIT && colType <= sql::DataType::BIGINT) {
+			int val = hasNext ? rs->getInt(i) : 0;
+			redisCmd += val;
+		}
+		else if (colType >= sql::DataType::REAL && colType <= sql::DataType::NUMERIC) {
+			double val = hasNext ? rs->getDouble(i) : 0;
+			redisCmd += val;
+		}
+		else {
+			const char* val = hasNext ? rs->getString(i).c_str() : "";
+			redisCmd += val;
+		}
+	}
+	m_redis->execRedisCmd(redisCmd.c_str());
+	return true;
+}
+
+bool DBHandler::insertRow(Table* tbl)
+{
+	std::string fields;
+	std::string vals;
+	Table* tblSchema = getTableSchema(tbl->tableName.c_str());
+	bool isSetPriKey = false;
+	for (auto iter = tbl->fields.begin(); iter != tbl->fields.end(); iter++) {
+		std::string fieldName = iter->first;
+		TableField* tbField = getTableField(tbl->tableName.c_str(), fieldName.c_str());
+		if (tbField == nullptr) {
+			return false;
+		}
+
+		bool isPriKey = false;
+		if (!isSetPriKey && fieldName == tblSchema->priKeyName) {
+			isSetPriKey = true;
+			isPriKey = true;
+		}
+		TableField field = iter->second;
+		fields += fieldName + ",";
+		switch (tbField->type) {
+			case TableField::FieldType::TYPE_INT:
+			{
+				char buf[64]{ 0 };
+				snprintf(buf, 64, "%ld", field.lval);
+				vals += buf;
+				if (isPriKey) tbl->priKeyVal = field.lval;
+				break;
+			}
+			case TableField::FieldType::TYPE_DOUBLE:
+			{
+				char buf[64]{ 0 };
+				snprintf(buf, 64, "%lf", field.dval);
+				vals += buf;
+				break;
+			}
+			case TableField::FieldType::TYPE_STRING:
+			{
+				vals += "'" + field.sval + "'";
+				break;
+			}
+			default:
+				Logger::logError("$not support field type, table:%s, field:%s, type:%d", tbl->tableName.c_str(), fieldName.c_str(), tbField->type);
+				return false;
+		}
+		vals += ",";
+	}
+
+	// 删除最后的逗号
+	if (!fields.empty()) {
+		fields.pop_back();
+		vals.pop_back();
+	}
+
+	char* sql = "INSERT INTO %s(%s) VALUES(%s)";
+	StatementPtr ptr = executeSql(sql, tbl->tableName.c_str(), fields.c_str(), vals.c_str());
+	if (ptr == NULL) return false;
+	int updateCount = ptr->getStatement()->getUpdateCount();
+	if (updateCount <= 0) {
+		Logger::logError("$exe insert sql failed, sql:%s, fields:%s, vals:%s", sql, fields.c_str(), vals.c_str());
+		return false;
+	}
+
+	if (!isSetPriKey) {
+		ptr = executeSql("SELECT last_insert_id()");
+		Statement* st = ptr->getStatement();
+		ResultSet* rs = st->getResultSet();
+		if (rs->next()) {
+			tbl->priKeyVal = rs->getInt64(1);
+		} else {
+			Logger::logError("$exe insert sql error, not found laster insert id, sql:%s, fields:%s, vals:%s", sql, fields.c_str(), vals.c_str());
+		}
+	}
+
+	return true;
+}
+
+REDIS_REPLY_PTR DBHandler::getRow(const char* tableName, long keyVal)
+{
+	if (!checkRedisExistAndLoad(tableName, keyVal)) return NULL;
+
+	std::string redisKey = Table::redisKey(tableName, keyVal);
+	return m_redis->execRedisCmd("HGETALL %s", redisKey.c_str());
+}
+
+bool DBHandler::updateRow(Table* tbl)
+{
+	if (!checkRedisExistAndLoad(tbl->tableName.c_str(), tbl->priKeyVal)) return false;
+	std::string redisCmd = "hmset " + tbl->redisKey();
+	std::set<std::string> stFields;
+	for (auto iter = tbl->fields.begin(); iter != tbl->fields.end(); iter++) {
+		std::string fieldName = iter->first;
+		stFields.insert(fieldName);
+		TableField field = iter->second;
+		redisCmd.append(" " + fieldName + " ");
+		switch (field.type) {
+			case TableField::FieldType::TYPE_INT:
+			{
+				char buf[64]{ 0 };
+				snprintf(buf, 64, "%ld", field.lval);
+				redisCmd.append(buf);
+				break;
+			}
+			case TableField::FieldType::TYPE_DOUBLE:
+			{
+				char buf[64]{ 0 };
+				snprintf(buf, 64, "%lf", field.dval);
+				redisCmd.append(buf);
+				break;
+			}
+			case TableField::FieldType::TYPE_STRING:
+			{
+				redisCmd.append("'" + field.sval + "'");
+				break;
+			}
+			default:
+				Logger::logError("$not support field type, table:%s, field:%s, type:%d", tbl->tableName.c_str(), fieldName.c_str(), field.type);
+				return false;
+		}
+	}
+	m_redis->execRedisCmd(redisCmd.c_str());
+	addUpdateRecord(tbl->tableName, tbl->priKeyVal, stFields);
+	flushChgRedisRecordToDB();
+	return true;
+}
+
+bool DBHandler::deleteRow(Table* tbl)
+{
+	std::string redisCmd = "del " + tbl->redisKey();
+	REDIS_REPLY_PTR replyPtr = m_redis->execRedisCmd(redisCmd.c_str());
+	if (replyPtr == NULL) return false;
+	executeSql("delete from %s where %s=%s", tbl->tableName, tbl->priKeyName, tbl->priKeyVal);
+	return true;
 }

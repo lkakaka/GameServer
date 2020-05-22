@@ -99,7 +99,10 @@ void test(char* pName, char* dstName)
 int main(int argc, char**args)
 {
 	//startDevice("*:5555", "*:5556");
-	test(args[1], args[2]);
+	char buf[10]{0};
+	int n = snprintf(buf, 10, "ss%d", 10);
+	n = snprintf(buf, 10, "s%d", 1);
+	//test(args[1], args[2]);
 	getchar();
 
 	return 0;

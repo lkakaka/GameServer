@@ -29,6 +29,9 @@ class GamePlayer:
     def send_msg_to_client(self, msg):
         self.game_scene.service.send_msg_to_client(self.conn_id, msg)
 
+    def send_msg_to_service(self, dst_srv, msg):
+        self.game_scene.service.send_msg_to_service(dst_srv, msg)
+
     @_c_cmd.reg_cmd(Message.MSG_ID_DISCONNECT_REQ)
     def _on_recv_disconnect(self, msg_id, msg):
         logger.logError("$player disconnect, role_id:{},reason:{}", self.role_id, msg.reason)
@@ -41,3 +44,4 @@ class GamePlayer:
         rsp_msg.id = 10
         rsp_msg.msg = "welcome to game world, " + self.name
         self.send_msg_to_client(rsp_msg)
+        self.send_msg_to_service("db", msg)

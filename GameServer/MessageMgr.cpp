@@ -79,8 +79,8 @@ void MessageMgr::onRecvData(char* sender, char* data, int dataLen) {
 		//	return;
 		//}
 		//msg->ParseFromArray(&data[8], dataLen - 8);
-		char* msgData = &data[9];
-		int msgLen = dataLen - 9;
+		char* msgData = buffer.data();
+		int msgLen = buffer.size();
 		if (!handleMsg(connId, msgId, msgData, msgLen)) {
 			auto py_state = PyGILState_Ensure();
 			PyObject* arg = PyTuple_New(3);
@@ -108,8 +108,8 @@ void MessageMgr::onRecvData(char* sender, char* data, int dataLen) {
 			return;
 		}
 		msgId = buffer.readInt(true);
-		char* msgData = &data[4];
-		int msgLen = dataLen - 4;
+		char* msgData = buffer.data();
+		int msgLen = buffer.size();
 		if (!handleServiceMsg(msgId, msgData, msgLen)) {
 			auto py_state = PyGILState_Ensure();
 			PyObject* arg = PyTuple_New(3);

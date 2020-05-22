@@ -45,7 +45,7 @@ static PyObject* db_repr(PyObject* self)
 {
 	DBHandler* dbHandler = ((PyDbObject*)self)->db_inst;
 	char buf[64]{ 0 };
-	sprintf(buf, "<C++ Object DBHandler:%ld>", dbHandler);
+	snprintf(buf, 64, "<C++ Object DBHandler:%lld>", (long long)dbHandler);
 	return Py_BuildValue("s", buf);
 }
 
@@ -75,7 +75,7 @@ static PyObject* initTable(PyObject* self, PyObject* args)
 		PyErr_SetString(ModuleError, "init table failed");
 		Py_RETURN_FALSE;
 	}
-	long length = PyTuple_Size(fieldTuple);
+	ssize_t length = PyTuple_Size(fieldTuple);
 	for (int i = 0; i < length; i++) {
 		//get an element out of the list - the element is also a python objects
 		PyObject* fieldInfo = PyTuple_GetItem(fieldTuple, i);
@@ -134,64 +134,286 @@ static PyObject* executeSql(PyObject* self, PyObject* args)
 		Py_RETURN_NONE;
 	}
 
-	PyObject* result = PyList_New(0);
-	auto dataHandler = [&result](sql::Statement* st, bool isResultSet) {
-		/*Logger::logInfo("$execute sql return!!");*/
-		while (true) {
-			if (isResultSet) {
-				sql::ResultSet* rs = st->getResultSet();
-				sql::ResultSetMetaData* metaData = rs->getMetaData();
-				int colCount = metaData->getColumnCount();
-				PyObject* fieldTuple = PyTuple_New(colCount);
-				for (int i = 1; i <= colCount; i++) {
-					//std::string fieldName = metaData->getColumnLabel(i).c_str();
-					/*const char* name = metaData->getColumnLabel(i).c_str();*/
-					PyTuple_SetItem(fieldTuple, i - 1, PyUnicode_FromString(metaData->getColumnLabel(i).c_str()));
-				}
-				PyList_Append(result, fieldTuple);
+	StatementPtr ptr = dbHandler->executeSql(sql);
+	if (ptr == NULL) Py_RETURN_NONE;
+	sql::Statement* st = ptr->getStatement();
+	bool isResultSet = ptr->isResultSet();
 
-				while (rs->next()) {
-					PyObject* dataTuple = PyTuple_New(metaData->getColumnCount());
-					for (int i = 1; i <= colCount; i++) {
-						int colType = metaData->getColumnType(i);
-						if (colType >= sql::DataType::BIT && colType <= sql::DataType::BIGINT) {
-							PyTuple_SetItem(dataTuple, i - 1, PyLong_FromLong(rs->getInt(i)));
-						}
-						else if (colType >= sql::DataType::REAL && colType <= sql::DataType::NUMERIC) {
-							PyTuple_SetItem(dataTuple, i - 1, PyFloat_FromDouble(rs->getDouble(i)));
-						}
-						else {
-							PyTuple_SetItem(dataTuple, i - 1, PyUnicode_FromString(rs->getString(i).c_str()));
-						}
-					}
-					PyList_Append(result, dataTuple);
-				}
+	PyObject* result = PyList_New(0);
+	/*Logger::logInfo("$execute sql return!!");*/
+	while (true) {
+		if (isResultSet) {
+			sql::ResultSet* rs = st->getResultSet();
+			sql::ResultSetMetaData* metaData = rs->getMetaData();
+			int colCount = metaData->getColumnCount();
+			PyObject* fieldTuple = PyTuple_New(colCount);
+			for (int i = 1; i <= colCount; i++) {
+				//std::string fieldName = metaData->getColumnLabel(i).c_str();
+				/*const char* name = metaData->getColumnLabel(i).c_str();*/
+				PyTuple_SetItem(fieldTuple, i - 1, PyUnicode_FromString(metaData->getColumnLabel(i).c_str()));
 			}
-			else {
-				int updateCount = st->getUpdateCount();
-				if (updateCount < 0) {
-					break;
+			PyList_Append(result, fieldTuple);
+
+			while (rs->next()) {
+				PyObject* dataTuple = PyTuple_New(metaData->getColumnCount());
+				for (int i = 1; i <= colCount; i++) {
+					int colType = metaData->getColumnType(i);
+					if (colType >= sql::DataType::BIT && colType <= sql::DataType::BIGINT) {
+						PyTuple_SetItem(dataTuple, i - 1, PyLong_FromLong(rs->getInt(i)));
+					}
+					else if (colType >= sql::DataType::REAL && colType <= sql::DataType::NUMERIC) {
+						PyTuple_SetItem(dataTuple, i - 1, PyFloat_FromDouble(rs->getDouble(i)));
+					}
+					else {
+						PyTuple_SetItem(dataTuple, i - 1, PyUnicode_FromString(rs->getString(i).c_str()));
+					}
 				}
-				PyObject* filedTuple = PyTuple_New(1);
-				PyTuple_SetItem(filedTuple, 0, PyUnicode_FromString("update_count"));
-				PyList_Append(result, filedTuple);
-				PyObject* dataTuple = PyTuple_New(1);
-				PyTuple_SetItem(dataTuple, 0, PyLong_FromLong(updateCount));
 				PyList_Append(result, dataTuple);
 			}
-
-			isResultSet = st->getMoreResults();
 		}
-	};
+		else {
+			uint64_t updateCount = st->getUpdateCount();
+			if (updateCount < 0) {
+				break;
+			}
+			PyObject* filedTuple = PyTuple_New(1);
+			PyTuple_SetItem(filedTuple, 0, PyUnicode_FromString("update_count"));
+			PyList_Append(result, filedTuple);
+			PyObject* dataTuple = PyTuple_New(1);
+			PyTuple_SetItem(dataTuple, 0, PyLong_FromLong(updateCount));
+			PyList_Append(result, dataTuple);
+		}
 
-	try {
+		isResultSet = st->getMoreResults();
+	}
+
+	/*try {
 		dbHandler->executeSql(sql, dataHandler);
 	}
 	catch (std::exception& e) {
 		Logger::logError("$execute sql failed, sql:%s, ex: %s", sql, e.what());
 		Py_RETURN_NONE;
-	}
+	}*/
 	return result;
+}
+
+static char* PyStringToString(PyObject* obj) {
+	char* str;
+	Py_ssize_t len;
+	PyObject* bytes = PyUnicode_AsUTF8String(obj);
+	PyBytes_AsStringAndSize(bytes, &str, &len);
+	return str;
+}
+
+static PyObject* parseRedisReply(redisReply* reply) {
+	switch (reply->type) {
+		case REDIS_REPLY_INTEGER:
+			return PyLong_FromLongLong(reply->integer);
+		case REDIS_REPLY_DOUBLE:
+			return PyFloat_FromDouble(reply->dval);
+		case REDIS_REPLY_NIL:
+			Py_RETURN_NONE;
+		case REDIS_REPLY_BOOL:
+			return PyBool_FromLong(reply->integer);
+		case REDIS_REPLY_ATTR:
+		case REDIS_REPLY_PUSH:
+		case REDIS_REPLY_BIGNUM:
+			return PyFloat_FromString(PyUnicode_FromStringAndSize(reply->str, reply->len));
+		case REDIS_REPLY_STRING:
+		case REDIS_REPLY_ERROR:
+		case REDIS_REPLY_STATUS:
+			return PyUnicode_FromStringAndSize(reply->str, reply->len);
+		case REDIS_REPLY_ARRAY:
+		case REDIS_REPLY_MAP:
+		case REDIS_REPLY_SET:
+		{
+			PyObject* array = PyTuple_New(reply->elements);
+			for (int i = 0; i < reply->elements; i++) {
+				redisReply* subReply = reply->element[i];
+				PyTuple_SetItem(array, i, parseRedisReply(subReply));
+			}
+			return array;
+		}
+	}
+	Logger::logError("not support redis reply type %d", reply->type);
+	Py_RETURN_NONE;
+}
+
+static PyObject* insertRow(PyObject* self, PyObject* args)
+{
+	PyObject* obj;
+	if (!PyArg_ParseTuple(args, "O", &obj)) {
+		Logger::logError("$insert row failed, args is error!!");
+		Py_RETURN_NONE;
+	}
+	DBHandler* dbHandler = ((PyDbObject*)self)->db_inst;
+	if (dbHandler == NULL)
+	{
+		PyErr_SetString(ModuleError, "insert row failed, db hander is null");
+		Py_RETURN_NONE;
+	}
+
+	PyObject* tableNameObj = PyObject_GetAttrString(obj, "table_name");
+	PyObject* priKeyObj = PyObject_GetAttrString(obj, "pri_key");
+	PyObject* fields = PyObject_GetAttrString(obj, "fields");
+
+	char* tableName = PyStringToString(tableNameObj);
+	long priKeyVal = PyLong_AsLong(priKeyObj);
+
+	Table tbl;
+	tbl.tableName = tableName;
+	tbl.priKeyVal = priKeyVal;
+	Py_ssize_t pos = 0;
+	PyObject* key;
+	PyObject* val;
+	while (PyDict_Next(fields, &pos, &key, &val)) {
+		char* fieldName = PyStringToString(key);
+		DataBase::TableField* fieldDesc = dbHandler->getTableField(tableName, fieldName);
+		if (fieldDesc == NULL) {
+			Py_RETURN_NONE;
+		}
+
+		TableField field;
+		field.fieldName = fieldName;
+		field.type = fieldDesc->type;
+		switch (fieldDesc->type)
+		{
+		case TableField::FieldType::TYPE_INT:
+		{
+			field.lval = PyLong_AsLong(val);
+			break;
+		}
+		case TableField::FieldType::TYPE_DOUBLE:
+		{
+			field.dval = PyFloat_AsDouble(val);
+			break;
+		}
+		case TableField::FieldType::TYPE_STRING:
+		{
+			field.sval = PyStringToString(val);
+			break;
+		}
+		default:
+		{
+			Logger::logError("$not support field type, table:%s, field:%s", tableName, fieldName);
+			Py_RETURN_NONE;
+		}
+		}
+		tbl.addField(field);
+	}
+
+	if (!dbHandler->insertRow(&tbl))
+	{
+		Py_RETURN_NONE;
+	}
+	return PyLong_FromLong(tbl.priKeyVal);
+}
+
+static PyObject* getRow(PyObject* self, PyObject* args)
+{
+	char* tableName = NULL;
+	long keyVal; 
+	if (!PyArg_ParseTuple(args, "sl", &tableName, &keyVal)) {
+		Logger::logError("$execute sql failed, args is error!!");
+		Py_RETURN_NONE;
+	}
+	DBHandler* dbHandler = ((PyDbObject*)self)->db_inst;
+	if (dbHandler == NULL)
+	{
+		PyErr_SetString(ModuleError, "execute sql failed, db hander is null");
+		Py_RETURN_NONE;
+	}
+
+	REDIS_REPLY_PTR reply = dbHandler->getRow(tableName, keyVal);
+	if (reply == NULL) Py_RETURN_NONE;
+
+	return parseRedisReply(reply->getReply());
+}
+
+static PyObject* updateRow(PyObject* self, PyObject* args)
+{
+	PyObject* obj;
+	if (!PyArg_ParseTuple(args, "O", &obj)) {
+		Logger::logError("$update row failed, args is error!!");
+		Py_RETURN_NONE;
+	}
+	DBHandler* dbHandler = ((PyDbObject*)self)->db_inst;
+	if (dbHandler == NULL)
+	{
+		PyErr_SetString(ModuleError, "update row failed, db hander is null");
+		Py_RETURN_NONE;
+	}
+
+	PyObject* tableNameObj = PyObject_GetAttrString(obj, "table_name");
+	PyObject* priKeyObj = PyObject_GetAttrString(obj, "pri_key");
+	PyObject* fields = PyObject_GetAttrString(obj, "fields");
+
+	char* tableName = PyStringToString(tableNameObj);
+	long priKeyVal = PyLong_AsLong(priKeyObj);
+
+	Table tbl;
+	tbl.tableName = tableName;
+	tbl.priKeyVal = priKeyVal;
+	Py_ssize_t pos = 0;
+	PyObject* key;
+	PyObject* val;
+	while (PyDict_Next(fields, &pos, &key, &val)) {
+		char* fieldName = PyStringToString(key);
+		DataBase::TableField* fieldDesc = dbHandler->getTableField(tableName, fieldName);
+		if (fieldDesc == NULL) {
+			Py_RETURN_NONE;
+		}
+		
+		TableField field;
+		field.fieldName = fieldName;
+		field.type = fieldDesc->type;
+		switch (fieldDesc->type)
+		{
+			case TableField::FieldType::TYPE_INT:
+			{
+				field.lval = PyLong_AsLong(val);
+				break;
+			}
+			case TableField::FieldType::TYPE_DOUBLE:
+			{
+				field.dval = PyFloat_AsDouble(val);
+				break;
+			}
+			case TableField::FieldType::TYPE_STRING:
+			{
+				field.sval = PyStringToString(val);
+				break;
+			}
+			default:
+			{	
+				Logger::logError("$not support field type, table:%s, field:%s", tableName, fieldName);
+				Py_RETURN_NONE;
+			}
+		}
+		tbl.addField(field);
+	}
+
+	if (!dbHandler->updateRow(&tbl))
+	{
+		Py_RETURN_FALSE;
+	}
+	Py_RETURN_TRUE;
+}
+
+static PyObject* deleteRow(PyObject* self, PyObject* args)
+{
+	PyObject* obj;
+	if (!PyArg_ParseTuple(args, "O", &obj)) {
+		Logger::logError("$delete row failed, args is error!!");
+		Py_RETURN_FALSE;
+	}
+	DBHandler* dbHandler = ((PyDbObject*)self)->db_inst;
+	if (dbHandler == NULL)
+	{
+		PyErr_SetString(ModuleError, "delete row failed, db hander is null");
+		Py_RETURN_FALSE;
+	}
+	Py_RETURN_TRUE;
 }
 
 static PyMethodDef module_methods[] = {
@@ -216,6 +438,10 @@ static struct PyModuleDef module_def =
 static PyMethodDef db_methods[] = {
 	{"test", test, METH_NOARGS, "test"},
 	{"executeSql", executeSql, METH_VARARGS, ""},
+	{"insertRow", insertRow, METH_VARARGS, ""},
+	{"getRow", getRow, METH_VARARGS, ""},
+	{"updateRow", updateRow, METH_VARARGS, ""},
+	{"deleteRow", deleteRow, METH_VARARGS, ""},
 	{NULL, NULL}           /* sentinel */
 };
 

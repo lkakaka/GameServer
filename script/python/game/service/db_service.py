@@ -113,3 +113,14 @@ class DBService(ServiceBase):
         rsp_msg.err_code = ErrorCode.OK
         self.send_msg_to_client(conn_id, rsp_msg)
 
+    @_s_cmd.reg_cmd(Message.MSG_ID_TEST_REQ)
+    def _on_recv_test_req(self, sender, msg_id, msg):
+        class Table:
+            table_name = "player"
+            pri_key = 1
+            fields = {}
+
+        tbl = Table()
+        tbl.fields["name"] = "testreq"
+        print(tbl)
+        self._db_handler.update_row(tbl)

@@ -7,8 +7,8 @@ add_definitions(-DSERVER_EXPORT)
 
 gnu_setting(false)
 
-include_directories(../log4cpp/include ../Depends/mysql/include include ${PYTHON_ROOT}/include)
-link_directories(../Depends/mysql/lib64 ${PYTHON_ROOT}/libs)
-link_libraries(log4cpp mysqlcppconn)
+include_directories(../log4cpp/include ../Depends/mysql/include include ${PYTHON_ROOT}/include ${REDIS_ROOT}/include)
+link_directories(../Depends/mysql/lib64 ${PYTHON_ROOT}/libs ${REDIS_ROOT}/libs)
+link_libraries(log4cpp mysqlcppconn hiredis)
 add_library(DBPlugin SHARED ${CURRENT_HEADERS} ${CURRENT_SRC} ${COMMON_SRC})
 SET(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)

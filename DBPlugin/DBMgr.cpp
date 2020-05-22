@@ -9,6 +9,7 @@
 
 #include "Logger.h"
 
+
 DBMgr* g_DBMgr;
 
 std::string DBMgr::m_dbUserName = "";

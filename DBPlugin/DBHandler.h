@@ -1,10 +1,80 @@
 #pragma once
 #include <vector>
+#include <set>
 #include <Reflect.h>
 #include <functional>
 #include <memory>
 #include "../Common/ServerExports.h"
 #include "jdbc/cppconn/statement.h"
+#include "Redis.h"
+#include "DataBase.h"
+
+DATA_BASE_BEGIN
+
+#define MAX_SQL_LENGTH (4 * 1024)  // sql语句长度
+
+struct TableField
+{
+	std::string fieldName;
+	long lval;
+	double dval;
+	std::string sval;
+	std::string defaut_val;
+
+	enum FieldType
+	{
+		TYPE_INT = 0,
+		TYPE_DOUBLE = 1,
+		TYPE_STRING = 2,
+	}type;
+};
+
+class Table
+{
+public:
+	std::string tableName;
+	std::string priKeyName;
+	long priKeyVal;  // 主键只能是自增
+	std::map<std::string, TableField> fields;
+
+	std::string redisKey() { 
+		char buf[64];
+		snprintf(buf, 64, "%ld", priKeyVal);
+		return tableName + ":" + buf;
+	}
+
+	void addField(TableField field) {
+		fields.emplace(field.fieldName, field);
+	}
+
+	static std::string redisKey(const char* tableName, long keyVal) {
+		std::string redis_key = tableName;
+		char buf[64];
+		snprintf(buf, 64, "%ld", keyVal);
+		return redis_key + ":" + buf;
+	}
+};
+
+class _Statement
+{
+private:
+	sql::Statement* m_st;
+	bool m_isResultSet;
+public:
+	_Statement(sql::Statement* st, bool isResultSet) : m_st(st), m_isResultSet(isResultSet){
+		printf("statement constructor\n");
+	}
+	~_Statement() {
+		printf("statement free\n");
+		if (m_st != NULL) m_st->close();
+	}
+	inline sql::Statement* getStatement() { return m_st; }
+	inline bool isResultSet() { return m_isResultSet; }
+};
+
+typedef std::shared_ptr<_Statement> StatementPtr;
+#define MAKE_STATEMENT_PTR(ptr, isResultSet) std::make_shared<_Statement>(ptr, isResultSet)
+
 
 class SERVER_EXPORT_API DBHandler
 {
@@ -15,9 +85,22 @@ private:
 	std::string m_dbPassword;
 	std::string m_dbName;
 	sql::Connection* m_dbConn;
+	char m_sqlBuf[MAX_SQL_LENGTH]{ 0 };
+
+	std::shared_ptr<Redis> m_redis;
+	std::map<std::string, std::shared_ptr<Table>> m_tableSchema;
+
+	std::map<std::string, std::map<long, std::set<std::string>>> m_chgRecords; // 已经变化了记录
 
 	void createTable(ReflectObject* tbl);
 	sql::Connection* getDBConnection();
+	void initTableSchema();
+
+	bool checkRedisExistAndLoad(const char* tableName, long keyVal);
+	void addUpdateRecord(std::string& tableName, long keyVal, std::set<std::string> stFields);
+	void flushChgRedisRecordToDB();
+
+	std::shared_ptr<Table> getRowFromRedis(std::string& tableName, long keyVal);
 
 public:
 	DBHandler(std::string& dbUrl, int dbPort, std::string& dbUserName, std::string& dbPassword, std::string dbName);
@@ -25,12 +108,20 @@ public:
 	inline std::string getDbName();
 	void initDbTable(std::vector<ReflectObject*> tblDefs);
 
+	TableField* getTableField(const char* tableName, const char* fieldName) const;
+	Table* getTableSchema(const char* tableName) const;
+
 	void insert(std::vector<ReflectObject> data);
 	void insertOne(ReflectObject tbl);
 	void select(ReflectObject data);
 	void update(ReflectObject src, ReflectObject dst);
 	void del(ReflectObject data);
-	void executeSql(std::string sql, std::function<void(sql::Statement*, bool) > handler);
+	StatementPtr executeSql(const char* sqlFromat, ...);
+
+	bool insertRow(Table* tbl);
+	REDIS_REPLY_PTR getRow(const char* tableName, long keyVal);
+	bool updateRow(Table* tbl);
+	bool deleteRow(Table* tbl);
 };
 
 class DBField
@@ -53,3 +144,5 @@ public:
 	int updateCount;
 	DBRow* head;
 };
+
+DATA_BASE_END
