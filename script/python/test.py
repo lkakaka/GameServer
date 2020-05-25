@@ -22,5 +22,6 @@ test_kw(0, **d)
 
 tbl_player = game.db.tbl.tbl_player.TblPlayer()
 tbl_item = game.db.tbl.tbl_item.TblItem()
+print(game.db.tbl.tbl_player.TblPlayer.__dict__)
 print(tbl_player.__dict__)
-print(tbl_player.role_id, tbl_player.item_id)
+print(tbl_player.role_id)

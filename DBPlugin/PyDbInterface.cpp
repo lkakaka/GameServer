@@ -33,6 +33,14 @@ public:
 //
 //};
 
+static char* PyStringToString(PyObject* obj) {
+	char* str;
+	Py_ssize_t len;
+	PyObject* bytes = PyUnicode_AsUTF8String(obj);
+	PyBytes_AsStringAndSize(bytes, &str, &len);
+	return str;
+}
+
 static PyObject* test(PyObject* self, PyObject* args)
 {
 	PyDbObject* obj = (PyDbObject*)self;
@@ -67,28 +75,159 @@ static PyObject* createDB(PyObject* self, PyObject* args)
 	return tuple;
 }
 
+static bool _initTable(DBHandler* dbHandler, PyObject* tblObj) {
+	Table tbl;
+	char* tbName = PyStringToString(PyObject_GetAttrString(tblObj, "tb_name"));
+	tbl.tableName = tbName;
+	PyObject * colSchemaList = PyObject_GetAttrString(tblObj, "col_schema");
+	ssize_t colNum =  PyList_Size(colSchemaList);
+	bool hasKey = false;
+	for (int col = 0; col < colNum; col++) {
+		PyObject* schema = PyList_GetItem(colSchemaList, col);
+		char* colName = PyStringToString(PyObject_GetAttrString(schema, "name"));
+		PyObject* defaultObj = PyObject_GetAttrString(schema, "default");
+		long type = PyLong_AsLong(PyObject_GetAttrString(schema, "type"));
+		
+		TableField field;
+		field.fieldName = colName;
+		field.type = (TableField::FieldType)type;
+		switch (type)
+		{
+			case TableField::FieldType::TYPE_INT:
+			case TableField::FieldType::TYPE_BIGINT:
+			{
+				if (defaultObj != Py_None) {
+					long defVal = PyLong_AsLong(defaultObj);
+					char buf[32]{ 0 };
+					snprintf(buf, 32, " DEFAULT %ld", defVal);
+					field.defaut_val = defVal;
+				}
+				break;
+			}
+			case TableField::FieldType::TYPE_DOUBLE:
+			{
+				if (defaultObj != Py_None) {
+					long defVal = PyFloat_AsDouble(defaultObj);
+					char buf[64]{ 0 };
+					snprintf(buf, 64, " DEFAULT %lf", defVal);
+					field.defaut_val = defVal;
+				}
+				break;
+			}
+			case TableField::FieldType::TYPE_VCHAR:
+			{
+				PyObject* lenObj = PyObject_GetAttrString(schema, "length");
+				if (lenObj != Py_None) {
+					long len = PyLong_AsLong(lenObj);
+					field.length = len;
+				}
+				if (defaultObj != Py_None) {
+					char* defVal = PyStringToString(defaultObj);
+					field.defaut_val.append("'").append(defVal).append("'");
+				}
+				break;
+			}
+			case TableField::FieldType::TYPE_TEXT:
+			{
+				if (defaultObj != Py_None) {
+					char* defVal = PyStringToString(defaultObj);
+					field.defaut_val.append("'").append(defVal).append("'");
+				}
+				break;
+			}
+			default:
+				Logger::logError("$not support table col type %ld, table:%s", type, tbName);
+				return false;
+		}
+		PyObject* keyObj = PyObject_GetAttrString(schema, "key");
+		if (keyObj != Py_None && PyLong_AsLong(keyObj) == 1) {
+			if (hasKey) {
+				Logger::logError("$creat table %s failed, has set primary key", tbName);
+				return false;
+			}
+			tbl.priKeyName = colName;
+			hasKey = true;
+		}
+
+		tbl.addField(field);
+	}
+
+	if (!hasKey) {
+		Logger::logError("$creat table %s failed, not set primary key", tbName);
+		return false;
+	}
+	
+	// ³õÊ¼»¯Ë÷Òý
+	PyObject* tbIndexObj = PyObject_GetAttrString(tblObj, "tb_index");
+	ssize_t indexNum = PyList_Size(tbIndexObj);
+	for (int idx = 0; idx < indexNum; idx++) {
+		TableIndex tblIndex;
+		PyObject* idxObj = PyList_GetItem(tbIndexObj, idx);
+		PyObject* closObj = PyObject_GetAttrString(idxObj, "cols");
+		tblIndex.isUnique = PyLong_AsLong(PyObject_GetAttrString(idxObj, "is_unique")) == 1;
+		ssize_t idxColNum = PyTuple_Size(closObj);
+		for (int idxCol = 0; idxCol < idxColNum; idxCol++) {
+			PyObject* colNameObj = PyTuple_GetItem(closObj, idxCol);
+			tblIndex.cols.emplace_back(PyStringToString(colNameObj));
+		}
+		tbl.tableIndexs.emplace_back(tblIndex);
+	}
+
+	dbHandler->createTable(&tbl);
+	return true;
+}
+
 static PyObject* initTable(PyObject* self, PyObject* args)
 {
-	char* tbName = NULL;
-	PyObject* fieldTuple;
-	if (!PyArg_ParseTuple(args, "sO", &tbName, &fieldTuple)) {
+	//char* tbName = NULL;
+	//PyObject* fieldTuple;
+	//if (!PyArg_ParseTuple(args, "sO", &tbName, &fieldTuple)) {
+	//	PyErr_SetString(ModuleError, "init table failed");
+	//	Py_RETURN_FALSE;
+	//}
+	//ssize_t length = PyTuple_Size(fieldTuple);
+	//for (int i = 0; i < length; i++) {
+	//	//get an element out of the list - the element is also a python objects
+	//	PyObject* fieldInfo = PyTuple_GetItem(fieldTuple, i);
+	//	PyObject* val = PyDict_GetItemString(fieldInfo, "fieldName");
+	//	PyObject* bytes;
+	//	char* fieldName;
+	//	Py_ssize_t len;
+	//	bytes = PyUnicode_AsUTF8String(val);
+	//	PyBytes_AsStringAndSize(bytes, &fieldName, &len);
+	//	//char* fieldName = PyBytes_AsString(val);
+	//	val = PyDict_GetItemString(fieldInfo, "filedType");
+	//	int fieldType = PyLong_AsLong(val);
+	//	Logger::logInfo("$init table %s, field:%s, fieldType:%d", tbName, fieldName, fieldType);
+	//}
+	//Py_RETURN_TRUE;
+
+	PyObject* tblTuple;
+	if (!PyArg_ParseTuple(args, "O", &tblTuple)) {
 		PyErr_SetString(ModuleError, "init table failed");
 		Py_RETURN_FALSE;
 	}
-	ssize_t length = PyTuple_Size(fieldTuple);
-	for (int i = 0; i < length; i++) {
-		//get an element out of the list - the element is also a python objects
-		PyObject* fieldInfo = PyTuple_GetItem(fieldTuple, i);
-		PyObject* val = PyDict_GetItemString(fieldInfo, "fieldName");
-		PyObject* bytes;
-		char* fieldName;
-		Py_ssize_t len;
-		bytes = PyUnicode_AsUTF8String(val);
-		PyBytes_AsStringAndSize(bytes, &fieldName, &len);
-		//char* fieldName = PyBytes_AsString(val);
-		val = PyDict_GetItemString(fieldInfo, "filedType");
-		int fieldType = PyLong_AsLong(val);
-		Logger::logInfo("$init table %s, field:%s, fieldType:%d", tbName, fieldName, fieldType);
+
+	DBHandler* dbHandler = ((PyDbObject*)self)->db_inst;
+	if (dbHandler == NULL)
+	{
+		PyErr_SetString(ModuleError, "init tables failed, db hander is null");
+		Py_RETURN_FALSE;
+	}
+
+	if (!PyObject_TypeCheck(tblTuple, &PyTuple_Type)) {
+		Logger::logError("$init table failed, args format error");
+		Py_RETURN_FALSE;
+	}
+
+	ssize_t size = PyTuple_Size(tblTuple);
+	for (int i = 0; i < size; i++) {
+		PyObject* tbObj = PyTuple_GetItem(tblTuple, i);
+		if (!_initTable(dbHandler, tbObj)) {
+			char* tbName = PyStringToString(PyObject_GetAttrString(tbObj, "tb_name"));
+			Logger::logError("$table %s init failed", tbName);
+			Py_RETURN_FALSE;
+		}
 	}
 	Py_RETURN_TRUE;
 }
@@ -172,7 +311,7 @@ static PyObject* executeSql(PyObject* self, PyObject* args)
 			}
 		}
 		else {
-			uint64_t updateCount = st->getUpdateCount();
+			int64_t updateCount = st->getUpdateCount();
 			if (updateCount < 0) {
 				break;
 			}
@@ -195,14 +334,6 @@ static PyObject* executeSql(PyObject* self, PyObject* args)
 		Py_RETURN_NONE;
 	}*/
 	return result;
-}
-
-static char* PyStringToString(PyObject* obj) {
-	char* str;
-	Py_ssize_t len;
-	PyObject* bytes = PyUnicode_AsUTF8String(obj);
-	PyBytes_AsStringAndSize(bytes, &str, &len);
-	return str;
 }
 
 static PyObject* parseRedisReply(redisReply* reply) {
@@ -279,6 +410,7 @@ static PyObject* insertRow(PyObject* self, PyObject* args)
 		switch (fieldDesc->type)
 		{
 		case TableField::FieldType::TYPE_INT:
+		case TableField::FieldType::TYPE_BIGINT:
 		{
 			field.lval = PyLong_AsLong(val);
 			break;
@@ -288,7 +420,8 @@ static PyObject* insertRow(PyObject* self, PyObject* args)
 			field.dval = PyFloat_AsDouble(val);
 			break;
 		}
-		case TableField::FieldType::TYPE_STRING:
+		case TableField::FieldType::TYPE_VCHAR:
+		case TableField::FieldType::TYPE_TEXT:
 		{
 			field.sval = PyStringToString(val);
 			break;
@@ -370,6 +503,7 @@ static PyObject* updateRow(PyObject* self, PyObject* args)
 		switch (fieldDesc->type)
 		{
 			case TableField::FieldType::TYPE_INT:
+			case TableField::FieldType::TYPE_BIGINT:
 			{
 				field.lval = PyLong_AsLong(val);
 				break;
@@ -379,7 +513,8 @@ static PyObject* updateRow(PyObject* self, PyObject* args)
 				field.dval = PyFloat_AsDouble(val);
 				break;
 			}
-			case TableField::FieldType::TYPE_STRING:
+			case TableField::FieldType::TYPE_VCHAR:
+			case TableField::FieldType::TYPE_TEXT:
 			{
 				field.sval = PyStringToString(val);
 				break;
@@ -438,6 +573,7 @@ static struct PyModuleDef module_def =
 static PyMethodDef db_methods[] = {
 	{"test", test, METH_NOARGS, "test"},
 	{"executeSql", executeSql, METH_VARARGS, ""},
+	{"initTable", initTable, METH_VARARGS, ""},
 	{"insertRow", insertRow, METH_VARARGS, ""},
 	{"getRow", getRow, METH_VARARGS, ""},
 	{"updateRow", updateRow, METH_VARARGS, ""},

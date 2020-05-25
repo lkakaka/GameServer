@@ -24,25 +24,34 @@ class DBService(ServiceBase):
         logger.logInfo("$DBService start!!!")
         # DBHandler.test_db()
         self._db_handler = DBHandler("save")
+        print("xxxxx")
         self._db_info = DbInfo(self._db_handler)
-        db_ver = self._db_info.get_int_val(DbInfo.DB_INFO_KEY_VERSION, -1)
-        if db_ver >= CUR_DB_VERSION:
-            return
-
-        if db_ver == -1:
-            if not self.init_db():
-                logger.logError("$init db error")
-                raise RuntimeError("init db error")
-                return
-        else:
-            if not self.upgrade_db(db_ver):
-                logger.logError("$upgrade db error, db_ver:{}".format(db_ver))
-                raise RuntimeError("upgrade db error, db_ver:{}".format(db_ver))
-                return
-
-        if not self._db_info.set_int_val(DbInfo.DB_INFO_KEY_VERSION, CUR_DB_VERSION):
-            logger.logError("$set db version failed, old_version:{}, cur_version:{}".format(db_ver, CUR_DB_VERSION))
-            raise RuntimeError("set db version failed, old_version:{}, cur_version:{}".format(db_ver, CUR_DB_VERSION))
+        print("xxxxx1")
+        # db_ver = self._db_info.get_int_val(DbInfo.DB_INFO_KEY_VERSION, -1)
+        # if db_ver >= CUR_DB_VERSION:
+        #     return
+        #
+        # if db_ver == -1:
+        #     if not self.init_db():
+        #         logger.logError("$init db error")
+        #         raise RuntimeError("init db error")
+        #         return
+        # else:
+        #     if not self.upgrade_db(db_ver):
+        #         logger.logError("$upgrade db error, db_ver:{}".format(db_ver))
+        #         raise RuntimeError("upgrade db error, db_ver:{}".format(db_ver))
+        #         return
+        #
+        # if not self._db_info.set_int_val(DbInfo.DB_INFO_KEY_VERSION, CUR_DB_VERSION):
+        #     logger.logError("$set db version failed, old_version:{}, cur_version:{}".format(db_ver, CUR_DB_VERSION))
+        #     raise RuntimeError("set db version failed, old_version:{}, cur_version:{}".format(db_ver, CUR_DB_VERSION))
+        print("start init table---------------11")
+        from game.db.tbl.tbl_player import TblPlayer
+        print("start init table---------------22")
+        from game.db.tbl.tbl_item import TblItem
+        print("start init table---------------")
+        tbls = (TblPlayer, TblItem)
+        self._db_handler.init_table(tbls)
 
     def init_db(self):
         sql = "create table if not exists player(" \

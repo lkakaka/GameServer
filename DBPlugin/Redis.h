@@ -15,10 +15,10 @@ private:
 	redisReply* m_reply;
 public:
 	RedisReply(redisReply* reply) : m_reply(reply) {
-		printf("redisReply constructor------\n");
+		//printf("redisReply constructor------\n");
 	}
 	~RedisReply() {
-		printf("redisReply free------\n");
+		//printf("redisReply free------\n");
 		freeReplyObject(m_reply);
 	}
 	inline redisReply* getReply() { return m_reply; }

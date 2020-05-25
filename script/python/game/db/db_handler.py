@@ -28,6 +28,7 @@ class DBHandler:
 
     def execute_sql(self, sql):
         result = self._db_inst.executeSql(sql)
+        print("result----")
         if result is None:
             return None
 
@@ -42,8 +43,12 @@ class DBHandler:
             db_res.append(db_row_res)
         return tuple(db_res)
 
+    def init_table(self, tbls):
+        print("init table-----", tbls)
+        self._db_inst.initTable(tbls)
+
     def insert_row(self, tbl):
-        self._db_inst.insert_row(tbl)
+        self._db_inst.insertRow(tbl)
 
     def update_row(self, tbl):
         self._db_inst.updateRow(tbl)

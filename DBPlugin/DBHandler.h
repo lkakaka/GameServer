@@ -8,52 +8,57 @@
 #include "jdbc/cppconn/statement.h"
 #include "Redis.h"
 #include "DataBase.h"
+#include "DBTable.h"
 
 DATA_BASE_BEGIN
 
 #define MAX_SQL_LENGTH (4 * 1024)  // sql语句长度
 
-struct TableField
-{
-	std::string fieldName;
-	long lval;
-	double dval;
-	std::string sval;
-	std::string defaut_val;
-
-	enum FieldType
-	{
-		TYPE_INT = 0,
-		TYPE_DOUBLE = 1,
-		TYPE_STRING = 2,
-	}type;
-};
-
-class Table
-{
-public:
-	std::string tableName;
-	std::string priKeyName;
-	long priKeyVal;  // 主键只能是自增
-	std::map<std::string, TableField> fields;
-
-	std::string redisKey() { 
-		char buf[64];
-		snprintf(buf, 64, "%ld", priKeyVal);
-		return tableName + ":" + buf;
-	}
-
-	void addField(TableField field) {
-		fields.emplace(field.fieldName, field);
-	}
-
-	static std::string redisKey(const char* tableName, long keyVal) {
-		std::string redis_key = tableName;
-		char buf[64];
-		snprintf(buf, 64, "%ld", keyVal);
-		return redis_key + ":" + buf;
-	}
-};
+//struct TableField
+//{
+//	std::string fieldName;
+//	long lval;
+//	double dval;
+//	std::string sval;
+//	std::string defaut_val;
+//	int length;  // 字段长度,TYPE_VCHAR有效
+//
+//	enum FieldType
+//	{
+//		TYPE_INT = 0,
+//		TYPE_BIGINT = 1,
+//		TYPE_DOUBLE = 2,
+//		TYPE_VCHAR = 3,
+//		TYPE_TEXT = 4,
+//	}type;
+//}; 
+//
+//class Table
+//{
+//public:
+//	std::string tableName;
+//	std::string priKeyName;
+//	long priKeyVal;  // 主键只能是自增
+//	std::map<std::string, TableField> fields;
+//	std::vector<std::string> colNames;
+//
+//	std::string redisKey() { 
+//		char buf[64];
+//		snprintf(buf, 64, "%ld", priKeyVal);
+//		return tableName + ":" + buf;
+//	}
+//
+//	void addField(TableField field) {
+//		fields.emplace(field.fieldName, field);
+//	}
+//
+//	static std::string redisKey(const char* tableName, long keyVal) {
+//		std::string redis_key = tableName;
+//		char buf[64];
+//		snprintf(buf, 64, "%ld", keyVal);
+//		return redis_key + ":" + buf;
+//	}
+//};
 
 class _Statement
 {
@@ -62,10 +67,10 @@ private:
 	bool m_isResultSet;
 public:
 	_Statement(sql::Statement* st, bool isResultSet) : m_st(st), m_isResultSet(isResultSet){
-		printf("statement constructor\n");
+		//printf("statement constructor\n");
 	}
 	~_Statement() {
-		printf("statement free\n");
+		//printf("statement free\n");
 		if (m_st != NULL) m_st->close();
 	}
 	inline sql::Statement* getStatement() { return m_st; }
@@ -92,7 +97,7 @@ private:
 
 	std::map<std::string, std::map<long, std::set<std::string>>> m_chgRecords; // 已经变化了记录
 
-	void createTable(ReflectObject* tbl);
+	//void createTable(ReflectObject* tbl);
 	sql::Connection* getDBConnection();
 	void initTableSchema();
 
@@ -110,6 +115,8 @@ public:
 
 	TableField* getTableField(const char* tableName, const char* fieldName) const;
 	Table* getTableSchema(const char* tableName) const;
+
+	bool createTable(Table* tbl);
 
 	void insert(std::vector<ReflectObject> data);
 	void insertOne(ReflectObject tbl);

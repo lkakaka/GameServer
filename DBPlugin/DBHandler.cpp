@@ -85,6 +85,26 @@ void DBHandler::initTableSchema() {
 		std::string priKey = rs->getString(1).c_str();
 		ptrTable->priKeyName = priKey;
 
+		// 获取索引信息
+		sql = "select * from(SELECT a.TABLE_SCHEMA, a.TABLE_NAME, a.index_name, GROUP_CONCAT(column_name ORDER BY seq_in_index) AS `columns` "
+			"FROM information_schema.statistics a "
+			"GROUP BY a.TABLE_SCHEMA, a.TABLE_NAME, a.index_name) as b where b.TABLE_NAME = '%s' and b.index_name LIKE 'Index_%'";
+		ptr = executeSql(sql, iter->c_str());
+		st = ptr->getStatement();
+		rs = st->getResultSet();
+		while (rs->next()) {
+			std::string indexName = rs->getString(sql::SQLString("index_name"));
+			std::string columns = rs->getString(sql::SQLString("columns"));
+			TableIndex tblIndex;
+			int npos = -1;
+			while ((npos = columns.find_first_of(',', 0)) >= 0) {
+				tblIndex.cols.push_back(columns.substr(0, npos));
+				columns = columns.substr(npos + 1, columns.size() - npos);
+			}
+			if (!columns.empty()) tblIndex.cols.push_back(columns);
+			ptrTable->tableIndexs.emplace_back(tblIndex);
+		}
+
 
 		// 获取字段信息
 		sql = "select column_name, data_type, column_default from information_schema.columns where table_schema = '%s' and table_name = '%s'";
@@ -96,14 +116,17 @@ void DBHandler::initTableSchema() {
 			field.fieldName = rs->getString(1).c_str();
 			std::string type = rs->getString(2).c_str();
 			std::string defaultVal = rs->getString(3).c_str();
-			if (type == "int" || type == "bigint" || type == "tinyint") {
+			if (type == "int" || type == "tinyint") {
 				field.type = TableField::FieldType::TYPE_INT;
+			}
+			else if (type == "bigint") {
+				field.type = TableField::FieldType::TYPE_BIGINT;
 			}
 			else if (type == "double") {
 				field.type = TableField::FieldType::TYPE_DOUBLE;
 			}
 			else {
-				field.type = TableField::FieldType::TYPE_STRING;
+				field.type = TableField::FieldType::TYPE_VCHAR;
 			}
 			field.defaut_val = defaultVal;
 			ptrTable->fields.emplace(field.fieldName, field);
@@ -161,55 +184,172 @@ Connection* DBHandler::getDBConnection()
 	return m_dbConn;
 }
 
-void DBHandler::initDbTable(std::vector<ReflectObject*> tblDefs)
-{
-	for (auto iter = tblDefs.begin(); iter != tblDefs.end(); iter++) {
-		createTable(*iter);
-	}
-}
 
-void DBHandler::createTable(ReflectObject* tbl)
+
+bool DBHandler::createTable(Table* tbl)
 {
-	std::string sql = "CREATE TABLE IF NOT EXISTS " + tbl->getTypeName() + "(";
-	std::map<std::string, Field> fieldMap = tbl->getFieldMap();
-	if (fieldMap.size() == 0) {
-		Logger::logError("$create table %s failed, not define any field ", tbl->getTypeName().c_str());
-		return;
-	}
-	for (auto iter = fieldMap.begin(); iter != fieldMap.end(); iter++) {
-		Field field = iter->second;
-		std::string filedStr = field.name;
+	std::string tbName = tbl->tableName;
+	std::string colStr;
+	int colNum = tbl->colNames.size();
+	for (int col = 0; col < colNum; col++) {
+		std::string colName = tbl->colNames[col];
+		colStr += colName;
+		TableField field = tbl->fields.find(colName)->second;
 		switch (field.type)
 		{
-		case TYPE_INT:
-			filedStr += " INT,";
-			break;
-		case TYPE_STRING:
-			filedStr += " VARCHAR(128),";
-			break;
-		default:
-			Logger::logError("$create table %s failed, unsupport db field type: %s", tbl->getTypeName().c_str(), field.type);
-			return;
+			case TableField::FieldType::TYPE_INT:
+			{
+				colStr += " INT";
+				break;
+			}
+			case TableField::FieldType::TYPE_BIGINT:
+			{
+				colStr += " BIGINT";
+				break;
+			}
+			case TableField::FieldType::TYPE_DOUBLE:
+			{
+				colStr += " FLOAT";
+				break;
+			}
+			case TableField::FieldType::TYPE_VCHAR:
+			{
+				int length = field.length > 0 ? field.length : 128;
+				char buf[64]{ 0 };
+				snprintf(buf, 64, " VARCHAR(%ld)", length);
+				colStr += buf;
+				break;
+			}
+			case TableField::FieldType::TYPE_TEXT:
+			{
+				colStr += " TEXT";
+				break;
+			}
+			default:
+				Logger::logError("$not support table col type %ld, table:%s", field.type, tbName.c_str());
+				return false;
 		}
-		sql += filedStr;
+
+		if (field.defaut_val != "") {
+			colStr += " DEFAULT " + field.defaut_val;
+		}
+
+		if (tbl->priKeyName == colName) {
+			colStr += " primary key";
+		}
+		if (col != colNum - 1) colStr += ", ";
 	}
-	sql.pop_back();
-	sql += ")";
-	sql::SQLString sqlStr = sql::SQLString(sql.c_str());
-	Connection* conn = getDBConnection();
-	if (conn == NULL) {
-		Logger::logError("$exec sql failed, conn is null, sql: %s", sql.c_str());
-		return;
+
+	char* sql = "CREATE TABLE IF NOT EXISTS %s(%s)";
+	StatementPtr ptr = executeSql(sql, tbName.c_str(), colStr.c_str());
+	if (ptr == NULL) {
+		Logger::logError("$creat table %s failed", tbName.c_str());
+		return false;
 	}
-	Statement* st = conn->createStatement();
-	try {
-		st->execute(sqlStr);
+
+	sql = "select * from(SELECT a.TABLE_SCHEMA, a.TABLE_NAME, a.index_name, GROUP_CONCAT(column_name ORDER BY seq_in_index) AS `columns` "
+		"FROM information_schema.statistics a "
+		"GROUP BY a.TABLE_SCHEMA, a.TABLE_NAME, a.index_name) as b where b.TABLE_NAME = '%s' and b.index_name LIKE 'Index_%%'";
+	ptr = executeSql(sql, tbName.c_str());
+	Statement* st = ptr->getStatement();
+	sql::ResultSet* rs = st->getResultSet();
+	std::set<std::string> indexs;
+	while (rs->next()) {
+		std::string indexName = rs->getString("index_name").c_str();
+		indexs.emplace(indexName);
 	}
-	catch (std::exception e) {
-		Logger::logError("$exec sql failed, sql: %s, e: %s", sql.c_str(), e.what());
+
+	// 初始化索引
+	for (auto iter = tbl->tableIndexs.begin(); iter != tbl->tableIndexs.end(); iter++) {
+		std::string indexName = "Index_";
+		std::string colVals;
+		for (std::string s : iter->cols) {
+			indexName += s + "_";
+			colVals += s + ",";
+		}
+		// 去掉最后的逗号
+		if (!colVals.empty()) {
+			colVals.pop_back();
+			indexName.pop_back();
+		}
+
+		// 索引已经创建
+		if (indexs.erase(indexName) > 0) {
+			continue;
+		}
+
+		char* sql = "CREATE %s INDEX %s ON %s(%s)";
+		StatementPtr ptr = executeSql(sql, iter->isUnique ? "UNIQUE" : "", indexName.c_str(), tbName.c_str(), colVals.c_str());
+		if (ptr == NULL) {
+			Logger::logError("$creat index failed, table:%s, cols:%s", tbName.c_str(), colVals.c_str());
+			return false;
+		}
 	}
+
+	// 删除不用的索引
+	for (std::string indexName : indexs) {
+		char* sql = "DROP INDEX %s ON %s";
+		StatementPtr ptr = executeSql(sql, indexName.c_str(), tbName.c_str());
+		if (ptr == NULL) {
+			Logger::logError("$drop index failed, table:%s, index:%s", tbName.c_str(), indexName.c_str());
+			return false;
+		}
+	}
+
+	return true;
 }
 
+
+
+void DBHandler::initDbTable(std::vector<ReflectObject*> tblDefs)
+{
+	/*for (auto iter = tblDefs.begin(); iter != tblDefs.end(); iter++) {
+		createTable(*iter);
+	}*/
+}
+
+//void DBHandler::createTable(ReflectObject* tbl)
+//{
+//	std::string sql = "CREATE TABLE IF NOT EXISTS " + tbl->getTypeName() + "(";
+//	std::map<std::string, Field> fieldMap = tbl->getFieldMap();
+//	if (fieldMap.size() == 0) {
+//		Logger::logError("$create table %s failed, not define any field ", tbl->getTypeName().c_str());
+//		return;
+//	}
+//	for (auto iter = fieldMap.begin(); iter != fieldMap.end(); iter++) {
+//		Field field = iter->second;
+//		std::string filedStr = field.name;
+//		switch (field.type)
+//		{
+//		case TYPE_INT:
+//			filedStr += " INT,";
+//			break;
+//		case TYPE_STRING:
+//			filedStr += " VARCHAR(128),";
+//			break;
+//		default:
+//			Logger::logError("$create table %s failed, unsupport db field type: %s", tbl->getTypeName().c_str(), field.type);
+//			return;
+//		}
+//		sql += filedStr;
+//	}
+//	sql.pop_back();
+//	sql += ")";
+//	sql::SQLString sqlStr = sql::SQLString(sql.c_str());
+//	Connection* conn = getDBConnection();
+//	if (conn == NULL) {
+//		Logger::logError("$exec sql failed, conn is null, sql: %s", sql.c_str());
+//		return;
+//	}
+//	Statement* st = conn->createStatement();
+//	try {
+//		st->execute(sqlStr);
+//	}
+//	catch (std::exception e) {
+//		Logger::logError("$exec sql failed, sql: %s, e: %s", sql.c_str(), e.what());
+//	}
+//}
+//
 void DBHandler::insert(std::vector<ReflectObject> data)
 {
 	for (auto iter = data.begin(); iter != data.end(); iter++) {
@@ -605,6 +745,7 @@ bool DBHandler::insertRow(Table* tbl)
 		fields += fieldName + ",";
 		switch (tbField->type) {
 			case TableField::FieldType::TYPE_INT:
+			case TableField::FieldType::TYPE_BIGINT:
 			{
 				char buf[64]{ 0 };
 				snprintf(buf, 64, "%ld", field.lval);
@@ -619,7 +760,8 @@ bool DBHandler::insertRow(Table* tbl)
 				vals += buf;
 				break;
 			}
-			case TableField::FieldType::TYPE_STRING:
+			case TableField::FieldType::TYPE_VCHAR:
+			case TableField::FieldType::TYPE_TEXT:
 			{
 				vals += "'" + field.sval + "'";
 				break;
@@ -680,6 +822,7 @@ bool DBHandler::updateRow(Table* tbl)
 		redisCmd.append(" " + fieldName + " ");
 		switch (field.type) {
 			case TableField::FieldType::TYPE_INT:
+			case TableField::FieldType::TYPE_BIGINT:
 			{
 				char buf[64]{ 0 };
 				snprintf(buf, 64, "%ld", field.lval);
@@ -693,7 +836,8 @@ bool DBHandler::updateRow(Table* tbl)
 				redisCmd.append(buf);
 				break;
 			}
-			case TableField::FieldType::TYPE_STRING:
+			case TableField::FieldType::TYPE_VCHAR:
+			case TableField::FieldType::TYPE_TEXT:
 			{
 				redisCmd.append("'" + field.sval + "'");
 				break;

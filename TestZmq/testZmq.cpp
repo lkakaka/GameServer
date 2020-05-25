@@ -2,6 +2,7 @@
 #include "zmq.h"
 #include <string>
 #include <string.h>
+#include <set>
 
 #include "Device.h"
 #include <thread>
@@ -100,8 +101,20 @@ int main(int argc, char**args)
 {
 	//startDevice("*:5555", "*:5556");
 	char buf[10]{0};
-	int n = snprintf(buf, 10, "ss%d", 10);
+	int n = snprintf(buf, 10, "'%%Index_%%'");
 	n = snprintf(buf, 10, "s%d", 1);
+
+	std::set<std::string> st;
+	st.emplace("1");
+	st.emplace("2");
+	n = st.erase("0");
+	
+	std::string columns = "age,sex";
+	int npos;
+	while ((npos = columns.find_first_of(',', 0)) >= 0) {
+		std::string x = columns.substr(0, npos);
+		columns = columns.substr(npos + 1, columns.size() - npos);
+	}
 	//test(args[1], args[2]);
 	getchar();
 
