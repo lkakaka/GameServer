@@ -78,6 +78,25 @@ void Logger::logDebug(const char* fmt, ...)
 	va_end(args);
 }
 
+void Logger::logWarning(const char* fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	char buff[FORMAT_BUFF_SIZE]{ 0 };
+	if (Logger::isPrint(fmt))
+	{
+		formatLog(buff, &fmt[1], args);
+		log4cpp::Category& sub = log4cpp::Category::getInstance("sub1");
+		sub.warn(buff);
+	}
+	else {
+		formatLog(buff, fmt, args);
+		log4cpp::Category& root = log4cpp::Category::getRoot();
+		root.warn(buff);
+	}
+	va_end(args);
+}
+
 void Logger::logInfo(char* fmt, ...)
 {
 	va_list args;

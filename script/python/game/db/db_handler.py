@@ -44,20 +44,19 @@ class DBHandler:
         return tuple(db_res)
 
     def init_table(self, tbls):
-        print("init table-----", tbls)
-        self._db_inst.initTable(tbls)
+        return self._db_inst.initTable(tbls)
 
     def insert_row(self, tbl):
-        self._db_inst.insertRow(tbl)
+        return self._db_inst.insertRow(tbl)
 
     def update_row(self, tbl):
-        self._db_inst.updateRow(tbl)
+        return self._db_inst.updateRow(tbl)
 
     def get_row(self, tbl):
-        self._db_inst.getRow(tbl)
+        return self._db_inst.getRow(tbl)
 
     def delete_row(self, tbl):
-        self._db_inst.delete_row(tbl)
+        return self._db_inst.delete_row(tbl)
 
     @staticmethod
     def test_db():

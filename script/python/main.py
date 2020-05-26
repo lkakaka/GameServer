@@ -58,6 +58,16 @@ def create_login_service():
     return service_inst
 
 
+def create_tb(tb_name):
+    print("create tb --------", tb_name)
+    if tb_name == "player":
+        from game.db.tbl.tbl_player import TblPlayer
+        return TblPlayer()
+    if tb_name == "item":
+        from game.db.tbl.tbl_item import TblItem
+        return TblItem()
+
+
 # def timer_cb():
 #     print("timer cb called")
 #     # Timer.removeTimer(timer_id)

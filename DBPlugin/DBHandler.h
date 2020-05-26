@@ -102,10 +102,17 @@ private:
 	void initTableSchema();
 
 	bool checkRedisExistAndLoad(const char* tableName, long keyVal);
+	void loadFromDB(Table* tbl, std::vector<Table>& result);
 	void addUpdateRecord(std::string& tableName, long keyVal, std::set<std::string> stFields);
 	void flushChgRedisRecordToDB();
 
 	std::shared_ptr<Table> getRowFromRedis(std::string& tableName, long keyVal);
+
+	void getTableCols(const char* tableName, std::vector<TableField>& fields);
+	bool _createNewTable(Table* tbl);
+	bool _changeTable(Table* tbl, std::map<std::string, TableField>& orgFields);
+
+	void getRedisKeyValue(std::string& tableName, long keyVal, Table* tblData);
 
 public:
 	DBHandler(std::string& dbUrl, int dbPort, std::string& dbUserName, std::string& dbPassword, std::string dbName);
@@ -126,7 +133,7 @@ public:
 	StatementPtr executeSql(const char* sqlFromat, ...);
 
 	bool insertRow(Table* tbl);
-	REDIS_REPLY_PTR getRow(const char* tableName, long keyVal);
+	bool getRow(Table* tbl, std::vector<Table>& result);
 	bool updateRow(Table* tbl);
 	bool deleteRow(Table* tbl);
 };

@@ -24,9 +24,14 @@ class DBService(ServiceBase):
         logger.logInfo("$DBService start!!!")
         # DBHandler.test_db()
         self._db_handler = DBHandler("save")
-        print("xxxxx")
         self._db_info = DbInfo(self._db_handler)
-        print("xxxxx1")
+        from game.db.tbl.tbl_player import TblPlayer
+        from game.db.tbl.tbl_item import TblItem
+        tbls = (TblPlayer, TblItem)
+        logger.logInfo("$start init table, {}", tbls)
+        if not self._db_handler.init_table(tbls):
+            raise RuntimeError("init tables error")
+        logger.logInfo("$finish init table, {}", tbls)
         # db_ver = self._db_info.get_int_val(DbInfo.DB_INFO_KEY_VERSION, -1)
         # if db_ver >= CUR_DB_VERSION:
         #     return
@@ -45,13 +50,12 @@ class DBService(ServiceBase):
         # if not self._db_info.set_int_val(DbInfo.DB_INFO_KEY_VERSION, CUR_DB_VERSION):
         #     logger.logError("$set db version failed, old_version:{}, cur_version:{}".format(db_ver, CUR_DB_VERSION))
         #     raise RuntimeError("set db version failed, old_version:{}, cur_version:{}".format(db_ver, CUR_DB_VERSION))
-        print("start init table---------------11")
+
         from game.db.tbl.tbl_player import TblPlayer
-        print("start init table---------------22")
-        from game.db.tbl.tbl_item import TblItem
-        print("start init table---------------")
-        tbls = (TblPlayer, TblItem)
-        self._db_handler.init_table(tbls)
+        tbl_player = TblPlayer()
+        tbl_player.account = "test"
+        db_res = self._db_handler.get_row(tbl_player)
+        print(db_res)
 
     def init_db(self):
         sql = "create table if not exists player(" \
@@ -103,19 +107,25 @@ class DBService(ServiceBase):
     @_rpc_proc.reg_cmd("CreateRole")
     def _on_rpc_create_role(self, conn_id, account, role_name):
         rsp_msg = Message.create_msg_by_id(Message.MSG_ID_CREATE_ROLE_RSP)
-        db_res = self._db_handler.execute_sql("select * from player where account='{}'".format(account))
-        if len(db_res) >= util.const.GlobalVar.MAX_ROLE_NUM:
-            rsp_msg.err_code = ErrorCode.ROLE_COUNT_LIMIT
-            self.send_msg_to_client(conn_id, rsp_msg)
-            return
-        db_res = self._db_handler.execute_sql("select count(*) as name_count from player where name='{}'".format(role_name))
-        if len(db_res) > 0 and db_res[0].name_count > 0:
-            rsp_msg.err_code = ErrorCode.ROLE_NAME_EXIST
-            self.send_msg_to_client(conn_id, rsp_msg)
-            return
+        # db_res = self._db_handler.execute_sql("select * from player where account='{}'".format(account))
+        # if len(db_res) >= util.const.GlobalVar.MAX_ROLE_NUM:
+        #     rsp_msg.err_code = ErrorCode.ROLE_COUNT_LIMIT
+        #     self.send_msg_to_client(conn_id, rsp_msg)
+        #     return
+        # db_res = self._db_handler.execute_sql("select count(*) as name_count from player where name='{}'".format(role_name))
+        # if len(db_res) > 0 and db_res[0].name_count > 0:
+        #     rsp_msg.err_code = ErrorCode.ROLE_NAME_EXIST
+        #     self.send_msg_to_client(conn_id, rsp_msg)
+        #     return
+        #
+        # self._db_handler.execute_sql("insert into player(name, account) values('{}', '{}')".format(role_name, account))
+        # db_res = self._db_handler.execute_sql("select * from player where name='{}'".format(role_name))
 
-        self._db_handler.execute_sql("insert into player(name, account) values('{}', '{}')".format(role_name, account))
-        db_res = self._db_handler.execute_sql("select * from player where name='{}'".format(role_name))
+        from game.db.tbl.tbl_player import TblPlayer
+        tbl_player = TblPlayer()
+        tbl_player.account = account
+        db_res = self._db_handler.get_row(tbl_player)
+
         rsp_msg.role_info = Message.create_msg_by_id(Message.MSG_ID_ROLE_INFO)
         rsp_msg.role_info.role_id = db_res[0].role_id
         rsp_msg.role_info.role_name = role_name

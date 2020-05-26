@@ -6,12 +6,17 @@ DATA_BASE_BEGIN
 
 struct TableField
 {
+public:
 	std::string fieldName;
 	long lval;
 	double dval;
 	std::string sval;
 	std::string defaut_val;
 	int length;  // 字段长度,TYPE_VCHAR有效
+
+	// 创建表使用
+	std::string oldName;
+	bool isDel;
 
 	enum FieldType
 	{
@@ -21,12 +26,17 @@ struct TableField
 		TYPE_VCHAR = 3,
 		TYPE_TEXT = 4,
 	}type;
+
+	TableField() : lval(0), dval(0.0), length(0), isDel(false){}
 };
 
 struct TableIndex
 {
 	std::vector<std::string> cols;
 	bool isUnique;
+	std::string indexName;
+	
+	std::string redisKey;
 };
 
 class Table

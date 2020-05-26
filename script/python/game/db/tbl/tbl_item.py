@@ -1,17 +1,26 @@
 
 import util.db_util
-COL_TYPE = util.db_util.ColType
+from util.db_util import TbCol
+from util.db_util import TbIndex
+from util.db_util import ColType
 
 
 class TblItem(util.db_util.TbBase):
 
     tb_name = "item"
-    col_schema = []
-    col_names = []
-    tb_index = []
+    _columns = (
+        TbCol(name="item_uid", type=ColType.BIGINT, key=True),
+        TbCol(name="name", type=ColType.VARCHAR, length=128),
+        TbCol(name="role_id", type=ColType.BIGINT),
+        TbCol(name="item_id", type=ColType.INT),
+        TbCol(name="count", type=ColType.INT),
+    )
+
+    Index_RoleId = ("role_id",)
+    _indexs = (
+        TbIndex(cols=Index_RoleId, is_unique=False),
+    )
 
     def __init__(self):
         util.db_util.TbBase.__init__(self)
 
-util.db_util.add_col(TblItem, name="item_id", type=COL_TYPE.BIGINT, key=True)
-util.db_util.add_col(TblItem, name="name", type=COL_TYPE.VARCHAR, length=128)

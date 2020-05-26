@@ -1,19 +1,26 @@
 
 import util.db_util
-COL_TYPE = util.db_util.ColType
+from util.db_util import TbCol
+from util.db_util import TbIndex
+from util.db_util import ColType
 
 
 class TblPlayer(util.db_util.TbBase):
 
     tb_name = "player"
-    col_schema = []
-    col_names = []
+    _columns = (
+        TbCol(name="role_id", type=ColType.BIGINT, key=True),
+        TbCol(name="role_name", type=ColType.VARCHAR, length=128, default=""),
+        TbCol(name="account", type=ColType.VARCHAR, length=128),
+    )
+
+    INDEX_NAME = ("role_name",)
+    INDEX_ACCOUNT = ("account",)
+    _indexs = (
+        TbIndex(cols=INDEX_NAME, is_unique=True),
+        TbIndex(cols=INDEX_ACCOUNT, is_unique=False),
+    )
 
     def __init__(self):
         util.db_util.TbBase.__init__(self)
 
-util.db_util.add_col(TblPlayer, name="role_id", type=COL_TYPE.BIGINT, key=True)
-util.db_util.add_col(TblPlayer, name="name", type=COL_TYPE.VARCHAR, length=128, default="")
-
-INDEX_NAME = ("name",)
-util.db_util.add_index(TblPlayer, INDEX_NAME, True)

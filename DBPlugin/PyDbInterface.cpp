@@ -12,6 +12,8 @@
 
 #include "PyCustomObj.h"
 
+#include "../Common/PyCommon.h"
+
 static PyObject* ModuleError;
 static char* ModuleName = "PyDb";
 
@@ -79,18 +81,20 @@ static bool _initTable(DBHandler* dbHandler, PyObject* tblObj) {
 	Table tbl;
 	char* tbName = PyStringToString(PyObject_GetAttrString(tblObj, "tb_name"));
 	tbl.tableName = tbName;
-	PyObject * colSchemaList = PyObject_GetAttrString(tblObj, "col_schema");
-	ssize_t colNum =  PyList_Size(colSchemaList);
+	PyObject * colTuple = PyObject_GetAttrString(tblObj, "_columns");
+	ssize_t colNum =  PyTuple_Size(colTuple);
 	bool hasKey = false;
 	for (int col = 0; col < colNum; col++) {
-		PyObject* schema = PyList_GetItem(colSchemaList, col);
-		char* colName = PyStringToString(PyObject_GetAttrString(schema, "name"));
-		PyObject* defaultObj = PyObject_GetAttrString(schema, "default");
-		long type = PyLong_AsLong(PyObject_GetAttrString(schema, "type"));
+		PyObject* colObj = PyTuple_GetItem(colTuple, col);
+		char* colName = PyStringToString(PyObject_GetAttrString(colObj, "name"));
+		PyObject* defaultObj = PyObject_GetAttrString(colObj, "default");
+		long type = PyLong_AsLong(PyObject_GetAttrString(colObj, "type"));
 		
 		TableField field;
 		field.fieldName = colName;
 		field.type = (TableField::FieldType)type;
+		field.oldName = PyStringToString(PyObject_GetAttrString(colObj, "old_name"));
+		field.isDel = PyLong_AsLong(PyObject_GetAttrString(colObj, "is_del")) == 1;
 		switch (type)
 		{
 			case TableField::FieldType::TYPE_INT:
@@ -98,8 +102,6 @@ static bool _initTable(DBHandler* dbHandler, PyObject* tblObj) {
 			{
 				if (defaultObj != Py_None) {
 					long defVal = PyLong_AsLong(defaultObj);
-					char buf[32]{ 0 };
-					snprintf(buf, 32, " DEFAULT %ld", defVal);
 					field.defaut_val = defVal;
 				}
 				break;
@@ -108,22 +110,22 @@ static bool _initTable(DBHandler* dbHandler, PyObject* tblObj) {
 			{
 				if (defaultObj != Py_None) {
 					long defVal = PyFloat_AsDouble(defaultObj);
-					char buf[64]{ 0 };
-					snprintf(buf, 64, " DEFAULT %lf", defVal);
 					field.defaut_val = defVal;
 				}
 				break;
 			}
 			case TableField::FieldType::TYPE_VCHAR:
 			{
-				PyObject* lenObj = PyObject_GetAttrString(schema, "length");
+				PyObject* lenObj = PyObject_GetAttrString(colObj, "length");
 				if (lenObj != Py_None) {
 					long len = PyLong_AsLong(lenObj);
 					field.length = len;
 				}
 				if (defaultObj != Py_None) {
 					char* defVal = PyStringToString(defaultObj);
-					field.defaut_val.append("'").append(defVal).append("'");
+					if (strcmp(defVal, "") != 0) {
+						field.defaut_val.append("'").append(defVal).append("'");
+					}
 				}
 				break;
 			}
@@ -139,7 +141,7 @@ static bool _initTable(DBHandler* dbHandler, PyObject* tblObj) {
 				Logger::logError("$not support table col type %ld, table:%s", type, tbName);
 				return false;
 		}
-		PyObject* keyObj = PyObject_GetAttrString(schema, "key");
+		PyObject* keyObj = PyObject_GetAttrString(colObj, "key");
 		if (keyObj != Py_None && PyLong_AsLong(keyObj) == 1) {
 			if (hasKey) {
 				Logger::logError("$creat table %s failed, has set primary key", tbName);
@@ -158,23 +160,26 @@ static bool _initTable(DBHandler* dbHandler, PyObject* tblObj) {
 	}
 	
 	// ³õÊ¼»¯Ë÷Òý
-	PyObject* tbIndexObj = PyObject_GetAttrString(tblObj, "tb_index");
-	ssize_t indexNum = PyList_Size(tbIndexObj);
-	for (int idx = 0; idx < indexNum; idx++) {
-		TableIndex tblIndex;
-		PyObject* idxObj = PyList_GetItem(tbIndexObj, idx);
-		PyObject* closObj = PyObject_GetAttrString(idxObj, "cols");
-		tblIndex.isUnique = PyLong_AsLong(PyObject_GetAttrString(idxObj, "is_unique")) == 1;
-		ssize_t idxColNum = PyTuple_Size(closObj);
-		for (int idxCol = 0; idxCol < idxColNum; idxCol++) {
-			PyObject* colNameObj = PyTuple_GetItem(closObj, idxCol);
-			tblIndex.cols.emplace_back(PyStringToString(colNameObj));
+	if (PyObject_HasAttrString(tblObj, "_indexs")) {
+		PyObject* tbIndexTuple = PyObject_GetAttrString(tblObj, "_indexs");
+		if (tbIndexTuple != NULL && tbIndexTuple != Py_None) {
+			ssize_t indexNum = PyTuple_Size(tbIndexTuple);
+			for (int idx = 0; idx < indexNum; idx++) {
+				TableIndex tblIndex;
+				PyObject* idxObj = PyTuple_GetItem(tbIndexTuple, idx);
+				PyObject* closObj = PyObject_GetAttrString(idxObj, "cols");
+				tblIndex.isUnique = PyLong_AsLong(PyObject_GetAttrString(idxObj, "is_unique")) == 1;
+				ssize_t idxColNum = PyTuple_Size(closObj);
+				for (int idxCol = 0; idxCol < idxColNum; idxCol++) {
+					PyObject* colNameObj = PyTuple_GetItem(closObj, idxCol);
+					tblIndex.cols.emplace_back(PyStringToString(colNameObj));
+				}
+				tbl.tableIndexs.emplace_back(tblIndex);
+			}
 		}
-		tbl.tableIndexs.emplace_back(tblIndex);
 	}
 
-	dbHandler->createTable(&tbl);
-	return true;
+	return dbHandler->createTable(&tbl);
 }
 
 static PyObject* initTable(PyObject* self, PyObject* args)
@@ -326,13 +331,6 @@ static PyObject* executeSql(PyObject* self, PyObject* args)
 		isResultSet = st->getMoreResults();
 	}
 
-	/*try {
-		dbHandler->executeSql(sql, dataHandler);
-	}
-	catch (std::exception& e) {
-		Logger::logError("$execute sql failed, sql:%s, ex: %s", sql, e.what());
-		Py_RETURN_NONE;
-	}*/
 	return result;
 }
 
@@ -442,25 +440,120 @@ static PyObject* insertRow(PyObject* self, PyObject* args)
 	return PyLong_FromLong(tbl.priKeyVal);
 }
 
+static void PyTableToTable(PyObject* pyTbl, Table* tbl) {
+	PyObject* tableNameObj = PyObject_GetAttrString(pyTbl, "tb_name");
+	tbl->tableName = PyStringToString(tableNameObj);
+
+	PyObject* colTuple = PyObject_GetAttrString(pyTbl, "_columns");
+	ssize_t colNum = PyTuple_Size(colTuple);
+	for (int col = 0; col < colNum; col++) {
+		PyObject* colObj = PyTuple_GetItem(colTuple, col);
+		char* colName = PyStringToString(PyObject_GetAttrString(colObj, "name"));
+		long type = PyLong_AsLong(PyObject_GetAttrString(colObj, "type"));
+		if (PyObject_HasAttrString(pyTbl, colName)) {
+			PyObject* colObj = PyObject_GetAttrString(pyTbl, colName);
+			if (colObj == Py_None) {
+				continue;
+			}
+			TableField tbField;
+			tbField.fieldName = colName;
+			tbField.type = (TableField::FieldType)type;
+			switch (type)
+			{
+			case TableField::FieldType::TYPE_INT:
+			case TableField::FieldType::TYPE_BIGINT:
+			{
+				tbField.lval = PyLong_AsLong(colObj);
+				break;
+			}
+			case TableField::FieldType::TYPE_DOUBLE:
+			{
+				tbField.defaut_val = PyFloat_AsDouble(colObj);
+				break;
+			}
+			case TableField::FieldType::TYPE_VCHAR:
+			case TableField::FieldType::TYPE_TEXT:
+			{
+				tbField.sval = PyStringToString(colObj);
+				break;
+			}
+			default:
+				Logger::logError("$not support table col type %ld, table:%s", type, tbl->tableName.c_str());
+			}
+			tbl->addField(tbField);
+		}
+	}
+}
+
+static PyObject* TableToPyTable(Table* tbl) {
+	std::string tableName = tbl->tableName;
+	PyObject* args = PyTuple_New(1);
+	PyTuple_SetItem(args, 0, PyUnicode_FromString(tableName.c_str()));
+	PyObject* tblObj = callPyFunction("main", "create_tb", args);
+	PyObject* colTuple = PyObject_GetAttrString(tblObj, "_columns");
+	ssize_t colNum = PyTuple_Size(colTuple);
+	for (int col = 0; col < colNum; col++) {
+		PyObject* colObj = PyTuple_GetItem(colTuple, col);
+		char* colName = PyStringToString(PyObject_GetAttrString(colObj, "name"));
+		auto iter = tbl->fields.find(colName);
+		if (iter == tbl->fields.end()) {
+			continue;
+		}
+		long type = PyLong_AsLong(PyObject_GetAttrString(colObj, "type"));
+		switch (type)
+		{
+			case TableField::FieldType::TYPE_INT:
+			case TableField::FieldType::TYPE_BIGINT:
+			{
+				PyObject_SetAttrString(tblObj, colName, PyLong_FromLong(iter->second.lval));
+				break;
+			}
+			case TableField::FieldType::TYPE_DOUBLE:
+			{
+				PyObject_SetAttrString(tblObj, colName, PyFloat_FromDouble(iter->second.dval));
+				break;
+			}
+			case TableField::FieldType::TYPE_VCHAR:
+			case TableField::FieldType::TYPE_TEXT:
+			{
+				PyObject_SetAttrString(tblObj, colName, PyUnicode_FromString(iter->second.sval.c_str()));
+				break;
+			}
+			default:
+				Logger::logError("$not support table col type %ld, table:%s", type, tbl->tableName.c_str());
+		}
+	}
+	return tblObj;
+}
+
 static PyObject* getRow(PyObject* self, PyObject* args)
 {
-	char* tableName = NULL;
-	long keyVal; 
-	if (!PyArg_ParseTuple(args, "sl", &tableName, &keyVal)) {
-		Logger::logError("$execute sql failed, args is error!!");
+	PyObject* tblObj;
+	if (!PyArg_ParseTuple(args, "O", &tblObj)) {
+		Logger::logError("$get row failed, args is error!!");
 		Py_RETURN_NONE;
 	}
 	DBHandler* dbHandler = ((PyDbObject*)self)->db_inst;
 	if (dbHandler == NULL)
 	{
-		PyErr_SetString(ModuleError, "execute sql failed, db hander is null");
+		PyErr_SetString(ModuleError, "get row failed, db hander is null");
 		Py_RETURN_NONE;
 	}
 
-	REDIS_REPLY_PTR reply = dbHandler->getRow(tableName, keyVal);
-	if (reply == NULL) Py_RETURN_NONE;
+	Table tbl;
+	PyTableToTable(tblObj, &tbl);
+	std::vector<Table> result;
+	if (!dbHandler->getRow(&tbl, result)) {
+		Py_RETURN_NONE;
+	}
 
-	return parseRedisReply(reply->getReply());
+	PyObject* lst = PyList_New(0);
+	for (Table tbl : result) {
+		PyObject* obj = TableToPyTable(&tbl);
+		PyList_Append(lst, obj);
+	}
+
+	return lst;
 }
 
 static PyObject* updateRow(PyObject* self, PyObject* args)
