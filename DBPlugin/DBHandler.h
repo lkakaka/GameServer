@@ -93,7 +93,7 @@ private:
 	char m_sqlBuf[MAX_SQL_LENGTH]{ 0 };
 
 	std::shared_ptr<Redis> m_redis;
-	std::map<std::string, std::shared_ptr<Table>> m_tableSchema;
+	std::map<std::string, std::shared_ptr<TableSchema>> m_tableSchema;
 
 	std::map<std::string, std::map<long, std::set<std::string>>> m_chgRecords; // 已经变化了记录
 
@@ -121,7 +121,7 @@ public:
 	void initDbTable(std::vector<ReflectObject*> tblDefs);
 
 	TableField* getTableField(const char* tableName, const char* fieldName) const;
-	Table* getTableSchema(const char* tableName) const;
+	TableSchema* getTableSchema(const char* tableName) const;
 
 	bool createTable(Table* tbl);
 

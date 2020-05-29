@@ -57,7 +57,7 @@ void DBHandler::initTableSchema() {
 	}
 
 	for (auto iter = vecTables.begin(); iter != vecTables.end(); iter++) {
-		std::shared_ptr<Table> ptrTable = std::make_shared<Table>();
+		std::shared_ptr<TableSchema> ptrTable = std::make_shared<TableSchema>();
 		m_tableSchema.emplace(*iter, ptrTable);
 		// 找主键
 		sql = "select column_name from information_schema.key_column_usage where constraint_schema = '%s' and table_name = '%s' and constraint_name='PRIMARY'";
@@ -97,7 +97,7 @@ void DBHandler::initTableSchema() {
 		std::vector<TableField> fields;
 		getTableCols(iter->c_str(), fields);
 		for (TableField field : fields) {
-			ptrTable->fields.emplace(field.fieldName, field);
+			ptrTable->addFieldSchema(field);
 		}
 	}
 }
@@ -151,7 +151,7 @@ TableField* DBHandler::getTableField(const char* tableName, const char* fieldNam
 	return &fieldIter->second;
 }
 
-Table* DBHandler::getTableSchema(const char* tableName) const {
+TableSchema* DBHandler::getTableSchema(const char* tableName) const {
 	auto iter = m_tableSchema.find(tableName);
 	if (iter == m_tableSchema.end()) {
 		Logger::logError("$not found table schema:%s", tableName);
@@ -303,14 +303,14 @@ bool DBHandler::_createNewTable(Table* tbl) {
 	int colNum = tbl->colNames.size();
 	for (int col = 0; col < colNum; col++) {
 		std::string colName = tbl->colNames[col];
-		TableField field = tbl->fields.find(colName)->second;
+		TableField* field = tbl->getField(colName.c_str());
 		colStr += colName + " ";
 		char typeStr[64]{ 0 };
-		if (!getColTypeStr(&field, typeStr, 64)) return false;
+		if (!getColTypeStr(field, typeStr, 64)) return false;
 		colStr += typeStr;
 
-		if (field.defaut_val != "") {
-			colStr += " DEFAULT " + field.defaut_val;
+		if (field->defaut_val != "") {
+			colStr += " DEFAULT " + field->defaut_val;
 		}
 
 		if (tbl->priKeyName == colName) {
@@ -336,47 +336,47 @@ bool DBHandler::_changeTable(Table* tbl, std::map<std::string, TableField>& orgF
 	std::string colStr;
 	for (int col = 0; col < colNum; col++) {
 		std::string colName = tbl->colNames[col];
-		TableField field = tbl->fields.find(colName)->second;
+		TableField* field = tbl->getField(colName.c_str()); //tbl->fields.find(colName)->second;
 		
-		if (field.isDel) { // 删除字段
-			if (orgFields.find(field.fieldName) == orgFields.end()) {
-				Logger::logWarning("$delete column %s in table %s not found", field.fieldName.c_str(), tbName.c_str());
+		if (field->isDel) { // 删除字段
+			if (orgFields.find(field->fieldName) == orgFields.end()) {
+				Logger::logWarning("$delete column %s in table %s not found", field->fieldName.c_str(), tbName.c_str());
 				continue;
 			}
 			colStr += "DROP " + colName;
 		} else { // 修改字段
-			if (field.oldName == "") {
+			if (field->oldName == "") {
 				auto iter = orgFields.find(colName);
 				if (iter == orgFields.end()) { // 新加字段
 					colStr += "ADD ";
 				}
 				else {  // 修改字段
-					if (isSameCol(&field, &iter->second)) {
+					if (isSameCol(field, &iter->second)) {
 						continue;
 					}
 					colStr += "MODIFY ";
 				}
 			}
 			else { // 字段改名
-				auto iter = orgFields.find(field.oldName);
+				auto iter = orgFields.find(field->oldName);
 				if (iter == orgFields.end()) { // 未找到原字段
-					if (orgFields.find(field.fieldName) == orgFields.end()) {
-						Logger::logError("$change column error, not found %s in table %s", field.oldName.c_str(), tbName.c_str());
+					if (orgFields.find(field->fieldName) == orgFields.end()) {
+						Logger::logError("$change column error, not found %s in table %s", field->oldName.c_str(), tbName.c_str());
 						return false;
 					}
 					continue;
 				}
-				colStr += "CHANGE " + field.oldName + " ";
+				colStr += "CHANGE " + field->oldName + " ";
 			}
 
 			colStr += colName + " ";
 
 			char typeStr[64]{ 0 };
-			if (!getColTypeStr(&field, typeStr, 64)) return false;
+			if (!getColTypeStr(field, typeStr, 64)) return false;
 			colStr += typeStr;
 
-			if (field.defaut_val != "") {
-				colStr += " DEFAULT " + field.defaut_val;
+			if (field->defaut_val != "") {
+				colStr += " DEFAULT " + field->defaut_val;
 			}
 
 			if (tbl->priKeyName == colName) {
@@ -732,13 +732,13 @@ std::shared_ptr<Table> DBHandler::getRowFromRedis(std::string& tableName, long k
 	redisReply* reply = reply_ptr->getReply();
 	for (int i = 0; i < reply->elements / 2; i+=2) {
 		redisReply* keyReply = reply->element[i];
-		TableField field;
+		MAKE_TABLE_FIELD(field);
 		if (keyReply->len > 0) {
-			std::copy(keyReply->str, keyReply->str + keyReply->len, std::back_inserter(field.fieldName));
+			std::copy(keyReply->str, keyReply->str + keyReply->len, std::back_inserter(field->fieldName));
 		}
 		redisReply* valReply = reply->element[i+1];
 		if (valReply->len > 0) {
-			std::copy(valReply->str, valReply->str + valReply->len, std::back_inserter(field.sval));
+			std::copy(valReply->str, valReply->str + valReply->len, std::back_inserter(field->sval));
 		}
 		
 		tbl->addField(field);
@@ -752,7 +752,7 @@ void DBHandler::flushChgRedisRecordToDB()
 	for (auto iter = m_chgRecords.begin(); iter != m_chgRecords.end(); iter++) {
 		std::string tableName = iter->first;
 		std::map<long, std::set<std::string>> mpRecord = iter->second;
-		Table* tblSchema = getTableSchema(tableName.c_str());
+		TableSchema* tblSchema = getTableSchema(tableName.c_str());
 		if (tblSchema == NULL) continue;
 		for (auto iter1 = mpRecord.begin(); iter1 != mpRecord.end(); iter1++) {
 			std::string sql = "update " + tableName + " ";
@@ -763,13 +763,13 @@ void DBHandler::flushChgRedisRecordToDB()
 			
 			bool isFirst = true;
 			for (auto iter2 = st.begin(); iter2 != st.end(); iter2++) {
-				auto iter3 = tbl->fields.find(*iter2);
-				if (iter3 == tbl->fields.end()) continue;
+				TableField* tbField = tbl->getField(iter2->c_str());
+				if (tbField == NULL) continue;
 				if (!isFirst) {
 					sql += ",";
 					isFirst = true;
 				}
-				sql += *iter2 + "=" + iter3->second.sval;
+				sql += *iter2 + "=" + tbField->sval;
 			}
 			sql += " where " + tblSchema->priKeyName + "=%ld";
 			executeSql(sql.c_str(), keyVal);
@@ -789,7 +789,7 @@ bool DBHandler::checkRedisExistAndLoad(const char* tableName, long keyVal) {
 	// redis中已经存在
 	if (reply->getReply()->integer == 1) return true;
 	// redis中不存在从数据库加载
-	Table* tbl = getTableSchema(tableName);
+	TableSchema* tbl = getTableSchema(tableName);
 	if (tbl == NULL) {
 		return false;
 	}
@@ -825,40 +825,40 @@ bool DBHandler::checkRedisExistAndLoad(const char* tableName, long keyVal) {
 void DBHandler::loadFromDB(Table* tbl, std::vector<Table>& result) {
 	std::string tbName = tbl->tableName;
 	std::string colStr;
-	Table* tblSchema = getTableSchema(tbl->tableName.c_str());
+	TableSchema* tblSchema = getTableSchema(tbl->tableName.c_str());
 	int size = tbl->fields.size();
 	int count = 0;
 	for (auto iter = tbl->fields.begin(); iter != tbl->fields.end(); iter++) {
 		count++;
-		TableField field = iter->second;
-		colStr += field.fieldName + "=";
-		TableField* tbField = getTableField(tbName.c_str(), field.fieldName.c_str());
+		TableField* field = iter->second.get();
+		colStr += field->fieldName + "=";
+		TableField* tbField = getTableField(tbName.c_str(), field->fieldName.c_str());
 		switch (tbField->type)
 		{
 			case TableField::FieldType::TYPE_INT:
 			case TableField::FieldType::TYPE_BIGINT:
 			{
 				char buf[64]{ 0 };
-				snprintf(buf, 64, "%ld", field.lval);
+				snprintf(buf, 64, "%ld", field->lval);
 				colStr += buf;
 				break;
 			}
 			case TableField::FieldType::TYPE_DOUBLE:
 			{
 				char buf[64]{ 0 };
-				snprintf(buf, 64, "%lf", field.lval);
+				snprintf(buf, 64, "%lf", field->lval);
 				colStr += buf;
 				break;
 			}
 			case TableField::FieldType::TYPE_VCHAR:
 			case TableField::FieldType::TYPE_TEXT:
 			{
-				colStr += "'" + field.sval + "'";
+				colStr += "'" + field->sval + "'";
 				break;
 			}
 			default:
 			{
-				Logger::logError("$not support field type:%d, table:%s, col:%s", tbField->type, tbName.c_str(), field.fieldName.c_str());
+				Logger::logError("$not support field type:%d, table:%s, col:%s", tbField->type, tbName.c_str(), field->fieldName.c_str());
 				break;
 			}
 		}
@@ -897,11 +897,11 @@ void DBHandler::loadFromDB(Table* tbl, std::vector<Table>& result) {
 		Table tblData;
 		tblData.tableName = tbl->tableName;
 		for (int i = 1; i <= colCount; i++) {
-			TableField tbField;
+			MAKE_TABLE_FIELD(tbField);
 			std::string colName = metaData->getColumnLabel(i).c_str();
 			TableField* tbFieldSchema = getTableField(tbl->tableName.c_str(), colName.c_str());
-			tbField.fieldName = colName;
-			tbField.type = tbFieldSchema->type;
+			tbField->fieldName = colName;
+			tbField->type = tbFieldSchema->type;
 			redisVal += " " + colName + " ";
 			int colType = metaData->getColumnType(i);
 			if (colType >= sql::DataType::BIT && colType <= sql::DataType::BIGINT) {
@@ -913,7 +913,7 @@ void DBHandler::loadFromDB(Table* tbl, std::vector<Table>& result) {
 					redisKey.append(tbName).append(":").append(buf);
 				}
 				mpColVals.emplace(colName, buf);
-				tbField.lval = val;
+				tbField->lval = val;
 			}
 			else if (colType >= sql::DataType::REAL && colType <= sql::DataType::NUMERIC) {
 				double val = rs->getDouble(i);
@@ -924,7 +924,7 @@ void DBHandler::loadFromDB(Table* tbl, std::vector<Table>& result) {
 					redisKey.append(tbName).append(":").append(buf);
 				}
 				mpColVals.emplace(colName, buf);
-				tbField.dval = val;
+				tbField->dval = val;
 			}
 			else {
 				const char* val = rs->getString(i).c_str();
@@ -933,7 +933,7 @@ void DBHandler::loadFromDB(Table* tbl, std::vector<Table>& result) {
 					redisKey.append(tbName).append(":").append(val);
 				}
 				mpColVals.emplace(colName, val);
-				tbField.sval = val;
+				tbField->sval = val;
 			}
 			tblData.addField(tbField);
 		}
@@ -948,7 +948,7 @@ void DBHandler::loadFromDB(Table* tbl, std::vector<Table>& result) {
 				std::string val = mpColVals.find(colName)->second;
 				redisIndexKey += val + ":";
 			}
-			std::string redisCmd = "sadd " + redisIndexKey + " " + redisKey;
+			std::string redisCmd = "SADD " + redisIndexKey + " " + redisKey;
 			m_redis->execRedisCmd(redisCmd.c_str());
 		}
 	}
@@ -958,7 +958,7 @@ bool DBHandler::insertRow(Table* tbl)
 {
 	std::string fields;
 	std::string vals;
-	Table* tblSchema = getTableSchema(tbl->tableName.c_str());
+	TableSchema* tblSchema = getTableSchema(tbl->tableName.c_str());
 	bool isSetPriKey = false;
 	for (auto iter = tbl->fields.begin(); iter != tbl->fields.end(); iter++) {
 		std::string fieldName = iter->first;
@@ -972,29 +972,29 @@ bool DBHandler::insertRow(Table* tbl)
 			isSetPriKey = true;
 			isPriKey = true;
 		}
-		TableField field = iter->second;
+		TableField* field = iter->second.get();
 		fields += fieldName + ",";
 		switch (tbField->type) {
 			case TableField::FieldType::TYPE_INT:
 			case TableField::FieldType::TYPE_BIGINT:
 			{
 				char buf[64]{ 0 };
-				snprintf(buf, 64, "%ld", field.lval);
+				snprintf(buf, 64, "%ld", field->lval);
 				vals += buf;
-				if (isPriKey) tbl->priKeyVal = field.lval;
+				if (isPriKey) tbl->priKeyVal = field->lval;
 				break;
 			}
 			case TableField::FieldType::TYPE_DOUBLE:
 			{
 				char buf[64]{ 0 };
-				snprintf(buf, 64, "%lf", field.dval);
+				snprintf(buf, 64, "%lf", field->dval);
 				vals += buf;
 				break;
 			}
 			case TableField::FieldType::TYPE_VCHAR:
 			case TableField::FieldType::TYPE_TEXT:
 			{
-				vals += "'" + field.sval + "'";
+				vals += "'" + field->sval + "'";
 				break;
 			}
 			default:
@@ -1033,7 +1033,7 @@ bool DBHandler::insertRow(Table* tbl)
 	return true;
 }
 
-static TableIndex* matchTableIndex(Table* tableSchema, Table* tbl) {
+static TableIndex* matchTableIndex(TableSchema* tableSchema, Table* tbl) {
 	int iMaxIndexLen = 0;
 	TableIndex* tgtIndex = NULL;
 	int size = tableSchema->tableIndexs.size();
@@ -1068,21 +1068,21 @@ void DBHandler::getRedisKeyValue(std::string& tableName, long keyVal, Table* tbl
 		std::string colVal;
 		std::copy(colValReply->str, colValReply->str + colValReply->len, std::back_inserter(colVal));
 		TableField* tblField = getTableField(tableName.c_str(), colName.c_str());
-		TableField field;
-		field.fieldName = colName;
-		field.type = tblField->type;
+		MAKE_TABLE_FIELD(field);
+		field->fieldName = colName;
+		field->type = tblField->type;
 		switch (tblField->type)
 		{
 		case TableField::FieldType::TYPE_INT:
 		case TableField::FieldType::TYPE_BIGINT:
-			field.lval = atol(colVal.c_str());
+			field->lval = atol(colVal.c_str());
 			break;
 		case TableField::FieldType::TYPE_DOUBLE:
-			field.dval = atof(colVal.c_str());
+			field->dval = atof(colVal.c_str());
 			break;
 		case TableField::FieldType::TYPE_VCHAR:
 		case TableField::FieldType::TYPE_TEXT:
-			field.sval = colVal;
+			field->sval = colVal;
 			break;
 		default:
 			Logger::logError("not support field type:%d, table:%s, col:%s", tblField->type, tableName.c_str(), colName.c_str());
@@ -1095,17 +1095,17 @@ void DBHandler::getRedisKeyValue(std::string& tableName, long keyVal, Table* tbl
 bool DBHandler::getRow(Table* tbl, std::vector<Table>& result)
 {
 	//if (!checkRedisExistAndLoad(tableName, keyVal)) return NULL;
-	Table* tableSchema = getTableSchema(tbl->tableName.c_str());
+	TableSchema* tableSchema = getTableSchema(tbl->tableName.c_str());
 	if (tableSchema == NULL) {
 		Logger::logError("get row not found table schema, table:%s", tbl->tableName.c_str());
 		return false;
 	}
 
 	// 有主键
-	auto iter = tbl->fields.find(tableSchema->priKeyName);
-	if (iter != tbl->fields.end()) {
+	TableField* tbField = tbl->getField(tableSchema->priKeyName.c_str());
+	if (tbField != NULL) {
 		Table tblData;
-		getRedisKeyValue(tbl->tableName, iter->second.lval, &tblData);
+		getRedisKeyValue(tbl->tableName, tbField->lval, &tblData);
 		result.push_back(tblData);
 		return true;
 	}
@@ -1115,34 +1115,34 @@ bool DBHandler::getRow(Table* tbl, std::vector<Table>& result)
 	if (tgtIndex != NULL) {
 		std::string redisIndexKey = tbl->tableName + ":" + tgtIndex->indexName + ":";
 		for (std::string colName : tgtIndex->cols) {
-			TableField field = tbl->fields.find(colName)->second;
-			TableField* tbField = getTableField(tbl->tableName.c_str(), field.fieldName.c_str());
+			TableField* field = tbl->getField(colName.c_str());
+			TableField* tbField = getTableField(tbl->tableName.c_str(), field->fieldName.c_str());
 			switch (tbField->type)
 			{
 			case TableField::FieldType::TYPE_INT:
 			case TableField::FieldType::TYPE_BIGINT:
 			{
 				char buf[64]{ 0 };
-				snprintf(buf, 64, "%ld", field.lval);
+				snprintf(buf, 64, "%ld", field->lval);
 				redisIndexKey += buf;
 				break;
 			}
 			case TableField::FieldType::TYPE_DOUBLE:
 			{
 				char buf[64]{ 0 };
-				snprintf(buf, 64, "%lf", field.lval);
+				snprintf(buf, 64, "%lf", field->lval);
 				redisIndexKey += buf;
 				break;
 			}
 			case TableField::FieldType::TYPE_VCHAR:
 			case TableField::FieldType::TYPE_TEXT:
 			{
-				redisIndexKey += field.sval;
+				redisIndexKey += field->sval;
 				break;
 			}
 			default:
 			{
-				Logger::logError("$not support field type:%d, table:%s, col:%s", tbField->type, tbl->tableName.c_str(), field.fieldName.c_str());
+				Logger::logError("$not support field type:%d, table:%s, col:%s", tbField->type, tbl->tableName.c_str(), field->fieldName.c_str());
 				break;
 			}
 			}
@@ -1175,47 +1175,121 @@ bool DBHandler::getRow(Table* tbl, std::vector<Table>& result)
 
 	// 没有索引, 从DB加载
 	loadFromDB(tbl, result);
+	Logger::logWarning("$not match index when get data, you need create index on table %s", tbl->tableName.c_str());
 	return true;
+}
+
+void getEffectIndex(std::map<std::string, std::shared_ptr<TableField>>& fields, std::vector<TableIndex>& indexs, std::vector<TableIndex*>* effectIndexs) {
+	for (int i = 0; i < indexs.size(); i++) {
+		for (std::string col : indexs[i].cols) {
+			if (fields.find(col) != fields.end()) {
+				effectIndexs->emplace_back(&indexs[i]);
+				break;
+			}
+		}
+	}
 }
 
 bool DBHandler::updateRow(Table* tbl)
 {
 	if (!checkRedisExistAndLoad(tbl->tableName.c_str(), tbl->priKeyVal)) return false;
+	Table tblData;
+	getRedisKeyValue(tbl->tableName, tbl->priKeyVal, &tblData);
 	std::string redisCmd = "hmset " + tbl->redisKey();
 	std::set<std::string> stFields;
+	TableSchema* tableSchema = getTableSchema(tbl->tableName.c_str());
+
 	for (auto iter = tbl->fields.begin(); iter != tbl->fields.end(); iter++) {
 		std::string fieldName = iter->first;
+
 		stFields.insert(fieldName);
-		TableField field = iter->second;
+		TableField* field = iter->second.get();
 		redisCmd.append(" " + fieldName + " ");
-		switch (field.type) {
+		switch (field->type) {
 			case TableField::FieldType::TYPE_INT:
 			case TableField::FieldType::TYPE_BIGINT:
 			{
 				char buf[64]{ 0 };
-				snprintf(buf, 64, "%ld", field.lval);
+				snprintf(buf, 64, "%ld", field->lval);
 				redisCmd.append(buf);
 				break;
 			}
 			case TableField::FieldType::TYPE_DOUBLE:
 			{
 				char buf[64]{ 0 };
-				snprintf(buf, 64, "%lf", field.dval);
+				snprintf(buf, 64, "%lf", field->dval);
 				redisCmd.append(buf);
 				break;
 			}
 			case TableField::FieldType::TYPE_VCHAR:
 			case TableField::FieldType::TYPE_TEXT:
 			{
-				redisCmd.append("'" + field.sval + "'");
+				redisCmd.append("'" + field->sval + "'");
 				break;
 			}
 			default:
-				Logger::logError("$not support field type, table:%s, field:%s, type:%d", tbl->tableName.c_str(), fieldName.c_str(), field.type);
+				Logger::logError("$not support field type, table:%s, field:%s, type:%d", tbl->tableName.c_str(), fieldName.c_str(), field->type);
 				return false;
 		}
 	}
+	m_redis->execRedisCmd("MULTI");
 	m_redis->execRedisCmd(redisCmd.c_str());
+
+
+	std::vector<TableIndex*> effectIndexs;
+	getEffectIndex(tbl->fields, tableSchema->tableIndexs, &effectIndexs);
+	for (TableIndex* tbIndex : effectIndexs) {
+		std::string oldIndexKey = tbl->tableName + ":" + tbIndex->indexName + ":";
+		std::string newIndexKey = tbl->tableName + ":" + tbIndex->indexName + ":";
+		for (std::string col : tbIndex->cols) {
+			TableField* fieldSchema = tableSchema->getFieldSchema(col.c_str());
+			TableField* newField = tbl->getField(col.c_str());
+			TableField* oldField = tblData.getField(col.c_str());
+			switch (fieldSchema->type) {
+				case TableField::FieldType::TYPE_INT:
+				case TableField::FieldType::TYPE_BIGINT:
+				{
+					char buf[64]{ 0 };
+					snprintf(buf, 64, "%ld", oldField->lval);
+					oldIndexKey.append(buf);
+
+					long lval = newField != NULL ? newField->lval : oldField->lval;
+					snprintf(buf, 64, "%ld", lval);
+					newIndexKey.append(buf);
+					break;
+				}
+				case TableField::FieldType::TYPE_DOUBLE:
+				{
+					char buf[64]{ 0 };
+					snprintf(buf, 64, "%lf", oldField->dval);
+					oldIndexKey.append(buf);
+
+					double dval = newField != NULL ? newField->dval : oldField->dval;
+					snprintf(buf, 64, "%lf", dval);
+					newIndexKey.append(buf);
+					break;
+				}
+				case TableField::FieldType::TYPE_VCHAR:
+				case TableField::FieldType::TYPE_TEXT:
+				{
+					oldIndexKey.append("'" + oldField->sval + "'");
+					std::string sval = newField != NULL ? newField->sval : oldField->sval;
+					newIndexKey.append("'" + sval + "'");
+					break;
+				}
+			}
+			
+		}
+
+		m_redis->execRedisCmd("SREM %s %s", oldIndexKey.c_str(), tbl->redisKey());
+		m_redis->execRedisCmd("SADD %s %s", newIndexKey.c_str(), tbl->redisKey());
+	}
+	REDIS_REPLY_PTR ptr = m_redis->execRedisCmd("EXEC");
+	if (ptr == NULL || ptr->getReply()->type == REDIS_REPLY_NIL) {
+		Logger::logInfo("$update row failed!! table:%s", tbl->tableName.c_str());
+		return false;
+	}
+
 	addUpdateRecord(tbl->tableName, tbl->priKeyVal, stFields);
 	flushChgRedisRecordToDB();
 	return true;
@@ -1226,6 +1300,7 @@ bool DBHandler::deleteRow(Table* tbl)
 	std::string redisCmd = "del " + tbl->redisKey();
 	REDIS_REPLY_PTR replyPtr = m_redis->execRedisCmd(redisCmd.c_str());
 	if (replyPtr == NULL) return false;
+
 	executeSql("delete from %s where %s=%s", tbl->tableName, tbl->priKeyName, tbl->priKeyVal);
 	return true;
 }

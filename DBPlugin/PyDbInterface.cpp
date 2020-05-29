@@ -90,11 +90,11 @@ static bool _initTable(DBHandler* dbHandler, PyObject* tblObj) {
 		PyObject* defaultObj = PyObject_GetAttrString(colObj, "default");
 		long type = PyLong_AsLong(PyObject_GetAttrString(colObj, "type"));
 		
-		TableField field;
-		field.fieldName = colName;
-		field.type = (TableField::FieldType)type;
-		field.oldName = PyStringToString(PyObject_GetAttrString(colObj, "old_name"));
-		field.isDel = PyLong_AsLong(PyObject_GetAttrString(colObj, "is_del")) == 1;
+		MAKE_TABLE_FIELD(field);
+		field->fieldName = colName;
+		field->type = (TableField::FieldType)type;
+		field->oldName = PyStringToString(PyObject_GetAttrString(colObj, "old_name"));
+		field->isDel = PyLong_AsLong(PyObject_GetAttrString(colObj, "is_del")) == 1;
 		switch (type)
 		{
 			case TableField::FieldType::TYPE_INT:
@@ -102,7 +102,7 @@ static bool _initTable(DBHandler* dbHandler, PyObject* tblObj) {
 			{
 				if (defaultObj != Py_None) {
 					long defVal = PyLong_AsLong(defaultObj);
-					field.defaut_val = defVal;
+					field->defaut_val = defVal;
 				}
 				break;
 			}
@@ -110,7 +110,7 @@ static bool _initTable(DBHandler* dbHandler, PyObject* tblObj) {
 			{
 				if (defaultObj != Py_None) {
 					long defVal = PyFloat_AsDouble(defaultObj);
-					field.defaut_val = defVal;
+					field->defaut_val = defVal;
 				}
 				break;
 			}
@@ -119,12 +119,12 @@ static bool _initTable(DBHandler* dbHandler, PyObject* tblObj) {
 				PyObject* lenObj = PyObject_GetAttrString(colObj, "length");
 				if (lenObj != Py_None) {
 					long len = PyLong_AsLong(lenObj);
-					field.length = len;
+					field->length = len;
 				}
 				if (defaultObj != Py_None) {
 					char* defVal = PyStringToString(defaultObj);
 					if (strcmp(defVal, "") != 0) {
-						field.defaut_val.append("'").append(defVal).append("'");
+						field->defaut_val.append("'").append(defVal).append("'");
 					}
 				}
 				break;
@@ -133,7 +133,7 @@ static bool _initTable(DBHandler* dbHandler, PyObject* tblObj) {
 			{
 				if (defaultObj != Py_None) {
 					char* defVal = PyStringToString(defaultObj);
-					field.defaut_val.append("'").append(defVal).append("'");
+					field->defaut_val.append("'").append(defVal).append("'");
 				}
 				break;
 			}
@@ -402,26 +402,26 @@ static PyObject* insertRow(PyObject* self, PyObject* args)
 			Py_RETURN_NONE;
 		}
 
-		TableField field;
-		field.fieldName = fieldName;
-		field.type = fieldDesc->type;
+		MAKE_TABLE_FIELD(field);
+		field->fieldName = fieldName;
+		field->type = fieldDesc->type;
 		switch (fieldDesc->type)
 		{
 		case TableField::FieldType::TYPE_INT:
 		case TableField::FieldType::TYPE_BIGINT:
 		{
-			field.lval = PyLong_AsLong(val);
+			field->lval = PyLong_AsLong(val);
 			break;
 		}
 		case TableField::FieldType::TYPE_DOUBLE:
 		{
-			field.dval = PyFloat_AsDouble(val);
+			field->dval = PyFloat_AsDouble(val);
 			break;
 		}
 		case TableField::FieldType::TYPE_VCHAR:
 		case TableField::FieldType::TYPE_TEXT:
 		{
-			field.sval = PyStringToString(val);
+			field->sval = PyStringToString(val);
 			break;
 		}
 		default:
@@ -455,26 +455,26 @@ static void PyTableToTable(PyObject* pyTbl, Table* tbl) {
 			if (colObj == Py_None) {
 				continue;
 			}
-			TableField tbField;
-			tbField.fieldName = colName;
-			tbField.type = (TableField::FieldType)type;
+			MAKE_TABLE_FIELD(tbField);
+			tbField->fieldName = colName;
+			tbField->type = (TableField::FieldType)type;
 			switch (type)
 			{
 			case TableField::FieldType::TYPE_INT:
 			case TableField::FieldType::TYPE_BIGINT:
 			{
-				tbField.lval = PyLong_AsLong(colObj);
+				tbField->lval = PyLong_AsLong(colObj);
 				break;
 			}
 			case TableField::FieldType::TYPE_DOUBLE:
 			{
-				tbField.defaut_val = PyFloat_AsDouble(colObj);
+				tbField->defaut_val = PyFloat_AsDouble(colObj);
 				break;
 			}
 			case TableField::FieldType::TYPE_VCHAR:
 			case TableField::FieldType::TYPE_TEXT:
 			{
-				tbField.sval = PyStringToString(colObj);
+				tbField->sval = PyStringToString(colObj);
 				break;
 			}
 			default:
@@ -495,8 +495,8 @@ static PyObject* TableToPyTable(Table* tbl) {
 	for (int col = 0; col < colNum; col++) {
 		PyObject* colObj = PyTuple_GetItem(colTuple, col);
 		char* colName = PyStringToString(PyObject_GetAttrString(colObj, "name"));
-		auto iter = tbl->fields.find(colName);
-		if (iter == tbl->fields.end()) {
+		TableField* field = tbl->getField(colName);
+		if (field == NULL) {
 			continue;
 		}
 		long type = PyLong_AsLong(PyObject_GetAttrString(colObj, "type"));
@@ -505,18 +505,18 @@ static PyObject* TableToPyTable(Table* tbl) {
 			case TableField::FieldType::TYPE_INT:
 			case TableField::FieldType::TYPE_BIGINT:
 			{
-				PyObject_SetAttrString(tblObj, colName, PyLong_FromLong(iter->second.lval));
+				PyObject_SetAttrString(tblObj, colName, PyLong_FromLong(field->lval));
 				break;
 			}
 			case TableField::FieldType::TYPE_DOUBLE:
 			{
-				PyObject_SetAttrString(tblObj, colName, PyFloat_FromDouble(iter->second.dval));
+				PyObject_SetAttrString(tblObj, colName, PyFloat_FromDouble(field->dval));
 				break;
 			}
 			case TableField::FieldType::TYPE_VCHAR:
 			case TableField::FieldType::TYPE_TEXT:
 			{
-				PyObject_SetAttrString(tblObj, colName, PyUnicode_FromString(iter->second.sval.c_str()));
+				PyObject_SetAttrString(tblObj, colName, PyUnicode_FromString(field->sval.c_str()));
 				break;
 			}
 			default:
@@ -590,26 +590,26 @@ static PyObject* updateRow(PyObject* self, PyObject* args)
 			Py_RETURN_NONE;
 		}
 		
-		TableField field;
-		field.fieldName = fieldName;
-		field.type = fieldDesc->type;
+		MAKE_TABLE_FIELD(field);
+		field->fieldName = fieldName;
+		field->type = fieldDesc->type;
 		switch (fieldDesc->type)
 		{
 			case TableField::FieldType::TYPE_INT:
 			case TableField::FieldType::TYPE_BIGINT:
 			{
-				field.lval = PyLong_AsLong(val);
+				field->lval = PyLong_AsLong(val);
 				break;
 			}
 			case TableField::FieldType::TYPE_DOUBLE:
 			{
-				field.dval = PyFloat_AsDouble(val);
+				field->dval = PyFloat_AsDouble(val);
 				break;
 			}
 			case TableField::FieldType::TYPE_VCHAR:
 			case TableField::FieldType::TYPE_TEXT:
 			{
-				field.sval = PyStringToString(val);
+				field->sval = PyStringToString(val);
 				break;
 			}
 			default:
