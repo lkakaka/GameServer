@@ -14,52 +14,6 @@ DATA_BASE_BEGIN
 
 #define MAX_SQL_LENGTH (4 * 1024)  // sql语句长度
 
-//struct TableField
-//{
-//	std::string fieldName;
-//	long lval;
-//	double dval;
-//	std::string sval;
-//	std::string defaut_val;
-//	int length;  // 字段长度,TYPE_VCHAR有效
-//
-//	enum FieldType
-//	{
-//		TYPE_INT = 0,
-//		TYPE_BIGINT = 1,
-//		TYPE_DOUBLE = 2,
-//		TYPE_VCHAR = 3,
-//		TYPE_TEXT = 4,
-//	}type;
-//}; 
-//
-//class Table
-//{
-//public:
-//	std::string tableName;
-//	std::string priKeyName;
-//	long priKeyVal;  // 主键只能是自增
-//	std::map<std::string, TableField> fields;
-//	std::vector<std::string> colNames;
-//
-//	std::string redisKey() { 
-//		char buf[64];
-//		snprintf(buf, 64, "%ld", priKeyVal);
-//		return tableName + ":" + buf;
-//	}
-//
-//	void addField(TableField field) {
-//		fields.emplace(field.fieldName, field);
-//	}
-//
-//	static std::string redisKey(const char* tableName, long keyVal) {
-//		std::string redis_key = tableName;
-//		char buf[64];
-//		snprintf(buf, 64, "%ld", keyVal);
-//		return redis_key + ":" + buf;
-//	}
-//};
-
 class _Statement
 {
 private:
@@ -92,7 +46,6 @@ private:
 	sql::Connection* m_dbConn;
 	char m_sqlBuf[MAX_SQL_LENGTH]{ 0 };
 
-	std::shared_ptr<Redis> m_redis;
 	std::map<std::string, std::shared_ptr<TableSchema>> m_tableSchema;
 
 	std::map<std::string, std::map<long, std::set<std::string>>> m_chgRecords; // 已经变化了记录
@@ -101,18 +54,11 @@ private:
 	sql::Connection* getDBConnection();
 	void initTableSchema();
 
-	bool checkRedisExistAndLoad(const char* tableName, long keyVal);
 	void loadFromDB(Table* tbl, std::vector<Table>& result);
-	void addUpdateRecord(std::string& tableName, long keyVal, std::set<std::string> stFields);
-	void flushChgRedisRecordToDB();
-
-	std::shared_ptr<Table> getRowFromRedis(std::string& tableName, long keyVal);
 
 	void getTableCols(const char* tableName, std::vector<TableField>& fields);
 	bool _createNewTable(Table* tbl);
 	bool _changeTable(Table* tbl, std::map<std::string, TableField>& orgFields);
-
-	void getRedisKeyValue(std::string& tableName, long keyVal, Table* tblData);
 
 public:
 	DBHandler(std::string& dbUrl, int dbPort, std::string& dbUserName, std::string& dbPassword, std::string dbName);

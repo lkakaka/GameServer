@@ -13,6 +13,7 @@
 #include "PyCustomObj.h"
 
 #include "../Common/PyCommon.h"
+#include "PyRedis.h"
 
 static PyObject* ModuleError;
 static char* ModuleName = "PyDb";
@@ -821,6 +822,10 @@ PyMODINIT_FUNC PyInit_PyDb(void)
 	pyModObj.tp_basicsize = sizeof(PyDbObject);
 	pyModObj.tp_name = "PyDb.DbInst";
 	pyModObj.addToModule(g_moudle);
+
+	if(!addPyRedisObj(g_moudle)) { 
+		return NULL;
+	}
 
 	return g_moudle;
 }

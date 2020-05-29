@@ -110,7 +110,7 @@ public:
 	std::map<std::string, TableField> fields;
 	std::vector<std::string> colNames;
 
-	std::vector<TableIndex> tableIndexs; // 索引信息
+	//std::vector<TableIndex> tableIndexs; // 索引信息
 
 	void addFieldSchema(TableField field) {
 		colNames.emplace_back(field.fieldName);
