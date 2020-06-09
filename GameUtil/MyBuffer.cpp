@@ -1,7 +1,8 @@
 #include "MyBuffer.h"
-#include <stdexcept>
-
-#define THROW_EXCEPTION(msg) {std::logic_error ex(msg); throw std::exception(ex);}
+#include "../Common/ServerMacros.h"
+//#include <stdexcept>
+//
+//#define THROW_EXCEPTION(msg) {std::logic_error ex(msg); throw std::exception(ex);}
 
 
 MyBuffer::MyBuffer() {

@@ -1,5 +1,6 @@
 #include "Redis.h"
 #include "Logger.h"
+#include "../Common/ServerMacros.h"
 
 struct timeval {
 	long    tv_sec;         /* seconds */
@@ -17,7 +18,8 @@ Redis::Redis(std::string ip, int port) : ip(ip), port(port)
 	m_redisContext = redisConnectWithTimeout(ip.c_str(), port, tv);
 	if (m_redisContext->err != 0) {
 		Logger::logError("$cannot connect redis server, ip:%s, port:%d", ip.c_str(), port);
-		throw new std::exception("connect redis failed");
+		THROW_EXCEPTION("connect redis failed")
+		//throw new std::exception("connect redis failed");
 		//exit(1);
 	}
 	Logger::logInfo("$connected redis server, ip:%s, port:%d", ip.c_str(), port);

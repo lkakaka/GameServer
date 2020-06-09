@@ -1,4 +1,5 @@
 #pragma once
+#include <stdexcept>
 
 #ifdef WIN32
 #include <io.h>
@@ -16,3 +17,5 @@
 #define M_MKDIR(dirName, mode) mkdir(dirName, mode)
 #define M_ACCESS(fileName, mode) access(fileName, mode)
 #endif //(WIN32)
+
+#define THROW_EXCEPTION(msg) {std::logic_error ex(msg); throw std::exception(ex);}
