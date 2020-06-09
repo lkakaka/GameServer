@@ -1,5 +1,6 @@
 #include "PyRedis.h"
 #include "Logger.h"
+#include "Profile/ProfileTrack.h"
 
 static PyTypeObject PyRedisObj_Type;
 
@@ -53,7 +54,7 @@ static PyObject* parseRedisReply(redisReply* reply) {
 }
 
 
-static PyObject* exeReidsCmd(PyObject* self, PyObject* args) {
+static PyObject* execRedisCmd(PyObject* self, PyObject* args) {
 	char* redisCmd;
 	if (!PyArg_ParseTuple(args, "s", &redisCmd)) {
 		//PyErr_SetString(ModuleError, "create scene obj failed");
@@ -61,6 +62,8 @@ static PyObject* exeReidsCmd(PyObject* self, PyObject* args) {
 		Py_RETURN_NONE;
 	}
 	Redis* redis = ((PyRedisObj*)self)->redis;
+
+	//PROFILE_TRACK("redis_cmd");
 	REDIS_REPLY_PTR ptr = redis->execRedisCmd(redisCmd);
 	if (ptr == NULL) {
 		Py_RETURN_NONE;
@@ -70,7 +73,7 @@ static PyObject* exeReidsCmd(PyObject* self, PyObject* args) {
 }
 
 static PyMethodDef tp_methods[] = {
-	{"exeReidsCmd", (PyCFunction)exeReidsCmd, METH_VARARGS, ""},
+	{"execRedisCmd", (PyCFunction)execRedisCmd, METH_VARARGS, ""},
 	{NULL, NULL}           /* sentinel */
 };
 
@@ -80,11 +83,11 @@ static PyMethodDef tp_methods[] = {
 //};
 
 
-static void initPySceneObj_Type()
+static void initPyRedisObj_Type()
 {
 	memset(&PyRedisObj_Type, 0, sizeof(PyRedisObj_Type));
 	PyRedisObj_Type.ob_base = { PyObject_HEAD_INIT(NULL) 0 };
-	PyRedisObj_Type.tp_name = "Scene.SceneObj";
+	PyRedisObj_Type.tp_name = "DB.Redis";
 	PyRedisObj_Type.tp_basicsize = sizeof(PyRedisObj);
 	PyRedisObj_Type.tp_getattro = PyObject_GenericGetAttr;
 	PyRedisObj_Type.tp_flags = Py_TPFLAGS_DEFAULT;
@@ -95,14 +98,14 @@ static void initPySceneObj_Type()
 }
 
 bool addPyRedisObj(PyObject* module) {
-	initPySceneObj_Type();
+	initPyRedisObj_Type();
 	if (PyType_Ready(&PyRedisObj_Type) < 0) {
 		Logger::logError("$add py redis obj error, ready type failed");
 		return false;
 	}
 
 	Py_INCREF(&PyRedisObj_Type);
-	if (PyModule_AddObject(module, "SceneObj", (PyObject*)&PyRedisObj_Type) < 0) {
+	if (PyModule_AddObject(module, "Redis", (PyObject*)&PyRedisObj_Type) < 0) {
 		Py_DECREF(&PyRedisObj_Type);
 		Logger::logError("$add py redis obj error, add failed");
 		return false;

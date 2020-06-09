@@ -22,7 +22,7 @@ class SceneService(ServiceBase):
         self._player_to_scene = {}
 
     def on_service_start(self):
-        logger.logInfo("$Scene Service Start!!")
+        logger.log_info("Scene Service Start!!")
         util.timer.add_timer(3, lambda: self.create_scene(1))
 
     def create_scene(self, scene_id):
@@ -31,9 +31,9 @@ class SceneService(ServiceBase):
 
         def _reg_callback(err_code):
             if err_code == util.const.ErrorCode.OK:
-                logger.logInfo("$reg scene success, result:{}", err_code)
+                logger.log_info("reg scene success, result:{}", err_code)
             else:
-                logger.logError("$reg scene error, err_code:{}, scene_id:{}", err_code, scene_id)
+                logger.log_error("reg scene error, err_code:{}, scene_id:{}", err_code, scene_id)
 
         future = self.rpc_call("scene_ctrl", "RegScene", timeout=10.0, scene_id=scene_id, scene_uid=scene.scene_uid)
         future.finish_cb += _reg_callback
@@ -46,7 +46,7 @@ class SceneService(ServiceBase):
         return self._scenes.get(scene_id)
 
     def on_recv_client_msg(self, conn_id, msg_id, msg_data):
-        logger.logInfo("$recv client msg, conn_id:{}, msg_id:{}", conn_id, msg_id)
+        logger.log_info("recv client msg, conn_id:{}, msg_id:{}", conn_id, msg_id)
         func = SceneService._c_cmd.get_cmd_func(msg_id)
         if func is not None:
             msg = Message.create_msg_by_id(msg_id)
@@ -56,7 +56,7 @@ class SceneService(ServiceBase):
 
         game_scene = self.get_player_scene(conn_id)
         if game_scene is None:
-            logger.logInfo("$on_recv_client_msg error, player game_scene not found, conn_id:{}, msgId:{}", conn_id, msg_id)
+            logger.log_info("on_recv_client_msg error, player game_scene not found, conn_id:{}, msgId:{}", conn_id, msg_id)
             return
         game_scene.on_recv_client_msg(conn_id, msg_id, msg_data)
 

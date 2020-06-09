@@ -1,13 +1,26 @@
 #include "Redis.h"
 #include "Logger.h"
 
+struct timeval {
+	long    tv_sec;         /* seconds */
+	long    tv_usec;        /* and microseconds */
+};
+
+
 #define REDIS_CMD_LOG_BUFFER_LENTGH 1024
 
 USING_DATA_BASE;
 
 Redis::Redis(std::string ip, int port) : ip(ip), port(port)
 {
-	m_redisContext = redisConnect(ip.c_str(), port);
+	struct timeval tv = { 10, 0 };
+	m_redisContext = redisConnectWithTimeout(ip.c_str(), port, tv);
+	if (m_redisContext->err != 0) {
+		Logger::logError("$cannot connect redis server, ip:%s, port:%d", ip.c_str(), port);
+		throw new std::exception("connect redis failed");
+		//exit(1);
+	}
+	Logger::logInfo("$connected redis server, ip:%s, port:%d", ip.c_str(), port);
 	redisEnableKeepAlive(m_redisContext);
 	redisReply* reply = (redisReply*)redisCommand(m_redisContext, "hgetall test");
 	parseReply(reply);
@@ -54,7 +67,7 @@ std::shared_ptr<RedisReply> Redis::execRedisCmd(const char* format, ...)
 	char cmd[REDIS_CMD_LOG_BUFFER_LENTGH]{ 0 };
 	vsnprintf(cmd, REDIS_CMD_LOG_BUFFER_LENTGH - 1, format, ap);
 	va_end(ap);
-	Logger::logInfo("$exec redis cmd, %s", cmd);
+	//Logger::logInfo("$exec redis cmd, %s", cmd);
 	if (reply == NULL) {
 		Logger::logInfo("$exec redis cmd failed, %s", cmd);
 		return NULL;

@@ -22,20 +22,20 @@ class SceneMgr(object):
             self._all_scene[scene_id] = {}
         scenes = self._all_scene[scene_id]
         if scene_uid in scenes:
-            logger.logError("$scene uid has exist, scene_id:{}, scene_uid:{}", scene_id, scene_uid)
+            logger.log_error("scene uid has exist, scene_id:{}, scene_uid:{}", scene_id, scene_uid)
         scene = _Scene(scene_id, scene_uid, service_name)
         self._all_scene[scene_id][scene_uid] = scene
         self._scene_by_uid[scene_uid] = scene
-        logger.logInfo("$reg scene, scene_id:{}, scene_uid:{}", scene_id, scene_uid)
+        logger.log_info("reg scene, scene_id:{}, scene_uid:{}", scene_id, scene_uid)
 
     def unreg_scene(self, scene_id, scene_uid):
         scenes = self._all_scene.get(scene_id, None)
         if scenes is None:
-            logger.logError("$unreg scene not found, scene_id:{}, scene_uid:{}", scene_id, scene_uid)
+            logger.log_error("unreg scene not found, scene_id:{}, scene_uid:{}", scene_id, scene_uid)
             return
         scenes.pop(scene_uid, None)
         self._scene_by_uid.pop(scene_uid, None)
-        logger.logInfo("$unreg scene, scene_id:{}, scene_uid:{}", scene_id, scene_uid)
+        logger.log_info("unreg scene, scene_id:{}, scene_uid:{}", scene_id, scene_uid)
 
     def get_min_player_scene(self, scene_id):
         scenes = self._all_scene.get(scene_id, None)
@@ -53,7 +53,7 @@ class SceneMgr(object):
     def reg_player_to_scene(self, role_id, scene_uid):
         scene = self._scene_by_uid.get(scene_uid, None)
         if scene is None:
-            logger.logError("$reg player to scene not found, role_id:{}, scene_uid:{}", role_id, scene_uid)
+            logger.log_error("reg player to scene not found, role_id:{}, scene_uid:{}", role_id, scene_uid)
             return
         if role_id not in scene.player_list:
             scene.player_list.append(role_id)
@@ -62,7 +62,7 @@ class SceneMgr(object):
     def unreg_player_to_scene(self, role_id, scene_uid):
         scene = self._scene_by_uid.get(scene_uid, None)
         if scene is None:
-            logger.logError("$unreg player to scene not found, role_id:{}, scene_uid:{}", role_id, scene_uid)
+            logger.log_error("unreg player to scene not found, role_id:{}, scene_uid:{}", role_id, scene_uid)
             return
         if role_id in scene.player_list:
             scene.player_list.remove(role_id)

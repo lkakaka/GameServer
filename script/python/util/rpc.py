@@ -31,13 +31,13 @@ class _Future(object):
         params = eval(rpc_data) if rpc_data != "" else ()
         for fin_cb in self.finish_cb.future_cb:
             fin_cb(*params)
-        logger.logInfo("$future finish, rpc_id:{}", self._rpc_id)
+        logger.log_info("future finish, rpc_id:{}", self._rpc_id)
 
     def _on_future_timeout(self):
         self._rpc_mgr().remove_future(self._rpc_id)
         for tt_cb in self.timeout_cb.future_cb:
             tt_cb(util.const.ErrorCode.TIME_OUT)
-        logger.logInfo("$future timeout, rpc_id:{}", self._rpc_id)
+        logger.log_info("future timeout, rpc_id:{}", self._rpc_id)
 
     def remove_timeout_timer(self):
         if self._timer_id < 0:
@@ -66,7 +66,7 @@ class RpcMgr(object):
     def _add_future(self, rpc_id, time_out):
         future = _Future(self, rpc_id, time_out)
         self._futures[rpc_id] = future
-        logger.logInfo("$add future, rpc_id:{}, time_out:{}, timer_id:{}", rpc_id, time_out, future._timer_id)
+        logger.log_info("add future, rpc_id:{}, time_out:{}, timer_id:{}", rpc_id, time_out, future._timer_id)
         return future
 
     def remove_future(self, rpc_id):
@@ -85,6 +85,6 @@ class RpcMgr(object):
     def on_recv_rpc_rsp_msg(self, sender, rpc_id, rpc_data):
         future = self._futures.pop(rpc_id, None)
         if future is None:
-            logger.logError("$not found rpc futurue, rpc_id:{}", rpc_id)
+            logger.log_error("not found rpc futurue, rpc_id:{}", rpc_id)
             return
         future.on_recv_rsp(rpc_data)

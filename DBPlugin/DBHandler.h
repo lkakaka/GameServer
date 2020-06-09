@@ -81,6 +81,7 @@ public:
 	bool insertRow(Table* tbl);
 	bool getRow(Table* tbl, std::vector<Table>& result);
 	bool updateRow(Table* tbl);
+	bool replaceRow(Table* tbl);
 	bool deleteRow(Table* tbl);
 };
 

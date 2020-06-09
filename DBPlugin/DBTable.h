@@ -47,11 +47,14 @@ class Table
 public:
 	std::string tableName;
 	std::string priKeyName;
-	long priKeyVal;  // 主键只能是自增
+	long priKeyVal;
+	bool isAutoIncr;  // 主键是否自增
 	std::map<std::string, std::shared_ptr<TableField>> fields;
 	std::vector<std::string> colNames;
 
 	std::vector<TableIndex> tableIndexs; // 索引信息
+
+	Table():priKeyVal(0), isAutoIncr(false){}
 
 	std::string redisKey() { 
 		char buf[64];

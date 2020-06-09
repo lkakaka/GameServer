@@ -149,6 +149,10 @@ static bool _initTable(DBHandler* dbHandler, PyObject* tblObj) {
 				return false;
 			}
 			tbl.priKeyName = colName;
+			PyObject* autoIncrObj = PyObject_GetAttrString(colObj, "auto_incr");
+			if (PyLong_AsLong(autoIncrObj) == 1) {
+				tbl.isAutoIncr = true;
+			}
 			hasKey = true;
 		}
 
@@ -442,6 +446,7 @@ static PyObject* insertRow(PyObject* self, PyObject* args)
 }
 
 static void PyTableToTable(PyObject* pyTbl, Table* tbl) {
+	//PyObject* tableNameObj = PyObject_GenericGetAttr(pyTbl, PyUnicode_FromString("tb_name"));
 	PyObject* tableNameObj = PyObject_GetAttrString(pyTbl, "tb_name");
 	tbl->tableName = PyStringToString(tableNameObj);
 
@@ -571,7 +576,10 @@ static PyObject* updateRow(PyObject* self, PyObject* args)
 		Py_RETURN_NONE;
 	}
 
-	PyObject* tableNameObj = PyObject_GetAttrString(obj, "table_name");
+	Table tbl;
+	PyTableToTable(obj, &tbl);
+
+	/*PyObject* tableNameObj = PyObject_GetAttrString(obj, "table_name");
 	PyObject* priKeyObj = PyObject_GetAttrString(obj, "pri_key");
 	PyObject* fields = PyObject_GetAttrString(obj, "fields");
 
@@ -620,12 +628,40 @@ static PyObject* updateRow(PyObject* self, PyObject* args)
 			}
 		}
 		tbl.addField(field);
-	}
+	}*/
 
 	if (!dbHandler->updateRow(&tbl))
 	{
 		Py_RETURN_FALSE;
 	}
+	Py_RETURN_TRUE;
+}
+
+static PyObject* replaceRows(PyObject* self, PyObject* args)
+{
+	PyObject* obj;
+	if (!PyArg_ParseTuple(args, "O", &obj)) {
+		Logger::logError("$replace row failed, args is error!!");
+		Py_RETURN_NONE;
+	}
+	DBHandler* dbHandler = ((PyDbObject*)self)->db_inst;
+	if (dbHandler == NULL)
+	{
+		PyErr_SetString(ModuleError, "replace row failed, db hander is null");
+		Py_RETURN_NONE;
+	}
+
+	ssize_t tupleSize = PyTuple_Size(obj);
+	for (int i = 0; i < tupleSize; i++) {
+		PyObject* tblObj = PyTuple_GetItem(obj, i);
+		Table tbl;
+		PyTableToTable(tblObj, &tbl);
+		if (!dbHandler->replaceRow(&tbl))
+		{
+			Py_RETURN_FALSE;
+		}
+	}
+
 	Py_RETURN_TRUE;
 }
 
@@ -640,6 +676,14 @@ static PyObject* deleteRow(PyObject* self, PyObject* args)
 	if (dbHandler == NULL)
 	{
 		PyErr_SetString(ModuleError, "delete row failed, db hander is null");
+		Py_RETURN_FALSE;
+	}
+
+	Table tbl;
+	PyTableToTable(obj, &tbl);
+
+	if (!dbHandler->deleteRow(&tbl))
+	{
 		Py_RETURN_FALSE;
 	}
 	Py_RETURN_TRUE;
@@ -671,6 +715,7 @@ static PyMethodDef db_methods[] = {
 	{"insertRow", insertRow, METH_VARARGS, ""},
 	{"getRow", getRow, METH_VARARGS, ""},
 	{"updateRow", updateRow, METH_VARARGS, ""},
+	{"replaceRows", replaceRows, METH_VARARGS, ""},
 	{"deleteRow", deleteRow, METH_VARARGS, ""},
 	{NULL, NULL}           /* sentinel */
 };

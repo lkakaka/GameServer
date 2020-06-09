@@ -5,7 +5,6 @@
 #include "DataBase.h"
 #include <memory>
 
-
 DATA_BASE_BEGIN;
 
 #define REDIS_REPLY_PTR std::shared_ptr<RedisReply>

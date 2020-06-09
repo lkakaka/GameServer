@@ -14,7 +14,7 @@ class SceneCtrlService(ServiceBase):
         self._scene_mgr = game.scene_ctrl.scene_mgr.SceneMgr(self)
 
     def on_service_start(self):
-        logger.logInfo("$SceneCtrlService start!!!")
+        logger.log_info("SceneCtrlService start!!!")
 
     @_rpc_proc.reg_cmd("RegScene")
     def _on_recv_rpc_reg_scene(self, sender, scene_id=-1, scene_uid=-1):
@@ -31,7 +31,7 @@ class SceneCtrlService(ServiceBase):
         scene = self._scene_mgr.get_min_player_scene(scene_id)
         print("_on_recv_rpc_enter_scene-----", scene)
         if scene is None:
-            logger.logInfo("$enter scene failed, not found scene, scene_id:{}, role_id:{}", scene_id, role_id)
+            logger.log_info("enter scene failed, not found scene, scene_id:{}, role_id:{}", scene_id, role_id)
             return ErrorCode.NOT_FOUND_SCENE
         self.rpc_call(scene.service_name, "Scene_EnterScene", conn_id=conn_id, role_id=role_id, scene_uid=scene.scene_uid)
         return ErrorCode.OK

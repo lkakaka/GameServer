@@ -17,7 +17,7 @@ class LoginService(ServiceBase):
         self._conn_dict = {}    # 验证成功的连接
 
     def on_service_start(self):
-        logger.logInfo("$Login Service Start!!")
+        logger.log_info("Login Service Start!!")
 
     @_c_cmd.reg_cmd(Message.MSG_ID_LOGIN_REQ)
     def _on_recv_login_req(self, conn_id, msg_id, msg):
@@ -44,7 +44,7 @@ class LoginService(ServiceBase):
     def _on_recv_load_role_rsp(self, sender, msg_id, msg):
         conn_id = self._account_dict.pop(msg.account, None)
         if conn_id is None:
-            logger.logError("$not found account's conn id, account:{}", msg.account)
+            logger.log_error("not found account's conn id, account:{}", msg.account)
             return
         self.send_msg_to_client(conn_id, msg)
 
@@ -55,7 +55,7 @@ class LoginService(ServiceBase):
         if account is None or account != msg.account:
             rsp_msg.err_code = ErrorCode.CONN_INVALID
             self.send_msg_to_client(conn_id, rsp_msg)
-            logger.logError("create role error, account:{}, msg.account:{}", account, msg.account)
+            logger.log_error("create role error, account:{}, msg.account:{}", account, msg.account)
             return
 
         self.rpc_call("db", "CreateRole", conn_id=conn_id, account=msg.account, role_name=msg.role_name)
@@ -64,7 +64,7 @@ class LoginService(ServiceBase):
     def _on_recv_enter_game(self, conn_id, msg_id, msg):
         account = self._conn_dict.get(conn_id)
         if account is None:
-            logger.logError("enter game error, conn_id({}) invalid", conn_id)
+            logger.log_error("enter game error, conn_id({}) invalid", conn_id)
             self._send_enter_game_rsp(conn_id, ErrorCode.CONN_INVALID)
             return
 
@@ -72,14 +72,14 @@ class LoginService(ServiceBase):
         db_msg.role_id = msg.role_id
         db_msg.conn_id = conn_id
         self.send_msg_to_service("db", db_msg)
-        logger.logInfo("enter game req, conn_id:{}, account:{}", conn_id, account)
+        logger.log_info("enter game req, conn_id:{}, account:{}", conn_id, account)
 
     @_s_cmd.reg_cmd(Message.MSG_ID_LOAD_ROLE_RSP)
     def _on_recv_load_role_rsp(self, sender, msg_id, msg):
         conn_id = msg.conn_id
         account = self._conn_dict.get(conn_id)
         if account is None:
-            logger.logError("$load role rsp, conn_id({}) invalid", conn_id)
+            logger.log_error("load role rsp, conn_id({}) invalid", conn_id)
             self._send_enter_game_rsp(conn_id, ErrorCode.CONN_INVALID)
             return
 
@@ -92,7 +92,7 @@ class LoginService(ServiceBase):
         future = self.rpc_call("scene_ctrl", "EnterScene", timeout=30, conn_id=conn_id, role_id=msg.role_info.role_id)
         future.finish_cb += _on_query_login_scene
         future.timeout_cb += _on_query_login_scene
-        logger.logInfo("$send enter scene req to scene ctrl, conn_id:{}, account:{}", conn_id, account)
+        logger.log_info("send enter scene req to scene ctrl, conn_id:{}, account:{}", conn_id, account)
 
     def _send_enter_game_rsp(self, conn_id, err_code, role_info):
         msg = Message.create_msg_by_id(Message.MSG_ID_ENTER_GAME_RSP)

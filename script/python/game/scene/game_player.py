@@ -22,7 +22,7 @@ class GamePlayer:
         msg.ParseFromString(msg_data)
         func = GamePlayer._c_cmd.get_cmd_func(msg_id)
         if func is None:
-            logger.logError("$player on_recv_client_msg error, not found cmd func, msgId:{}", msg_id)
+            logger.log_error("player on_recv_client_msg error, not found cmd func, msgId:{}", msg_id)
             return
         func(self, msg_id, msg)
 
@@ -34,7 +34,7 @@ class GamePlayer:
 
     @_c_cmd.reg_cmd(Message.MSG_ID_DISCONNECT_REQ)
     def _on_recv_disconnect(self, msg_id, msg):
-        logger.logError("$player disconnect, role_id:{},reason:{}", self.role_id, msg.reason)
+        logger.log_error("player disconnect, role_id:{},reason:{}", self.role_id, msg.reason)
         self.game_scene.tick_player(self.role_id, "client req disconnect")
 
     @_c_cmd.reg_cmd(Message.MSG_ID_TEST_REQ)

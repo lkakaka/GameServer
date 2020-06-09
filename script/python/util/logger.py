@@ -1,11 +1,18 @@
 
 import Logger
 
-def logInfo(fmt, *p):
+
+def log_info(fmt, *p):
     Logger.logInfo("$[PyLog] " + fmt.format(*p))
 
-def logError(fmt, *p):
+
+def log_error(fmt, *p):
     Logger.logInfo("$[PyLog] " + fmt.format(*p))
 
-def logDebug(fmt, *p):
+
+def log_debug(fmt, *p):
     Logger.logInfo("$[PyLog] " + fmt.format(*p))
+
+
+def log_warn(fmt, *p):
+    Logger.logWarn("$[PyLog] " + fmt.format(*p))

@@ -5,9 +5,9 @@ from util.db_util import TbIndex
 from util.db_util import ColType
 
 
-class TblPlayer(util.db_util.TbBase):
+class TblTest(util.db_util.TbBase):
 
-    tb_name = "player"
+    tb_name = "test"
     _columns = (
         TbCol(name="role_id", type=ColType.BIGINT, key=True, auto_incr=True),
         TbCol(name="role_name", type=ColType.VARCHAR, length=128, default=""),
@@ -24,4 +24,4 @@ class TblPlayer(util.db_util.TbBase):
     def __init__(self):
         util.db_util.TbBase.__init__(self)
 
-util.db_util.init_columns(TblPlayer)
+util.db_util.init_columns(TblTest)

@@ -7,17 +7,17 @@ import Timer
 timer_id = 0
 
 def init():
-    logger.logInfo("$init python {} {}", os.getcwd(), os.path.abspath(""))
+    logger.log_info("init python {} {}", os.getcwd(), os.path.abspath(""))
     # import Test
     # print(Test.test())
     db.TbMgr.TbMgr.initTbTable()
     # py_cffi.cffi_test.test_use()
     # test_timer()
-    logger.logInfo("$init python end")
+    logger.log_info("init python end")
 
 def thread_test():
     # print("thread test")
-    logger.logInfo("$python thread test")
+    logger.log_info("python thread test")
 
 def test_timer():
     global timer_id
@@ -26,7 +26,7 @@ def test_timer():
         print("timer cb called")
 
     timer_id = Timer.addTimer(3000, 1000, 3, timer_cb)
-    logger.logInfo("$add timer {}", timer_id)
+    logger.log_info("add timer {}", timer_id)
 
 
 def create_db_service():
@@ -59,13 +59,9 @@ def create_login_service():
 
 
 def create_tb(tb_name):
-    print("create tb --------", tb_name)
-    if tb_name == "player":
-        from game.db.tbl.tbl_player import TblPlayer
-        return TblPlayer()
-    if tb_name == "item":
-        from game.db.tbl.tbl_item import TblItem
-        return TblItem()
+    # print("create tb --------", tb_name)
+    import util.db_util
+    return util.db_util.create_tbl_obj(tb_name)
 
 
 # def timer_cb():

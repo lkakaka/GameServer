@@ -8,7 +8,7 @@ import java.util.Random;
 public class RobotMgr {
     private static final String m_serverIP = "127.0.0.1";
 //    private static final String m_serverIP = "111.229.80.201";
-    private static final int m_serverPort = 20000;
+    private static final int m_serverPort = 30000;
 
     private static final RobotMgr m_robotMgr = new RobotMgr();
     public Map<String, GameRobot> robotMap = new HashMap<>();

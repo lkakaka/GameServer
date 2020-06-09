@@ -26,7 +26,7 @@ class GameScene:
         msg.role_id = role_id
         msg.conn_id = conn_id
         self.service.send_msg_to_service("db", msg)
-        logger.logInfo("$prepare enter scene, role_id:{}, scene_uid:{}, scene_id:%d", role_id, self.scene_uid, self.scene_id)
+        logger.log_info("prepare enter scene, role_id:{}, scene_uid:{}, scene_id:%d", role_id, self.scene_uid, self.scene_id)
 
     def on_load_player(self, msg):
         conn_id = msg.conn_id
@@ -39,7 +39,7 @@ class GameScene:
 
     def on_player_enter(self, game_player):
         self.scene_obj.onPlayerEnter(game_player.actor_id)
-        logger.logInfo("$player enter scene, role_id:{}, scene_uid:{}, name:{}", game_player.role_id, self.scene_uid, game_player.name)
+        logger.log_info("player enter scene, role_id:{}, scene_uid:{}, name:{}", game_player.role_id, self.scene_uid, game_player.name)
 
     def create_player(self, conn_id, role_id, name):
         player_info = self.scene_obj.createPlayer(conn_id, role_id, name, 0, 0)
@@ -56,7 +56,7 @@ class GameScene:
         self.player_conn_dict.pop(player.conn_id, None)
         self.service.on_remove_player(player.conn_id)
 
-        logger.logInfo("$remove player, reason:{}", reason)
+        logger.log_info("remove player, reason:{}", reason)
 
     def tick_player(self, role_id, reason):
         player = self.get_player_by_role_id(role_id)
@@ -80,7 +80,7 @@ class GameScene:
     def on_recv_client_msg(self, conn_id, msg_id, msg_data):
         player = self.get_player_by_conn_id(conn_id)
         if player is None:
-            logger.logError("$on_recv_service_msg error, not found player, msgId:{}", msg_id)
+            logger.log_error("on_recv_service_msg error, not found player, msgId:{}", msg_id)
             return
 
         player.on_recv_client_msg(msg_id, msg_data)

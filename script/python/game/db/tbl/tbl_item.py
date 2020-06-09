@@ -24,3 +24,4 @@ class TblItem(util.db_util.TbBase):
     def __init__(self):
         util.db_util.TbBase.__init__(self)
 
+util.db_util.init_columns(TblItem)

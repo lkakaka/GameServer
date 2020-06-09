@@ -42,10 +42,23 @@ static PyObject* logDebug(PyObject* self, PyObject* args)
 	Py_RETURN_TRUE;
 }
 
+static PyObject* logWarn(PyObject* self, PyObject* args)
+{
+	char* msg = NULL;
+	if (!PyArg_ParseTuple(args, "s", &msg)) {
+		//PyErr_SetString(ModuleError, "logDebug failed");
+		Py_RETURN_FALSE;
+	}
+
+	Logger::logWarning(msg);
+	Py_RETURN_TRUE;
+}
+
 static PyMethodDef module_methods[] = {
 	{"logInfo", (PyCFunction)logInfo, METH_VARARGS, ""},
 	{"logError", (PyCFunction)logError, METH_VARARGS, ""},
 	{"logDebug", (PyCFunction)logDebug, METH_VARARGS, ""},
+	{"logWarn", (PyCFunction)logWarn, METH_VARARGS, ""},
 	{NULL, NULL, 0, NULL}
 
 };

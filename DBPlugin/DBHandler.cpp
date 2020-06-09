@@ -217,8 +217,8 @@ bool DBHandler::createTable(Table* tbl)
 	// 查询索引
 	sql = "select * from(SELECT a.TABLE_SCHEMA, a.TABLE_NAME, a.index_name, GROUP_CONCAT(column_name ORDER BY seq_in_index) AS `columns` "
 		"FROM information_schema.statistics a "
-		"GROUP BY a.TABLE_SCHEMA, a.TABLE_NAME, a.index_name) as b where b.TABLE_NAME = '%s' and b.index_name LIKE 'Index_%%'";
-	ptr = executeSql(sql, tbName.c_str());
+		"GROUP BY a.TABLE_SCHEMA, a.TABLE_NAME, a.index_name) as b where b.TABLE_NAME = '%s' and b.TABLE_SCHEMA = '%s' and b.index_name LIKE 'Index_%%'";
+	ptr = executeSql(sql, tbName.c_str(), m_dbName.c_str());
 	st = ptr->getStatement();
 	rs = st->getResultSet();
 	std::set<std::string> indexs;
@@ -314,6 +314,9 @@ bool DBHandler::_createNewTable(Table* tbl) {
 
 		if (tbl->priKeyName == colName) {
 			colStr += " primary key";
+			if (tbl->isAutoIncr && (field->type == TableField::FieldType::TYPE_BIGINT || TableField::FieldType::TYPE_INT)) {
+				colStr += " AUTO_INCREMENT";
+			}
 		}
 		if (col != colNum - 1) colStr += ", ";
 	}
@@ -689,7 +692,7 @@ StatementPtr DBHandler::executeSql(const char* sqlFormat, ...)
 	sql::SQLString sqlStr = sql::SQLString(m_sqlBuf);
 	try {
 		bool isResultSet = st->execute(sqlStr);
-		Logger::logInfo("$exec sql success, sql: %s", m_sqlBuf);
+		//Logger::logInfo("$exec sql success, sql: %s", m_sqlBuf);
 		return MAKE_STATEMENT_PTR(st, isResultSet);
 	}
 	catch (std::exception& e) {
@@ -777,7 +780,8 @@ void DBHandler::loadFromDB(Table* tbl, std::vector<Table>& result) {
 				tbField->dval = val;
 			}
 			else {
-				const char* val = rs->getString(i).c_str();
+				SQLString sqlStr = rs->getString(i);
+				const char* val = sqlStr.c_str();
 				mpColVals.emplace(colName, val);
 				tbField->sval = val;
 			}
@@ -882,40 +886,136 @@ bool DBHandler::updateRow(Table* tbl)
 {
 	TableSchema* tableSchema = getTableSchema(tbl->tableName.c_str());
 
+	std::string chg_fields;
+	std::string conditions;
+
 	for (auto iter = tbl->fields.begin(); iter != tbl->fields.end(); iter++) {
 		std::string fieldName = iter->first;
-
 		TableField* field = iter->second.get();
+		bool isPriKey = tableSchema->priKeyName == field->fieldName;
 		switch (field->type) {
 			case TableField::FieldType::TYPE_INT:
 			case TableField::FieldType::TYPE_BIGINT:
 			{
 				char buf[64]{ 0 };
 				snprintf(buf, 64, "%ld", field->lval);
+				if (isPriKey) {
+					conditions = field->fieldName + "=" + buf;
+				}
+				else {
+					chg_fields += field->fieldName + "=" + buf;
+				}
 				break;
 			}
 			case TableField::FieldType::TYPE_DOUBLE:
 			{
 				char buf[64]{ 0 };
 				snprintf(buf, 64, "%lf", field->dval);
+				if (isPriKey) {
+					conditions = field->fieldName + "=" + buf;
+				}
+				else {
+					chg_fields += field->fieldName + "=" + buf;
+				}
 				break;
 			}
 			case TableField::FieldType::TYPE_VCHAR:
 			case TableField::FieldType::TYPE_TEXT:
 			{
+				if (isPriKey) {
+					conditions = field->fieldName + "='" + field->sval + "'";
+				}
+				else {
+					chg_fields += field->fieldName + "='" + field->sval + "'";
+				}
 				break;
 			}
 			default:
 				Logger::logError("$not support field type, table:%s, field:%s, type:%d", tbl->tableName.c_str(), fieldName.c_str(), field->type);
 				return false;
 		}
+		chg_fields += ",";
+	}
+
+	// 删除最后的逗号
+	if (!chg_fields.empty()) {
+		chg_fields.pop_back();
+	}
+
+
+	char* sql = "UPDATE %s SET %s WHERE %s";
+	StatementPtr ptr = executeSql(sql, tbl->tableName.c_str(), chg_fields.c_str(), conditions.c_str());
+	if (ptr == NULL) {
+		Logger::logError("$exe update sql failed, sql:%s, fields:%s, conditions:%s", sql, chg_fields.c_str(), conditions.c_str());
+		return false;
 	}
 	return true;
 }
 
-void formatSqlConditions(Table* tbl, std::string& formatStr) {
+bool DBHandler::replaceRow(Table* tbl)
+{
+	std::string fields;
+	std::string vals;
+	TableSchema* tblSchema = getTableSchema(tbl->tableName.c_str());
+	bool isSetPriKey = false;
+	for (auto iter = tbl->fields.begin(); iter != tbl->fields.end(); iter++) {
+		std::string fieldName = iter->first;
+		TableField* tbField = getTableField(tbl->tableName.c_str(), fieldName.c_str());
+		if (tbField == nullptr) {
+			return false;
+		}
+
+		TableField* field = iter->second.get();
+		fields += fieldName + ",";
+		switch (tbField->type) {
+			case TableField::FieldType::TYPE_INT:
+			case TableField::FieldType::TYPE_BIGINT:
+			{
+				char buf[64]{ 0 };
+				snprintf(buf, 64, "%ld", field->lval);
+				vals += buf;
+				break;
+			}
+			case TableField::FieldType::TYPE_DOUBLE:
+			{
+				char buf[64]{ 0 };
+				snprintf(buf, 64, "%lf", field->dval);
+				vals += buf;
+				break;
+			}
+			case TableField::FieldType::TYPE_VCHAR:
+			case TableField::FieldType::TYPE_TEXT:
+			{
+				vals += "'" + field->sval + "'";
+				break;
+			}
+			default:
+				Logger::logError("$not support field type, table:%s, field:%s, type:%d", tbl->tableName.c_str(), fieldName.c_str(), tbField->type);
+				return false;
+		}
+		vals += ",";
+	}
+
+	// 删除最后的逗号
+	if (!fields.empty()) {
+		fields.pop_back();
+		vals.pop_back();
+	}
+
+	char* sql = "REPLACE INTO %s(%s) VALUES(%s)";
+	StatementPtr ptr = executeSql(sql, tbl->tableName.c_str(), fields.c_str(), vals.c_str());
+	if (ptr == NULL) {
+		Logger::logError("$exe replace sql failed, sql:%s, fields:%s, vals:%s", sql, fields.c_str(), vals.c_str());
+		return false;
+	}
+
+	return true;
+}
+
+std::string formatSqlConditions(Table* tbl) {
+	std::string formatStr;
 	int size = tbl->fields.size();
-	int count = 1;
+	int count = 0;
 	for (auto iter = tbl->fields.begin(); iter != tbl->fields.end(); iter++) {
 		count++;
 		std::string fieldName = iter->first;
@@ -950,6 +1050,7 @@ void formatSqlConditions(Table* tbl, std::string& formatStr) {
 
 		if (count != size) formatStr += " AND ";
 	}
+	return formatStr;
 }
 
 bool DBHandler::deleteRow(Table* tbl)
@@ -958,9 +1059,8 @@ bool DBHandler::deleteRow(Table* tbl)
 		Logger::logError("$delete row not set conditions");
 		return false;
 	}
-	std::string cond;
-	formatSqlConditions(tbl, cond);
-	if (executeSql("delete from %s where %s", tbl->tableName, cond.c_str()) == NULL)
+	std::string cond = formatSqlConditions(tbl);
+	if (executeSql("DELETE FROM %s WHERE %s", tbl->tableName.c_str(), cond.c_str()) == NULL)
 		return false;
 	return true;
 }
