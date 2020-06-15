@@ -328,6 +328,12 @@ namespace log4cpp {
             va_end(va);
         }
     }
+
+    void Category::notice(const char* stringFormat, va_list va) throw() {
+        if (isPriorityEnabled(Priority::NOTICE)) {
+            _logUnconditionally(Priority::NOTICE, stringFormat, va);
+        }
+    }
     
     void Category::notice(const std::string& message) throw() { 
         if (isPriorityEnabled(Priority::NOTICE))

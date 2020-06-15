@@ -373,6 +373,8 @@ namespace log4cpp {
          **/  
         void notice(const char* stringFormat, ...) throw();
 
+        void notice(const char* stringFormat, va_list va);
+
         /** 
          * Log a message with notice priority.
          * @param message string to write in the log file

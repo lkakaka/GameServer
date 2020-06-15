@@ -67,6 +67,12 @@
 		已包含头文件和库文件
 		
 		
+		5、hiredis (https://github.com/redis/hiredis.git)
+		cd hiredis
+		mkdir build
+		cd build
+		cmake ..
+		make
 		
 	   
 	   3、生成工程Makefile

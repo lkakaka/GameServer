@@ -104,13 +104,13 @@ void Logger::logInfo(char* fmt, ...)
 	char buff[FORMAT_BUFF_SIZE]{ 0 };
 	if (Logger::isPrint(fmt))
 	{
-		formatLog(buff, &fmt[1], args);
+		//formatLog(buff, &fmt[1], args);
 		log4cpp::Category& sub = log4cpp::Category::getInstance("sub1");
-		sub.notice(buff);
+		sub.notice(&fmt[1], args);
 	}else {
-		formatLog(buff, fmt, args);
+		//formatLog(buff, fmt, args);
 		log4cpp::Category& root = log4cpp::Category::getRoot();
-		root.notice(buff);
+		root.notice(fmt, args);
 	}
 	va_end(args);
 }
