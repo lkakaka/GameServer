@@ -67,13 +67,13 @@ void Logger::logDebug(const char* fmt, ...)
 	char buff[FORMAT_BUFF_SIZE]{ 0 };
 	if (Logger::isPrint(fmt))
 	{
-		formatLog(buff, &fmt[1], args);
+		//formatLog(buff, &fmt[1], args);
 		log4cpp::Category& sub = log4cpp::Category::getInstance("sub1");
-		sub.debug(buff);
+		sub.debug(&fmt[1], args);
 	}else {
-		formatLog(buff, fmt, args);
+		//formatLog(buff, fmt, args);
 		log4cpp::Category& root = log4cpp::Category::getRoot();
-		root.debug(buff);
+		root.debug(fmt, args);
 	}
 	va_end(args);
 }
@@ -85,14 +85,14 @@ void Logger::logWarning(const char* fmt, ...)
 	char buff[FORMAT_BUFF_SIZE]{ 0 };
 	if (Logger::isPrint(fmt))
 	{
-		formatLog(buff, &fmt[1], args);
+		//formatLog(buff, &fmt[1], args);
 		log4cpp::Category& sub = log4cpp::Category::getInstance("sub1");
-		sub.warn(buff);
+		sub.warn(&fmt[1], args);
 	}
 	else {
-		formatLog(buff, fmt, args);
+		//formatLog(buff, fmt, args);
 		log4cpp::Category& root = log4cpp::Category::getRoot();
-		root.warn(buff);
+		root.warn(fmt, args);
 	}
 	va_end(args);
 }
@@ -122,13 +122,13 @@ void Logger::logError(const char* fmt, ...)
 	char buff[FORMAT_BUFF_SIZE]{ 0 };
 	if (Logger::isPrint(fmt))
 	{
-		formatLog(buff, &fmt[1], args);
+		//formatLog(buff, &fmt[1], args);
 		log4cpp::Category& sub = log4cpp::Category::getInstance("sub1");
-		sub.error(buff);
+		sub.error(&fmt[1], args);
 	}else {
-		formatLog(buff, fmt, args);
+		//formatLog(buff, fmt, args);
 		log4cpp::Category& root = log4cpp::Category::getRoot();
-		root.error(buff);
+		root.error(fmt, args);
 	}
 	va_end(args);
 }

@@ -312,6 +312,7 @@ namespace log4cpp {
          * @param ... The arguments for stringFormat 
          **/  
         void debug(const char* stringFormat, ...) throw();
+        void debug(const char* stringFormat, va_list va) throw();
 
         /** 
          * Log a message with debug priority.
@@ -373,7 +374,7 @@ namespace log4cpp {
          **/  
         void notice(const char* stringFormat, ...) throw();
 
-        void notice(const char* stringFormat, va_list va);
+        void notice(const char* stringFormat, va_list va) throw();
 
         /** 
          * Log a message with notice priority.
@@ -404,6 +405,7 @@ namespace log4cpp {
          * @param ... The arguments for stringFormat 
          **/  
         void warn(const char* stringFormat, ...) throw();
+        void warn(const char* stringFormat, va_list va) throw();
 
         /** 
          * Log a message with warn priority.
@@ -434,6 +436,7 @@ namespace log4cpp {
          * @param ... The arguments for stringFormat 
          **/  
         void error(const char* stringFormat, ...) throw();
+        void error(const char* stringFormat, va_list va) throw();
 
         /** 
          * Log a message with error priority.

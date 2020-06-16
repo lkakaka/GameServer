@@ -300,6 +300,12 @@ namespace log4cpp {
             va_end(va);
         }
     }
+
+    void Category::debug(const char* stringFormat, va_list va) throw() {
+        if (isPriorityEnabled(Priority::DEBUG)) {
+            _logUnconditionally(Priority::DEBUG, stringFormat, va);
+        }
+    }
     
     void Category::debug(const std::string& message) throw() { 
         if (isPriorityEnabled(Priority::DEBUG))
@@ -348,6 +354,12 @@ namespace log4cpp {
             va_end(va);
         }
     }
+
+    void Category::warn(const char* stringFormat, va_list va) throw() {
+        if (isPriorityEnabled(Priority::WARN)) {
+            _logUnconditionally(Priority::WARN, stringFormat, va);
+        }
+    }
     
     void Category::warn(const std::string& message) throw() { 
         if (isPriorityEnabled(Priority::WARN))
@@ -360,6 +372,12 @@ namespace log4cpp {
             va_start(va,stringFormat);
                        _logUnconditionally(Priority::ERROR, stringFormat, va);
             va_end(va);
+        }
+    }
+
+    void Category::error(const char* stringFormat, va_list va) throw() {
+        if (isPriorityEnabled(Priority::ERROR)) {
+            _logUnconditionally(Priority::ERROR, stringFormat, va);
         }
     }
     
