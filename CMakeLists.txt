@@ -49,6 +49,7 @@ add_subdirectory(GameServer)
 add_subdirectory(HttpServer)
 
 add_subdirectory(TestZmq)
+add_subdirectory(TestRedis)
 
 
 
