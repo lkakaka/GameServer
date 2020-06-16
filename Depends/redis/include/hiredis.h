@@ -39,6 +39,7 @@
 #include <sys/time.h> /* for struct timeval */
 #else
 struct timeval; /* forward declaration */
+typedef long long ssize_t;
 #endif
 #include <stdint.h> /* uintXX_t, etc */
 #include "sds.h" /* for sds */
@@ -102,7 +103,9 @@ typedef struct redisReply {
     double dval; /* The double when type is REDIS_REPLY_DOUBLE */
     size_t len; /* Length of string */
     char *str; /* Used for REDIS_REPLY_ERROR, REDIS_REPLY_STRING
-                  and REDIS_REPLY_DOUBLE (in additional to dval). */
+                  REDIS_REPLY_VERB, and REDIS_REPLY_DOUBLE (in additional to dval). */
+    char vtype[4]; /* Used for REDIS_REPLY_VERB, contains the null
+                      terminated 3 character content type, such as "txt". */
     size_t elements; /* number of elements, for REDIS_REPLY_ARRAY */
     struct redisReply **element; /* elements vector for REDIS_REPLY_ARRAY */
 } redisReply;
@@ -198,8 +201,8 @@ typedef struct redisContextFuncs {
     void (*free_privdata)(void *);
     void (*async_read)(struct redisAsyncContext *);
     void (*async_write)(struct redisAsyncContext *);
-    int (*read)(struct redisContext *, char *, size_t);
-    int (*write)(struct redisContext *);
+    ssize_t (*read)(struct redisContext *, char *, size_t);
+    ssize_t (*write)(struct redisContext *);
 } redisContextFuncs;
 
 /* Context for a connection to Redis */

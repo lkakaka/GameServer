@@ -2,10 +2,12 @@
 #include "Logger.h"
 #include "../Common/ServerMacros.h"
 
+#ifdef WIN32
 struct timeval {
 	long    tv_sec;         /* seconds */
 	long    tv_usec;        /* and microseconds */
 };
+#endif
 
 
 #define REDIS_CMD_LOG_BUFFER_LENTGH 1024
@@ -69,7 +71,7 @@ std::shared_ptr<RedisReply> Redis::execRedisCmd(const char* format, ...)
 	char cmd[REDIS_CMD_LOG_BUFFER_LENTGH]{ 0 };
 	vsnprintf(cmd, REDIS_CMD_LOG_BUFFER_LENTGH - 1, format, ap);
 	va_end(ap);
-	//Logger::logInfo("$exec redis cmd, %s", cmd);
+	Logger::logInfo("$exec redis cmd, %s", cmd);
 	if (reply == NULL) {
 		Logger::logInfo("$exec redis cmd failed, %s", cmd);
 		return NULL;

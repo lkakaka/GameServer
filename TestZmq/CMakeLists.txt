@@ -1,7 +1,7 @@
 
 set(CMAKE_DEBUG_POSTFIX "_d") 
 
-gnu_setting(false)
+gnu_setting(true)
 
 include_directories(${PROJECT_SOURCE_DIR}/log4cpp/include ${ZMQ_ROOT}/include)
 link_directories(${LOG4CPP_ROOT} ${ZMQ_ROOT}/libs)
