@@ -108,28 +108,28 @@ class DBService(ServiceBase):
         self.send_msg_to_service(sender, rsp_msg)
 
     @_rpc_proc.reg_cmd("CreateRole")
-    def _on_rpc_create_role(self, conn_id, account, role_name):
+    def _on_rpc_create_role(self, sender, conn_id, account, role_name):
+        print("_on_rpc_create_role----", conn_id, account, role_name)
         rsp_msg = Message.create_msg_by_id(Message.MSG_ID_CREATE_ROLE_RSP)
         db_res = self._db_handler.execute_sql("select * from player where account='{}'".format(account))
         if len(db_res) >= util.const.GlobalVar.MAX_ROLE_NUM:
             rsp_msg.err_code = ErrorCode.ROLE_COUNT_LIMIT
             self.send_msg_to_client(conn_id, rsp_msg)
             return
-        db_res = self._db_handler.execute_sql("select count(*) as name_count from player where name='{}'".format(role_name))
+        db_res = self._db_handler.execute_sql("select count(*) as name_count from player where role_name='{}'".format(role_name))
         if len(db_res) > 0 and db_res[0].name_count > 0:
             rsp_msg.err_code = ErrorCode.ROLE_NAME_EXIST
             self.send_msg_to_client(conn_id, rsp_msg)
             return
 
-        self._db_handler.execute_sql("insert into player(name, account) values('{}', '{}')".format(role_name, account))
-        db_res = self._db_handler.execute_sql("select * from player where name='{}'".format(role_name))
+        self._db_handler.execute_sql("insert into player(role_name, account) values('{}', '{}')".format(role_name, account))
+        db_res = self._db_handler.execute_sql("select * from player where role_name='{}'".format(role_name))
 
         # from game.db.tbl.tbl_player import TblPlayer
         # tbl_player = TblPlayer()
         # tbl_player.account = account
         # db_res = self._db_handler.get_row(tbl_player)
 
-        rsp_msg.role_info = Message.create_msg_by_id(Message.MSG_ID_ROLE_INFO)
         rsp_msg.role_info.role_id = db_res[0].role_id
         rsp_msg.role_info.role_name = role_name
         rsp_msg.err_code = ErrorCode.OK
