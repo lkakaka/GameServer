@@ -121,26 +121,35 @@ void TcpConnection::sendMsgToClient(int msgId, char* data, int dataLen) {
 
 void TcpConnection::sendData(std::vector<char>& dat)
 {
+	std::vector<char> buf;
 	std::copy(dat.begin(), dat.end(), std::back_inserter(m_sendBuf));
 	doSend();
 }
 
 void TcpConnection::doSend() {
 	if (m_sendBuf.size() == 0) return;
+	//m_sendMutex.lock();
 	boost::asio::const_buffer buf(&m_sendBuf.front(), m_sendBuf.size());
-	m_socket.async_write_some(buf, [this](boost::system::error_code err_code, size_t datLen) {
-		if (err_code)
-		{
-			const std::string err_str = err_code.message();
-			Logger::logError("$send data error, %s", err_str.data());
-			//Logger::logInfo("$send data len:%d", datLen);
-			return;
-		}
-		if (datLen > 0) {
-			m_sendBuf.erase(m_sendBuf.begin(), m_sendBuf.begin() + datLen);
-			if(m_sendBuf.size() > 0) doSend();
-		}
-	});
+	/*std::shared_ptr<std::vector<char>> buf_ptr = std::make_shared<std::vector<char>>();*/
+	size_t len = m_socket.write_some(buf);
+	if (len > 0) {
+		m_sendBuf.erase(m_sendBuf.begin(), m_sendBuf.begin() + len);
+		if(m_sendBuf.size() > 0) doSend();
+	}
+	//m_socket.async_write_some(buf, [this](boost::system::error_code err_code, size_t datLen) {
+	//	//m_sendMutex.unlock();
+	//	if (err_code)
+	//	{
+	//		const std::string err_str = err_code.message();
+	//		Logger::logError("$send data error, %s", err_str.data());
+	//		//Logger::logInfo("$send data len:%d", datLen);
+	//		return;
+	//	}
+	//	if (datLen > 0) {
+	//		m_sendBuf.erase(m_sendBuf.begin(), m_sendBuf.begin() + datLen);
+	//		if(m_sendBuf.size() > 0) doSend();
+	//	}
+	//});
 }
 
 void TcpConnection::close(const char* reason) {

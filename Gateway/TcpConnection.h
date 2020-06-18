@@ -4,6 +4,7 @@
 #include "Logger.h"
 #include "MyBuffer.h"
 #include "../Common/ServerExports.h"
+#include <mutex>
 
 typedef std::function<void(int, const char*)> ConnCloseFunc;
 
@@ -19,6 +20,7 @@ private:
 	std::vector<char> m_sendBuf;
 	int m_connID;
 	bool m_isClosed;
+	std::mutex m_sendMutex;
 	//std::shared_ptr<Network> m_network;
 	ConnCloseFunc m_closeFunc;
 
