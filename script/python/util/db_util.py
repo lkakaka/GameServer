@@ -61,6 +61,9 @@ class TbBase(object):
 
     def __setitem__(self, item, val):
         if item in self._column_names:
+            if val is None:
+                self.__dict__[item] = val
+                return
             tb_col = self._column_dict.get(item)
             if tb_col.type in (ColType.INT, ColType.BIGINT):
                 self.__dict__[item] = int(val)
@@ -141,10 +144,30 @@ class TbBase(object):
         col_count = len(tbl_index.cols)
         for i in range(col_count):
             col_name = tbl_index.cols[i]
-            redis_key += col_name + ":" + self[col_name]
+            redis_key += "{}:{}".format(col_name, self[col_name])
             if i != col_count - 1:
                 redis_key += ":"
         return redis_key
+
+    def to_dict(self, cols=None):
+        dict = {}
+        dict["__tb_name"] = self.tb_name
+        for col_name in self._column_names:
+            if self[col_name] is None:
+                continue
+            if cols is not None and col_name not in cols:
+                continue
+            dict[col_name] = self[col_name]
+        return dict
+
+    def assign(self, dict):
+        for k, v in dict.items():
+            if k == "__tb_name":
+                continue
+            if k not in self._column_names:
+                util.logger.log_warn("{} not table {} column", k, self.tb_name)
+                continue
+            self[k] = v
 
     def dump_cols(self):
         for col_name in self._column_names:
@@ -178,6 +201,13 @@ def init_columns(cls):
 def create_tbl_obj(tb_name):
     import game.db.tbl
     return game.db.tbl.__dict__["tbl_" + tb_name].__dict__["Tbl" + tb_name.capitalize()]()
+
+
+def create_tbl_with_data(tb_name, tbl_dat):
+    import game.db.tbl
+    tbl = game.db.tbl.__dict__["tbl_" + tb_name].__dict__["Tbl" + tb_name.capitalize()]()
+    tbl.assign(tbl_dat)
+    return tbl
 
 
 def get_tbl_name_from_key(key):

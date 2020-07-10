@@ -1,0 +1,17 @@
+syntax="proto3";
+
+option java_package="com.proto";
+option java_outer_classname = "Role";
+
+//package proto;
+
+message GmCmd {
+	string cmd = 1;
+	string args = 2;
+}
+
+message GmCmdRsp {
+	string cmd = 1;
+	string msg = 2;
+}
+

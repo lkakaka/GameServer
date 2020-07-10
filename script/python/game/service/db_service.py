@@ -23,6 +23,7 @@ class DBService(ServiceBase):
         self._db_info = None
 
     def on_service_start(self):
+        ServiceBase.on_service_start(self)
         logger.log_info("DBService start!!!")
         # DBHandler.test_db()
         self._db_handler = DBHandler("save")
@@ -80,6 +81,67 @@ class DBService(ServiceBase):
 
     def upgrade_db(self, db_ver):
         return True
+
+    @_rpc_proc.reg_cmd("RpcLoadDB")
+    def _on_recv_rpc_load_db(self, sender, tb_name, **kwargs):
+        tbl_sql = util.db_util.create_tbl_obj(tb_name)
+        for k, v in kwargs.items():
+            tbl_sql[k] = v
+        result_list = []
+        tbl_list = self._db_handler.load_tb_data(tbl_sql)
+        for tbl in tbl_list:
+            result_list.append(tbl.to_dict())
+        return ErrorCode.OK, tuple(result_list)
+
+    @_rpc_proc.reg_cmd("RpcLoadDBMulti")
+    def _on_recv_rpc_load_db_multi(self, sender, tbl_list):
+        result_list = []
+        for tbl in tbl_list:
+            tbl_sql = util.db_util.create_tbl_obj(tbl["__tb_name"])
+            for k, v in tbl.items():
+                if k == "__tb_name":
+                    continue
+                tbl_sql[k] = v
+            res_list = self._db_handler.load_tb_data(tbl_sql)
+            for tbl_res in res_list:
+                result_list.append(tbl_res.to_dict())
+        return ErrorCode.OK, tuple(result_list)
+
+    @_rpc_proc.reg_cmd("RpcInsertDB")
+    def _on_recv_rpc_insert_db(self, sender, tbl_list):
+        print("_on_recv_rpc_insert_db", tbl_list)
+        tbls = []
+        for data in tbl_list:
+            tbl_sql = util.db_util.create_tbl_obj(data["__tb_name"])
+            tbl_sql.assign(data)
+            tbl_sql.dump_cols()
+            tbls.append(tbl_sql)
+        if self._db_handler.insert_table(tbls):
+            return ErrorCode.OK
+        util.logger.log_error("insert db error")
+        return ErrorCode.DB_ERROR
+
+    @_rpc_proc.reg_cmd("RpcUpdateDB")
+    def _on_recv_rpc_update_db(self, sender, tbl_list):
+        tbls = []
+        for data in tbl_list:
+            tbl_sql = util.db_util.create_tbl_obj(data["__tb_name"])
+            tbl_sql.assign(data)
+            tbls.append(tbl_sql)
+        if self._db_handler.update_table(tbls):
+            return ErrorCode.OK
+        return ErrorCode.DB_ERROR
+
+    @_rpc_proc.reg_cmd("RpcDeleteDB")
+    def _on_recv_rpc_delete_db(self, sender, tbl_list):
+        tbls = []
+        for data in tbl_list:
+            tbl_sql = util.db_util.create_tbl_obj(data["__tb_name"])
+            tbl_sql.assign(data)
+            tbls.append(tbl_sql)
+        if self._db_handler.delete_table(tbls):
+            return ErrorCode.OK
+        return ErrorCode.DB_ERROR
 
     @_s_cmd.reg_cmd(Message.MSG_ID_LOAD_ROLE_LIST_REQ)
     def _on_recv_load_role_list_req(self, sender, msg_id, msg):
@@ -144,5 +206,6 @@ class DBService(ServiceBase):
         # print(db_res)
         # for res in db_res:
         #     res.dump_cols()
-        self._db_handler.redis_benchmark()
+        # self._db_handler.redis_benchmark()
+        pass
 

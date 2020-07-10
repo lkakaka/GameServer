@@ -5,6 +5,7 @@ from google.protobuf import descriptor_pb2  # 如果不先import，协议序列�
 import proto.server_only.login_srv_pb2
 import proto.login_pb2
 import proto.scene_pb2
+import proto.role_pb2
 import proto.server_only.common_pb2
 import proto.test_pb2
 
@@ -19,15 +20,17 @@ class Message:
     MSG_ID_ENTER_GAME_RSP = 7
     MSG_ID_ENTER_SCENE_REQ = 8
     MSG_ID_ENTER_SCENE_RSP = 9
-    MSG_ID_LOAD_ROLE_LIST_REQ = 10
-    MSG_ID_LOAD_ROLE_LIST_RSP = 11
-    MSG_ID_LOAD_ROLE_REQ = 12
-    MSG_ID_LOAD_ROLE_RSP = 13
-    MSG_ID_LOGIN_REQ = 14
-    MSG_ID_LOGIN_RSP = 15
-    MSG_ID_RPC_MSG = 16
-    MSG_ID_RPC_MSG_RSP = 17
-    MSG_ID_TEST_REQ = 18
+    MSG_ID_GM_CMD = 10
+    MSG_ID_GM_CMD_RSP = 11
+    MSG_ID_LOAD_ROLE_LIST_REQ = 12
+    MSG_ID_LOAD_ROLE_LIST_RSP = 13
+    MSG_ID_LOAD_ROLE_REQ = 14
+    MSG_ID_LOAD_ROLE_RSP = 15
+    MSG_ID_LOGIN_REQ = 16
+    MSG_ID_LOGIN_RSP = 17
+    MSG_ID_RPC_MSG = 18
+    MSG_ID_RPC_MSG_RSP = 19
+    MSG_ID_TEST_REQ = 20
 
     _MsgId2Msg = {
         MSG_ID_CLIENT_DISCONNECT: proto.server_only.login_srv_pb2.ClientDisconnect,
@@ -39,6 +42,8 @@ class Message:
         MSG_ID_ENTER_GAME_RSP: proto.login_pb2.EnterGameRsp,
         MSG_ID_ENTER_SCENE_REQ: proto.scene_pb2.EnterSceneReq,
         MSG_ID_ENTER_SCENE_RSP: proto.scene_pb2.EnterSceneRsp,
+        MSG_ID_GM_CMD: proto.role_pb2.GmCmd,
+        MSG_ID_GM_CMD_RSP: proto.role_pb2.GmCmdRsp,
         MSG_ID_LOAD_ROLE_LIST_REQ: proto.server_only.login_srv_pb2.LoadRoleListReq,
         MSG_ID_LOAD_ROLE_LIST_RSP: proto.login_pb2.LoadRoleListRsp,
         MSG_ID_LOAD_ROLE_REQ: proto.server_only.login_srv_pb2.LoadRoleReq,
@@ -60,6 +65,8 @@ class Message:
         proto.login_pb2.EnterGameRsp: MSG_ID_ENTER_GAME_RSP,
         proto.scene_pb2.EnterSceneReq: MSG_ID_ENTER_SCENE_REQ,
         proto.scene_pb2.EnterSceneRsp: MSG_ID_ENTER_SCENE_RSP,
+        proto.role_pb2.GmCmd: MSG_ID_GM_CMD,
+        proto.role_pb2.GmCmdRsp: MSG_ID_GM_CMD_RSP,
         proto.server_only.login_srv_pb2.LoadRoleListReq: MSG_ID_LOAD_ROLE_LIST_REQ,
         proto.login_pb2.LoadRoleListRsp: MSG_ID_LOAD_ROLE_LIST_RSP,
         proto.server_only.login_srv_pb2.LoadRoleReq: MSG_ID_LOAD_ROLE_REQ,

@@ -3,6 +3,7 @@ package com.command;
 import com.game.GameRobot;
 import com.game.RobotMgr;
 import com.proto.ProtoBufferMsg;
+import com.proto.Role;
 import com.proto.Test;
 
 public class CommandCmd extends CmdDispatch {
@@ -62,6 +63,28 @@ public class CommandCmd extends CmdDispatch {
         String account = params[0];
         RobotMgr.getInstance().removeRobot(account);
         System.out.println("removeRobot successful, account:" + account);
+    }
+
+    @CmdAnnotation(inputCmd = "gm")
+    private void gmCmd() {
+        if (params == null || params.length < 1) {
+            System.out.println("gmCmd error, params: " + params);
+            return;
+        }
+
+        String gmCmd = params[0];
+        StringBuilder sb = new StringBuilder();
+        for (int i = 1; i < params.length; i++) {
+            sb.append(params[i]);
+            if (i != params.length - 1)
+                sb.append(",");
+        }
+        Role.GmCmd.Builder builder = Role.GmCmd.newBuilder();
+        builder.setCmd(gmCmd).setArgs(sb.toString());
+
+        GameRobot robot = RobotMgr.getInstance().getOneRobot();
+        robot.sendProto(ProtoBufferMsg.MSG_ID_GM_CMD, builder.build());
+        System.out.println("gmCmd successful, account:" + robot.getAccount());
     }
 
     @CmdAnnotation(inputCmd = "test")

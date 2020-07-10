@@ -6,6 +6,7 @@
 #include "proto/server_only/login_srv.pb.h"
 #include "proto/login.pb.h"
 #include "proto/scene.pb.h"
+#include "proto/role.pb.h"
 #include "proto/server_only/common.pb.h"
 #include "proto/test.pb.h"
 
@@ -27,15 +28,17 @@ enum PROTO_MSG_ID {
 	MSG_ID_ENTER_GAME_RSP = 7,
 	MSG_ID_ENTER_SCENE_REQ = 8,
 	MSG_ID_ENTER_SCENE_RSP = 9,
-	MSG_ID_LOAD_ROLE_LIST_REQ = 10,
-	MSG_ID_LOAD_ROLE_LIST_RSP = 11,
-	MSG_ID_LOAD_ROLE_REQ = 12,
-	MSG_ID_LOAD_ROLE_RSP = 13,
-	MSG_ID_LOGIN_REQ = 14,
-	MSG_ID_LOGIN_RSP = 15,
-	MSG_ID_RPC_MSG = 16,
-	MSG_ID_RPC_MSG_RSP = 17,
-	MSG_ID_TEST_REQ = 18,
+	MSG_ID_GM_CMD = 10,
+	MSG_ID_GM_CMD_RSP = 11,
+	MSG_ID_LOAD_ROLE_LIST_REQ = 12,
+	MSG_ID_LOAD_ROLE_LIST_RSP = 13,
+	MSG_ID_LOAD_ROLE_REQ = 14,
+	MSG_ID_LOAD_ROLE_RSP = 15,
+	MSG_ID_LOGIN_REQ = 16,
+	MSG_ID_LOGIN_RSP = 17,
+	MSG_ID_RPC_MSG = 18,
+	MSG_ID_RPC_MSG_RSP = 19,
+	MSG_ID_TEST_REQ = 20,
 	
 };
 

@@ -36,8 +36,8 @@ class SceneService(ServiceBase):
                 logger.log_error("reg scene error, err_code:{}, scene_id:{}", err_code, scene_id)
 
         future = self.rpc_call("scene_ctrl", "RegScene", timeout=10.0, scene_id=scene_id, scene_uid=scene.scene_uid)
-        future.finish_cb += _reg_callback
-        future.timeout_cb += _reg_callback
+        future.on_fin += _reg_callback
+        future.on_timeout += _reg_callback
 
     def get_player_scene(self, conn_id):
         scene_id = self._player_to_scene.get(conn_id)
@@ -82,7 +82,7 @@ class SceneService(ServiceBase):
     @_s_cmd.reg_cmd(Message.MSG_ID_LOAD_ROLE_RSP)
     def _on_recv_load_role_rsp(self, sender, msg_id, msg):
         game_scene = self.get_player_scene(msg.conn_id)
-        game_scene.on_load_player(msg)
+        # game_scene.on_load_player(msg)
 
     @_s_cmd.reg_cmd(Message.MSG_ID_CLIENT_DISCONNECT)
     def _on_recv_disconnect(self, sender, msg_id, msg):

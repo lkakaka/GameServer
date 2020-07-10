@@ -23,19 +23,19 @@ class _Future(object):
         self._rpc_id = rpc_id
         self._time_out = RpcMgr.DEFAULT_TIME_OUT if time_out <= 0 else time_out
         self._timer_id = util.timer.add_timer(self._time_out, self._on_future_timeout)
-        self.finish_cb = _FutureCallback()
-        self.timeout_cb = _FutureCallback()
+        self.on_fin = _FutureCallback()
+        self.on_timeout = _FutureCallback()
 
     def on_recv_rsp(self, rpc_data):
         self.remove_timeout_timer()
         params = eval(rpc_data) if rpc_data != "" else ()
-        for fin_cb in self.finish_cb.future_cb:
+        for fin_cb in self.on_fin.future_cb:
             fin_cb(*params)
         logger.log_info("future finish, rpc_id:{}", self._rpc_id)
 
     def _on_future_timeout(self):
         self._rpc_mgr().remove_future(self._rpc_id)
-        for tt_cb in self.timeout_cb.future_cb:
+        for tt_cb in self.on_timeout.future_cb:
             tt_cb(util.const.ErrorCode.TIME_OUT)
         logger.log_info("future timeout, rpc_id:{}", self._rpc_id)
 

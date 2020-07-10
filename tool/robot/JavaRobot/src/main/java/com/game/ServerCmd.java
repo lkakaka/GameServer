@@ -4,6 +4,7 @@ import com.command.CmdAnnotation;
 import com.command.CmdDispatch;
 import com.proto.Login;
 import com.proto.ProtoBufferMsg;
+import com.proto.Role;
 import com.proto.Test;
 import com.util.Util;
 
@@ -58,5 +59,11 @@ public class ServerCmd extends CmdDispatch {
         Login.EnterGameRsp rsp = (Login.EnterGameRsp) param;
         int errCode = rsp.getErrCode();
         Util.logInfo("recv enter game rsp, err_code:%s", errCode);
+    }
+
+    @CmdAnnotation(serverCmd = ProtoBufferMsg.MSG_ID_GM_CMD_RSP)
+    private void onRecvGmCmdRsp(Object param) {
+        Role.GmCmdRsp rsp = (Role.GmCmdRsp) param;
+        Util.logInfo("recv GM cmd rsp, cmd:%s, msg:%s", rsp.getCmd(), rsp.getMsg());
     }
 }

@@ -147,6 +147,8 @@ class DBHandler:
         # ZADD key score member [[score member] [score member] …]
         # score=0,1：代表是否已经全部缓存在redis中
         # score=10：代表redis键值(具体记录)
+        if not tbls:
+            return
         key = tbls[0].make_redis_index_key(tb_index)
         redis_cmd = "EXISTS " + key
         redis_result = self._db_redis.exec_redis_cmd(redis_cmd)
@@ -184,7 +186,12 @@ class DBHandler:
             pri_key = tbl.make_redis_pri_key()
             redis_cmd = "HSET " + pri_key
             for name in col_names:
-                redis_cmd += " {} {}".format(name, tbl[name])
+                val = tbl[name]
+                # todo: 怎么存入空字符串?
+                if val == "":
+                    redis_cmd += ' {} "{}"'.format(name, val)
+                else:
+                    redis_cmd += " {} {}".format(name, val)
             redis_result = self._db_redis.exec_redis_cmd(redis_cmd)
             if redis_result is None:
                 logger.log_error("exec redis cmd error, {}", redis_cmd)
@@ -238,10 +245,11 @@ class DBHandler:
             tbls = (tbls,)
         index_dict = {}
         for tbl in tbls:
-            res = self._load_data_by_primary_key(tbl, tbl.make_redis_pri_key())
-            if res:
-                logger.log_info("insert error, key {} has exist", tbl.make_redis_pri_key())
-                return False
+            if tbl.primary_val is not None:
+                res = self._load_data_by_primary_key(tbl, tbl.make_redis_pri_key())
+                if res:
+                    logger.log_info("insert error, key {} has exist", tbl.make_redis_pri_key())
+                    return False
             tbl.init_with_default()
             for tb_index in tbl.all_index:
                 if tb_index not in index_dict:
@@ -411,23 +419,31 @@ class DBHandler:
 
     def redis_benchmark(self):
         import time
-        st = time.time()
-        for i in range(10000):
-            res = self._db_redis.exec_redis_cmd("HGETALL player:1")
-        print("redis time=", time.time() - st)
-        print(res)
 
-        st = time.time()
         from game.db.tbl.tbl_player import TblPlayer
         tbl = TblPlayer()
         tbl.role_id = 1
+
+        st = time.time()
+        for i in range(10000):
+            res = self.load_tb_data(tbl)
+        print("[redis cache] load time=", time.time() - st)
+        print(res)
+
+        st = time.time()
+        for i in range(10000):
+            res = self._db_redis.exec_redis_cmd("HGETALL player:1")
+        print("[redis only] load time=", time.time() - st)
+        print(res)
+
+        st = time.time()
         for i in range(10000):
             res = self.get_row(tbl)
-        print("sql time=", time.time() - st)
+        print("[sql] load time=", time.time() - st)
         print(res)
 
         st = time.time()
         for i in range(10000):
             res = self.execute_sql("select * from player where role_id=1")
-        print("sql time1=", time.time() - st)
+        print("[sql only] load time=", time.time() - st)
         print(res)

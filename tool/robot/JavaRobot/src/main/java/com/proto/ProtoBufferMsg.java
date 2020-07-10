@@ -11,10 +11,12 @@ public class ProtoBufferMsg {
 	public static final int MSG_ID_ENTER_GAME_RSP = 7;
 	public static final int MSG_ID_ENTER_SCENE_REQ = 8;
 	public static final int MSG_ID_ENTER_SCENE_RSP = 9;
-	public static final int MSG_ID_LOAD_ROLE_LIST_RSP = 11;
-	public static final int MSG_ID_LOGIN_REQ = 14;
-	public static final int MSG_ID_LOGIN_RSP = 15;
-	public static final int MSG_ID_TEST_REQ = 18;
+	public static final int MSG_ID_GM_CMD = 10;
+	public static final int MSG_ID_GM_CMD_RSP = 11;
+	public static final int MSG_ID_LOAD_ROLE_LIST_RSP = 13;
+	public static final int MSG_ID_LOGIN_REQ = 16;
+	public static final int MSG_ID_LOGIN_RSP = 17;
+	public static final int MSG_ID_TEST_REQ = 20;
 
 	public static Object createMsgById(int msgId, byte[] dat) {
 		try {
@@ -36,6 +38,10 @@ public class ProtoBufferMsg {
 					return Scene.EnterSceneReq.parseFrom(dat);
 				case MSG_ID_ENTER_SCENE_RSP:
 					return Scene.EnterSceneRsp.parseFrom(dat);
+				case MSG_ID_GM_CMD:
+					return Role.GmCmd.parseFrom(dat);
+				case MSG_ID_GM_CMD_RSP:
+					return Role.GmCmdRsp.parseFrom(dat);
 				case MSG_ID_LOAD_ROLE_LIST_RSP:
 					return Login.LoadRoleListRsp.parseFrom(dat);
 				case MSG_ID_LOGIN_REQ:
@@ -69,6 +75,10 @@ public class ProtoBufferMsg {
 				return Scene.EnterSceneReq.newBuilder();
 			case MSG_ID_ENTER_SCENE_RSP:
 				return Scene.EnterSceneRsp.newBuilder();
+			case MSG_ID_GM_CMD:
+				return Role.GmCmd.newBuilder();
+			case MSG_ID_GM_CMD_RSP:
+				return Role.GmCmdRsp.newBuilder();
 			case MSG_ID_LOAD_ROLE_LIST_RSP:
 				return Login.LoadRoleListRsp.newBuilder();
 			case MSG_ID_LOGIN_REQ:
@@ -111,6 +121,14 @@ public class ProtoBufferMsg {
 	
 	public static Scene.EnterSceneRsp.Builder createEnterSceneRspBuilder() {
 		return Scene.EnterSceneRsp.newBuilder();
+	}
+	
+	public static Role.GmCmd.Builder createGmCmdBuilder() {
+		return Role.GmCmd.newBuilder();
+	}
+	
+	public static Role.GmCmdRsp.Builder createGmCmdRspBuilder() {
+		return Role.GmCmdRsp.newBuilder();
 	}
 	
 	public static Login.LoadRoleListRsp.Builder createLoadRoleListRspBuilder() {

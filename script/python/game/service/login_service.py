@@ -90,8 +90,8 @@ class LoginService(ServiceBase):
                 return
 
         future = self.rpc_call("scene_ctrl", "EnterScene", timeout=30, conn_id=conn_id, role_id=msg.role_info.role_id)
-        future.finish_cb += _on_query_login_scene
-        future.timeout_cb += _on_query_login_scene
+        future.on_fin += _on_query_login_scene
+        future.on_timeout += _on_query_login_scene
         logger.log_info("send enter scene req to scene ctrl, conn_id:{}, account:{}", conn_id, account)
 
     def _send_enter_game_rsp(self, conn_id, err_code, role_info):

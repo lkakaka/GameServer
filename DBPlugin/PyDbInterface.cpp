@@ -553,7 +553,7 @@ static PyObject* getRow(PyObject* self, PyObject* args)
 		Py_RETURN_NONE;
 	}
 
-	PyObject* lst = PyList_New(0);
+	PyObject* lst = PyList_New(result.size());
 	for (Table tbl : result) {
 		PyObject* obj = TableToPyTable(&tbl);
 		PyList_Append(lst, obj);

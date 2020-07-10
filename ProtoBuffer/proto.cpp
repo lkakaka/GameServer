@@ -25,6 +25,10 @@ std::shared_ptr<google::protobuf::Message> CreateMsgById(int msgId)
 		return std::shared_ptr<google::protobuf::Message>(new EnterSceneReq());
 		case MSG_ID_ENTER_SCENE_RSP:
 		return std::shared_ptr<google::protobuf::Message>(new EnterSceneRsp());
+		case MSG_ID_GM_CMD:
+		return std::shared_ptr<google::protobuf::Message>(new GmCmd());
+		case MSG_ID_GM_CMD_RSP:
+		return std::shared_ptr<google::protobuf::Message>(new GmCmdRsp());
 		case MSG_ID_LOAD_ROLE_LIST_REQ:
 		return std::shared_ptr<google::protobuf::Message>(new LoadRoleListReq());
 		case MSG_ID_LOAD_ROLE_LIST_RSP:

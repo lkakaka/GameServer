@@ -5,6 +5,7 @@ import game.db.tbl.tbl_item
 # import game.db.tbl.tbl_test
 import util.db_util
 import copy
+import asyncio
 
 # def match_func(matched):
 #     value = matched.group('value')
@@ -47,6 +48,96 @@ print(game.db.tbl.tbl_player.TblPlayer.__dict__)
 print(tbl_player.__dict__)
 print(game.db.tbl.tbl_item.TblItem.__dict__)
 print(tbl_player.role_id)
+
+
+def to_dash_name(param_name):
+    ts = re.sub(r"([A-Z])", r"_\1", param_name)
+    print("111", ts)
+    mt = re.findall(r"((_[^_]){2,})_?", ts)
+    if mt:
+        for m in mt:
+            print(m[0], re.sub(r"_([^_])", r"\1", m[0]))
+            s = '_' + re.sub(r"_([^_])", r"\1", m[0])
+            ts = ts.replace(m[0], s)
+            print(ts)
+    ts = ts.replace('__', '_').lower()
+    # ts = .lstrip('_')
+    return ts
+
+print(to_dash_name("grade_reward_a"))
+
+lst = []
+x = {"a":1, "b":2 ,"c":None}
+lst.append(x)
+t = tuple(lst)
+print("x=", repr(t), eval(repr(t)))
+
+def co_func():
+    print("co 1")
+    x = yield 10
+    print("co 2", x)
+    y = yield 20
+    print("co 3", y)
+
+co = co_func()
+print("send none")
+print(co.send(None))
+# co.send(1)
+# print("send 1")
+# print(co.send(1))
+# co.send(2)
+
+
+# async def compute(x, y):
+#     print("Compute %s + %s ..." % (x, y))
+#     await asyncio.sleep(1.0)
+#     return x + y
+#
+#
+# async def print_sum(x, y):
+#     result = await compute(x, y)
+#     print("%s + %s = %s" % (x, y, result))
+#
+# def co_loop(co_func, *p):
+#     loop = asyncio.get_event_loop()
+#     print("start")
+#     # loop.run_until_complete(print_sum(1, 2))
+#     loop.run_until_complete(co_func(*p))
+#     print("end")
+#     loop.close()
+#
+# co_loop(print_sum, 1, 2)
+
+
+# future = asyncio.Future()
+#
+#
+# async def coro1():
+#     print("wait 1 second")
+#     # await asyncio.sleep(1)
+#     print("set_result")
+#     future.set_result('data')
+#
+#
+# async def coro2():
+#     print("coro2")
+#     result = await future
+#     print(result)
+#
+#
+# def co_loop():
+#     loop = asyncio.get_event_loop()
+#     loop.run_until_complete(asyncio.wait([
+#         coro1(),
+#         coro2()
+#     ]))
+#     loop.close()
+#
+# co_loop()
+
+print("end co")
+# coro1()
+
 
 
 def init_tables(mod):
@@ -97,4 +188,4 @@ def init_tables(mod):
 
     print(tbls)
 
-init_tables(game.db.tbl)
+# init_tables(game.db.tbl)

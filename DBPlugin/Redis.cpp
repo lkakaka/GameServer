@@ -76,6 +76,12 @@ std::shared_ptr<RedisReply> Redis::execRedisCmd(const char* format, ...)
 		Logger::logInfo("$exec redis cmd failed, %s", cmd);
 		return NULL;
 	}
+	if (reply->type == REDIS_REPLY_ERROR) {
+		std::string err_msg;
+		std::copy(reply->str, reply->str + reply->len, std::back_inserter(err_msg));
+		Logger::logInfo("$exec redis cmd error, %s, cmd:%s", err_msg.c_str(), cmd);
+		return NULL;
+	}
 	return std::make_shared<RedisReply>(reply);
 }
 

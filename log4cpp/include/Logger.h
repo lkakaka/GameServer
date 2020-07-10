@@ -3,14 +3,17 @@
 #include <string.h>
 #include <stdarg.h>
 #include "../../Common/ServerExports.h"
+#include <thread>
 
 class SERVER_EXPORT_API Logger
 {
 private:
-	static Logger* g_log;
+	static std::shared_ptr<std::thread> m_thread;
 
 	static bool isPrint(const char* fmt);
 public:
+	static Logger* g_log;
+	//static std::list < std::
 	static void test();
 	static int initLog(const char* serverName);
 	static void formatLog(char* buff, const char* fmt, va_list va);

@@ -3,12 +3,16 @@ import Game
 from proto.pb_message import Message
 from util import logger
 from util.rpc import RpcMgr
+from util.db_proxy import DBProxy
+
+# import asyncio
 
 
 class ServiceBase:
 
     def __init__(self, s_cmd, c_cmd, rpc_proc=None):
         self._service_obj = Game.Service()
+        self.db_proxy = DBProxy(self)
         self._s_cmd = s_cmd
         self._c_cmd = c_cmd
         self._rpc_proc = rpc_proc
@@ -19,6 +23,20 @@ class ServiceBase:
 
     def on_service_start(self):
         pass
+
+    # def start_asyncio_loop(self):
+    #     loop = asyncio.get_event_loop()
+    #
+    #     # Schedule a call to hello_world()
+    #     # loop.call_soon(hello_world, loop)
+    #
+    #     # Blocking call interrupted by loop.stop()
+    #     try:
+    #         print("loop start")
+    #         loop.run_forever()
+    #     finally:
+    #         loop.close()
+    #         print("loop end")
 
     # def on_recv_client_msg(self, conn_id, msg_id, msg_data):
     #     logger.logError("$service on_recv_client_msg error, must override in drived class!!!", conn_id, msg_id, msg_data)

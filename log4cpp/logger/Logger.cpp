@@ -44,6 +44,14 @@ int Logger::initLog(const char* serverName)
 	subPatternLayout->setConversionPattern("%d{%Y-%m-%d %H:%M:%S.%l} thread_id:%t [%p] %m %n");
 	subAppender->setLayout(subPatternLayout);
 
+	/*auto loopFunc = [](){
+		while (true) {
+
+		}
+	};
+
+	Logger::m_thread = std::make_shared<std::thread>(loopFunc);*/
+
 	return 1;
 }
 
