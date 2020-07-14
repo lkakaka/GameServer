@@ -1,9 +1,10 @@
 
 import Game
+import Config
 from proto.pb_message import Message
-from util import logger
-from util.rpc import RpcMgr
-from util.db_proxy import DBProxy
+from game.util import logger
+from game.util.rpc import RpcMgr
+from game.util.db_proxy import DBProxy
 
 # import asyncio
 
@@ -22,7 +23,15 @@ class ServiceBase:
         print("service obj = ", self._service_obj)
 
     def on_service_start(self):
-        pass
+        self._init_id_mgr()
+
+    def _init_id_mgr(self):
+        redis_ip = Config.getConfigStr("id_redis_ip")
+        redis_port = Config.getConfigInt("id_redis_port")
+        if not redis_ip or not redis_port:
+            return
+        import game.util.id_mgr
+        game.util.id_mgr.IDMgr.connect_redis(redis_ip, redis_port)
 
     # def start_asyncio_loop(self):
     #     loop = asyncio.get_event_loop()

@@ -8,7 +8,7 @@
 class SERVER_EXPORT_API Logger
 {
 private:
-	static std::shared_ptr<std::thread> m_thread;
+	//static std::shared_ptr<std::thread> m_thread;
 
 	static bool isPrint(const char* fmt);
 public:

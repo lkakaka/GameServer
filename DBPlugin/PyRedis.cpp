@@ -6,15 +6,23 @@ static PyTypeObject PyRedisObj_Type;
 
 
 static PyObject* PyRedisObj_New(struct _typeobject* tobj, PyObject* args, PyObject* obj2) {
+	char* redisIP;
+	int redisPort;
+	if (!PyArg_ParseTuple(args, "si", &redisIP, &redisPort)) {
+		//PyErr_SetString(ModuleError, "create redis obj failed");
+		Logger::logError("$new redis obj failed, arg error");
+		Py_RETURN_NONE;
+	}
+
 	PyObject* obj = PyType_GenericNew(tobj, args, obj2);
-	Redis* redis = new Redis("127.0.0.1", 6379);
+	Redis* redis = new Redis(redisIP, redisPort);
 	((PyRedisObj*)obj)->redis = redis;
 	return obj;
 }
 
 static void PyRedisObj_Free(void* ptr) {
 	Redis* redis = ((PyRedisObj*)ptr)->redis;
-	//printf("PySceneObj_Free-=--\n");
+	//printf("PyRedisObj_Free-=--\n");
 	delete redis;
 }
 
@@ -57,7 +65,6 @@ static PyObject* parseRedisReply(redisReply* reply) {
 static PyObject* execRedisCmd(PyObject* self, PyObject* args) {
 	char* redisCmd;
 	if (!PyArg_ParseTuple(args, "s", &redisCmd)) {
-		//PyErr_SetString(ModuleError, "create scene obj failed");
 		Logger::logError("$execute redis cmd failed, arg error");
 		Py_RETURN_NONE;
 	}

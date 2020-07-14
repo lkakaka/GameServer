@@ -1,11 +1,13 @@
-from util import logger
+
+import Config
+from game.util import logger
 from proto.pb_message import Message
 from game.service.service_base import ServiceBase
-import util.cmd_util
-from util.const import ErrorCode
+from game.util.const import ErrorCode
 from game.db.db_handler import DBHandler
 from game.db.db_builder import DbInfo
-import util.db_util
+import game.util.cmd_util
+import game.util.db_util
 import game.db.tbl
 
 
@@ -14,29 +16,35 @@ CUR_DB_VERSION = 1
 
 class DBService(ServiceBase):
 
-    _s_cmd = util.cmd_util.CmdDispatch("db_service")
-    _rpc_proc = util.cmd_util.CmdDispatch("rpc_db_service")
+    _s_cmd = game.util.cmd_util.CmdDispatch("db_service")
+    _rpc_proc = game.util.cmd_util.CmdDispatch("rpc_db_service")
 
     def __init__(self):
         ServiceBase.__init__(self, DBService._s_cmd, None, DBService._rpc_proc)
         self._db_handler = None
         self._db_info = None
 
+    def _init_id_mgr(self):
+        pass
+
     def on_service_start(self):
         ServiceBase.on_service_start(self)
         logger.log_info("DBService start!!!")
         # DBHandler.test_db()
-        self._db_handler = DBHandler("save")
-        self._db_info = DbInfo(self._db_handler)
-        # from game.db.tbl.tbl_player import TblPlayer
-        # from game.db.tbl.tbl_item import TblItem
-        # from game.db.tbl.tbl_test import TblTest
-        # tbls = (TblTest, TblPlayer, TblItem)
-        # logger.log_info("$start init table, {}", tbls)
-        # if not self._db_handler.init_table(tbls):
-        #     raise RuntimeError("init tables error")
-        # logger.log_info("$finish init table, {}", tbls)
 
+        db_name = Config.getConfigStr("db_name")
+        if not db_name:
+            raise RuntimeError("not config db_name")
+
+        redis_ip = Config.getConfigStr("redis_ip")
+        redis_port = Config.getConfigInt("redis_port")
+        if not redis_ip or not redis_port:
+            raise RuntimeError("not config redis_ip or redis_port")
+
+        logger.log_info("db_name:{}, redis_ip:{}, redis_port:{}".format(db_name, redis_ip, redis_port))
+
+        self._db_handler = DBHandler(db_name, redis_ip, redis_port)
+        self._db_info = DbInfo(self._db_handler)
         self._db_handler.init_tables(game.db.tbl)
 
         # db_ver = self._db_info.get_int_val(DbInfo.DB_INFO_KEY_VERSION, -1)
@@ -58,7 +66,6 @@ class DBService(ServiceBase):
         #     logger.logError("$set db version failed, old_version:{}, cur_version:{}".format(db_ver, CUR_DB_VERSION))
         #     raise RuntimeError("set db version failed, old_version:{}, cur_version:{}".format(db_ver, CUR_DB_VERSION))
 
-        # self._db_handler.flush_add_clean_redis()
         self._db_handler.test_db_and_redis()
 
     def init_db(self):
@@ -84,7 +91,7 @@ class DBService(ServiceBase):
 
     @_rpc_proc.reg_cmd("RpcLoadDB")
     def _on_recv_rpc_load_db(self, sender, tb_name, **kwargs):
-        tbl_sql = util.db_util.create_tbl_obj(tb_name)
+        tbl_sql = game.util.db_util.create_tbl_obj(tb_name)
         for k, v in kwargs.items():
             tbl_sql[k] = v
         result_list = []
@@ -97,7 +104,7 @@ class DBService(ServiceBase):
     def _on_recv_rpc_load_db_multi(self, sender, tbl_list):
         result_list = []
         for tbl in tbl_list:
-            tbl_sql = util.db_util.create_tbl_obj(tbl["__tb_name"])
+            tbl_sql = game.util.db_util.create_tbl_obj(tbl["__tb_name"])
             for k, v in tbl.items():
                 if k == "__tb_name":
                     continue
@@ -112,20 +119,20 @@ class DBService(ServiceBase):
         print("_on_recv_rpc_insert_db", tbl_list)
         tbls = []
         for data in tbl_list:
-            tbl_sql = util.db_util.create_tbl_obj(data["__tb_name"])
+            tbl_sql = game.util.db_util.create_tbl_obj(data["__tb_name"])
             tbl_sql.assign(data)
             tbl_sql.dump_cols()
             tbls.append(tbl_sql)
         if self._db_handler.insert_table(tbls):
             return ErrorCode.OK
-        util.logger.log_error("insert db error")
+        game.util.logger.log_error("insert db error")
         return ErrorCode.DB_ERROR
 
     @_rpc_proc.reg_cmd("RpcUpdateDB")
     def _on_recv_rpc_update_db(self, sender, tbl_list):
         tbls = []
         for data in tbl_list:
-            tbl_sql = util.db_util.create_tbl_obj(data["__tb_name"])
+            tbl_sql = game.util.db_util.create_tbl_obj(data["__tb_name"])
             tbl_sql.assign(data)
             tbls.append(tbl_sql)
         if self._db_handler.update_table(tbls):
@@ -136,45 +143,19 @@ class DBService(ServiceBase):
     def _on_recv_rpc_delete_db(self, sender, tbl_list):
         tbls = []
         for data in tbl_list:
-            tbl_sql = util.db_util.create_tbl_obj(data["__tb_name"])
+            tbl_sql = game.util.db_util.create_tbl_obj(data["__tb_name"])
             tbl_sql.assign(data)
             tbls.append(tbl_sql)
         if self._db_handler.delete_table(tbls):
             return ErrorCode.OK
         return ErrorCode.DB_ERROR
 
-    @_s_cmd.reg_cmd(Message.MSG_ID_LOAD_ROLE_LIST_REQ)
-    def _on_recv_load_role_list_req(self, sender, msg_id, msg):
-        rsp_msg = Message.create_msg_by_id(Message.MSG_ID_LOAD_ROLE_LIST_RSP)
-        rsp_msg.account = msg.account
-        db_res = self._db_handler.execute_sql("select * from player where account='{}'".format(msg.account))
-        if db_res is None:
-            rsp_msg.err_code = util.const.ErrorCode.DB_ERROR
-            logger.log_error("loader player list error!!!, account:{}", msg.account)
-        else:
-            rsp_msg.err_code = util.const.ErrorCode.OK
-            for res in db_res:
-                role_info = rsp_msg.role_list.add()
-                role_info.role_id = res.role_id
-                role_info.role_name = res.role_name
-                # rsp_msg.role_list.append(role_info)
-        self.send_msg_to_service(sender, rsp_msg)
-
-    @_s_cmd.reg_cmd(Message.MSG_ID_LOAD_ROLE_REQ)
-    def _on_recv_load_role_req(self, sender, msg_id, msg):
-        rsp_msg = Message.create_msg_by_id(Message.MSG_ID_LOAD_ROLE_RSP)
-        rsp_msg.conn_id = msg.conn_id
-        db_res = self._db_handler.execute_sql("select * from player where role_id={}".format(1))
-        rsp_msg.role_info.role_id = db_res[0].role_id
-        rsp_msg.role_info.role_name = db_res[0].role_name
-        self.send_msg_to_service(sender, rsp_msg)
-
     @_rpc_proc.reg_cmd("CreateRole")
     def _on_rpc_create_role(self, sender, conn_id, account, role_name):
         print("_on_rpc_create_role----", conn_id, account, role_name)
         rsp_msg = Message.create_msg_by_id(Message.MSG_ID_CREATE_ROLE_RSP)
         db_res = self._db_handler.execute_sql("select * from player where account='{}'".format(account))
-        if len(db_res) >= util.const.GlobalVar.MAX_ROLE_NUM:
+        if len(db_res) >= game.util.const.GlobalVar.MAX_ROLE_NUM:
             rsp_msg.err_code = ErrorCode.ROLE_COUNT_LIMIT
             self.send_msg_to_client(conn_id, rsp_msg)
             return

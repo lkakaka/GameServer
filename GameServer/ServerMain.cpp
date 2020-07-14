@@ -22,11 +22,10 @@ using namespace std;
 std::string g_service_name = "";
 //GameService g_game_service;
 //extern struct GameService g_game_service;
+std::string g_cfgFileName = "";
 
 int main(int argc, char** argv)
 {
-	
-
 	if (argc < 2) {
 		printf("arg count error");
 		return 0;
@@ -36,6 +35,8 @@ int main(int argc, char** argv)
 		printf("cfg file not exist, file name: %s", cfgName);
 		return 0;
 	}
+
+	g_cfgFileName = cfgName;
 
 	std::string serviceName = Config::getConfigStr(cfgName, "service_name");
 	if (serviceName.length() == 0) {

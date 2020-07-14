@@ -1,9 +1,8 @@
 
 import Scene
 from proto.pb_message import Message
-import util.cmd_util
-from util import logger
-import util.db_util
+from game.util import logger
+import game.util.db_util
 
 from game.db.tbl.tbl_player import TblPlayer
 import game.db.tbl.tbl_item
@@ -14,7 +13,7 @@ import game.scene.player.gm_mgr
 
 class GamePlayer:
 
-    _c_cmd = util.cmd_util.CmdDispatch("c_player")
+    _c_cmd = game.util.cmd_util.CmdDispatch("c_player")
 
     def __init__(self, e_player, game_scene, conn_id, role_id):
         self.native_obj = Scene.Player(e_player, self)
@@ -57,19 +56,19 @@ class GamePlayer:
     @_c_cmd.reg_cmd(Message.MSG_ID_GM_CMD)
     def _on_recv_gm_cmd(self, msg_id, msg):
         try:
-            err_msg = self._gm_mgr.on_recv_gm_cmd(msg.cmd , msg.args)
+            result = self._gm_mgr.on_recv_gm_cmd(msg.cmd , msg.args)
         except Exception as e:
             import traceback
             import sys
             tb = traceback.format_exception(*sys.exc_info())
-            util.logger.log_error('gm cmd {} Error, {}, {}', msg.cmd, e, "".join(tb))
-            err_msg = e.message
+            game.util.logger.log_error('gm cmd {} Error, {}, {}', msg.cmd, e, "".join(tb))
+            result = e.message
 
-        util.logger.log_info("exe gm cmd:{}, args:{}, err_msg:{}", msg.cmd, msg.args, err_msg)
+        game.util.logger.log_info("exe gm cmd:{}, args:{}, result:\n{}", msg.cmd, msg.args, result)
 
         rsp_msg = Message.create_msg_by_id(Message.MSG_ID_GM_CMD_RSP)
         rsp_msg.cmd = msg.cmd
-        rsp_msg.msg = err_msg
+        rsp_msg.msg = result
         self.send_msg_to_client(rsp_msg)
 
     @_c_cmd.reg_cmd(Message.MSG_ID_TEST_REQ)

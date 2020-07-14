@@ -1,9 +1,9 @@
 import weakref
 
 from proto.pb_message import Message
-from util import logger
-import util.timer
-import util.const
+from game.util import logger
+import game.util.const
+import game.util.timer
 
 
 class _FutureCallback(object):
@@ -22,7 +22,7 @@ class _Future(object):
         self._rpc_mgr = weakref.ref(rpc_mgr)
         self._rpc_id = rpc_id
         self._time_out = RpcMgr.DEFAULT_TIME_OUT if time_out <= 0 else time_out
-        self._timer_id = util.timer.add_timer(self._time_out, self._on_future_timeout)
+        self._timer_id = game.util.timer.add_timer(self._time_out, self._on_future_timeout)
         self.on_fin = _FutureCallback()
         self.on_timeout = _FutureCallback()
 
@@ -36,13 +36,13 @@ class _Future(object):
     def _on_future_timeout(self):
         self._rpc_mgr().remove_future(self._rpc_id)
         for tt_cb in self.on_timeout.future_cb:
-            tt_cb(util.const.ErrorCode.TIME_OUT)
+            tt_cb(game.util.const.ErrorCode.TIME_OUT)
         logger.log_info("future timeout, rpc_id:{}", self._rpc_id)
 
     def remove_timeout_timer(self):
         if self._timer_id < 0:
             return
-        util.timer.remove_timer(self._timer_id)
+        game.util.timer.remove_timer(self._timer_id)
         self._timer_id = -1
 
 

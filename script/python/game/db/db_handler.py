@@ -1,9 +1,8 @@
 
 import PyDb
-from util import logger
-import util.db_util
+from game.util import logger
 from game.db.db_redis import DBRedis
-import util.timer
+import game.util.timer
 
 
 class DBRowResult:
@@ -29,11 +28,11 @@ class DBHandler:
 
     REDIS_FLUSH_TIME = 5 * 6
 
-    def __init__(self, db_name):
+    def __init__(self, db_name, redis_ip, redis_port):
         self._db_name = db_name
         self._db_inst = PyDb.DbInst(self._db_name)
-        self._db_redis = DBRedis()
-        self._flush_timer_id = util.timer.add_timer(DBHandler.REDIS_FLUSH_TIME, lambda: self._on_flush_redis(), loop_cnt=-1)
+        self._db_redis = DBRedis(redis_ip, redis_port)
+        self._flush_timer_id = game.util.timer.add_timer(DBHandler.REDIS_FLUSH_TIME, lambda: self._on_flush_redis(), loop_cnt=-1)
 
     @property
     def name(self):
@@ -75,6 +74,7 @@ class DBHandler:
         import os
         import sys
         tbls = []
+        tbl_names = []
         list_dir = os.walk(mod.__path__[0])
         for dirPath, _, files in list_dir:
             for fname in files:
@@ -85,7 +85,9 @@ class DBHandler:
                __import__(mod_name)
                mod_dict = sys.modules[mod_name].__dict__
                pos = fname.find("_")
-               cls_name = "Tbl" + fname[pos+1:].capitalize()
+               tbl_name = fname[pos+1:]
+               tbl_names.append(tbl_name)
+               cls_name = "Tbl" + tbl_name.capitalize()
                if cls_name not in mod_dict:
                    raise RuntimeError("class {} not file {}".format(cls_name, fname))
                tbls.append(mod_dict[cls_name])
@@ -93,6 +95,23 @@ class DBHandler:
         logger.log_info("*********init table, {}", tbls)
         if not self._db_inst.initTable(tuple(tbls)):
             raise RuntimeError("init tables error")
+        self.flush_add_clean_redis()
+        self._init_id_allocator(tbl_names)
+        return tbl_names
+
+    def _init_id_allocator(self, tbl_names):
+        redis_cmd = "HMSET _id_allocator"
+        for tbl_name in tbl_names:
+            tbl = game.util.db_util.create_tbl_obj(tbl_name)
+            if tbl.primary_col is None:
+                continue
+            # sql = "select auto_increment from information_schema.TABLES where TABLE_NAME='{}'".format(tbl_name)
+            sql = "select max({}) as max_id from {}".format(tbl.primary_col.name, tbl_name)
+            res = self.execute_sql(sql)
+            max_id = res[0].max_id
+            redis_cmd += " {} {}".format(tbl_name, max_id)
+        if self._db_redis.exec_redis_cmd(redis_cmd) is None:
+            raise RuntimeError("init id allocator error, redis cmd:{}".format(redis_cmd))
 
     def load_tb_data(self, tbl):
         primary_val = tbl.primary_val
@@ -116,7 +135,7 @@ class DBHandler:
     def _load_data_from_redis(self, tb_name, primary_key):
         result = self._db_redis.exec_redis_cmd("HGETALL {}", primary_key)
         if result:
-            res_tbl = util.db_util.create_tbl_obj(tb_name)
+            res_tbl = game.util.db_util.create_tbl_obj(tb_name)
             for i in range(0, len(result), 2):
                 res_tbl[result[i]] = result[i+1]
             return (res_tbl,)
@@ -127,8 +146,9 @@ class DBHandler:
         key = tbl.make_redis_index_key(tb_index)
         result = self._db_redis.exec_redis_cmd("ZRANGE {} 0 -1 WITHSCORES", key)
         print("redis result----", result)
-        if result and result[1] == "1": # 已在redis中全缓存
-            for pri_key in result:
+        if result and result[1] == DBHandler.INDEX_ALL_CACHED_SCORE:    # 已在redis中全缓存
+            for i in range(2, len(result), 2):
+                pri_key = result[i]
                 if pri_key == "":
                     continue
                 tup = self._load_data_by_primary_key(tbl, pri_key)
@@ -226,19 +246,30 @@ class DBHandler:
         if redis_result is None:
             logger.log_error("exec redis cmd error, {}", redis_cmd)
 
-        all_result = []
-        for key in redis_result:
-            tb_name = util.db_util.get_tbl_name_from_key(key)
-            result = self._load_data_from_redis(tb_name, key)
-            if not result:
-                logger.log_warn("not found redis key {}", key)
-                continue
-            all_result.extend(result)
-        if all_result:
-            self.replace_rows(tuple(result))
+        flush_count = 0
+        if len(redis_result) > 0:
+            all_result = []
+            for key in redis_result:
+                tb_name = game.util.db_util.get_tbl_name_from_key(key)
+                result = self._load_data_from_redis(tb_name, key)
+                if not result:
+                    logger.log_warn("not found redis key {}", key)
+                    continue
+                flush_count += len(result)
+                all_result.extend(result)
+                if len(all_result) >= 1000:
+                    if not self.replace_rows(tuple(all_result)):
+                        logger.log_error("flush redis error, update mysql failed, count: {}", len(all_result))
+                        return
+                    all_result = []
 
-        self._db_redis.exec_redis_cmd("DEL _chg_keys")
-        logger.log_info("end flush redis!!!!, flush count: {}", len(all_result))
+            if not all_result:
+                if not self.replace_rows(tuple(all_result)):
+                    logger.log_error("flush redis error, update mysql failed, count: {}", len(all_result))
+                    return
+
+            self._db_redis.exec_redis_cmd("DEL _chg_keys")
+        logger.log_info("end flush redis!!!!, flush count: {}", flush_count)
 
     def insert_table(self, tbls):
         if type(tbls) not in (tuple, list):
@@ -373,7 +404,7 @@ class DBHandler:
         err_msg = "test db and redis failed!!!"
 
         def _output(flag):
-            tbl_sql = util.db_util.create_tbl_obj("test")
+            tbl_sql = game.util.db_util.create_tbl_obj("test")
             tbl_sql.role_id = 3
             res = self.load_tb_data(tbl_sql)
             print(flag)
@@ -383,7 +414,7 @@ class DBHandler:
             return res
 
         print("--------test insert--------")
-        tbl_test = util.db_util.create_tbl_obj("test")
+        tbl_test = game.util.db_util.create_tbl_obj("test")
         tbl_test.role_id = 3
         tbl_test.role_name = "test3"
         tbl_test.account = "test3"
@@ -396,7 +427,7 @@ class DBHandler:
             raise RuntimeError(err_msg)
 
         print("--------test update--------")
-        tbl_test = util.db_util.create_tbl_obj("test")
+        tbl_test = game.util.db_util.create_tbl_obj("test")
         tbl_test.role_id = 3
         tbl_test.role_name = "test3-1"
         self.update_table(tbl_test)
@@ -408,7 +439,7 @@ class DBHandler:
             raise RuntimeError(err_msg)
 
         print("--------test delete--------")
-        tbl_test = util.db_util.create_tbl_obj("test")
+        tbl_test = game.util.db_util.create_tbl_obj("test")
         tbl_test.role_id = 3
         self.delete_table(tbl_test)
         res = _output("after delete:")

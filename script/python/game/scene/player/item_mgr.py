@@ -1,9 +1,10 @@
-
 import weakref
-import util.db_util
-from util.const import ErrorCode
 import math
-import util.logger
+
+from game.util.const import ErrorCode
+from game.util import logger
+from game.util.id_mgr import IDMgr
+import game.util.db_util
 
 MAX_OVERLAP_COUNT = 10
 MAX_GRID_COUNT = 20
@@ -18,12 +19,15 @@ class Item(object):
         self.count = count
 
     def to_tbl_item(self):
-        tbl_item = util.db_util.create_tbl_obj("item")
+        tbl_item = game.util.db_util.create_tbl_obj("item")
         tbl_item.item_uid = self.item_uid
         tbl_item.role_id = self.role_id
         tbl_item.item_id = self.item_id
         tbl_item.count = self.count
         return tbl_item
+
+    def to_string(self):
+        return "item_uid:{},item_id:{},count:{}".format(self.item_uid, self.item_id, self.count)
 
 
 class ItemMgr(object):
@@ -41,10 +45,9 @@ class ItemMgr(object):
         if not tbls:
             return
         role_id = self._weak_player().role_id
-        for tbl in tbls:
-            tbl_item = util.db_util.create_tbl_with_data("item", tbl)
+        for tbl_item in tbls:
             if tbl_item.role_id != role_id:
-                util.logger.log_error("load item role id mismatch, item's role_id:{}, player's role_id:{}", tbl_item.role_id, role_id)
+                game.util.logger.log_error("load item role id mismatch, item's role_id:{}, player's role_id:{}", tbl_item.role_id, role_id)
                 continue
             item = Item(role_id, tbl_item.item_uid, tbl_item.item_id, tbl_item.count)
             self._add_item(item)
@@ -56,9 +59,21 @@ class ItemMgr(object):
         else:
             self._items_by_id[item.item_id].append(item.item_uid)
 
+    def _remove_item(self, item):
+        self._items.pop(item.item_uid)
+        if item.item_id not in self._items_by_id:
+            return
+        self._items_by_id[item.item_id].remove(item.item_uid)
+
+    def _remove_item_by_uid(self, item_uid):
+        item = self._items.get(item_uid, None)
+        if item is None:
+            return
+        self._remove_item(item)
+
     def _create_item(self, item_id, item_count):
         role_id = self._weak_player().role_id
-        item_uid = 0  # todo: ·ÖÅäID
+        item_uid = IDMgr.alloc_item_uid()
         item = Item(role_id, item_uid, item_id, item_count)
         return item
 
@@ -108,31 +123,27 @@ class ItemMgr(object):
                     else:
                         item.count = MAX_OVERLAP_COUNT
                         item_count -= add_count
-                    chg_items.append(item)
+                    tbl_item = game.util.db_util.create_tbl_obj("item")
+                    tbl_item.item_uid = item.item_uid
+                    tbl_item.count = item.count
+                    chg_items.append(tbl_item)
 
             while item_count > 0:
                 add_count = min(item_count, MAX_OVERLAP_COUNT)
                 new_item = self._create_item(item_id, add_count)
-                new_items.append(new_item)
+                self._add_item(new_item)
                 item_count -= add_count
+                tbl_item = new_item.to_tbl_item()
+                new_items.append(tbl_item)
+
         print(chg_items, new_items)
         if len(chg_items) > 0:
-            chg_tbls = []
-            for item in chg_items:
-                tbl_item = util.db_util.create_tbl_obj("item")
-                tbl_item.item_uid = item.item_uid
-                tbl_item.count = item.count
-                chg_tbls.append(tbl_item)
-            self.service_obj.db_proxy.update(chg_tbls)
+            self.service_obj.db_proxy.update(chg_items)
 
         if len(new_items) > 0:
-            new_tbls = []
-            for item in new_items:
-                tbl_item = item.to_tbl_item()
-                new_tbls.append(tbl_item)
-            self.service_obj.db_proxy.insert(new_tbls)
+            self.service_obj.db_proxy.insert(new_items)
 
-        util.logger.log_info("add item:{}", repr(item_list))
+        game.util.logger.log_info("add item:{}", repr(item_list))
         return ErrorCode.OK
 
     def check_use_item(self, item_id, item_count):
@@ -160,34 +171,35 @@ class ItemMgr(object):
         item_uids = self._items_by_id.get(item_id)
         for item_uid in item_uids:
             item = self._items[item_uid]
+            tbl_item = game.util.db_util.create_tbl_obj("item")
+            tbl_item.item_uid = item.item_uid
             if item_count >= item.count:
                 item_count -= item.count
                 item.count = 0
-                del_items.append(item)
+                del_items.append(tbl_item)
             else:
                 item.count -= item_count
                 item_count = 0
-                chg_items.append(item)
+                tbl_item.count = item.count
+                chg_items.append(tbl_item)
 
             if item_count == 0:
                 break
 
         if len(del_items) > 0:
-            del_tbls = []
-            for item in del_items:
-                tbl_item = util.db_util.create_tbl_obj("item")
-                tbl_item.item_uid = item.item_uid
-                del_tbls.append(tbl_item)
-            self.service_obj.db_proxy.delete(del_tbls)
+            for tbl_item in del_items:
+                self._remove_item_by_uid(tbl_item.item_uid)
+            self.service_obj.db_proxy.delete(del_items)
 
         if len(chg_items) > 0:
-            chg_tbls = []
-            for item in chg_items:
-                tbl_item = util.db_util.create_tbl_obj("item")
-                tbl_item.item_uid = item.item_uid
-                tbl_item.count = item.count
-                chg_tbls.append(tbl_item)
-            self.service_obj.db_proxy.update(chg_tbls)
+            self.service_obj.db_proxy.update(chg_items)
 
-        util.logger.log_info("use item:{}", repr((item_id, item_count)))
+        game.util.logger.log_info("use item:{}", repr((item_id, item_count)))
         return ErrorCode.OK
+
+    def dump_items(self):
+        item_str = ""
+        for _, item in self._items.items():
+            item_str += item.to_string() + "\n"
+        item_str += "item_by_ids:\n" + repr(self._items_by_id)
+        return item_str

@@ -13,10 +13,10 @@ public class ProtoBufferMsg {
 	public static final int MSG_ID_ENTER_SCENE_RSP = 9;
 	public static final int MSG_ID_GM_CMD = 10;
 	public static final int MSG_ID_GM_CMD_RSP = 11;
-	public static final int MSG_ID_LOAD_ROLE_LIST_RSP = 13;
-	public static final int MSG_ID_LOGIN_REQ = 16;
-	public static final int MSG_ID_LOGIN_RSP = 17;
-	public static final int MSG_ID_TEST_REQ = 20;
+	public static final int MSG_ID_LOAD_ROLE_LIST_RSP = 12;
+	public static final int MSG_ID_LOGIN_REQ = 13;
+	public static final int MSG_ID_LOGIN_RSP = 14;
+	public static final int MSG_ID_TEST_REQ = 17;
 
 	public static Object createMsgById(int msgId, byte[] dat) {
 		try {

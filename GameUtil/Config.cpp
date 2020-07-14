@@ -10,7 +10,7 @@ bool Config::checkFileExist(char* fileName)
 	return in.good();
 }
 
-std::string Config::getConfigStr(char* configFileName, char* key)
+std::string Config::getConfigStr(const char* configFileName, char* key)
 {
 	std::ifstream in(configFileName);
 	//char line[128]{0};
@@ -34,7 +34,7 @@ std::string Config::getConfigStr(char* configFileName, char* key)
 	return "";
 }
 
-int Config::getConfigInt(char* configFileName, char* key)
+int Config::getConfigInt(const char* configFileName, char* key)
 {
 	std::string val = getConfigStr(configFileName, key);
 	if (val.length() == 0) {

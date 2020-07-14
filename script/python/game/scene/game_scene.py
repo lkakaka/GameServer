@@ -2,11 +2,9 @@ import weakref
 
 import Scene
 import game.scene.game_player
-from util import logger
+from game.util import logger
 from proto.pb_message import Message
-import util.cmd_util
-import util.db_util
-from util.const import ErrorCode
+from game.util.const import ErrorCode
 
 
 class GameScene:
@@ -24,10 +22,6 @@ class GameScene:
         return self.scene_obj.scene_uid
 
     def prepare_enter_scene(self, conn_id, role_id):
-        # msg = Message.create_msg_by_id(Message.MSG_ID_LOAD_ROLE_REQ)
-        # msg.role_id = role_id
-        # msg.conn_id = conn_id
-        # self.service.send_msg_to_service("db", msg)
         tbls = self._add_load_tb(role_id)
         future = self.service.db_proxy.load_multi(tbls)
 
@@ -41,11 +35,11 @@ class GameScene:
     def _add_load_tb(self, role_id):
         tbls = []
         # player
-        tbl_player = util.db_util.create_tbl_obj("player")
+        tbl_player = game.util.db_util.create_tbl_obj("player")
         tbl_player.role_id = role_id
         tbls.append(tbl_player)
         # item
-        tbl_item = util.db_util.create_tbl_obj("item")
+        tbl_item = game.util.db_util.create_tbl_obj("item")
         tbl_item.role_id = role_id
         tbls.append(tbl_item)
 
@@ -63,7 +57,7 @@ class GameScene:
         sorted_tbls = {}
         for tbl in tbls:
             tb_name = tbl["__tb_name"]
-            tbl_obj = util.db_util.create_tbl_obj(tb_name)
+            tbl_obj = game.util.db_util.create_tbl_obj(tb_name)
             tbl_obj.assign(tbl)
             if tb_name not in sorted_tbls:
                 sorted_tbls[tb_name] = [tbl_obj,]

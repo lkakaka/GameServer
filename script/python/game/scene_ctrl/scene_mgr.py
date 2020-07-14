@@ -1,4 +1,4 @@
-from util import logger
+from game.util import logger
 
 
 class _Scene(object):

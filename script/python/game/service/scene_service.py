@@ -1,20 +1,17 @@
-import random
-
-from util import logger
+from game.util import logger
 from proto.pb_message import Message
 from game.service.service_base import ServiceBase
-import util.cmd_util
 import game.scene.game_scene
 import game.scene.game_player
-import util.timer
-import util.const
+import game.util.timer
+import game.util.const
 
 
 class SceneService(ServiceBase):
 
-    _s_cmd = util.cmd_util.CmdDispatch("s_scene")
-    _c_cmd = util.cmd_util.CmdDispatch("c_scene")
-    _rpc_proc = util.cmd_util.CmdDispatch("rpc_scene")
+    _s_cmd = game.util.cmd_util.CmdDispatch("s_scene")
+    _c_cmd = game.util.cmd_util.CmdDispatch("c_scene")
+    _rpc_proc = game.util.cmd_util.CmdDispatch("rpc_scene")
 
     def __init__(self):
         ServiceBase.__init__(self, SceneService._s_cmd, SceneService._c_cmd, SceneService._rpc_proc)
@@ -22,15 +19,16 @@ class SceneService(ServiceBase):
         self._player_to_scene = {}
 
     def on_service_start(self):
+        ServiceBase.on_service_start(self)
         logger.log_info("Scene Service Start!!")
-        util.timer.add_timer(3, lambda: self.create_scene(1))
+        game.util.timer.add_timer(3, lambda: self.create_scene(1))
 
     def create_scene(self, scene_id):
         scene = game.scene.game_scene.GameScene(self, scene_id)
         self._scenes[scene.scene_uid] = scene
 
         def _reg_callback(err_code):
-            if err_code == util.const.ErrorCode.OK:
+            if err_code == game.util.const.ErrorCode.OK:
                 logger.log_info("reg scene success, result:{}", err_code)
             else:
                 logger.log_error("reg scene error, err_code:{}, scene_id:{}", err_code, scene_id)
@@ -78,11 +76,6 @@ class SceneService(ServiceBase):
         scene = self._scenes.get(scene_uid)
         self._player_to_scene[conn_id] = scene_uid
         scene.prepare_enter_scene(conn_id, role_id)
-
-    @_s_cmd.reg_cmd(Message.MSG_ID_LOAD_ROLE_RSP)
-    def _on_recv_load_role_rsp(self, sender, msg_id, msg):
-        game_scene = self.get_player_scene(msg.conn_id)
-        # game_scene.on_load_player(msg)
 
     @_s_cmd.reg_cmd(Message.MSG_ID_CLIENT_DISCONNECT)
     def _on_recv_disconnect(self, sender, msg_id, msg):

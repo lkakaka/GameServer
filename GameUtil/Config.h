@@ -9,7 +9,7 @@ class SERVER_EXPORT_API Config
 {
 public:
 	static bool checkFileExist(char* fileName);
-	static std::string getConfigStr(char* configFileName, char* key);
-	static int getConfigInt(char* configFileName, char* key);
+	static std::string getConfigStr(const char* configFileName, char* key);
+	static int getConfigInt(const char* configFileName, char* key);
 };
 

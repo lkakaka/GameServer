@@ -22,15 +22,12 @@ class Message:
     MSG_ID_ENTER_SCENE_RSP = 9
     MSG_ID_GM_CMD = 10
     MSG_ID_GM_CMD_RSP = 11
-    MSG_ID_LOAD_ROLE_LIST_REQ = 12
-    MSG_ID_LOAD_ROLE_LIST_RSP = 13
-    MSG_ID_LOAD_ROLE_REQ = 14
-    MSG_ID_LOAD_ROLE_RSP = 15
-    MSG_ID_LOGIN_REQ = 16
-    MSG_ID_LOGIN_RSP = 17
-    MSG_ID_RPC_MSG = 18
-    MSG_ID_RPC_MSG_RSP = 19
-    MSG_ID_TEST_REQ = 20
+    MSG_ID_LOAD_ROLE_LIST_RSP = 12
+    MSG_ID_LOGIN_REQ = 13
+    MSG_ID_LOGIN_RSP = 14
+    MSG_ID_RPC_MSG = 15
+    MSG_ID_RPC_MSG_RSP = 16
+    MSG_ID_TEST_REQ = 17
 
     _MsgId2Msg = {
         MSG_ID_CLIENT_DISCONNECT: proto.server_only.login_srv_pb2.ClientDisconnect,
@@ -44,10 +41,7 @@ class Message:
         MSG_ID_ENTER_SCENE_RSP: proto.scene_pb2.EnterSceneRsp,
         MSG_ID_GM_CMD: proto.role_pb2.GmCmd,
         MSG_ID_GM_CMD_RSP: proto.role_pb2.GmCmdRsp,
-        MSG_ID_LOAD_ROLE_LIST_REQ: proto.server_only.login_srv_pb2.LoadRoleListReq,
         MSG_ID_LOAD_ROLE_LIST_RSP: proto.login_pb2.LoadRoleListRsp,
-        MSG_ID_LOAD_ROLE_REQ: proto.server_only.login_srv_pb2.LoadRoleReq,
-        MSG_ID_LOAD_ROLE_RSP: proto.server_only.login_srv_pb2.LoadRoleRsp,
         MSG_ID_LOGIN_REQ: proto.login_pb2.LoginReq,
         MSG_ID_LOGIN_RSP: proto.login_pb2.LoginRsp,
         MSG_ID_RPC_MSG: proto.server_only.common_pb2.RpcMsg,
@@ -67,10 +61,7 @@ class Message:
         proto.scene_pb2.EnterSceneRsp: MSG_ID_ENTER_SCENE_RSP,
         proto.role_pb2.GmCmd: MSG_ID_GM_CMD,
         proto.role_pb2.GmCmdRsp: MSG_ID_GM_CMD_RSP,
-        proto.server_only.login_srv_pb2.LoadRoleListReq: MSG_ID_LOAD_ROLE_LIST_REQ,
         proto.login_pb2.LoadRoleListRsp: MSG_ID_LOAD_ROLE_LIST_RSP,
-        proto.server_only.login_srv_pb2.LoadRoleReq: MSG_ID_LOAD_ROLE_REQ,
-        proto.server_only.login_srv_pb2.LoadRoleRsp: MSG_ID_LOAD_ROLE_RSP,
         proto.login_pb2.LoginReq: MSG_ID_LOGIN_REQ,
         proto.login_pb2.LoginRsp: MSG_ID_LOGIN_RSP,
         proto.server_only.common_pb2.RpcMsg: MSG_ID_RPC_MSG,

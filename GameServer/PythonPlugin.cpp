@@ -88,6 +88,7 @@ void initPython()
 {	
 	PyImport_AppendInittab("Test", PyInit_Test);  // python3
 
+	initConfigModule();
 	initDbModule();
 	initLoggerModule();
 	initTimerModule();

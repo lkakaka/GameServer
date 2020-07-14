@@ -1,11 +1,10 @@
+import game.util.db_util
+from game.util.db_util import TbCol
+from game.util.db_util import TbIndex
+from game.util.db_util import ColType
 
-import util.db_util
-from util.db_util import TbCol
-from util.db_util import TbIndex
-from util.db_util import ColType
 
-
-class TblPlayer(util.db_util.TbBase):
+class TblPlayer(game.util.db_util.TbBase):
 
     tb_name = "player"
     _columns = (
@@ -22,6 +21,6 @@ class TblPlayer(util.db_util.TbBase):
     )
 
     def __init__(self):
-        util.db_util.TbBase.__init__(self)
+        game.util.db_util.TbBase.__init__(self)
 
-util.db_util.init_columns(TblPlayer)
+game.util.db_util.init_columns(TblPlayer)

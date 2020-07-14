@@ -1,23 +1,27 @@
-#-*- ecoding:utf-8 -*-
+# -*- ecoding:utf-8 -*-
+
 import os
-# import db.TbMgr
-from util import logger
+
+from game.util import logger
+import game.util.db_util
 import Timer
 
 timer_id = 0
+
 
 def init():
     logger.log_info("init python {} {}", os.getcwd(), os.path.abspath(""))
     # import Test
     # print(Test.test())
-    db.TbMgr.TbMgr.initTbTable()
     # py_cffi.cffi_test.test_use()
     # test_timer()
     logger.log_info("init python end")
 
+
 def thread_test():
     # print("thread test")
     logger.log_info("python thread test")
+
 
 def test_timer():
     global timer_id
@@ -49,7 +53,7 @@ def create_scene_ctrl_service():
     service_inst = game.service.scene_ctrl_service.SceneCtrlService()
     service_inst.on_service_start()
     return service_inst
-    
+
 
 def create_login_service():
     import game.service.login_service
@@ -60,11 +64,8 @@ def create_login_service():
 
 def create_tb(tb_name):
     # print("create tb --------", tb_name)
-    import util.db_util
-    return util.db_util.create_tbl_obj(tb_name)
-
+    return game.util.db_util.create_tbl_obj(tb_name)
 
 # def timer_cb():
 #     print("timer cb called")
 #     # Timer.removeTimer(timer_id)
-

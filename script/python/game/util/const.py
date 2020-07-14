@@ -5,6 +5,10 @@ class GlobalVar(object):
     MAX_ROLE_NUM = 6
 
 
+class RedisKey(object):
+    ID_ALLOCATOR = "_id_allocator"
+
+
 # ¥ÌŒÛ¬Î∂®“Â
 class ErrorCode(object):
     OK = 0

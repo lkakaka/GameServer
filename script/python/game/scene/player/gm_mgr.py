@@ -1,11 +1,12 @@
 import weakref
-import util.cmd_util
-import util.logger
+
+import game.util.logger
+import game.util.cmd_util
 
 
 class GMMgr(object):
 
-    _gm_cmd = util.cmd_util.CmdDispatch("player_gm_cmd")
+    _gm_cmd = game.util.cmd_util.CmdDispatch("player_gm_cmd")
 
     def __init__(self, player):
         self._weak_player_ref = weakref.ref(player)
@@ -17,7 +18,7 @@ class GMMgr(object):
     def on_recv_gm_cmd(self, cmd, args):
         func = GMMgr._gm_cmd.get_cmd_func(cmd)
         if func is None:
-            util.logger.log_error("player on_recv_gm_cmd error, not found cmd func, cmd:{}", cmd)
+            game.util.logger.log_error("player on_recv_gm_cmd error, not found cmd func, cmd:{}", cmd)
             return "not define cmd"
         return func(self, args)
 
@@ -30,3 +31,7 @@ class GMMgr(object):
         item_count = int(arg_list[1])
         self.player._item_mgr.add_item(((item_id, item_count),))
         return "ok"
+
+    @_gm_cmd.reg_cmd("dump_item")
+    def _gm_add_item(self, args):
+        return self.player._item_mgr.dump_items()

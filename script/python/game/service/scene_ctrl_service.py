@@ -1,15 +1,16 @@
 from game.service.service_base import ServiceBase
-import util.cmd_util
-from util import logger
-from util.const import ErrorCode
+from game.util import logger
+from game.util.const import ErrorCode
+import game.util.cmd_util
 import game.scene_ctrl.scene_mgr
 
 
 class SceneCtrlService(ServiceBase):
-    _s_cmd = util.cmd_util.CmdDispatch("scene_ctrl_service")
-    _rpc_proc = util.cmd_util.CmdDispatch("rpc_scene_ctrl_service")
+    _s_cmd = game.util.cmd_util.CmdDispatch("scene_ctrl_service")
+    _rpc_proc = game.util.cmd_util.CmdDispatch("rpc_scene_ctrl_service")
 
     def __init__(self):
+        ServiceBase.on_service_start(self)
         ServiceBase.__init__(self, SceneCtrlService._s_cmd, None, SceneCtrlService._rpc_proc)
         self._scene_mgr = game.scene_ctrl.scene_mgr.SceneMgr(self)
 

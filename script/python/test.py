@@ -1,11 +1,13 @@
 import re
+
 import game.db.tbl
 import game.db.tbl.tbl_player
 import game.db.tbl.tbl_item
+
+
 # import game.db.tbl.tbl_test
-import util.db_util
-import copy
-import asyncio
+from game import util
+
 
 # def match_func(matched):
 #     value = matched.group('value')
@@ -31,7 +33,7 @@ def p_f(func):
 
 p_f(lambda x: x % 2 == 1)
 
-print("xxxx", util.db_util.get_tbl_name_from_key("player:1"))
+print("xxxx", game.util.db_util.get_tbl_name_from_key("player:1"))
 s = "tbl_player"
 pos = s.find("_")
 print("dfdas", s[pos+1:])
@@ -43,7 +45,7 @@ print("primary_col:", tbl_player.primary_val)
 # tbl_player = game.db.tbl.tbl_player.TblPlayer()
 tbl_item = game.db.tbl.tbl_item.TblItem()
 tbl_item_clone = tbl_item.clone()
-util.db_util.create_tbl_obj(tbl_item.tb_name)
+game.util.db_util.create_tbl_obj(tbl_item.tb_name)
 print(game.db.tbl.tbl_player.TblPlayer.__dict__)
 print(tbl_player.__dict__)
 print(game.db.tbl.tbl_item.TblItem.__dict__)
@@ -72,20 +74,20 @@ lst.append(x)
 t = tuple(lst)
 print("x=", repr(t), eval(repr(t)))
 
-def co_func():
-    print("co 1")
-    x = yield 10
-    print("co 2", x)
-    y = yield 20
-    print("co 3", y)
-
-co = co_func()
-print("send none")
-print(co.send(None))
-# co.send(1)
-# print("send 1")
-# print(co.send(1))
-# co.send(2)
+# def co_func():
+#     print("co 1")
+#     x = yield 10
+#     print("co 2", x)
+#     y = yield 20
+#     print("co 3", y)
+#
+# co = co_func()
+# print("send none")
+# print(co.send(None))
+# # co.send(1)
+# # print("send 1")
+# # print(co.send(1))
+# # co.send(2)
 
 
 # async def compute(x, y):
@@ -137,6 +139,14 @@ print(co.send(None))
 
 print("end co")
 # coro1()
+
+d = {"1" : [1, 2, 3]}
+lst = d.get("1")
+for i in lst:
+    lst.remove(i)
+    print("i=", i)
+
+print(d)
 
 
 
