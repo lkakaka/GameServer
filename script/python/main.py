@@ -1,7 +1,6 @@
-# -*- ecoding:utf-8 -*-
+# -*- encoding:utf-8 -*-
 
 import os
-
 from game.util import logger
 import game.util.db_util
 import Timer
@@ -65,6 +64,7 @@ def create_login_service():
 def create_tb(tb_name):
     # print("create tb --------", tb_name)
     return game.util.db_util.create_tbl_obj(tb_name)
+
 
 # def timer_cb():
 #     print("timer cb called")

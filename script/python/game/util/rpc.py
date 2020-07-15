@@ -1,3 +1,5 @@
+# -*- encoding:utf-8 -*-
+
 import weakref
 
 from proto.pb_message import Message
@@ -48,7 +50,7 @@ class _Future(object):
 
 class RpcMgr(object):
 
-    DEFAULT_TIME_OUT = 30  # Ãë
+    DEFAULT_TIME_OUT = 30  # ç»‰ï¿½
 
     def __init__(self, service_obj):
         self._service_obj = weakref.ref(service_obj)
@@ -88,3 +90,4 @@ class RpcMgr(object):
             logger.log_error("not found rpc futurue, rpc_id:{}", rpc_id)
             return
         future.on_recv_rsp(rpc_data)
+

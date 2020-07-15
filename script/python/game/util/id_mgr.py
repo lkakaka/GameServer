@@ -24,12 +24,12 @@ class IDMgr(object):
         logger.log_info("connect id redis, ip:{}, port:{}".format(redis_ip, redis_port))
 
     @staticmethod
-    def alloc_role_id():
-        role_id = IDMgr._redis.exec_redis_cmd("HINCRBY {} {} 1".format(RedisKey.ID_ALLOCATOR, IDMgr.REDIS_KEY_ROLE))
+    def alloc_role_id(count=1):
+        role_id = IDMgr._redis.exec_redis_cmd("HINCRBY {} {} {}".format(RedisKey.ID_ALLOCATOR, IDMgr.REDIS_KEY_ROLE, count))
         return int(role_id)
 
     @staticmethod
-    def alloc_item_uid():
-        item_uid = IDMgr._redis.exec_redis_cmd("HINCRBY {} {} 1".format(RedisKey.ID_ALLOCATOR, IDMgr.REDIS_KEY_ITEM))
+    def alloc_item_uid(count=1):
+        item_uid = IDMgr._redis.exec_redis_cmd("HINCRBY {} {} {}".format(RedisKey.ID_ALLOCATOR, IDMgr.REDIS_KEY_ITEM, count))
         print("alloc_item_uid", item_uid, type(item_uid))
         return int(item_uid)

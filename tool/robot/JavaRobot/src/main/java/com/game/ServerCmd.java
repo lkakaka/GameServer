@@ -8,7 +8,6 @@ import com.proto.Role;
 import com.proto.Test;
 import com.util.Util;
 
-
 public class ServerCmd extends CmdDispatch {
     private GameRobot m_robot;
 
@@ -39,7 +38,7 @@ public class ServerCmd extends CmdDispatch {
         int errCode = rsp.getErrCode();
         Util.logInfo("recv role list, err_code:%s", errCode);
         if (errCode == 0) {
-            if  (rsp.getRoleListCount() == 0) {
+            if (rsp.getRoleListCount() == 0) {
                 Login.CreateRoleReq req = ProtoBufferMsg.createCreateRoleReqBuilder().setAccount(m_robot.getAccount())
                         .setRoleName(m_robot.getAccount()).build();
                 m_robot.sendProto(ProtoBufferMsg.MSG_ID_CREATE_ROLE_REQ, req);
@@ -52,6 +51,18 @@ public class ServerCmd extends CmdDispatch {
                 Util.logInfo("send enter game, role_id:%d", roleInfo.getRoleId());
             }
         }
+    }
+
+    @CmdAnnotation(serverCmd = ProtoBufferMsg.MSG_ID_CREATE_ROLE_RSP)
+    private void onRecvCreateRoleRsp(Object param) {
+        Login.CreateRoleRsp rsp = (Login.CreateRoleRsp) param;
+        Util.logInfo("create role rsp, err_code:%d", rsp.getErrCode());
+        if (rsp.getErrCode() != 0) {
+            return;
+        }
+        Login.EnterGame enterGame = ProtoBufferMsg.createEnterGameBuilder().setAccount(m_robot.getAccount())
+                .setRoleId(rsp.getRoleInfo().getRoleId()).build();
+        m_robot.sendProto(ProtoBufferMsg.MSG_ID_ENTER_GAME, enterGame);
     }
 
     @CmdAnnotation(serverCmd = ProtoBufferMsg.MSG_ID_ENTER_GAME_RSP)

@@ -11,6 +11,7 @@ class TblTest(game.util.db_util.TbBase):
         TbCol(name="role_id", type=ColType.BIGINT, key=True, auto_incr=True),
         TbCol(name="role_name", type=ColType.VARCHAR, length=128, default=""),
         TbCol(name="account", type=ColType.VARCHAR, length=128),
+        TbCol(name="data1", type=ColType.BIGINT),
     )
 
     INDEX_NAME = ("role_name",)

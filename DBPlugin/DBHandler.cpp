@@ -44,6 +44,7 @@ DBHandler::DBHandler(std::string& dbUrl, int dbPort, std::string& dbUserName, st
 }
 
 void DBHandler::initTableSchema() {
+	m_tableSchema.clear();
 	Connection* conn = getDBConnection();
 	char* sql = "select TABLE_NAME from information_schema.tables where table_schema = '%s' and table_type = 'BASE TABLE'";
 	StatementPtr ptr = executeSql(sql, m_dbName.c_str());
@@ -193,7 +194,7 @@ bool isSameCol(TableField* col1, TableField* col2) {
 	return true;
 }
 
-bool DBHandler::createTable(Table* tbl)
+bool DBHandler::initTable(Table* tbl)
 {
 	std::string tbName = tbl->tableName;
 
@@ -335,28 +336,30 @@ bool DBHandler::_changeTable(Table* tbl, std::map<std::string, TableField>& orgF
 	std::string tbName = tbl->tableName;
 	int colNum = tbl->colNames.size();
 	bool isChange = false;
-	std::string colStr;
+	bool isFirstColChg = true;
+	std::string chgColStr;
 	for (int col = 0; col < colNum; col++) {
 		std::string colName = tbl->colNames[col];
 		TableField* field = tbl->getField(colName.c_str()); //tbl->fields.find(colName)->second;
 		
+		std::string colStr;
 		if (field->isDel) { // É¾³ý×Ö¶Î
 			if (orgFields.find(field->fieldName) == orgFields.end()) {
 				Logger::logWarning("$delete column %s in table %s not found", field->fieldName.c_str(), tbName.c_str());
 				continue;
 			}
-			colStr += "DROP " + colName;
+			colStr = "DROP " + colName;
 		} else { // ÐÞ¸Ä×Ö¶Î
 			if (field->oldName == "") {
 				auto iter = orgFields.find(colName);
 				if (iter == orgFields.end()) { // ÐÂ¼Ó×Ö¶Î
-					colStr += "ADD ";
+					colStr = "ADD ";
 				}
 				else {  // ÐÞ¸Ä×Ö¶Î
 					if (isSameCol(field, &iter->second)) {
 						continue;
 					}
-					colStr += "MODIFY ";
+					colStr = "MODIFY ";
 				}
 			}
 			else { // ×Ö¶Î¸ÄÃû
@@ -368,7 +371,7 @@ bool DBHandler::_changeTable(Table* tbl, std::map<std::string, TableField>& orgF
 					}
 					continue;
 				}
-				colStr += "CHANGE " + field->oldName + " ";
+				colStr = "CHANGE " + field->oldName + " ";
 			}
 
 			colStr += colName + " ";
@@ -384,21 +387,28 @@ bool DBHandler::_changeTable(Table* tbl, std::map<std::string, TableField>& orgF
 			if (tbl->priKeyName == colName) {
 				colStr += " primary key";
 			}
+			
 		}
 
-		if (col != colNum - 1) colStr += ", ";
+		if (isFirstColChg) {
+			chgColStr += colStr;
+			isFirstColChg = false;
+		}
+		else {
+			chgColStr += "," + colStr;
+		}
 		if (!isChange) isChange = true;
 	}
 
 	if (!isChange) return true;
 
 	char* sql = "ALTER TABLE %s %s";
-	StatementPtr ptr = executeSql(sql, tbName.c_str(), colStr.c_str());
+	StatementPtr ptr = executeSql(sql, tbName.c_str(), chgColStr.c_str());
 	if (ptr == NULL) {
 		Logger::logError("$alter table %s failed", tbName.c_str());
 		return false;
 	}
-	Logger::logInfo("$alter table %s, %s", tbName.c_str(), colStr.c_str());
+	Logger::logInfo("$alter table %s, %s", tbName.c_str(), chgColStr.c_str());
 	return true;
 }
 

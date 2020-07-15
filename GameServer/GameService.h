@@ -9,7 +9,7 @@ public:
 	PyObject* m_scriptObj;
 
 	GameService(std::string service_name, PyObject* scriptObj);
-	PyObject* callPyFunction(const char* funcName, PyObject* args);
+	PyObject* callPyFunc(const char* funcName, PyObject* args);
 };
 
 

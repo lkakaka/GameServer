@@ -8,8 +8,7 @@ class TblItem(game.util.db_util.TbBase):
 
     tb_name = "item"
     _columns = (
-        TbCol(name="item_uid", type=ColType.BIGINT, key=True, auto_incr=True),
-        TbCol(name="name", type=ColType.VARCHAR, length=128),
+        TbCol(name="item_uid", type=ColType.BIGINT, key=True),
         TbCol(name="role_id", type=ColType.BIGINT),
         TbCol(name="item_id", type=ColType.INT),
         TbCol(name="count", type=ColType.INT),

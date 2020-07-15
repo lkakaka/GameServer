@@ -23,7 +23,48 @@ PyObject* callPyFunction(const char* module, const char* func, PyObject* arg)
 
 	if (result == NULL)
 	{
-		PyErr_Print();
+		logPyException();
 	}
 	return result;
+}
+
+void logPyException() {
+	PyObject* ptype, * pvalue, * ptraceback;
+	PyErr_Fetch(&ptype, &pvalue, &ptraceback);
+	PyErr_Restore(ptype, pvalue, ptraceback);
+	PyErr_Print();
+	PyErr_NormalizeException(&ptype, &pvalue, &ptraceback); // pvalue修改为format_exception可以使用的excettion类型
+	PyObject* module_name = PyUnicode_FromString("traceback");
+	PyObject* tb_mod = PyImport_Import(module_name);
+	Py_DECREF(module_name);
+	PyObject* format_func = PyObject_GetAttrString(tb_mod, "format_exception");
+	if (format_func && PyCallable_Check(format_func)) {
+		PyObject* exList = PyObject_CallFunctionObjArgs(format_func, ptype, pvalue, ptraceback, NULL);
+		if (exList == NULL) {
+			PyErr_Print();
+			Logger::logError("$call traceback.format_exception failed when log py exception");
+			return;
+		}
+		std::string fullMsg = "";
+		for (int i = 0; i < PyList_GET_SIZE(exList); i++) {
+			PyObject* exMsg = PyList_GetItem(exList, i);
+			fullMsg += PyUnicode_AsUTF8(exMsg);
+		}
+		Logger::logError(fullMsg.c_str());
+		Py_DECREF(exList);
+	}
+	
+	/*PyObject* tb = ptraceback;
+		Py_INCREF(tb);
+		std::string traceback;
+		while (tb != NULL) {
+			PyObject* frame = PyObject_GetAttrString(tb, "tb_frame");
+			PyObject* f_code = PyObject_GetAttrString(frame, "f_code");
+			PyObject* line = PyObject_GetAttrString(frame, "co_firstlineno");
+			int line_no = PyLong_AsLong(line);
+
+			PyTracebackObject* t_tb = (PyTracebackObject*)tb;
+			int line_no = ((PyTracebackObject*)tb)->tb_frame->f_code->co_firstlineno;
+			tb = PyObject_GetAttrString(tb, "tb_next");
+		}*/
 }

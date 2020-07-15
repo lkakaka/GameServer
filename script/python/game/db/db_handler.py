@@ -263,7 +263,7 @@ class DBHandler:
                         return
                     all_result = []
 
-            if not all_result:
+            if all_result:
                 if not self.replace_rows(tuple(all_result)):
                     logger.log_error("flush redis error, update mysql failed, count: {}", len(all_result))
                     return

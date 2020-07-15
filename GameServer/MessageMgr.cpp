@@ -94,10 +94,10 @@ void MessageMgr::onRecvData(char* sender, char* data, int dataLen) {
 			PyTuple_SetItem(arg, 1, PyLong_FromLong(msgId));
 			PyTuple_SetItem(arg, 2, Py_BuildValue("y#", msgData, msgLen));
 			if (isClientMsg) {
-				GameService::g_gameService->callPyFunction("on_recv_client_msg", arg);
+				GameService::g_gameService->callPyFunc("on_recv_client_msg", arg);
 			}
 			else {
-				GameService::g_gameService->callPyFunction("on_recv_service_msg", arg);
+				GameService::g_gameService->callPyFunc("on_recv_service_msg", arg);
 			}
 			PyGILState_Release(py_state);
 		}
@@ -116,7 +116,7 @@ void MessageMgr::onRecvData(char* sender, char* data, int dataLen) {
 			PyTuple_SetItem(arg, 0, Py_BuildValue("s", sender));
 			PyTuple_SetItem(arg, 1, PyLong_FromLong(msgId));
 			PyTuple_SetItem(arg, 2, Py_BuildValue("y#", msgData, msgLen));
-			GameService::g_gameService->callPyFunction("on_recv_service_msg", arg);
+			GameService::g_gameService->callPyFunc("on_recv_service_msg", arg);
 			PyGILState_Release(py_state);
 		}
 	}

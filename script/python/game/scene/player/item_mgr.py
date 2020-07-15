@@ -71,9 +71,9 @@ class ItemMgr(object):
             return
         self._remove_item(item)
 
-    def _create_item(self, item_id, item_count):
+    def _create_item(self, item_id, item_count, item_uid=None):
         role_id = self._weak_player().role_id
-        item_uid = IDMgr.alloc_item_uid()
+        item_uid = item_uid if item_uid is not None else IDMgr.alloc_item_uid(count=1)
         item = Item(role_id, item_uid, item_id, item_count)
         return item
 
@@ -128,13 +128,17 @@ class ItemMgr(object):
                     tbl_item.count = item.count
                     chg_items.append(tbl_item)
 
-            while item_count > 0:
-                add_count = min(item_count, MAX_OVERLAP_COUNT)
-                new_item = self._create_item(item_id, add_count)
-                self._add_item(new_item)
-                item_count -= add_count
-                tbl_item = new_item.to_tbl_item()
-                new_items.append(tbl_item)
+            if item_count > 0:
+                new_item_count = math.ceil(float(item_count) / MAX_OVERLAP_COUNT)
+                item_uid = IDMgr.alloc_item_uid(count=new_item_count) - new_item_count + 1
+                while item_count > 0:
+                    add_count = min(item_count, MAX_OVERLAP_COUNT)
+                    new_item = self._create_item(item_id, add_count, item_uid=item_uid)
+                    self._add_item(new_item)
+                    item_count -= add_count
+                    tbl_item = new_item.to_tbl_item()
+                    new_items.append(tbl_item)
+                    item_uid += 1
 
         print(chg_items, new_items)
         if len(chg_items) > 0:

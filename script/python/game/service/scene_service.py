@@ -80,6 +80,9 @@ class SceneService(ServiceBase):
     @_s_cmd.reg_cmd(Message.MSG_ID_CLIENT_DISCONNECT)
     def _on_recv_disconnect(self, sender, msg_id, msg):
         game_scene = self.get_player_scene(msg.conn_id)
+        if game_scene is None:
+            logger.logInfo("_on_recv_disconnect error, not found player in scene, conn_id:{}", msg.conn_id)
+            return
         player = game_scene.get_player_by_conn_id(msg.conn_id)
         game_scene.remove_player(player.role_id, msg.reason)
 

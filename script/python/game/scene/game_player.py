@@ -26,7 +26,7 @@ class GamePlayer:
         self._item_mgr = game.scene.player.item_mgr.ItemMgr(self)
 
     def init_player_data(self, tables):
-        print(tables)
+        # print(tables)
         tb_player = tables["player"][0]
         self.name = tb_player.role_name
         self.account = tb_player.account
@@ -55,17 +55,8 @@ class GamePlayer:
 
     @_c_cmd.reg_cmd(Message.MSG_ID_GM_CMD)
     def _on_recv_gm_cmd(self, msg_id, msg):
-        try:
-            result = self._gm_mgr.on_recv_gm_cmd(msg.cmd , msg.args)
-        except Exception as e:
-            import traceback
-            import sys
-            tb = traceback.format_exception(*sys.exc_info())
-            game.util.logger.log_error('gm cmd {} Error, {}, {}', msg.cmd, e, "".join(tb))
-            result = e.message
-
+        result = self._gm_mgr.on_recv_gm_cmd(msg.cmd, msg.args)
         game.util.logger.log_info("exe gm cmd:{}, args:{}, result:\n{}", msg.cmd, msg.args, result)
-
         rsp_msg = Message.create_msg_by_id(Message.MSG_ID_GM_CMD_RSP)
         rsp_msg.cmd = msg.cmd
         rsp_msg.msg = result
@@ -90,5 +81,5 @@ class GamePlayer:
         tbl_player.role_id = 6
         tbl_player.role_name = "rename"
         # tbl_player.account = "aa"
-        self.game_scene.service.db_proxy.update(tbl_player.tb_name, tbl_player)
+        self.game_scene.service.db_proxy.update(tbl_player)
 

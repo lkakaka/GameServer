@@ -80,21 +80,21 @@ static PyObject* createDB(PyObject* self, PyObject* args)
 
 static bool _initTable(DBHandler* dbHandler, PyObject* tblObj) {
 	Table tbl;
-	char* tbName = PyStringToString(PyObject_GetAttrString(tblObj, "tb_name"));
+	const char* tbName = PyUnicode_AsUTF8(PyObject_GetAttrString(tblObj, "tb_name"));
 	tbl.tableName = tbName;
 	PyObject * colTuple = PyObject_GetAttrString(tblObj, "_columns");
 	ssize_t colNum =  PyTuple_Size(colTuple);
 	bool hasKey = false;
 	for (int col = 0; col < colNum; col++) {
 		PyObject* colObj = PyTuple_GetItem(colTuple, col);
-		char* colName = PyStringToString(PyObject_GetAttrString(colObj, "name"));
+		const char* colName = PyUnicode_AsUTF8(PyObject_GetAttrString(colObj, "name"));
 		PyObject* defaultObj = PyObject_GetAttrString(colObj, "default");
 		long type = PyLong_AsLong(PyObject_GetAttrString(colObj, "type"));
 		
 		MAKE_TABLE_FIELD(field);
 		field->fieldName = colName;
 		field->type = (TableField::FieldType)type;
-		field->oldName = PyStringToString(PyObject_GetAttrString(colObj, "old_name"));
+		field->oldName = PyUnicode_AsUTF8(PyObject_GetAttrString(colObj, "old_name"));
 		field->isDel = PyLong_AsLong(PyObject_GetAttrString(colObj, "is_del")) == 1;
 		switch (type)
 		{
@@ -123,7 +123,7 @@ static bool _initTable(DBHandler* dbHandler, PyObject* tblObj) {
 					field->length = len;
 				}
 				if (defaultObj != Py_None) {
-					char* defVal = PyStringToString(defaultObj);
+					const char* defVal = PyUnicode_AsUTF8(defaultObj);
 					if (strcmp(defVal, "") != 0) {
 						field->defaut_val.append("'").append(defVal).append("'");
 					}
@@ -133,7 +133,7 @@ static bool _initTable(DBHandler* dbHandler, PyObject* tblObj) {
 			case TableField::FieldType::TYPE_TEXT:
 			{
 				if (defaultObj != Py_None) {
-					char* defVal = PyStringToString(defaultObj);
+					const char* defVal = PyUnicode_AsUTF8(defaultObj);
 					field->defaut_val.append("'").append(defVal).append("'");
 				}
 				break;
@@ -177,14 +177,14 @@ static bool _initTable(DBHandler* dbHandler, PyObject* tblObj) {
 				ssize_t idxColNum = PyTuple_Size(closObj);
 				for (int idxCol = 0; idxCol < idxColNum; idxCol++) {
 					PyObject* colNameObj = PyTuple_GetItem(closObj, idxCol);
-					tblIndex.cols.emplace_back(PyStringToString(colNameObj));
+					tblIndex.cols.emplace_back(PyUnicode_AsUTF8(colNameObj));
 				}
 				tbl.tableIndexs.emplace_back(tblIndex);
 			}
 		}
 	}
 
-	return dbHandler->createTable(&tbl);
+	return dbHandler->initTable(&tbl);
 }
 
 static PyObject* initTable(PyObject* self, PyObject* args)
@@ -234,11 +234,12 @@ static PyObject* initTable(PyObject* self, PyObject* args)
 	for (int i = 0; i < size; i++) {
 		PyObject* tbObj = PyTuple_GetItem(tblTuple, i);
 		if (!_initTable(dbHandler, tbObj)) {
-			char* tbName = PyStringToString(PyObject_GetAttrString(tbObj, "tb_name"));
+			const char* tbName = PyUnicode_AsUTF8(PyObject_GetAttrString(tbObj, "tb_name"));
 			Logger::logError("$table %s init failed", tbName);
 			Py_RETURN_FALSE;
 		}
 	}
+	dbHandler->initTableSchema();
 	Py_RETURN_TRUE;
 }
 
@@ -391,7 +392,7 @@ static PyObject* insertRow(PyObject* self, PyObject* args)
 	PyObject* priKeyObj = PyObject_GetAttrString(obj, "pri_key");
 	PyObject* fields = PyObject_GetAttrString(obj, "fields");
 
-	char* tableName = PyStringToString(tableNameObj);
+	const char* tableName = PyUnicode_AsUTF8(tableNameObj);
 	long priKeyVal = PyLong_AsLong(priKeyObj);
 
 	Table tbl;
@@ -401,7 +402,7 @@ static PyObject* insertRow(PyObject* self, PyObject* args)
 	PyObject* key;
 	PyObject* val;
 	while (PyDict_Next(fields, &pos, &key, &val)) {
-		char* fieldName = PyStringToString(key);
+		const char* fieldName = PyUnicode_AsUTF8(key);
 		DataBase::TableField* fieldDesc = dbHandler->getTableField(tableName, fieldName);
 		if (fieldDesc == NULL) {
 			Py_RETURN_NONE;
@@ -426,7 +427,7 @@ static PyObject* insertRow(PyObject* self, PyObject* args)
 		case TableField::FieldType::TYPE_VCHAR:
 		case TableField::FieldType::TYPE_TEXT:
 		{
-			field->sval = PyStringToString(val);
+			field->sval = PyUnicode_AsUTF8(val);
 			break;
 		}
 		default:
@@ -448,13 +449,13 @@ static PyObject* insertRow(PyObject* self, PyObject* args)
 static void PyTableToTable(PyObject* pyTbl, Table* tbl) {
 	//PyObject* tableNameObj = PyObject_GenericGetAttr(pyTbl, PyUnicode_FromString("tb_name"));
 	PyObject* tableNameObj = PyObject_GetAttrString(pyTbl, "tb_name");
-	tbl->tableName = PyStringToString(tableNameObj);
+	tbl->tableName = PyUnicode_AsUTF8(tableNameObj);
 
 	PyObject* colTuple = PyObject_GetAttrString(pyTbl, "_columns");
 	ssize_t colNum = PyTuple_Size(colTuple);
 	for (int col = 0; col < colNum; col++) {
 		PyObject* colObj = PyTuple_GetItem(colTuple, col);
-		char* colName = PyStringToString(PyObject_GetAttrString(colObj, "name"));
+		const char* colName = PyUnicode_AsUTF8(PyObject_GetAttrString(colObj, "name"));
 		long type = PyLong_AsLong(PyObject_GetAttrString(colObj, "type"));
 		if (PyObject_HasAttrString(pyTbl, colName)) {
 			PyObject* colObj = PyObject_GetAttrString(pyTbl, colName);
@@ -480,7 +481,7 @@ static void PyTableToTable(PyObject* pyTbl, Table* tbl) {
 			case TableField::FieldType::TYPE_VCHAR:
 			case TableField::FieldType::TYPE_TEXT:
 			{
-				tbField->sval = PyStringToString(colObj);
+				tbField->sval = PyUnicode_AsUTF8(colObj);
 				break;
 			}
 			default:
@@ -500,7 +501,7 @@ static PyObject* TableToPyTable(Table* tbl) {
 	ssize_t colNum = PyTuple_Size(colTuple);
 	for (int col = 0; col < colNum; col++) {
 		PyObject* colObj = PyTuple_GetItem(colTuple, col);
-		char* colName = PyStringToString(PyObject_GetAttrString(colObj, "name"));
+		const char* colName = PyUnicode_AsUTF8(PyObject_GetAttrString(colObj, "name"));
 		TableField* field = tbl->getField(colName);
 		if (field == NULL) {
 			continue;

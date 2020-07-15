@@ -2,6 +2,7 @@
 #include "Timer.h"
 #include "PythonPlugin.h"
 #include "../Math/MathFunction.h"
+#include "../Common/PyCommon.h"
 
 #define TEST_TIMER_TREAD 0
 #define TEST_PYTHON_TREAD 0

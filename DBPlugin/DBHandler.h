@@ -52,7 +52,6 @@ private:
 
 	//void createTable(ReflectObject* tbl);
 	sql::Connection* getDBConnection();
-	void initTableSchema();
 
 	void loadFromDB(Table* tbl, std::vector<Table>& result);
 
@@ -66,10 +65,12 @@ public:
 	inline std::string getDbName();
 	void initDbTable(std::vector<ReflectObject*> tblDefs);
 
+	void initTableSchema();
+
 	TableField* getTableField(const char* tableName, const char* fieldName) const;
 	TableSchema* getTableSchema(const char* tableName) const;
 
-	bool createTable(Table* tbl);
+	bool initTable(Table* tbl);
 
 	void insert(std::vector<ReflectObject> data);
 	void insertOne(ReflectObject tbl);

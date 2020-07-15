@@ -1,4 +1,5 @@
 #include "GameService.h"
+#include "../Common/PyCommon.h"
 
 
 GameService* GameService::g_gameService = NULL;
@@ -9,11 +10,12 @@ GameService::GameService(std::string service_name, PyObject* scriptObj) :
 
 }
 
-PyObject* GameService::callPyFunction(const char* funcName, PyObject* args) {
+PyObject* GameService::callPyFunc(const char* funcName, PyObject* args) {
 	auto func = PyObject_GetAttrString(m_scriptObj, funcName);
 	PyObject* obj = PyObject_Call(func, args, NULL);
 	if (obj == NULL) {
-		PyErr_Print();
+		//PyErr_Print();
+		logPyException();
 	}
 	return obj;
 }

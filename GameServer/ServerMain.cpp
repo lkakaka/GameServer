@@ -8,6 +8,7 @@
 //#include "DBTableDef.h"
 #include "DBMgr.h"
 #include "PythonPlugin.h"
+#include "../Common/PyCommon.h"
 #include "ZmqInst.h"
 #include "ZmqRouter.h"
 #include "Timer.h"
