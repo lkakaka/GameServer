@@ -41,21 +41,25 @@ void connection::do_read()
   socket_.async_read_some(boost::asio::buffer(buffer_),
       [this, self](boost::system::error_code ec, std::size_t bytes_transferred)
       {
-        if (!ec)
-        {
-          request_parser::result_type result;
-          std::tie(result, std::ignore) = request_parser_.parse(
-              request_, buffer_.data(), buffer_.data() + bytes_transferred);
+          if (!ec)
+          {
+              request_parser::result_type result;
+              std::tie(result, std::ignore) = request_parser_.parse(
+                  request_, buffer_.data(), buffer_.data() + bytes_transferred);
 
-          if (result == request_parser::good)
-          {
-            request_handler_.handle_request(request_, reply_);
-            do_write();
-          }
-          else if (result == request_parser::bad)
-          {
-            reply_ = reply::stock_reply(reply::bad_request);
-            do_write();
+              if (result == request_parser::good)
+              {
+                  reply_ptr reply_ = request_handler_.handle_request(conn_id, request_);
+                  if (reply_ != NULL) {
+                      send_resp(reply_);
+                  }
+                  //do_write();
+              }
+              else if (result == request_parser::bad)
+              {
+                  reply_ptr reply_ = reply::stock_reply(reply::bad_request);
+                  //do_write();
+                  send_resp(reply_);
           }
           else
           {
@@ -88,6 +92,29 @@ void connection::do_write()
           connection_manager_.stop(shared_from_this());
         }
       });
+}
+
+void connection::send_resp(reply_ptr reply)
+{
+    auto self(shared_from_this());
+    reply_ptr_ = reply;
+    boost::asio::async_write(socket_, reply->to_buffers(),
+        [this, self](boost::system::error_code ec, std::size_t)
+        {
+            reply_ptr_ = NULL;
+            if (!ec)
+            {
+                // Initiate graceful connection closure.
+                boost::system::error_code ignored_ec;
+                socket_.shutdown(boost::asio::ip::tcp::socket::shutdown_both,
+                    ignored_ec);
+            }
+
+            if (ec != boost::asio::error::operation_aborted)
+            {
+                connection_manager_.stop(shared_from_this());
+            }
+        });
 }
 
 } // namespace server

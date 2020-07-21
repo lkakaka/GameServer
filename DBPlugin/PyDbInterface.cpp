@@ -496,7 +496,17 @@ static PyObject* TableToPyTable(Table* tbl) {
 	std::string tableName = tbl->tableName;
 	PyObject* args = PyTuple_New(1);
 	PyTuple_SetItem(args, 0, PyUnicode_FromString(tableName.c_str()));
-	PyObject* tblObj = callPyFunction("main", "create_tb", args);
+	/*PyObject* tblObj = callPyFunction("main", "create_tb", args);*/
+
+	std::string s = "game.db.tbl.tbl_" + tableName;
+	PyObject* pModule = PyImport_ImportModule(s.c_str());//这里是要调用的文件名
+	int x = toupper(tableName[0]);
+	std::string clsName = "Tbl";
+	clsName.push_back(toupper(tableName[0]));
+	clsName +=  tableName.substr(1, -1);
+	PyObject* pFunc = PyObject_GetAttrString(pModule, clsName.c_str());//这里是要调用的函数名
+	PyObject* tblObj = PyEval_CallObject(pFunc, NULL);//调用函数
+
 	PyObject* colTuple = PyObject_GetAttrString(tblObj, "_columns");
 	ssize_t colNum = PyTuple_Size(colTuple);
 	for (int col = 0; col < colNum; col++) {

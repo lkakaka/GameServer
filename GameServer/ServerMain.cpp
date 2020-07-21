@@ -74,16 +74,17 @@ int main(int argc, char** argv)
 	GameService::g_gameService = new GameService(serviceName, scriptObj);
 
 	// Initialise the http server.
-	std::string httpServerIp = Config::getConfigStr(cfgName, "http_server_ip");
-	std::string httpServerPort = Config::getConfigStr(cfgName, "http_server_port");
-	std::shared_ptr<std::thread> http_thread;
-	std::shared_ptr<http::server::server> http_server;
-	if (httpServerIp.length() > 0 && httpServerPort.length() > 0) {
-		http_server.reset(new http::server::server(httpServerIp, httpServerPort, ""));
+	//std::string httpServerIp = Config::getConfigStr(cfgName, "http_server_ip");
+	//std::string httpServerPort = Config::getConfigStr(cfgName, "http_server_port");
+	//std::shared_ptr<std::thread> http_thread;
+	//std::shared_ptr<http::server::server> http_server;
+	//if (httpServerIp.length() > 0 && httpServerPort.length() > 0) {
+	//	http_server.reset(new http::server::server(httpServerIp, httpServerPort, "", NULL));
 
-		// Run the server until stopped.
-		http_thread.reset(new std::thread([&http_server] { http_server->run(); }));
-	}
+	//	// Run the server until stopped.
+	//	http_thread.reset(new std::thread([&http_server] { http_server->run(); }));
+	//	Logger::logInfo("$start http server, ip: %s, port:%s", httpServerIp.c_str(), httpServerPort.c_str());
+	//}
 
 	int router_port = Config::getConfigInt(cfgName, "router_port");
 	if (router_port > 0) {

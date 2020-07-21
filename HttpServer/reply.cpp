@@ -238,16 +238,16 @@ std::string to_string(reply::status_type status)
 
 } // namespace stock_replies
 
-reply reply::stock_reply(reply::status_type status)
+reply_ptr reply::stock_reply(reply::status_type status)
 {
-  reply rep;
-  rep.status = status;
-  rep.content = stock_replies::to_string(status);
-  rep.headers.resize(2);
-  rep.headers[0].name = "Content-Length";
-  rep.headers[0].value = std::to_string(rep.content.size());
-  rep.headers[1].name = "Content-Type";
-  rep.headers[1].value = "text/html";
+  reply_ptr rep = std::make_shared<reply>();
+  rep->status = status;
+  rep->content = stock_replies::to_string(status);
+  rep->headers.resize(2);
+  rep->headers[0].name = "Content-Length";
+  rep->headers[0].value = std::to_string(rep->content.size());
+  rep->headers[1].name = "Content-Type";
+  rep->headers[1].value = "text/html";
   return rep;
 }
 

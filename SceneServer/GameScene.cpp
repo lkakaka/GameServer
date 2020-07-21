@@ -1,6 +1,7 @@
 #include "GameScene.h"
 #include "Logger.h"
 #include "PyScene.h"
+#include "../Common/PyCommon.h"
 
 
 GameScene::GameScene(int sceneId, int sceneUid, void* scriptObj) : m_maxActorId(0), m_sceneId(sceneId), m_sceneUid(sceneUid),
@@ -62,7 +63,7 @@ void GameScene::onActorEnter(int actorId) {
 		}
 		PyTuple_SetItem(arg, 0, PyLong_FromLong(actor->getActorId()));
 		PyTuple_SetItem(arg, 1, actors);
-		callPyFunction((PyObject*)m_scriptObj, "on_actor_enter", arg);
+		callPyObjFunc((PyObject*)m_scriptObj, "on_actor_enter", arg);
 		PyGILState_Release(py_state);
 	}
 
@@ -97,7 +98,7 @@ void GameScene::onActorLeave(GameActor* gameActor) {
 		}
 		PyTuple_SetItem(arg, 0, PyLong_FromLong(gameActor->getActorId()));
 		PyTuple_SetItem(arg, 1, actors);
-		callPyFunction((PyObject*)m_scriptObj, "on_actor_leave", arg);
+		callPyObjFunc((PyObject*)m_scriptObj, "on_actor_leave", arg);
 		PyGILState_Release(py_state);
 	}
 }
@@ -125,7 +126,7 @@ void GameScene::onActorMove(GameActor* gameActor) {
 	PyTuple_SetItem(arg, 0, PyLong_FromLong(gameActor->getActorId()));
 	PyTuple_SetItem(arg, 1, enterTuple);
 	PyTuple_SetItem(arg, 2, leaveTuple);
-	callPyFunction((PyObject*)m_scriptObj, "on_actor_move", arg);
+	callPyObjFunc((PyObject*)m_scriptObj, "on_actor_move", arg);
 	PyGILState_Release(py_state);
 }
 

@@ -37,9 +37,18 @@ public:
   /// Stop all connections.
   void stop_all();
 
+  connection_ptr get_connection(int conn_id);
+
 private:
   /// The managed connections.
   std::set<connection_ptr> connections_;
+  std::map<int, connection_ptr> mp_connections;
+
+  int max_conn_id;
+
+  inline int alloc_connection_id() {
+      return max_conn_id++;
+  }
 };
 
 } // namespace server

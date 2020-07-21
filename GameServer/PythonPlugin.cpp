@@ -6,6 +6,7 @@
 #include "py_module/PyModule.h"
 #include "PyTimer.h"
 #include "PyScene.h"
+#include "PyHttp.h"
 
 static PyObject* TestError = NULL;
 
@@ -56,15 +57,6 @@ PyMODINIT_FUNC PyInit_Test(void)
 	return module;
 }
 
-
-static char* PyStringToString(PyObject* obj) {
-	char* str;
-	Py_ssize_t len;
-	PyObject* bytes = PyUnicode_AsUTF8String(obj);
-	PyBytes_AsStringAndSize(bytes, &str, &len);
-	return str;
-}
-
 void initPython()
 {	
 	PyImport_AppendInittab("Test", PyInit_Test);  // python3
@@ -75,6 +67,7 @@ void initPython()
 	initTimerModule();
 	initGameModule();
 	initSceneModule();
+	initHttpModule();
 
 	Py_Initialize();
 	if (!PyEval_ThreadsInitialized()) {

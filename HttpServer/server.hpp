@@ -16,7 +16,6 @@
 #include "connection.hpp"
 #include "connection_manager.hpp"
 #include "request_handler.hpp"
-//#include "HttpServerExport.h"
 #include "../Common/ServerExports.h"
 
 namespace http {
@@ -32,12 +31,19 @@ public:
   /// Construct the server to listen on the specified TCP address and port, and
   /// serve up files from the given directory.
   explicit server(const std::string& address, const std::string& port,
-      const std::string& doc_root);
+      const std::string& doc_root, void* script_obj);
 
   /// Run the server's io_context loop.
   void run();
 
+  inline connection_manager* get_connection_mgr() { return &connection_manager_; }
+
+  ~server() {
+      printf("server destory!!!!!!!\n");
+  }
+
 private:
+    void* script_obj;
   /// Perform an asynchronous accept operation.
   void do_accept();
 

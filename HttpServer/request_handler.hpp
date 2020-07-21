@@ -12,6 +12,7 @@
 #define HTTP_REQUEST_HANDLER_HPP
 
 #include <string>
+#include "reply.hpp"
 
 namespace http {
 namespace server {
@@ -27,12 +28,13 @@ public:
   request_handler& operator=(const request_handler&) = delete;
 
   /// Construct with a directory containing files to be served.
-  explicit request_handler(const std::string& doc_root);
+  explicit request_handler(const std::string& doc_root, void* script_obj);
 
   /// Handle a request and produce a reply.
-  void handle_request(const request& req, reply& rep);
+  reply_ptr handle_request(int conn_id, const request& req);
 
 private:
+   void* script_obj;
   /// The directory containing the files to be served.
   std::string doc_root_;
 

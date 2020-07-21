@@ -42,7 +42,14 @@ public:
   /// Stop all asynchronous operations associated with the connection.
   void stop();
 
+  inline void set_conn_id(int conn_id) {
+      this->conn_id = conn_id;
+  }
+
+  void send_resp(reply_ptr reply);
+
 private:
+    int conn_id;
   /// Perform an asynchronous read operation.
   void do_read();
 
@@ -69,6 +76,8 @@ private:
 
   /// The reply to be sent back to the client.
   reply reply_;
+
+  reply_ptr reply_ptr_;
 };
 
 typedef std::shared_ptr<connection> connection_ptr;

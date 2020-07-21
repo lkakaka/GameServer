@@ -54,9 +54,15 @@ struct reply
   /// not be changed until the write operation has completed.
   std::vector<boost::asio::const_buffer> to_buffers();
 
+  ~reply() {
+      printf("reply destory---------------------\n");
+  }
+
   /// Get a stock reply.
-  static reply stock_reply(status_type status);
+  static std::shared_ptr<reply> stock_reply(status_type status);
 };
+
+typedef std::shared_ptr<reply> reply_ptr;
 
 } // namespace server
 } // namespace http

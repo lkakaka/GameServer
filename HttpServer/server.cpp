@@ -16,23 +16,24 @@ namespace http {
 namespace server {
 
 server::server(const std::string& address, const std::string& port,
-    const std::string& doc_root)
+    const std::string& doc_root, void* script_obj)
   : io_context_(1),
     signals_(io_context_),
     acceptor_(io_context_),
     connection_manager_(),
-    request_handler_(doc_root)
+    request_handler_(doc_root, script_obj),
+    script_obj(script_obj)
 {
   // Register to handle the signals that indicate when the server should exit.
   // It is safe to register for the same signal multiple times in a program,
   // provided all registration for the specified signal is made through Asio.
-  signals_.add(SIGINT);
-  signals_.add(SIGTERM);
-#if defined(SIGQUIT)
-  signals_.add(SIGQUIT);
-#endif // defined(SIGQUIT)
-
-  do_await_stop();
+//  signals_.add(SIGINT);
+//  signals_.add(SIGTERM);
+//#if defined(SIGQUIT)
+//  signals_.add(SIGQUIT);
+//#endif // defined(SIGQUIT)
+//
+//  do_await_stop();
 
   // Open the acceptor with the option to reuse the address (i.e. SO_REUSEADDR).
   boost::asio::ip::tcp::resolver resolver(io_context_);

@@ -1,6 +1,16 @@
 #include "PyCommon.h"
 #include "Logger.h"
 
+PyObject* callPyObjFunc(PyObject* scriptObj, const char* funcName, PyObject* args) {
+	auto func = PyObject_GetAttrString(scriptObj, funcName);
+	PyObject* result = PyObject_Call(func, args, NULL);
+	if (result == NULL) {
+		logPyException();
+		//PyErr_Print();
+	}
+	return result;
+}
+
 PyObject* callPyFunction(const char* module, const char* func, PyObject* arg)
 {
 	PyObject* pModule = NULL;//ÉùÃ÷±äÁ¿

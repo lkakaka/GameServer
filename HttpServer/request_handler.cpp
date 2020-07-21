@@ -15,31 +15,30 @@
 #include "mime_types.hpp"
 #include "reply.hpp"
 #include "request.hpp"
+#include "PyHttp.h"
 
 namespace http {
 namespace server {
 
-request_handler::request_handler(const std::string& doc_root)
-  : doc_root_(doc_root)
+request_handler::request_handler(const std::string& doc_root, void* script_obj)
+  : doc_root_(doc_root), script_obj(script_obj)
 {
 }
 
-void request_handler::handle_request(const request& req, reply& rep)
+reply_ptr request_handler::handle_request(int conn_id, const request& req)
 {
   // Decode url to path.
   std::string request_path;
   if (!url_decode(req.uri, request_path))
   {
-    rep = reply::stock_reply(reply::bad_request);
-    return;
+    return reply::stock_reply(reply::bad_request);
   }
 
   // Request path must be absolute and not contain "..".
   if (request_path.empty() || request_path[0] != '/'
       || request_path.find("..") != std::string::npos)
   {
-    rep = reply::stock_reply(reply::bad_request);
-    return;
+     return reply::stock_reply(reply::bad_request);
   }
 
   // If path ends in slash (i.e. is a directory) then add "index.html".
@@ -57,29 +56,37 @@ void request_handler::handle_request(const request& req, reply& rep)
     extension = request_path.substr(last_dot_pos + 1);
   }
 
-  // Open the file to send back.
-  std::string full_path = doc_root_ + request_path;
-  //std::ifstream is(full_path.c_str(), std::ios::in | std::ios::binary);
-  //if (!is)
-  //{
-  //  rep = reply::stock_reply(reply::not_found);
-  //  return;
-  //}
+ // // Open the file to send back.
+ // std::string full_path = doc_root_ + request_path;
+ // //std::ifstream is(full_path.c_str(), std::ios::in | std::ios::binary);
+ // //if (!is)
+ // //{
+ // //  rep = reply::stock_reply(reply::not_found);
+ // //  return;
+ // //}
 
-  // Fill out the reply to be sent to the client.
-  rep.status = reply::ok;
- /* char buf[512];
-  while (is.read(buf, sizeof(buf)).gcount() > 0)
-    rep.content.append(buf, is.gcount());*/
+ // // Fill out the reply to be sent to the client.
+ // rep.status = reply::ok;
+ ///* char buf[512];
+ // while (is.read(buf, sizeof(buf)).gcount() > 0)
+ //   rep.content.append(buf, is.gcount());*/
 
-  char* test = "{hello world}";
-  rep.content.append(test);
+ // char* test = "{hello world}";
+ // rep.content.append(test);
 
-  rep.headers.resize(2);
-  rep.headers[0].name = "Content-Length";
-  rep.headers[0].value = std::to_string(rep.content.size());
-  rep.headers[1].name = "Content-Type";
-  rep.headers[1].value = mime_types::extension_to_type(extension);
+ // rep.headers.resize(2);
+ // rep.headers[0].name = "Content-Length";
+ // rep.headers[0].value = std::to_string(rep.content.size());
+ // rep.headers[1].name = "Content-Type";
+ // rep.headers[1].value = mime_types::extension_to_type(extension);
+
+  //onRecvHttpReq(conn_id, req);
+  if (script_obj != NULL) {
+      return onRecvHttpReq(script_obj, conn_id, req);
+  }
+  else {
+      return reply::stock_reply(reply::unauthorized);
+  }
 }
 
 bool request_handler::url_decode(const std::string& in, std::string& out)

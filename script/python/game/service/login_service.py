@@ -1,9 +1,11 @@
+# -*- encoding:utf-8 -*-
 
 from game.service.service_base import ServiceBase
 from proto.pb_message import Message
 from game.util.const import ErrorCode
 from game.util import logger
 import game.util.cmd_util
+import Config
 
 
 class LoginService(ServiceBase):
@@ -15,7 +17,13 @@ class LoginService(ServiceBase):
         ServiceBase.on_service_start(self)
         ServiceBase.__init__(self, LoginService._s_cmd, LoginService._c_cmd)
         self._account_dict = {}
-        self._conn_dict = {}    # ÑéÖ¤³É¹¦µÄÁ¬½Ó
+        self._conn_dict = {}    # éªŒè¯æˆåŠŸçš„è¿æ¥
+
+        ip = Config.getConfigStr("http_server_ip")
+        port = Config.getConfigInt("http_server_port")
+        if ip:
+            import game.login.login_http_server
+            self._http_server = game.login.login_http_server.LoginHttpServer(self, ip, port)
 
     def on_service_start(self):
         logger.log_info("Login Service Start!!")
@@ -27,7 +35,7 @@ class LoginService(ServiceBase):
         #     rsp_msg.err_code = util.const.ErrorCode.ACCOUNT_IS_LOGINING
         #     self.send_msg_to_client(conn_id, MessageObj.MSG_ID_LOGIN_RSP, rsp_msg)
         #     return
-        # todo:ÑéÖ¤ÕËºÅ
+        # todo:éªŒè¯è´¦å·
         self._conn_dict[conn_id] = msg.account
         rsp_msg.err_code = game.util.const.ErrorCode.OK
         self.send_msg_to_client(conn_id, rsp_msg)
