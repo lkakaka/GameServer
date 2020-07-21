@@ -7,10 +7,9 @@
 static PyTypeObject PyHttpServer_Type;
 
 static PyObject* PyHttpServer_New(struct _typeobject* tobj, PyObject* args, PyObject* obj2) {
-	char* httpServerIp;
 	int httpServerPort;
 	PyObject* scriptObj;
-	if (!PyArg_ParseTuple(args, "siO", &httpServerIp, &httpServerPort, &scriptObj)) {
+	if (!PyArg_ParseTuple(args, "iO", &httpServerPort, &scriptObj)) {
 		//PyErr_SetString(ModuleError, "create scene obj failed");
 		Logger::logError("$create http server failed, arg error");
 		Py_RETURN_NONE;
@@ -18,7 +17,7 @@ static PyObject* PyHttpServer_New(struct _typeobject* tobj, PyObject* args, PyOb
 
 	char port[8]{0};
 	sprintf(port, "%d", httpServerPort);
-	http::server::server* serv = new http::server::server(httpServerIp, port, "", scriptObj);
+	http::server::server* serv = new http::server::server("0.0.0.0", port, "", scriptObj);
 	PyObject* obj = PyType_GenericNew(tobj, args, obj2);
 	((PyHttpServer*)obj)->http_server = serv;
 	
@@ -26,7 +25,7 @@ static PyObject* PyHttpServer_New(struct _typeobject* tobj, PyObject* args, PyOb
 	http_thread.reset(new std::thread([serv] { serv->run(); }));
 	((PyHttpServer*)obj)->http_thread = http_thread;
 	//new std::thread([&serv] { serv->run(); });
-	Logger::logInfo("$create http server, ip:%s, port:%d", httpServerIp, httpServerPort);
+	Logger::logInfo("$create http server, port:%d", httpServerPort);
 	return obj;
 }
 

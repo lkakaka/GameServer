@@ -19,11 +19,10 @@ class LoginService(ServiceBase):
         self._account_dict = {}
         self._conn_dict = {}    # 验证成功的连接
 
-        ip = Config.getConfigStr("http_server_ip")
         port = Config.getConfigInt("http_server_port")
-        if ip:
+        if port:
             import game.login.login_http_server
-            self._http_server = game.login.login_http_server.LoginHttpServer(self, ip, port)
+            self._http_server = game.login.login_http_server.LoginHttpServer(self, port)
 
     def on_service_start(self):
         logger.log_info("Login Service Start!!")

@@ -4,9 +4,9 @@ from http_util.http_resp import HttpResp
 
 class LoginHttpServer(HttpServer):
 
-    def __init__(self, service, ip, port):
+    def __init__(self, service, port):
         self._service = service
-        HttpServer.__init__(self, ip, port)
+        HttpServer.__init__(self, port)
 
     def on_recv_http_req(self, conn_id, req):
         print("on_recv_http_req----", conn_id, req.method, req.uri, req.headers)
