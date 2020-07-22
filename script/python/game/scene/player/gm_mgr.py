@@ -35,3 +35,9 @@ class GMMgr(object):
     @_gm_cmd.reg_cmd("dump_item")
     def _gm_add_item(self, args):
         return self.player._item_mgr.dump_items()
+
+    @_gm_cmd.reg_cmd("hotfix")
+    def _gm_hotfix(self, args):
+        import hotfix.hotfix
+        hotfix.hotfix.start_hotfix()
+        return "ok"

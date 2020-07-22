@@ -65,6 +65,8 @@ def create_tb(tb_name):
     # print("create tb --------", tb_name)
     return game.util.db_util.create_tbl_obj(tb_name)
 
+import hotfix.hotfix
+hotfix.hotfix.on_server_start()
 
 # def timer_cb():
 #     print("timer cb called")

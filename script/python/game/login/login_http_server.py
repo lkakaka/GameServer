@@ -1,3 +1,4 @@
+# -*- encoding:utf-8 -*-
 from http_util.http_server import HttpServer
 from http_util.http_resp import HttpResp
 
@@ -13,5 +14,10 @@ class LoginHttpServer(HttpServer):
         if req.uri == "/test":
             resp = HttpResp()
             resp.status = 200
-            resp.body = "nihao"
+            resp.body = """<html>
+                                <body>
+                                <h1 style="text-align:center;color:green">测试页面</h1>
+                                </body>
+                            </html>"""
+            resp.headers["Content-Type"] = "text/html;charset=UTF-8"
             return resp

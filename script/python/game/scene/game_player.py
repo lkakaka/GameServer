@@ -59,7 +59,7 @@ class GamePlayer:
         game.util.logger.log_info("exe gm cmd:{}, args:{}, result:\n{}", msg.cmd, msg.args, result)
         rsp_msg = Message.create_msg_by_id(Message.MSG_ID_GM_CMD_RSP)
         rsp_msg.cmd = msg.cmd
-        rsp_msg.msg = result
+        rsp_msg.msg = result if result is None else ""
         self.send_msg_to_client(rsp_msg)
 
     @_c_cmd.reg_cmd(Message.MSG_ID_TEST_REQ)

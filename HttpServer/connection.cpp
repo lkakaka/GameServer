@@ -32,7 +32,8 @@ void connection::start()
 
 void connection::stop()
 {
-  socket_.close();
+    printf("connection stop-----\n");
+    socket_.close();
 }
 
 void connection::do_read()
