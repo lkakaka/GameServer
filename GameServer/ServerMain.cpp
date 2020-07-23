@@ -18,6 +18,7 @@
 #include "GameService.h"
 #include "server.hpp"
 #include "Network.h"
+#include "CmdLine.h"
 
 using namespace std;
 std::string g_service_name = "";
@@ -137,6 +138,8 @@ int main(int argc, char** argv)
 //	}
 	
 	UnitTest::test();
+
+	startCmd();
 
 	Logger::logInfo("$MyServer Start!!!");
 

@@ -91,8 +91,7 @@ def start_hotfix():
 
 def for_each_file():
     import os
-    import game
-    list_dir = os.walk(game.__path__[0] + "/..")
+    list_dir = os.walk(os.path.dirname(__file__) + "/..")
     for (dir_path, _, files) in list_dir:
         if dir_path.find("google") > 0 or dir_path.find("__pycache__") > 0:
             continue
