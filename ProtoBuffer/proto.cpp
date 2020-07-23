@@ -7,6 +7,10 @@ std::shared_ptr<google::protobuf::Message> CreateMsgById(int msgId)
 {
 	switch (msgId)
 	{
+		case MSG_ID_ACTOR_BORN:
+		return std::shared_ptr<google::protobuf::Message>(new ActorBorn());
+		case MSG_ID_ACTOR_DISSOLVE:
+		return std::shared_ptr<google::protobuf::Message>(new ActorDissolve());
 		case MSG_ID_CLIENT_DISCONNECT:
 		return std::shared_ptr<google::protobuf::Message>(new ClientDisconnect());
 		case MSG_ID_CREATE_ROLE_REQ:
@@ -35,6 +39,8 @@ std::shared_ptr<google::protobuf::Message> CreateMsgById(int msgId)
 		return std::shared_ptr<google::protobuf::Message>(new LoginReq());
 		case MSG_ID_LOGIN_RSP:
 		return std::shared_ptr<google::protobuf::Message>(new LoginRsp());
+		case MSG_ID_MOVE_TO:
+		return std::shared_ptr<google::protobuf::Message>(new MoveTo());
 		case MSG_ID_RPC_MSG:
 		return std::shared_ptr<google::protobuf::Message>(new RpcMsg());
 		case MSG_ID_RPC_MSG_RSP:

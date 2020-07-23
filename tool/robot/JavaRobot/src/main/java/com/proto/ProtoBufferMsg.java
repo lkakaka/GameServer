@@ -3,25 +3,32 @@
 package com.proto;
 
 public class ProtoBufferMsg {
-	public static final int MSG_ID_CREATE_ROLE_REQ = 2;
-	public static final int MSG_ID_CREATE_ROLE_RSP = 3;
-	public static final int MSG_ID_DISCONNECT_REQ = 4;
-	public static final int MSG_ID_DISCONNECT_RSP = 5;
-	public static final int MSG_ID_ENTER_GAME = 6;
-	public static final int MSG_ID_ENTER_GAME_RSP = 7;
-	public static final int MSG_ID_ENTER_SCENE_REQ = 8;
-	public static final int MSG_ID_ENTER_SCENE_RSP = 9;
-	public static final int MSG_ID_GM_CMD = 10;
-	public static final int MSG_ID_GM_CMD_RSP = 11;
-	public static final int MSG_ID_LOAD_ROLE_LIST_RSP = 12;
-	public static final int MSG_ID_LOGIN_REQ = 13;
-	public static final int MSG_ID_LOGIN_RSP = 14;
-	public static final int MSG_ID_TEST_REQ = 17;
+	public static final int MSG_ID_ACTOR_BORN = 1;
+	public static final int MSG_ID_ACTOR_DISSOLVE = 2;
+	public static final int MSG_ID_CREATE_ROLE_REQ = 4;
+	public static final int MSG_ID_CREATE_ROLE_RSP = 5;
+	public static final int MSG_ID_DISCONNECT_REQ = 6;
+	public static final int MSG_ID_DISCONNECT_RSP = 7;
+	public static final int MSG_ID_ENTER_GAME = 8;
+	public static final int MSG_ID_ENTER_GAME_RSP = 9;
+	public static final int MSG_ID_ENTER_SCENE_REQ = 10;
+	public static final int MSG_ID_ENTER_SCENE_RSP = 11;
+	public static final int MSG_ID_GM_CMD = 12;
+	public static final int MSG_ID_GM_CMD_RSP = 13;
+	public static final int MSG_ID_LOAD_ROLE_LIST_RSP = 14;
+	public static final int MSG_ID_LOGIN_REQ = 15;
+	public static final int MSG_ID_LOGIN_RSP = 16;
+	public static final int MSG_ID_MOVE_TO = 17;
+	public static final int MSG_ID_TEST_REQ = 20;
 
 	public static Object createMsgById(int msgId, byte[] dat) {
 		try {
 			switch (msgId)
 			{
+				case MSG_ID_ACTOR_BORN:
+					return Scene.ActorBorn.parseFrom(dat);
+				case MSG_ID_ACTOR_DISSOLVE:
+					return Scene.ActorDissolve.parseFrom(dat);
 				case MSG_ID_CREATE_ROLE_REQ:
 					return Login.CreateRoleReq.parseFrom(dat);
 				case MSG_ID_CREATE_ROLE_RSP:
@@ -48,6 +55,8 @@ public class ProtoBufferMsg {
 					return Login.LoginReq.parseFrom(dat);
 				case MSG_ID_LOGIN_RSP:
 					return Login.LoginRsp.parseFrom(dat);
+				case MSG_ID_MOVE_TO:
+					return Role.MoveTo.parseFrom(dat);
 				case MSG_ID_TEST_REQ:
 					return Test.TestReq.parseFrom(dat);
 			}
@@ -59,6 +68,10 @@ public class ProtoBufferMsg {
 
 	public static Object createBuilderById(int msgId) {
 		switch (msgId) {
+			case MSG_ID_ACTOR_BORN:
+				return Scene.ActorBorn.newBuilder();
+			case MSG_ID_ACTOR_DISSOLVE:
+				return Scene.ActorDissolve.newBuilder();
 			case MSG_ID_CREATE_ROLE_REQ:
 				return Login.CreateRoleReq.newBuilder();
 			case MSG_ID_CREATE_ROLE_RSP:
@@ -85,10 +98,20 @@ public class ProtoBufferMsg {
 				return Login.LoginReq.newBuilder();
 			case MSG_ID_LOGIN_RSP:
 				return Login.LoginRsp.newBuilder();
+			case MSG_ID_MOVE_TO:
+				return Role.MoveTo.newBuilder();
 			case MSG_ID_TEST_REQ:
 				return Test.TestReq.newBuilder();
 		}
 		return null;
+	}
+	
+	public static Scene.ActorBorn.Builder createActorBornBuilder() {
+		return Scene.ActorBorn.newBuilder();
+	}
+	
+	public static Scene.ActorDissolve.Builder createActorDissolveBuilder() {
+		return Scene.ActorDissolve.newBuilder();
 	}
 	
 	public static Login.CreateRoleReq.Builder createCreateRoleReqBuilder() {
@@ -141,6 +164,10 @@ public class ProtoBufferMsg {
 	
 	public static Login.LoginRsp.Builder createLoginRspBuilder() {
 		return Login.LoginRsp.newBuilder();
+	}
+	
+	public static Role.MoveTo.Builder createMoveToBuilder() {
+		return Role.MoveTo.newBuilder();
 	}
 	
 	public static Test.TestReq.Builder createTestReqBuilder() {

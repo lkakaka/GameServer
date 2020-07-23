@@ -47,22 +47,38 @@ struct TableStruct_proto_2fscene_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[2]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[6]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
   static const ::PROTOBUF_NAMESPACE_ID::uint32 offsets[];
 };
 extern const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_proto_2fscene_2eproto;
+class ActorBorn;
+class ActorBornDefaultTypeInternal;
+extern ActorBornDefaultTypeInternal _ActorBorn_default_instance_;
+class ActorDissolve;
+class ActorDissolveDefaultTypeInternal;
+extern ActorDissolveDefaultTypeInternal _ActorDissolve_default_instance_;
 class EnterSceneReq;
 class EnterSceneReqDefaultTypeInternal;
 extern EnterSceneReqDefaultTypeInternal _EnterSceneReq_default_instance_;
 class EnterSceneRsp;
 class EnterSceneRspDefaultTypeInternal;
 extern EnterSceneRspDefaultTypeInternal _EnterSceneRsp_default_instance_;
+class _NpcInfo;
+class _NpcInfoDefaultTypeInternal;
+extern _NpcInfoDefaultTypeInternal __NpcInfo_default_instance_;
+class _PlayerInfo;
+class _PlayerInfoDefaultTypeInternal;
+extern _PlayerInfoDefaultTypeInternal __PlayerInfo_default_instance_;
 PROTOBUF_NAMESPACE_OPEN
+template<> ::ActorBorn* Arena::CreateMaybeMessage<::ActorBorn>(Arena*);
+template<> ::ActorDissolve* Arena::CreateMaybeMessage<::ActorDissolve>(Arena*);
 template<> ::EnterSceneReq* Arena::CreateMaybeMessage<::EnterSceneReq>(Arena*);
 template<> ::EnterSceneRsp* Arena::CreateMaybeMessage<::EnterSceneRsp>(Arena*);
+template<> ::_NpcInfo* Arena::CreateMaybeMessage<::_NpcInfo>(Arena*);
+template<> ::_PlayerInfo* Arena::CreateMaybeMessage<::_PlayerInfo>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 
 // ===================================================================
@@ -348,6 +364,576 @@ class EnterSceneRsp :
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_proto_2fscene_2eproto;
 };
+// -------------------------------------------------------------------
+
+class _PlayerInfo :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:_PlayerInfo) */ {
+ public:
+  _PlayerInfo();
+  virtual ~_PlayerInfo();
+
+  _PlayerInfo(const _PlayerInfo& from);
+  _PlayerInfo(_PlayerInfo&& from) noexcept
+    : _PlayerInfo() {
+    *this = ::std::move(from);
+  }
+
+  inline _PlayerInfo& operator=(const _PlayerInfo& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline _PlayerInfo& operator=(_PlayerInfo&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const _PlayerInfo& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const _PlayerInfo* internal_default_instance() {
+    return reinterpret_cast<const _PlayerInfo*>(
+               &__PlayerInfo_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    2;
+
+  friend void swap(_PlayerInfo& a, _PlayerInfo& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(_PlayerInfo* other) {
+    if (other == this) return;
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline _PlayerInfo* New() const final {
+    return CreateMaybeMessage<_PlayerInfo>(nullptr);
+  }
+
+  _PlayerInfo* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<_PlayerInfo>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const _PlayerInfo& from);
+  void MergeFrom(const _PlayerInfo& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  #else
+  bool MergePartialFromCodedStream(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* InternalSerializeWithCachedSizesToArray(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(_PlayerInfo* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "_PlayerInfo";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_proto_2fscene_2eproto);
+    return ::descriptor_table_proto_2fscene_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kNameFieldNumber = 2,
+    kActorIdFieldNumber = 1,
+  };
+  // string name = 2;
+  void clear_name();
+  const std::string& name() const;
+  void set_name(const std::string& value);
+  void set_name(std::string&& value);
+  void set_name(const char* value);
+  void set_name(const char* value, size_t size);
+  std::string* mutable_name();
+  std::string* release_name();
+  void set_allocated_name(std::string* name);
+
+  // int32 actor_id = 1;
+  void clear_actor_id();
+  ::PROTOBUF_NAMESPACE_ID::int32 actor_id() const;
+  void set_actor_id(::PROTOBUF_NAMESPACE_ID::int32 value);
+
+  // @@protoc_insertion_point(class_scope:_PlayerInfo)
+ private:
+  class _Internal;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr name_;
+  ::PROTOBUF_NAMESPACE_ID::int32 actor_id_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_proto_2fscene_2eproto;
+};
+// -------------------------------------------------------------------
+
+class _NpcInfo :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:_NpcInfo) */ {
+ public:
+  _NpcInfo();
+  virtual ~_NpcInfo();
+
+  _NpcInfo(const _NpcInfo& from);
+  _NpcInfo(_NpcInfo&& from) noexcept
+    : _NpcInfo() {
+    *this = ::std::move(from);
+  }
+
+  inline _NpcInfo& operator=(const _NpcInfo& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline _NpcInfo& operator=(_NpcInfo&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const _NpcInfo& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const _NpcInfo* internal_default_instance() {
+    return reinterpret_cast<const _NpcInfo*>(
+               &__NpcInfo_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    3;
+
+  friend void swap(_NpcInfo& a, _NpcInfo& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(_NpcInfo* other) {
+    if (other == this) return;
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline _NpcInfo* New() const final {
+    return CreateMaybeMessage<_NpcInfo>(nullptr);
+  }
+
+  _NpcInfo* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<_NpcInfo>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const _NpcInfo& from);
+  void MergeFrom(const _NpcInfo& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  #else
+  bool MergePartialFromCodedStream(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* InternalSerializeWithCachedSizesToArray(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(_NpcInfo* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "_NpcInfo";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_proto_2fscene_2eproto);
+    return ::descriptor_table_proto_2fscene_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kActorIdFieldNumber = 1,
+    kNpcIdFieldNumber = 2,
+  };
+  // int32 actor_id = 1;
+  void clear_actor_id();
+  ::PROTOBUF_NAMESPACE_ID::int32 actor_id() const;
+  void set_actor_id(::PROTOBUF_NAMESPACE_ID::int32 value);
+
+  // int32 npc_id = 2;
+  void clear_npc_id();
+  ::PROTOBUF_NAMESPACE_ID::int32 npc_id() const;
+  void set_npc_id(::PROTOBUF_NAMESPACE_ID::int32 value);
+
+  // @@protoc_insertion_point(class_scope:_NpcInfo)
+ private:
+  class _Internal;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::int32 actor_id_;
+  ::PROTOBUF_NAMESPACE_ID::int32 npc_id_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_proto_2fscene_2eproto;
+};
+// -------------------------------------------------------------------
+
+class ActorBorn :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:ActorBorn) */ {
+ public:
+  ActorBorn();
+  virtual ~ActorBorn();
+
+  ActorBorn(const ActorBorn& from);
+  ActorBorn(ActorBorn&& from) noexcept
+    : ActorBorn() {
+    *this = ::std::move(from);
+  }
+
+  inline ActorBorn& operator=(const ActorBorn& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ActorBorn& operator=(ActorBorn&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const ActorBorn& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const ActorBorn* internal_default_instance() {
+    return reinterpret_cast<const ActorBorn*>(
+               &_ActorBorn_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    4;
+
+  friend void swap(ActorBorn& a, ActorBorn& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(ActorBorn* other) {
+    if (other == this) return;
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline ActorBorn* New() const final {
+    return CreateMaybeMessage<ActorBorn>(nullptr);
+  }
+
+  ActorBorn* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<ActorBorn>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const ActorBorn& from);
+  void MergeFrom(const ActorBorn& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  #else
+  bool MergePartialFromCodedStream(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* InternalSerializeWithCachedSizesToArray(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(ActorBorn* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "ActorBorn";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_proto_2fscene_2eproto);
+    return ::descriptor_table_proto_2fscene_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kPlayerListFieldNumber = 1,
+    kNpcListFieldNumber = 2,
+  };
+  // repeated ._PlayerInfo player_list = 1;
+  int player_list_size() const;
+  void clear_player_list();
+  ::_PlayerInfo* mutable_player_list(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::_PlayerInfo >*
+      mutable_player_list();
+  const ::_PlayerInfo& player_list(int index) const;
+  ::_PlayerInfo* add_player_list();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::_PlayerInfo >&
+      player_list() const;
+
+  // repeated ._NpcInfo npc_list = 2;
+  int npc_list_size() const;
+  void clear_npc_list();
+  ::_NpcInfo* mutable_npc_list(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::_NpcInfo >*
+      mutable_npc_list();
+  const ::_NpcInfo& npc_list(int index) const;
+  ::_NpcInfo* add_npc_list();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::_NpcInfo >&
+      npc_list() const;
+
+  // @@protoc_insertion_point(class_scope:ActorBorn)
+ private:
+  class _Internal;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::_PlayerInfo > player_list_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::_NpcInfo > npc_list_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_proto_2fscene_2eproto;
+};
+// -------------------------------------------------------------------
+
+class ActorDissolve :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:ActorDissolve) */ {
+ public:
+  ActorDissolve();
+  virtual ~ActorDissolve();
+
+  ActorDissolve(const ActorDissolve& from);
+  ActorDissolve(ActorDissolve&& from) noexcept
+    : ActorDissolve() {
+    *this = ::std::move(from);
+  }
+
+  inline ActorDissolve& operator=(const ActorDissolve& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ActorDissolve& operator=(ActorDissolve&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const ActorDissolve& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const ActorDissolve* internal_default_instance() {
+    return reinterpret_cast<const ActorDissolve*>(
+               &_ActorDissolve_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    5;
+
+  friend void swap(ActorDissolve& a, ActorDissolve& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(ActorDissolve* other) {
+    if (other == this) return;
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline ActorDissolve* New() const final {
+    return CreateMaybeMessage<ActorDissolve>(nullptr);
+  }
+
+  ActorDissolve* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<ActorDissolve>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const ActorDissolve& from);
+  void MergeFrom(const ActorDissolve& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  #else
+  bool MergePartialFromCodedStream(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* InternalSerializeWithCachedSizesToArray(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(ActorDissolve* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "ActorDissolve";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_proto_2fscene_2eproto);
+    return ::descriptor_table_proto_2fscene_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kActorIdsFieldNumber = 1,
+  };
+  // repeated int32 actor_ids = 1;
+  int actor_ids_size() const;
+  void clear_actor_ids();
+  ::PROTOBUF_NAMESPACE_ID::int32 actor_ids(int index) const;
+  void set_actor_ids(int index, ::PROTOBUF_NAMESPACE_ID::int32 value);
+  void add_actor_ids(::PROTOBUF_NAMESPACE_ID::int32 value);
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< ::PROTOBUF_NAMESPACE_ID::int32 >&
+      actor_ids() const;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedField< ::PROTOBUF_NAMESPACE_ID::int32 >*
+      mutable_actor_ids();
+
+  // @@protoc_insertion_point(class_scope:ActorDissolve)
+ private:
+  class _Internal;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedField< ::PROTOBUF_NAMESPACE_ID::int32 > actor_ids_;
+  mutable std::atomic<int> _actor_ids_cached_byte_size_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_proto_2fscene_2eproto;
+};
 // ===================================================================
 
 
@@ -433,9 +1019,216 @@ inline void EnterSceneRsp::set_err_code(::PROTOBUF_NAMESPACE_ID::int32 value) {
   // @@protoc_insertion_point(field_set:EnterSceneRsp.err_code)
 }
 
+// -------------------------------------------------------------------
+
+// _PlayerInfo
+
+// int32 actor_id = 1;
+inline void _PlayerInfo::clear_actor_id() {
+  actor_id_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 _PlayerInfo::actor_id() const {
+  // @@protoc_insertion_point(field_get:_PlayerInfo.actor_id)
+  return actor_id_;
+}
+inline void _PlayerInfo::set_actor_id(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  actor_id_ = value;
+  // @@protoc_insertion_point(field_set:_PlayerInfo.actor_id)
+}
+
+// string name = 2;
+inline void _PlayerInfo::clear_name() {
+  name_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline const std::string& _PlayerInfo::name() const {
+  // @@protoc_insertion_point(field_get:_PlayerInfo.name)
+  return name_.GetNoArena();
+}
+inline void _PlayerInfo::set_name(const std::string& value) {
+  
+  name_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:_PlayerInfo.name)
+}
+inline void _PlayerInfo::set_name(std::string&& value) {
+  
+  name_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:_PlayerInfo.name)
+}
+inline void _PlayerInfo::set_name(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  
+  name_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:_PlayerInfo.name)
+}
+inline void _PlayerInfo::set_name(const char* value, size_t size) {
+  
+  name_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:_PlayerInfo.name)
+}
+inline std::string* _PlayerInfo::mutable_name() {
+  
+  // @@protoc_insertion_point(field_mutable:_PlayerInfo.name)
+  return name_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* _PlayerInfo::release_name() {
+  // @@protoc_insertion_point(field_release:_PlayerInfo.name)
+  
+  return name_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void _PlayerInfo::set_allocated_name(std::string* name) {
+  if (name != nullptr) {
+    
+  } else {
+    
+  }
+  name_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), name);
+  // @@protoc_insertion_point(field_set_allocated:_PlayerInfo.name)
+}
+
+// -------------------------------------------------------------------
+
+// _NpcInfo
+
+// int32 actor_id = 1;
+inline void _NpcInfo::clear_actor_id() {
+  actor_id_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 _NpcInfo::actor_id() const {
+  // @@protoc_insertion_point(field_get:_NpcInfo.actor_id)
+  return actor_id_;
+}
+inline void _NpcInfo::set_actor_id(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  actor_id_ = value;
+  // @@protoc_insertion_point(field_set:_NpcInfo.actor_id)
+}
+
+// int32 npc_id = 2;
+inline void _NpcInfo::clear_npc_id() {
+  npc_id_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 _NpcInfo::npc_id() const {
+  // @@protoc_insertion_point(field_get:_NpcInfo.npc_id)
+  return npc_id_;
+}
+inline void _NpcInfo::set_npc_id(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  npc_id_ = value;
+  // @@protoc_insertion_point(field_set:_NpcInfo.npc_id)
+}
+
+// -------------------------------------------------------------------
+
+// ActorBorn
+
+// repeated ._PlayerInfo player_list = 1;
+inline int ActorBorn::player_list_size() const {
+  return player_list_.size();
+}
+inline void ActorBorn::clear_player_list() {
+  player_list_.Clear();
+}
+inline ::_PlayerInfo* ActorBorn::mutable_player_list(int index) {
+  // @@protoc_insertion_point(field_mutable:ActorBorn.player_list)
+  return player_list_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::_PlayerInfo >*
+ActorBorn::mutable_player_list() {
+  // @@protoc_insertion_point(field_mutable_list:ActorBorn.player_list)
+  return &player_list_;
+}
+inline const ::_PlayerInfo& ActorBorn::player_list(int index) const {
+  // @@protoc_insertion_point(field_get:ActorBorn.player_list)
+  return player_list_.Get(index);
+}
+inline ::_PlayerInfo* ActorBorn::add_player_list() {
+  // @@protoc_insertion_point(field_add:ActorBorn.player_list)
+  return player_list_.Add();
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::_PlayerInfo >&
+ActorBorn::player_list() const {
+  // @@protoc_insertion_point(field_list:ActorBorn.player_list)
+  return player_list_;
+}
+
+// repeated ._NpcInfo npc_list = 2;
+inline int ActorBorn::npc_list_size() const {
+  return npc_list_.size();
+}
+inline void ActorBorn::clear_npc_list() {
+  npc_list_.Clear();
+}
+inline ::_NpcInfo* ActorBorn::mutable_npc_list(int index) {
+  // @@protoc_insertion_point(field_mutable:ActorBorn.npc_list)
+  return npc_list_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::_NpcInfo >*
+ActorBorn::mutable_npc_list() {
+  // @@protoc_insertion_point(field_mutable_list:ActorBorn.npc_list)
+  return &npc_list_;
+}
+inline const ::_NpcInfo& ActorBorn::npc_list(int index) const {
+  // @@protoc_insertion_point(field_get:ActorBorn.npc_list)
+  return npc_list_.Get(index);
+}
+inline ::_NpcInfo* ActorBorn::add_npc_list() {
+  // @@protoc_insertion_point(field_add:ActorBorn.npc_list)
+  return npc_list_.Add();
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::_NpcInfo >&
+ActorBorn::npc_list() const {
+  // @@protoc_insertion_point(field_list:ActorBorn.npc_list)
+  return npc_list_;
+}
+
+// -------------------------------------------------------------------
+
+// ActorDissolve
+
+// repeated int32 actor_ids = 1;
+inline int ActorDissolve::actor_ids_size() const {
+  return actor_ids_.size();
+}
+inline void ActorDissolve::clear_actor_ids() {
+  actor_ids_.Clear();
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 ActorDissolve::actor_ids(int index) const {
+  // @@protoc_insertion_point(field_get:ActorDissolve.actor_ids)
+  return actor_ids_.Get(index);
+}
+inline void ActorDissolve::set_actor_ids(int index, ::PROTOBUF_NAMESPACE_ID::int32 value) {
+  actor_ids_.Set(index, value);
+  // @@protoc_insertion_point(field_set:ActorDissolve.actor_ids)
+}
+inline void ActorDissolve::add_actor_ids(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  actor_ids_.Add(value);
+  // @@protoc_insertion_point(field_add:ActorDissolve.actor_ids)
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< ::PROTOBUF_NAMESPACE_ID::int32 >&
+ActorDissolve::actor_ids() const {
+  // @@protoc_insertion_point(field_list:ActorDissolve.actor_ids)
+  return actor_ids_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< ::PROTOBUF_NAMESPACE_ID::int32 >*
+ActorDissolve::mutable_actor_ids() {
+  // @@protoc_insertion_point(field_mutable_list:ActorDissolve.actor_ids)
+  return &actor_ids_;
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 

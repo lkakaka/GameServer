@@ -15,3 +15,7 @@ message GmCmdRsp {
 	string msg = 2;
 }
 
+message MoveTo {
+	int32 pos_x = 1;
+	int32 pos_y = 2;
+}

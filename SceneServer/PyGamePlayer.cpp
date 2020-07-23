@@ -49,7 +49,7 @@ static void PyPlayer_Free(void* ptr) {
 
 
 static PyMethodDef tp_methods[] = {
-	//{"getSceneById", getSceneById, METH_VARARGS, ""},
+	//{"sendMsgToClient", sendMsgToClient, METH_VARARGS, ""},
 	{NULL, NULL}           /* sentinel */
 };
 

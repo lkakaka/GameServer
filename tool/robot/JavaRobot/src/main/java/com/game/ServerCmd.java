@@ -2,10 +2,7 @@ package com.game;
 
 import com.command.CmdAnnotation;
 import com.command.CmdDispatch;
-import com.proto.Login;
-import com.proto.ProtoBufferMsg;
-import com.proto.Role;
-import com.proto.Test;
+import com.proto.*;
 import com.util.Util;
 
 public class ServerCmd extends CmdDispatch {
@@ -70,6 +67,24 @@ public class ServerCmd extends CmdDispatch {
         Login.EnterGameRsp rsp = (Login.EnterGameRsp) param;
         int errCode = rsp.getErrCode();
         Util.logInfo("recv enter game rsp, err_code:%s", errCode);
+    }
+
+    @CmdAnnotation(serverCmd = ProtoBufferMsg.MSG_ID_ACTOR_BORN)
+    private void onRecvActorBorn(Object param) {
+        Scene.ActorBorn rsp = (Scene.ActorBorn) param;
+        for (Scene._NpcInfo npcInfo : rsp.getNpcListList()) {
+            Util.logInfo("[%s] npc born: actor_id:%d, npc_id:%d", m_robot.getAccount(), npcInfo.getActorId(), npcInfo.getNpcId());
+        }
+
+        for (Scene._PlayerInfo playerInfo : rsp.getPlayerListList()) {
+            Util.logInfo("[%s] player born: actor_id:%d, name:%s", m_robot.getAccount(), playerInfo.getActorId(), playerInfo.getName());
+        }
+    }
+
+    @CmdAnnotation(serverCmd = ProtoBufferMsg.MSG_ID_ACTOR_DISSOLVE)
+    private void onRecvActorDissolve(Object param) {
+        Scene.ActorDissolve rsp = (Scene.ActorDissolve) param;
+        Util.logInfo("actor dissolve: actor_ids:%s", rsp.getActorIdsList());
     }
 
     @CmdAnnotation(serverCmd = ProtoBufferMsg.MSG_ID_GM_CMD_RSP)

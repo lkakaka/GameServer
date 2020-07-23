@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=_b('\n\tcom.protoB\004Role'),
-  serialized_pb=_b('\n\x10proto/role.proto\"\"\n\x05GmCmd\x12\x0b\n\x03\x63md\x18\x01 \x01(\t\x12\x0c\n\x04\x61rgs\x18\x02 \x01(\t\"$\n\x08GmCmdRsp\x12\x0b\n\x03\x63md\x18\x01 \x01(\t\x12\x0b\n\x03msg\x18\x02 \x01(\tB\x11\n\tcom.protoB\x04Roleb\x06proto3')
+  serialized_pb=_b('\n\x10proto/role.proto\"\"\n\x05GmCmd\x12\x0b\n\x03\x63md\x18\x01 \x01(\t\x12\x0c\n\x04\x61rgs\x18\x02 \x01(\t\"$\n\x08GmCmdRsp\x12\x0b\n\x03\x63md\x18\x01 \x01(\t\x12\x0b\n\x03msg\x18\x02 \x01(\t\"&\n\x06MoveTo\x12\r\n\x05pos_x\x18\x01 \x01(\x05\x12\r\n\x05pos_y\x18\x02 \x01(\x05\x42\x11\n\tcom.protoB\x04Roleb\x06proto3')
 )
 
 
@@ -101,8 +101,47 @@ _GMCMDRSP = _descriptor.Descriptor(
   serialized_end=92,
 )
 
+
+_MOVETO = _descriptor.Descriptor(
+  name='MoveTo',
+  full_name='MoveTo',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='pos_x', full_name='MoveTo.pos_x', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='pos_y', full_name='MoveTo.pos_y', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=94,
+  serialized_end=132,
+)
+
 DESCRIPTOR.message_types_by_name['GmCmd'] = _GMCMD
 DESCRIPTOR.message_types_by_name['GmCmdRsp'] = _GMCMDRSP
+DESCRIPTOR.message_types_by_name['MoveTo'] = _MOVETO
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 GmCmd = _reflection.GeneratedProtocolMessageType('GmCmd', (_message.Message,), {
@@ -118,6 +157,13 @@ GmCmdRsp = _reflection.GeneratedProtocolMessageType('GmCmdRsp', (_message.Messag
   # @@protoc_insertion_point(class_scope:GmCmdRsp)
   })
 _sym_db.RegisterMessage(GmCmdRsp)
+
+MoveTo = _reflection.GeneratedProtocolMessageType('MoveTo', (_message.Message,), {
+  'DESCRIPTOR' : _MOVETO,
+  '__module__' : 'proto.role_pb2'
+  # @@protoc_insertion_point(class_scope:MoveTo)
+  })
+_sym_db.RegisterMessage(MoveTo)
 
 
 DESCRIPTOR._options = None

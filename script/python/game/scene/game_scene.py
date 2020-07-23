@@ -13,6 +13,7 @@ class GameScene:
         self.service = service
         self.scene_id = scene_id
         self.scene_obj = Scene.SceneObj(scene_id, self)
+        self._actors = {}
         self.player_dict = {}
         self.player_conn_dict = {}
         # print("scene obj =", self.scene_obj, self.scene_obj.scene_uid)
@@ -65,8 +66,7 @@ class GameScene:
                 sorted_tbls[tb_name].append(tbl_obj)
 
         game_player = self.create_player(conn_id, role_id, sorted_tbls)
-        self.player_dict[role_id] = game_player
-        self.player_conn_dict[conn_id] = weakref.ref(game_player)
+        self.add_player(game_player)
         self.on_player_enter(game_player)
 
     def on_player_enter(self, game_player):
@@ -80,6 +80,11 @@ class GameScene:
         game_player.init_player_data(sorted_tbls)
         return game_player
 
+    def add_player(self, game_player):
+        self.player_dict[game_player.role_id] = game_player
+        self.player_conn_dict[game_player.conn_id] = weakref.ref(game_player)
+        self._actors[game_player.actor_id] = weakref.ref(game_player)
+
     def remove_player(self, role_id, reason):
         player = self.get_player_by_role_id(role_id)
         if player is None:
@@ -88,6 +93,7 @@ class GameScene:
         self.scene_obj.removeActor(player.actor_id)
         self.player_dict.pop(role_id, None)
         self.player_conn_dict.pop(player.conn_id, None)
+        self._actors.pop(player.actor_id, None)
         self.service.on_remove_player(player.conn_id)
 
         logger.log_info("remove player, reason:{}", reason)
@@ -111,6 +117,12 @@ class GameScene:
     def get_player_by_role_id(self, role_id):
         return self.player_dict.get(role_id)
 
+    def get_actor(self, actor_id):
+        weak_actor = self._actors.get(actor_id, None)
+        if weak_actor is None:
+            return None
+        return weak_actor()
+
     def on_recv_client_msg(self, conn_id, msg_id, msg_data):
         player = self.get_player_by_conn_id(conn_id)
         if player is None:
@@ -119,12 +131,51 @@ class GameScene:
 
         player.on_recv_client_msg(msg_id, msg_data)
 
-    def on_actor_enter(self, actor_id, enter_ids):
-        print("on_actor_enter", actor_id, enter_ids)
+    def _on_enter_sight(self, actor, enter_ids):
+        msg = Message.create_msg_by_id(Message.MSG_ID_ACTOR_BORN) if actor.is_player() else None
+        for actor_id in enter_ids:
+            enter_actor = self.get_actor(actor_id)
+            if enter_actor is None:
+                continue
+            if msg is not None:
+                enter_actor.pack_born_info(msg)
+            enter_actor.on_actor_enter_sight(actor)
 
-    def on_actor_leave(self, actor_id, leave_ids):
-        print("on_actor_leave", actor_id, leave_ids)
+        if msg is not None:
+            actor.send_msg_to_client(msg)
 
-    def on_actor_move(self, actor_id, enter_ids, leave_ids):
-        print("on_actor_move", actor_id, enter_ids, leave_ids)
+    def _on_leave_sight(self, actor, leave_ids, is_actor_leave):
+        msg = None
+        if not is_actor_leave and actor.is_player():
+            msg = Message.create_msg_by_id(Message.MSG_ID_ACTOR_BORN)
+        for actor_id in leave_ids:
+            leave_actor = self.get_actor(actor_id)
+            if leave_actor is None:
+                continue
+            if msg is not None:
+                msg.actor_ids.add(leave_actor.actor_id)
+            leave_actor.on_actor_leave_sight(actor)
+
+        if msg is not None:
+            actor.send_msg_to_client(msg)
+
+    def after_actor_enter(self, actor_id, enter_ids):
+        actor = self.get_actor(actor_id)
+        if actor is None:
+            return
+        self._on_enter_sight(actor, enter_ids)
+
+    def after_actor_leave(self, actor_id, leave_ids):
+        actor = self.get_actor(actor_id)
+        if actor is None:
+            return
+        self._on_leave_sight(actor, leave_ids, True)
+
+    def after_actor_move(self, actor_id, enter_ids, leave_ids):
+        actor = self.get_actor(actor_id)
+        if actor is None:
+            return
+        self._on_enter_sight(actor, enter_ids)
+        self._on_leave_sight(actor, leave_ids, False)
+
 

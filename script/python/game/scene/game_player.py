@@ -10,14 +10,17 @@ import game.db.tbl.tbl_item
 import game.scene.player.item_mgr
 import game.scene.player.gm_mgr
 
+import game.scene.game_actor
 
-class GamePlayer:
+
+class GamePlayer(game.scene.game_actor.GameActor):
 
     _c_cmd = game.util.cmd_util.CmdDispatch("c_player")
 
     def __init__(self, e_player, game_scene, conn_id, role_id):
+        game.scene.game_actor.GameActor.__init__(self, e_player[1])
         self.native_obj = Scene.Player(e_player, self)
-        self.actor_id = e_player[1]
+        # self.actor_id = e_player[1]
         self.game_scene = game_scene
         self.conn_id = conn_id
         self.role_id = role_id
@@ -33,6 +36,9 @@ class GamePlayer:
 
         self._item_mgr.on_load_item(tables.get("item"))
 
+    def is_player(self):
+        return True
+
     def on_recv_client_msg(self, msg_id, msg_data):
         msg = Message.create_msg_by_id(msg_id)
         msg.ParseFromString(msg_data)
@@ -47,6 +53,24 @@ class GamePlayer:
 
     def send_msg_to_service(self, dst_srv, msg):
         self.game_scene.service.send_msg_to_service(dst_srv, msg)
+
+    def pack_born_info(self, msg):
+        player_info = msg.player_list.add()
+        player_info.actor_id = self.actor_id
+        player_info.name = self.name
+
+    def on_actor_enter_sight(self, actor):
+        if not self.check_can_see(actor):
+            return
+        msg = Message.create_msg_by_id(Message.MSG_ID_ACTOR_BORN)
+        actor.pack_born_info(msg)
+        self.send_msg_to_client(msg)
+
+    def on_actor_leave_sight(self, actor):
+        msg = Message.create_msg_by_id(Message.MSG_ID_ACTOR_DISSOLVE)
+        msg.actor_ids.append(actor.actor_id)
+        self.send_msg_to_client(msg)
+        print("on_actor_leave_sight")
 
     @_c_cmd.reg_cmd(Message.MSG_ID_DISCONNECT_REQ)
     def _on_recv_disconnect(self, msg_id, msg):

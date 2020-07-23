@@ -87,6 +87,23 @@ public class CommandCmd extends CmdDispatch {
         System.out.println("gmCmd successful, account:" + robot.getAccount());
     }
 
+    @CmdAnnotation(inputCmd = "move")
+    private void move() {
+        if (params == null || params.length < 3) {
+            System.out.println("move error, params: " + params);
+            return;
+        }
+
+        String account = params[0];
+        int x = Integer.parseInt(params[1]);
+        int y = Integer.parseInt(params[2]);
+        Role.MoveTo.Builder builder = Role.MoveTo.newBuilder();
+        builder.setPosX(x).setPosY(y);
+        GameRobot robot = RobotMgr.getInstance().getRobot(account);
+        robot.sendProto(ProtoBufferMsg.MSG_ID_MOVE_TO, builder.build());
+        System.out.println("move successful, account:" + account);
+    }
+
     @CmdAnnotation(inputCmd = "test")
     private void test() {
         Test.TestReq.Builder builder = Test.TestReq.newBuilder();

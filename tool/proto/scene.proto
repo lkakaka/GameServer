@@ -13,3 +13,22 @@ message EnterSceneRsp {
 	int32 scene_id = 2;
 	int32 err_code = 3;
 }
+
+message _PlayerInfo {
+	int32 actor_id = 1;
+	string name = 2; 
+}
+
+message _NpcInfo {
+	int32 actor_id = 1;
+	int32 npc_id = 2;
+}
+
+message ActorBorn {
+	repeated _PlayerInfo player_list = 1;
+	repeated _NpcInfo npc_list = 2;
+}
+
+message ActorDissolve {
+	repeated int32 actor_ids = 1;
+}

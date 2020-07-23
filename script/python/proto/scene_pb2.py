@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=_b('\n\tcom.protoB\005Scene'),
-  serialized_pb=_b('\n\x11proto/scene.proto\"2\n\rEnterSceneReq\x12\x0f\n\x07role_id\x18\x01 \x01(\x05\x12\x10\n\x08scene_id\x18\x02 \x01(\x05\"D\n\rEnterSceneRsp\x12\x0f\n\x07role_id\x18\x01 \x01(\x05\x12\x10\n\x08scene_id\x18\x02 \x01(\x05\x12\x10\n\x08\x65rr_code\x18\x03 \x01(\x05\x42\x12\n\tcom.protoB\x05Sceneb\x06proto3')
+  serialized_pb=_b('\n\x11proto/scene.proto\"2\n\rEnterSceneReq\x12\x0f\n\x07role_id\x18\x01 \x01(\x05\x12\x10\n\x08scene_id\x18\x02 \x01(\x05\"D\n\rEnterSceneRsp\x12\x0f\n\x07role_id\x18\x01 \x01(\x05\x12\x10\n\x08scene_id\x18\x02 \x01(\x05\x12\x10\n\x08\x65rr_code\x18\x03 \x01(\x05\"-\n\x0b_PlayerInfo\x12\x10\n\x08\x61\x63tor_id\x18\x01 \x01(\x05\x12\x0c\n\x04name\x18\x02 \x01(\t\",\n\x08_NpcInfo\x12\x10\n\x08\x61\x63tor_id\x18\x01 \x01(\x05\x12\x0e\n\x06npc_id\x18\x02 \x01(\x05\"K\n\tActorBorn\x12!\n\x0bplayer_list\x18\x01 \x03(\x0b\x32\x0c._PlayerInfo\x12\x1b\n\x08npc_list\x18\x02 \x03(\x0b\x32\t._NpcInfo\"\"\n\rActorDissolve\x12\x11\n\tactor_ids\x18\x01 \x03(\x05\x42\x12\n\tcom.protoB\x05Sceneb\x06proto3')
 )
 
 
@@ -108,8 +108,159 @@ _ENTERSCENERSP = _descriptor.Descriptor(
   serialized_end=141,
 )
 
+
+__PLAYERINFO = _descriptor.Descriptor(
+  name='_PlayerInfo',
+  full_name='_PlayerInfo',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='actor_id', full_name='_PlayerInfo.actor_id', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='name', full_name='_PlayerInfo.name', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=143,
+  serialized_end=188,
+)
+
+
+__NPCINFO = _descriptor.Descriptor(
+  name='_NpcInfo',
+  full_name='_NpcInfo',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='actor_id', full_name='_NpcInfo.actor_id', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='npc_id', full_name='_NpcInfo.npc_id', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=190,
+  serialized_end=234,
+)
+
+
+_ACTORBORN = _descriptor.Descriptor(
+  name='ActorBorn',
+  full_name='ActorBorn',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='player_list', full_name='ActorBorn.player_list', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='npc_list', full_name='ActorBorn.npc_list', index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=236,
+  serialized_end=311,
+)
+
+
+_ACTORDISSOLVE = _descriptor.Descriptor(
+  name='ActorDissolve',
+  full_name='ActorDissolve',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='actor_ids', full_name='ActorDissolve.actor_ids', index=0,
+      number=1, type=5, cpp_type=1, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=313,
+  serialized_end=347,
+)
+
+_ACTORBORN.fields_by_name['player_list'].message_type = __PLAYERINFO
+_ACTORBORN.fields_by_name['npc_list'].message_type = __NPCINFO
 DESCRIPTOR.message_types_by_name['EnterSceneReq'] = _ENTERSCENEREQ
 DESCRIPTOR.message_types_by_name['EnterSceneRsp'] = _ENTERSCENERSP
+DESCRIPTOR.message_types_by_name['_PlayerInfo'] = __PLAYERINFO
+DESCRIPTOR.message_types_by_name['_NpcInfo'] = __NPCINFO
+DESCRIPTOR.message_types_by_name['ActorBorn'] = _ACTORBORN
+DESCRIPTOR.message_types_by_name['ActorDissolve'] = _ACTORDISSOLVE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 EnterSceneReq = _reflection.GeneratedProtocolMessageType('EnterSceneReq', (_message.Message,), {
@@ -125,6 +276,34 @@ EnterSceneRsp = _reflection.GeneratedProtocolMessageType('EnterSceneRsp', (_mess
   # @@protoc_insertion_point(class_scope:EnterSceneRsp)
   })
 _sym_db.RegisterMessage(EnterSceneRsp)
+
+_PlayerInfo = _reflection.GeneratedProtocolMessageType('_PlayerInfo', (_message.Message,), {
+  'DESCRIPTOR' : __PLAYERINFO,
+  '__module__' : 'proto.scene_pb2'
+  # @@protoc_insertion_point(class_scope:_PlayerInfo)
+  })
+_sym_db.RegisterMessage(_PlayerInfo)
+
+_NpcInfo = _reflection.GeneratedProtocolMessageType('_NpcInfo', (_message.Message,), {
+  'DESCRIPTOR' : __NPCINFO,
+  '__module__' : 'proto.scene_pb2'
+  # @@protoc_insertion_point(class_scope:_NpcInfo)
+  })
+_sym_db.RegisterMessage(_NpcInfo)
+
+ActorBorn = _reflection.GeneratedProtocolMessageType('ActorBorn', (_message.Message,), {
+  'DESCRIPTOR' : _ACTORBORN,
+  '__module__' : 'proto.scene_pb2'
+  # @@protoc_insertion_point(class_scope:ActorBorn)
+  })
+_sym_db.RegisterMessage(ActorBorn)
+
+ActorDissolve = _reflection.GeneratedProtocolMessageType('ActorDissolve', (_message.Message,), {
+  'DESCRIPTOR' : _ACTORDISSOLVE,
+  '__module__' : 'proto.scene_pb2'
+  # @@protoc_insertion_point(class_scope:ActorDissolve)
+  })
+_sym_db.RegisterMessage(ActorDissolve)
 
 
 DESCRIPTOR._options = None

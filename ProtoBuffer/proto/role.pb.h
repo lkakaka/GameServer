@@ -47,7 +47,7 @@ struct TableStruct_proto_2frole_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[2]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[3]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -60,9 +60,13 @@ extern GmCmdDefaultTypeInternal _GmCmd_default_instance_;
 class GmCmdRsp;
 class GmCmdRspDefaultTypeInternal;
 extern GmCmdRspDefaultTypeInternal _GmCmdRsp_default_instance_;
+class MoveTo;
+class MoveToDefaultTypeInternal;
+extern MoveToDefaultTypeInternal _MoveTo_default_instance_;
 PROTOBUF_NAMESPACE_OPEN
 template<> ::GmCmd* Arena::CreateMaybeMessage<::GmCmd>(Arena*);
 template<> ::GmCmdRsp* Arena::CreateMaybeMessage<::GmCmdRsp>(Arena*);
+template<> ::MoveTo* Arena::CreateMaybeMessage<::MoveTo>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 
 // ===================================================================
@@ -365,6 +369,144 @@ class GmCmdRsp :
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_proto_2frole_2eproto;
 };
+// -------------------------------------------------------------------
+
+class MoveTo :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:MoveTo) */ {
+ public:
+  MoveTo();
+  virtual ~MoveTo();
+
+  MoveTo(const MoveTo& from);
+  MoveTo(MoveTo&& from) noexcept
+    : MoveTo() {
+    *this = ::std::move(from);
+  }
+
+  inline MoveTo& operator=(const MoveTo& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline MoveTo& operator=(MoveTo&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const MoveTo& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const MoveTo* internal_default_instance() {
+    return reinterpret_cast<const MoveTo*>(
+               &_MoveTo_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    2;
+
+  friend void swap(MoveTo& a, MoveTo& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(MoveTo* other) {
+    if (other == this) return;
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline MoveTo* New() const final {
+    return CreateMaybeMessage<MoveTo>(nullptr);
+  }
+
+  MoveTo* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<MoveTo>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const MoveTo& from);
+  void MergeFrom(const MoveTo& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  #else
+  bool MergePartialFromCodedStream(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* InternalSerializeWithCachedSizesToArray(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(MoveTo* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "MoveTo";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_proto_2frole_2eproto);
+    return ::descriptor_table_proto_2frole_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kPosXFieldNumber = 1,
+    kPosYFieldNumber = 2,
+  };
+  // int32 pos_x = 1;
+  void clear_pos_x();
+  ::PROTOBUF_NAMESPACE_ID::int32 pos_x() const;
+  void set_pos_x(::PROTOBUF_NAMESPACE_ID::int32 value);
+
+  // int32 pos_y = 2;
+  void clear_pos_y();
+  ::PROTOBUF_NAMESPACE_ID::int32 pos_y() const;
+  void set_pos_y(::PROTOBUF_NAMESPACE_ID::int32 value);
+
+  // @@protoc_insertion_point(class_scope:MoveTo)
+ private:
+  class _Internal;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::int32 pos_x_;
+  ::PROTOBUF_NAMESPACE_ID::int32 pos_y_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_proto_2frole_2eproto;
+};
 // ===================================================================
 
 
@@ -584,9 +726,43 @@ inline void GmCmdRsp::set_allocated_msg(std::string* msg) {
   // @@protoc_insertion_point(field_set_allocated:GmCmdRsp.msg)
 }
 
+// -------------------------------------------------------------------
+
+// MoveTo
+
+// int32 pos_x = 1;
+inline void MoveTo::clear_pos_x() {
+  pos_x_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 MoveTo::pos_x() const {
+  // @@protoc_insertion_point(field_get:MoveTo.pos_x)
+  return pos_x_;
+}
+inline void MoveTo::set_pos_x(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  pos_x_ = value;
+  // @@protoc_insertion_point(field_set:MoveTo.pos_x)
+}
+
+// int32 pos_y = 2;
+inline void MoveTo::clear_pos_y() {
+  pos_y_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 MoveTo::pos_y() const {
+  // @@protoc_insertion_point(field_get:MoveTo.pos_y)
+  return pos_y_;
+}
+inline void MoveTo::set_pos_y(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  pos_y_ = value;
+  // @@protoc_insertion_point(field_set:MoveTo.pos_y)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 
