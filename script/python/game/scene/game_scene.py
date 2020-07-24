@@ -132,6 +132,8 @@ class GameScene:
         player.on_recv_client_msg(msg_id, msg_data)
 
     def _on_enter_sight(self, actor, enter_ids):
+        if not enter_ids:
+            return
         msg = Message.create_msg_by_id(Message.MSG_ID_ACTOR_BORN) if actor.is_player() else None
         for actor_id in enter_ids:
             enter_actor = self.get_actor(actor_id)
@@ -145,15 +147,17 @@ class GameScene:
             actor.send_msg_to_client(msg)
 
     def _on_leave_sight(self, actor, leave_ids, is_actor_leave):
+        if not leave_ids:
+            return
         msg = None
         if not is_actor_leave and actor.is_player():
-            msg = Message.create_msg_by_id(Message.MSG_ID_ACTOR_BORN)
+            msg = Message.create_msg_by_id(Message.MSG_ID_ACTOR_DISSOLVE)
         for actor_id in leave_ids:
             leave_actor = self.get_actor(actor_id)
             if leave_actor is None:
                 continue
             if msg is not None:
-                msg.actor_ids.add(leave_actor.actor_id)
+                msg.actor_ids.append(leave_actor.actor_id)
             leave_actor.on_actor_leave_sight(actor)
 
         if msg is not None:

@@ -21,7 +21,6 @@
 #include "CmdLine.h"
 
 using namespace std;
-std::string g_service_name = "";
 //GameService g_game_service;
 //extern struct GameService g_game_service;
 std::string g_cfgFileName = "";
@@ -45,6 +44,13 @@ int main(int argc, char** argv)
 		printf("$not config service name, file name: %s", cfgName);
 		return 0;
 	}
+
+	ServiceType serviceType = getServiceType(serviceName);
+	if (serviceType <= ServiceType::SERVICE_TYPE_START || serviceType >= ServiceType::SERVICE_TYPE_END) {
+		printf("$service type error, serviceName: %s", serviceName.c_str());
+		return 0;
+	}
+
 	Logger::initLog(serviceName.c_str());
 	//g_game_service.service_name = serviceName;
 
@@ -72,7 +78,7 @@ int main(int argc, char** argv)
 		PyGILState_Release(py_state);
 	}
 
-	GameService::g_gameService = new GameService(serviceName, scriptObj);
+	GameService::g_gameService = new GameService(serviceName, serviceType, scriptObj);
 
 	// Initialise the http server.
 	//std::string httpServerIp = Config::getConfigStr(cfgName, "http_server_ip");

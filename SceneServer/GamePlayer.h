@@ -10,7 +10,11 @@ private:
 	std::string m_name;
 	void* m_scriptObj;
 public:
-	GamePlayer(int connId, int actorId, int roleId, std::string name, int x, int y);
+	GamePlayer(int connId, int actorId, int roleId, std::string name, int x, int y, PosChgFunc posChgFunc);
 	inline void setScriptObj(void* scriptObj) { m_scriptObj = scriptObj; }
 	void sendPacket(int msgId);
+
+	inline int getConnId() { return m_connId; }
+
+	bool onRecvClientMsg(int msgId, char* data, int dataLen);
 };

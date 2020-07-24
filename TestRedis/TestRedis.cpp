@@ -1,11 +1,16 @@
 
 #include "hiredis.h"
 #include <string>
+#include <map>
 
 void parseReply(redisReply* reply);
 
 int main()
 {
+	std::map<int, int> mp;
+	mp.at(1);
+	mp.erase(1);
+
 	std::string ip = "127.0.0.1";
 	int port = 6379;
 	redisContext* redisContext = redisConnect(ip.c_str(), port);

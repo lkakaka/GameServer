@@ -45,3 +45,4 @@ enum PROTO_MSG_ID {
 typedef PROTO_MSG_ID MSG_ID;
 
 PROTO_BUFFER_API std::shared_ptr<google::protobuf::Message> CreateMsgById(int msgId);
+PROTO_BUFFER_API std::shared_ptr<google::protobuf::Message> createMessage(int msgId, char* data, int dataLen);

@@ -14,3 +14,14 @@ std::shared_ptr<google::protobuf::Message> CreateMsgById(int msgId)
 }
 	return NULL;
 }
+
+std::shared_ptr<google::protobuf::Message> createMessage(int msgId, char* data, int dataLen)
+{
+	std::shared_ptr<google::protobuf::Message> msg = CreateMsgById(msgId);
+	if (msg == NULL) {
+		// Logger::logError("$create proto msg error, msgId:%d", msgId);
+		return msg;
+	}
+	msg->ParseFromArray(data, dataLen);
+	return msg;
+}

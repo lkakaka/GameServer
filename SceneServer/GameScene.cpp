@@ -2,6 +2,7 @@
 #include "Logger.h"
 #include "PyScene.h"
 #include "../Common/PyCommon.h"
+#include "SceneMgr.h"
 
 
 GameScene::GameScene(int sceneId, int sceneUid, void* scriptObj) : m_maxActorId(0), m_sceneId(sceneId), m_sceneUid(sceneUid),
@@ -27,6 +28,18 @@ void GameScene::onCreate()
 
 	/*m_AOIMgr.removeNode(2);
 	m_AOIMgr.dump();*/
+	m_syncThread.reset(new std::thread(std::bind(&GameScene::_syncThreadFunc, this)));
+}
+
+void GameScene::_syncThreadFunc() {
+	while (true) {
+		for (auto iter = m_actors.begin(); iter != m_actors.end(); iter++) {
+			GameActor* gameActor = iter->second;
+			if (gameActor == NULL || !gameActor->isMoving()) continue;
+			gameActor->updatePos();
+		}
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
+	}
 }
 
 void GameScene::onDestory()
@@ -37,8 +50,10 @@ void GameScene::onDestory()
 GamePlayer* GameScene::createPlayer(int connId, int roleId, const char* name, int x, int y)
 {
 	int actorId = m_maxActorId++;
-	GamePlayer* gamePlayer = new GamePlayer(connId, actorId, roleId, name, x, y);
+	GamePlayer* gamePlayer = new GamePlayer(connId, actorId, roleId, name, x, y, std::bind(&GameScene::onActorPosChg, this, std::placeholders::_1, std::placeholders::_2));
 	m_actors.emplace(std::make_pair(actorId, gamePlayer));
+	m_players.emplace(std::make_pair(connId, gamePlayer));
+	SceneMgr::getSceneMgr()->addPlayer(connId, m_sceneUid);
 	Logger::logInfo("$create player, sceneId:%d, sceneUid:%d, actorId:%d", m_sceneId, m_sceneUid, actorId);
 	return gamePlayer;
 }
@@ -140,6 +155,16 @@ GameActor* GameScene::getActor(int actorId) {
 	return iter->second;
 }
 
+GamePlayer* GameScene::getPlayer(int connId) {
+	auto iter = m_players.find(connId);
+	if (iter == m_players.end()) {
+		Logger::logError("$get player error, player not found, sceneId:%d, sceneUid:%d, connId:%d", m_sceneId, m_sceneUid, connId);
+		return NULL;
+	}
+
+	return iter->second;
+}
+
 void GameScene::removeActor(int actorId) {
 	auto iter = m_actors.find(actorId);
 	if (iter == m_actors.end()) {
@@ -150,19 +175,31 @@ void GameScene::removeActor(int actorId) {
 	GameActor* gameActor = iter->second;
 	onActorLeave(gameActor);
 
+	if (gameActor->getActorType() == ActorType::PLYAER) {
+		int connId = ((GamePlayer*)gameActor)->getConnId();
+		SceneMgr::getSceneMgr()->removePlayer(connId);
+		m_players.erase(connId);
+	}
+
 	delete gameActor;
 	m_actors.erase(iter);
 	Logger::logInfo("$remove actor, sceneId:%d, sceneUid:%d, actorId:%d", m_sceneId, m_sceneUid, actorId);
 }
 
-void GameScene::setActorPos(int actorId, int x, int y) {
+void GameScene::onActorPosChg(int actorId, Position* pos) {
 	GameActor* actor = getActor(actorId);
 	if (actor == NULL) {
 		Logger::logError("move actor error, actor not found, sceneId:%d, sceneUid:%d, actorId:%d", m_sceneId, m_sceneUid, actorId);
 		return;
 	}
 
-	actor->setPos(x, y);
 	onActorMove(actor);
 }
 
+bool GameScene::onRecvClientMsg(int connId, int msgId, char* data, int dataLen) {
+	GamePlayer* player = getPlayer(connId);
+	if (player == NULL) {
+		return false;
+	}
+	return player->onRecvClientMsg(msgId, data, dataLen);
+}

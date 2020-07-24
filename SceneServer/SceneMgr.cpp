@@ -1,5 +1,6 @@
 #include "SceneMgr.h"
 #include "Logger.h"
+#include "proto.h"
 
 
 SceneMgr* SceneMgr::g_sceneMgr = NULL;
@@ -53,4 +54,25 @@ void SceneMgr::destroyScene(int sceneUid) {
 	gameScene->onDestory();
 	Logger::logInfo("$destroy scene, scene_uid:%d, sceneId:%d", sceneUid, gameScene->getSceneId());
 	delete gameScene;
+}
+
+void SceneMgr::addPlayer(int conn_id, int scene_uid) {
+	m_player_scene.emplace(conn_id, scene_uid);
+}
+
+void SceneMgr::removePlayer(int conn_id) {
+	m_player_scene.erase(conn_id);
+}
+
+bool SceneMgr::handleClientMsg(int connId, int msgId, char* data, int dataLen) {
+	if (msgId != MSG_ID_MOVE_TO) return false;
+	auto iter = m_player_scene.find(connId);
+	if (iter == m_player_scene.end()) {
+		return false;
+	}
+	GameScene* scene = getScene(iter->second);
+	if (scene == NULL) {
+		return false;
+	}
+	return scene->onRecvClientMsg(connId, msgId, data, dataLen);
 }

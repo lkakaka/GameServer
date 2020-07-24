@@ -6,23 +6,18 @@
 #include "PythonPlugin.h"
 #include "GameService.h"
 #include "MyBuffer.h"
+#include "SceneMgr.h"
+#include "proto.h"
 
-extern std::string g_service_name;
-
-
-std::shared_ptr<google::protobuf::Message> createMessage(int msgId, char* data, int dataLen)
-{
-	std::shared_ptr<google::protobuf::Message> msg = CreateMsgById(msgId);
-	if (msg == NULL) {
-		Logger::logError("$create proto msg error, msgId:%d", msgId);
-		return msg;
-	}
-	msg->ParseFromArray(data, dataLen);
-	return msg;
-}
 
 bool handleMsg(int connId, int msgId, char* data, int dataLen)
 {
+	if (GameService::g_gameService->getServieType() == SERVIE_TYPE_SCENE) {
+		if (SceneMgr::getSceneMgr()->handleClientMsg(connId, msgId, data, dataLen)) {
+			return true;
+		}
+	}
+	
 	switch (msgId)
 	{
 	/*case MSG_ID_TEST:
@@ -72,19 +67,11 @@ void MessageMgr::onRecvData(char* sender, char* data, int dataLen) {
 		bool isClientMsg = (buffer.readByte(true) == 0);
 		int connId = buffer.readInt(true);
 		msgId = buffer.readInt(true);
-		////google::protobuf::Message* msg = (google::protobuf::Message*)CreateMsgById(msgId);
-		//std::shared_ptr<google::protobuf::Message> msg = CreateMsgById(msgId);
-		//if (msg == NULL) {
-		//	Logger::logError("$create proto msg error, msgId:%d", msgId);
-		//	return;
-		//}
-		//msg->ParseFromArray(&data[8], dataLen - 8);
 		char* msgData = buffer.data();
 		int msgLen = buffer.size();
 		if (!handleMsg(connId, msgId, msgData, msgLen)) {
 			auto py_state = PyGILState_Ensure();
 			PyObject* arg = PyTuple_New(3);
-			//PyTuple_SetItem(arg, 0, Py_BuildValue("s", g_service_name.c_str()));
 			if (isClientMsg) {
 				PyTuple_SetItem(arg, 0, PyLong_FromLong(connId));
 			}
