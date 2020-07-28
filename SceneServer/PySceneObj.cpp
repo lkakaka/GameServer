@@ -34,15 +34,16 @@ static PyObject* createPlayer(PyObject* self, PyObject* args)
 {
 	int connId, roleId;
 	char* name;
-	int x, y;
+	int x, y, move_speed;
 	PyObject* scriptObj;
-	if (!PyArg_ParseTuple(args, "iisii", &connId, &roleId, &name, &x, &y)) {
+	if (!PyArg_ParseTuple(args, "iisiii", &connId, &roleId, &name, &x, &y, &move_speed)) {
 		//PyErr_SetString(ModuleError, "create scene obj failed");
 		Logger::logError("$create player failed, arg error");
 		Py_RETURN_NONE;
 	}
 	GameScene* gameScene = ((PySceneObj*)self)->gameScene;
 	GamePlayer* gamePlayer = gameScene->createPlayer(connId, roleId, name, x, y);
+	gamePlayer->setMoveSpeed(move_speed);
 	//return PyLong_FromSize_t((long long)gamePlayer);
 	PyObject* tuple = PyTuple_New(2);
 	PyTuple_SetItem(tuple, 0, PyLong_FromLong(gameScene->getSceneUid()));

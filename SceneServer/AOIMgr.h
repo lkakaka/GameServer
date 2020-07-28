@@ -28,11 +28,11 @@ private:
 	std::map<int, std::shared_ptr<AOINode>> m_nodes;
 public:
 	AOIMgr();
-	void addNode(int actorId, int x, int y, std::vector<int>& neighbours);
-	void removeNode(int actorId, std::vector<int>& neighbours);
-	void moveNode(int actorId, int x, int y, std::vector<int>& leaveIds, std::vector<int>& enterIds);
+	void addNode(int actorId, int x, int y, std::set<int>& neighbours);
+	void removeNode(int actorId, std::set<int>& neighbours);
+	void moveNode(int actorId, int x, int y, std::set<int>& leaveIds, std::set<int>& enterIds);
 
-	void getNeighbours(std::shared_ptr<AOINode>& node, std::vector<int>& neighbours);
+	void getNeighbours(std::shared_ptr<AOINode>& node, std::set<int>& neighbours);
 
 	void dump();
 };

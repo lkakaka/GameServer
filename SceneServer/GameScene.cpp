@@ -3,6 +3,7 @@
 #include "PyScene.h"
 #include "../Common/PyCommon.h"
 #include "SceneMgr.h"
+#include "TimeUtil.h"
 
 
 GameScene::GameScene(int sceneId, int sceneUid, void* scriptObj) : m_maxActorId(0), m_sceneId(sceneId), m_sceneUid(sceneUid),
@@ -33,10 +34,11 @@ void GameScene::onCreate()
 
 void GameScene::_syncThreadFunc() {
 	while (true) {
+		int64_t ts = TimeUtil::getCurrentTime();
 		for (auto iter = m_actors.begin(); iter != m_actors.end(); iter++) {
 			GameActor* gameActor = iter->second;
 			if (gameActor == NULL || !gameActor->isMoving()) continue;
-			gameActor->updatePos();
+			gameActor->updatePos(ts);
 		}
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
@@ -65,7 +67,7 @@ void GameScene::onActorEnter(int actorId) {
 		return;
 	}
 
-	std::vector<int> neighbours;
+	std::set<int> neighbours;
 	m_AOIMgr.addNode(actor->getActorId(), actor->getX(), actor->getY(), neighbours);
 
 	if (!neighbours.empty()) {
@@ -91,16 +93,16 @@ void GameScene::onActorEnter(int actorId) {
 	}
 }
 
-void GameScene::onPlayerEnter(GamePlayer* gamePlayer, std::vector<int>& neighbours) {
+void GameScene::onPlayerEnter(GamePlayer* gamePlayer, std::set<int>& neighbours) {
 	
 }
 
-void GameScene::onNpcEnter(GameNpc* gameNpc, std::vector<int>& neighbours) {
+void GameScene::onNpcEnter(GameNpc* gameNpc, std::set<int>& neighbours) {
 	
 }
 
 void GameScene::onActorLeave(GameActor* gameActor) {
-	std::vector<int> neighbours;
+	std::set<int> neighbours;
 	m_AOIMgr.removeNode(gameActor->getActorId(), neighbours);
 
 	if (!neighbours.empty()) {
@@ -119,10 +121,13 @@ void GameScene::onActorLeave(GameActor* gameActor) {
 }
 
 void GameScene::onActorMove(GameActor* gameActor) {
-	std::vector<int> enterIds;
-	std::vector<int> leaveIds;
+	std::set<int> enterIds;
+	std::set<int> leaveIds;
 	m_AOIMgr.moveNode(gameActor->getActorId(), gameActor->getX(), gameActor->getY(), leaveIds, enterIds);
 	if (enterIds.empty() && leaveIds.empty()) return;
+
+	gameActor->addSightActors(enterIds);
+	gameActor->removeSightActors(leaveIds);
 
 	auto py_state = PyGILState_Ensure();
 	PyObject* arg = PyTuple_New(3);
@@ -186,7 +191,7 @@ void GameScene::removeActor(int actorId) {
 	Logger::logInfo("$remove actor, sceneId:%d, sceneUid:%d, actorId:%d", m_sceneId, m_sceneUid, actorId);
 }
 
-void GameScene::onActorPosChg(int actorId, Position* pos) {
+void GameScene::onActorPosChg(int actorId, Vector<int>* pos) {
 	GameActor* actor = getActor(actorId);
 	if (actor == NULL) {
 		Logger::logError("move actor error, actor not found, sceneId:%d, sceneUid:%d, actorId:%d", m_sceneId, m_sceneUid, actorId);

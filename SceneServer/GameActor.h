@@ -1,6 +1,8 @@
 #pragma once
 #include <functional>
 #include <vector>
+#include <set>
+#include "Vector.h"
 
 enum ActorType
 {
@@ -9,16 +11,7 @@ enum ActorType
 	NPC = 2,
 };
 
-typedef struct Position {
-	int x;
-	int y;
-
-	Position() : x(0), y(0) {}
-
-	Position(int x, int y) : x(x), y(y) {}
-}Position;
-
-typedef std::function<void(int, Position*)> PosChgFunc;
+typedef std::function<void(int, Vector<int>*)> PosChgFunc;
 
 class GameActor
 {
@@ -28,8 +21,11 @@ protected:
 	ActorType m_actorType;
 	PosChgFunc m_posChgFunc;
 
-	Position m_pos; // 当前位置
-	std::vector<Position> m_tgtPosList;  // 移动的目标位置
+	std::set<int> m_sightActors; // 视野中的角色
+
+	Vector<int> m_pos; // 当前位置
+	std::vector<Vector<int>> m_tgtPosList;  // 移动的目标位置
+	int64_t m_lastMoveTime;	// 上次计算移动的时间戳(更新位置是使用)
 public:
 
 	GameActor(ActorType actorType, int actorId, PosChgFunc posChgFunc);
@@ -43,14 +39,17 @@ public:
 	inline int getY() { return m_pos.y; }
 	inline ActorType getActorType() { return m_actorType; }
 
-	void setTgtPosList(std::vector<Position> tgtPosList);
+	void addSightActors(std::set<int>& actors);
+	void removeSightActors(std::set<int>& actors);
+
+	void setTgtPosList(std::vector<Vector<int>> tgtPosList);
 
 	inline bool isMoving() {
 		return !m_tgtPosList.empty();
 	}
 
 	void setPos(int x, int y);
-	void updatePos();
+	void updatePos(int64_t ts);
 
 	virtual void test() {};
 };

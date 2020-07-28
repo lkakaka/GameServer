@@ -75,7 +75,9 @@ class GameScene:
 
     def create_player(self, conn_id, role_id, sorted_tbls):
         tb_player = sorted_tbls["player"][0]
-        player_info = self.scene_obj.createPlayer(conn_id, role_id, tb_player.role_name, 0, 0)
+        x, y = 0, 0
+        move_speed = 10
+        player_info = self.scene_obj.createPlayer(conn_id, role_id, tb_player.role_name, x, y, move_speed)
         game_player = game.scene.game_player.GamePlayer(player_info, self, conn_id, role_id)
         game_player.init_player_data(sorted_tbls)
         return game_player

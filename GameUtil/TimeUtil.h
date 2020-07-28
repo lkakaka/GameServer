@@ -1,8 +1,10 @@
 #pragma once
+#include "../Common/ServerExports.h"
+#include <stdint.h>
 
-class TimeUtil
+class SERVER_EXPORT_API TimeUtil
 {
 public:
-	static long getCurrentStamp();
+	static int64_t getCurrentTime();
 };
 

@@ -702,7 +702,7 @@ StatementPtr DBHandler::executeSql(const char* sqlFormat, ...)
 	sql::SQLString sqlStr = sql::SQLString(m_sqlBuf);
 	try {
 		bool isResultSet = st->execute(sqlStr);
-		//Logger::logInfo("$exec sql success, sql: %s", m_sqlBuf);
+		Logger::logInfo("$exec sql success, sql: %s", m_sqlBuf);
 		return MAKE_STATEMENT_PTR(st, isResultSet);
 	}
 	catch (std::exception& e) {

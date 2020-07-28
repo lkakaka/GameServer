@@ -60,8 +60,8 @@ void MessageMgr::onRecvData(char* sender, char* data, int dataLen) {
 	int msgId = 0;
 	MyBuffer buffer(data, dataLen);
 	if (strcmp(sender, "gateway") == 0) {
-		if (dataLen <= 9) {
-			Logger::logError("$recv %s msg format error, data len <= 9", sender);
+		if (dataLen < 9) {
+			Logger::logError("$recv %s msg format error, data len < 9", sender);
 			return;
 		}
 		bool isClientMsg = (buffer.readByte(true) == 0);

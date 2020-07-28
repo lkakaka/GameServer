@@ -12,6 +12,10 @@
 
 
 #define FORMAT_BUFF_SIZE 1024
+#define MAX_LOG_FILE_DAYS 15 // 日志文件保存天数
+
+
+std::vector<std::string> Logger::m_logs;
 
 
 int Logger::initLog(const char* serverName)
@@ -31,7 +35,7 @@ int Logger::initLog(const char* serverName)
 		printf("create log dir failed\n");
 	}
 	logFileName = logDirName + logFileName + ".log";
-	log4cpp::Appender* rootAppender = new log4cpp::DailyRollingFileAppender("MyServer", logFileName.c_str());
+	log4cpp::Appender* rootAppender = new log4cpp::DailyRollingFileAppender("MyServer", logFileName.c_str(), MAX_LOG_FILE_DAYS);
 	root.addAppender(rootAppender);
 	log4cpp::Appender* subAppender = new log4cpp::OstreamAppender("MyServer", &std::cout);
 	sub.addAppender(subAppender);
@@ -44,16 +48,33 @@ int Logger::initLog(const char* serverName)
 	subPatternLayout->setConversionPattern("%d{%Y-%m-%d %H:%M:%S.%l} thread_id:%t [%p] %m %n");
 	subAppender->setLayout(subPatternLayout);
 
-	/*auto loopFunc = [](){
-		while (true) {
-
-		}
-	};
-
-	Logger::m_thread = std::make_shared<std::thread>(loopFunc);*/
-
 	return 1;
 }
+
+//void Logger::_writeLog() {
+//	while (true) {
+//		if (Logger::m_logs.empty()) continue;
+//		for (auto iter = Logger::m_logs.begin(); iter != Logger::m_logs.end(); iter++) {
+//			if (Logger::isPrint(iter->c_str()))
+//			{
+//				//formatLog(buff, &fmt[1], args);
+//				log4cpp::Category& sub = log4cpp::Category::getInstance("sub1");
+//				//sub.notice(&fmt[1], args);
+//				//std::string s = buff;
+//				sub.notice(iter->erase(0, 1));
+//			}
+//			else {
+//				//formatLog(buff, fmt, args);
+//				log4cpp::Category& root = log4cpp::Category::getRoot();
+//				//root.notice(fmt, args);
+//				//std::string s = buff;
+//				root.notice(*iter);
+//			}
+//		}
+//	}
+//}
+//std::shared_ptr<std::thread> Logger::m_thread = std::make_shared<std::thread>(Logger::_writeLog);
+
 
 bool Logger::isPrint(const char* fmt)
 {
@@ -66,6 +87,7 @@ void Logger::formatLog(char* buff, const char* fmt, va_list va)
 {
 	//_vsnprintf_s(buff, FORMAT_BUFF_SIZE-1, _TRUNCATE, fmt, va);
 	vsnprintf(buff, FORMAT_BUFF_SIZE-1, fmt, va);
+	//Logger::m_logs.emplace_back(buff);
 }
 
 void Logger::logDebug(const char* fmt, ...)
@@ -115,10 +137,14 @@ void Logger::logInfo(char* fmt, ...)
 		//formatLog(buff, &fmt[1], args);
 		log4cpp::Category& sub = log4cpp::Category::getInstance("sub1");
 		sub.notice(&fmt[1], args);
+		/*std::string s = buff;
+		sub.notice(s);*/
 	}else {
 		//formatLog(buff, fmt, args);
 		log4cpp::Category& root = log4cpp::Category::getRoot();
 		root.notice(fmt, args);
+		/*std::string s = buff;
+		root.notice(s);*/
 	}
 	va_end(args);
 }

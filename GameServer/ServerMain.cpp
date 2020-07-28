@@ -52,6 +52,7 @@ int main(int argc, char** argv)
 	}
 
 	Logger::initLog(serviceName.c_str());
+	Logger::logInfo("$dfas,%%n");
 	//g_game_service.service_name = serviceName;
 
 	std::string dbUrl = Config::getConfigStr(cfgName, "db_url");

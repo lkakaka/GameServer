@@ -4,13 +4,17 @@
 #include <stdarg.h>
 #include "../../Common/ServerExports.h"
 #include <thread>
+#include <vector>
+
 
 class SERVER_EXPORT_API Logger
 {
 private:
-	//static std::shared_ptr<std::thread> m_thread;
+	static std::shared_ptr<std::thread> m_thread;
+	static std::vector<std::string> m_logs;
 
 	static bool isPrint(const char* fmt);
+	static void _writeLog();
 public:
 	static Logger* g_log;
 	//static std::list < std::

@@ -2,14 +2,16 @@
 #include "hiredis.h"
 #include <string>
 #include <map>
+#include <set>
 
 void parseReply(redisReply* reply);
 
 int main()
 {
-	std::map<int, int> mp;
-	mp.at(1);
-	mp.erase(1);
+	std::set<int> st;
+	st.insert(1);
+	st.insert(1);
+	st.erase(2);
 
 	std::string ip = "127.0.0.1";
 	int port = 6379;

@@ -17,8 +17,8 @@ private:
 	int m_maxActorId;
 	std::shared_ptr<std::thread> m_syncThread;
 
-	void onPlayerEnter(GamePlayer* gamePlayer, std::vector<int>& neighbours);
-	void onNpcEnter(GameNpc* gameNpc, std::vector<int>& neighbours);
+	void onPlayerEnter(GamePlayer* gamePlayer, std::set<int>& neighbours);
+	void onNpcEnter(GameNpc* gameNpc, std::set<int>& neighbours);
 
 	void _syncThreadFunc();
 public:
@@ -38,7 +38,7 @@ public:
 	void removeActor(int actorId);
 	void onCreate();
 
-	void onActorPosChg(int actorId, Position* pos);
+	void onActorPosChg(int actorId, Vector<int>* pos);
 
 	bool onRecvClientMsg(int connId, int msgId, char* data, int dataLen);
 };

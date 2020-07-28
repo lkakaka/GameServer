@@ -1,6 +1,7 @@
 #include "AOIMgr.h"
 #include "Logger.h"
 #include <algorithm>
+#include <iterator>
 
 #define X_VIEW_RANGE 5
 #define Y_VIEW_RANGE 5
@@ -35,7 +36,7 @@ x_tail(std::make_shared<AOINode>(-1, 0x0fffffff, 0)), y_tail(std::make_shared<AO
 	y_tail->y_pre = y_head;
 }
 
-void AOIMgr::addNode(int actorId, int x, int y, std::vector<int>& neighbours)
+void AOIMgr::addNode(int actorId, int x, int y, std::set<int>& neighbours)
 {
 	if (m_nodes.find(actorId) != m_nodes.end()) {
 		Logger::logError("$add aoi node repeat, actorId:%d", actorId);
@@ -78,7 +79,7 @@ void AOIMgr::addNode(int actorId, int x, int y, std::vector<int>& neighbours)
 	printf("neighbours addr=%p\n", &neighbours);
 }
 
-void AOIMgr::removeNode(int actorId, std::vector<int>& neighbours)
+void AOIMgr::removeNode(int actorId, std::set<int>& neighbours)
 {
 	auto iter = m_nodes.find(actorId);
 	if (iter == m_nodes.end()) {
@@ -103,14 +104,14 @@ void AOIMgr::removeNode(int actorId, std::vector<int>& neighbours)
 	Logger::logInfo("$remove aoi node, actorId:%d", actorId);
 }
 
-void AOIMgr::moveNode(int actorId, int x, int y, std::vector<int>& leaveIds, std::vector<int>& enterIds)
+void AOIMgr::moveNode(int actorId, int x, int y, std::set<int>& leaveIds, std::set<int>& enterIds)
 {
 	auto iter = m_nodes.find(actorId);
 	if (iter == m_nodes.end()) {
 		return;
 	}
 	std::shared_ptr<AOINode> aoi_node = iter->second;
-	std::vector<int> orgNeighbours;
+	std::set<int> orgNeighbours;
 	getNeighbours(aoi_node, orgNeighbours);
 
 	int org_x = aoi_node->x;
@@ -183,7 +184,7 @@ void AOIMgr::moveNode(int actorId, int x, int y, std::vector<int>& leaveIds, std
 		}
 	}
 
-	std::vector<int> newNeighbours;
+	std::set<int> newNeighbours;
 	getNeighbours(aoi_node, newNeighbours);
 
 	std::set<int> orgNeighSet;
@@ -196,11 +197,13 @@ void AOIMgr::moveNode(int actorId, int x, int y, std::vector<int>& leaveIds, std
 		newNeighSet.emplace(*iter);
 	}
 
-	std::set_difference(orgNeighbours.begin(), orgNeighbours.end(), newNeighbours.begin(), newNeighbours.end(), std::back_inserter(leaveIds));
-	std::set_difference(newNeighbours.begin(), newNeighbours.end(), orgNeighbours.begin(), orgNeighbours.end(), std::back_inserter(enterIds));
+	//std::set_difference()
+
+	std::set_difference(orgNeighbours.begin(), orgNeighbours.end(), newNeighbours.begin(), newNeighbours.end(), std::inserter(leaveIds, std::end(leaveIds)));
+	std::set_difference(newNeighbours.begin(), newNeighbours.end(), orgNeighbours.begin(), orgNeighbours.end(), std::inserter(enterIds, std::end(enterIds)));
 }
 
-void AOIMgr::getNeighbours(std::shared_ptr<AOINode>& node, std::vector<int>& neighbours) {
+void AOIMgr::getNeighbours(std::shared_ptr<AOINode>& node, std::set<int>& neighbours) {
 	int x = node->x;
 	std::set<int> xNeighbours;
 	// 往后找在X_VIEW_RANGE范围类的玩家
@@ -226,7 +229,7 @@ void AOIMgr::getNeighbours(std::shared_ptr<AOINode>& node, std::vector<int>& nei
 		if (y - y_node->y > Y_VIEW_RANGE) break;
 		yNeighbours.emplace(y_node->actorId);
 	}
-	std::set_intersection(xNeighbours.begin(), xNeighbours.end(), yNeighbours.begin(), yNeighbours.end(), std::back_inserter(neighbours));
+	std::set_intersection(xNeighbours.begin(), xNeighbours.end(), yNeighbours.begin(), yNeighbours.end(), std::inserter(neighbours, std::end(neighbours)));
 }
 
 void AOIMgr::dump() 
