@@ -38,7 +38,7 @@ public:
 	void removeActor(int actorId);
 	void onCreate();
 
-	void onActorPosChg(int actorId, Vector<int>* pos);
+	void onActorGridChg(int actorId, Grid* pos);
 
 	bool onRecvClientMsg(int connId, int msgId, char* data, int dataLen);
 };

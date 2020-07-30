@@ -4068,6 +4068,610 @@ public final class Scene {
 
   }
 
+  public interface SyncPosOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:SyncPos)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>int32 actor_id = 1;</code>
+     */
+    int getActorId();
+
+    /**
+     * <code>int32 pos_x = 2;</code>
+     */
+    int getPosX();
+
+    /**
+     * <code>int32 pos_y = 3;</code>
+     */
+    int getPosY();
+  }
+  /**
+   * Protobuf type {@code SyncPos}
+   */
+  public  static final class SyncPos extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:SyncPos)
+      SyncPosOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use SyncPos.newBuilder() to construct.
+    private SyncPos(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private SyncPos() {
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new SyncPos();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private SyncPos(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 8: {
+
+              actorId_ = input.readInt32();
+              break;
+            }
+            case 16: {
+
+              posX_ = input.readInt32();
+              break;
+            }
+            case 24: {
+
+              posY_ = input.readInt32();
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.proto.Scene.internal_static_SyncPos_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.proto.Scene.internal_static_SyncPos_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.proto.Scene.SyncPos.class, com.proto.Scene.SyncPos.Builder.class);
+    }
+
+    public static final int ACTOR_ID_FIELD_NUMBER = 1;
+    private int actorId_;
+    /**
+     * <code>int32 actor_id = 1;</code>
+     */
+    public int getActorId() {
+      return actorId_;
+    }
+
+    public static final int POS_X_FIELD_NUMBER = 2;
+    private int posX_;
+    /**
+     * <code>int32 pos_x = 2;</code>
+     */
+    public int getPosX() {
+      return posX_;
+    }
+
+    public static final int POS_Y_FIELD_NUMBER = 3;
+    private int posY_;
+    /**
+     * <code>int32 pos_y = 3;</code>
+     */
+    public int getPosY() {
+      return posY_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (actorId_ != 0) {
+        output.writeInt32(1, actorId_);
+      }
+      if (posX_ != 0) {
+        output.writeInt32(2, posX_);
+      }
+      if (posY_ != 0) {
+        output.writeInt32(3, posY_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (actorId_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(1, actorId_);
+      }
+      if (posX_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(2, posX_);
+      }
+      if (posY_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(3, posY_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof com.proto.Scene.SyncPos)) {
+        return super.equals(obj);
+      }
+      com.proto.Scene.SyncPos other = (com.proto.Scene.SyncPos) obj;
+
+      if (getActorId()
+          != other.getActorId()) return false;
+      if (getPosX()
+          != other.getPosX()) return false;
+      if (getPosY()
+          != other.getPosY()) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + ACTOR_ID_FIELD_NUMBER;
+      hash = (53 * hash) + getActorId();
+      hash = (37 * hash) + POS_X_FIELD_NUMBER;
+      hash = (53 * hash) + getPosX();
+      hash = (37 * hash) + POS_Y_FIELD_NUMBER;
+      hash = (53 * hash) + getPosY();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static com.proto.Scene.SyncPos parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.proto.Scene.SyncPos parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.proto.Scene.SyncPos parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.proto.Scene.SyncPos parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.proto.Scene.SyncPos parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.proto.Scene.SyncPos parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.proto.Scene.SyncPos parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.proto.Scene.SyncPos parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.proto.Scene.SyncPos parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static com.proto.Scene.SyncPos parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.proto.Scene.SyncPos parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.proto.Scene.SyncPos parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(com.proto.Scene.SyncPos prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code SyncPos}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:SyncPos)
+        com.proto.Scene.SyncPosOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.proto.Scene.internal_static_SyncPos_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.proto.Scene.internal_static_SyncPos_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.proto.Scene.SyncPos.class, com.proto.Scene.SyncPos.Builder.class);
+      }
+
+      // Construct using com.proto.Scene.SyncPos.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        actorId_ = 0;
+
+        posX_ = 0;
+
+        posY_ = 0;
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.proto.Scene.internal_static_SyncPos_descriptor;
+      }
+
+      @java.lang.Override
+      public com.proto.Scene.SyncPos getDefaultInstanceForType() {
+        return com.proto.Scene.SyncPos.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public com.proto.Scene.SyncPos build() {
+        com.proto.Scene.SyncPos result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public com.proto.Scene.SyncPos buildPartial() {
+        com.proto.Scene.SyncPos result = new com.proto.Scene.SyncPos(this);
+        result.actorId_ = actorId_;
+        result.posX_ = posX_;
+        result.posY_ = posY_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.proto.Scene.SyncPos) {
+          return mergeFrom((com.proto.Scene.SyncPos)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(com.proto.Scene.SyncPos other) {
+        if (other == com.proto.Scene.SyncPos.getDefaultInstance()) return this;
+        if (other.getActorId() != 0) {
+          setActorId(other.getActorId());
+        }
+        if (other.getPosX() != 0) {
+          setPosX(other.getPosX());
+        }
+        if (other.getPosY() != 0) {
+          setPosY(other.getPosY());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.proto.Scene.SyncPos parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (com.proto.Scene.SyncPos) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private int actorId_ ;
+      /**
+       * <code>int32 actor_id = 1;</code>
+       */
+      public int getActorId() {
+        return actorId_;
+      }
+      /**
+       * <code>int32 actor_id = 1;</code>
+       */
+      public Builder setActorId(int value) {
+        
+        actorId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 actor_id = 1;</code>
+       */
+      public Builder clearActorId() {
+        
+        actorId_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int posX_ ;
+      /**
+       * <code>int32 pos_x = 2;</code>
+       */
+      public int getPosX() {
+        return posX_;
+      }
+      /**
+       * <code>int32 pos_x = 2;</code>
+       */
+      public Builder setPosX(int value) {
+        
+        posX_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 pos_x = 2;</code>
+       */
+      public Builder clearPosX() {
+        
+        posX_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int posY_ ;
+      /**
+       * <code>int32 pos_y = 3;</code>
+       */
+      public int getPosY() {
+        return posY_;
+      }
+      /**
+       * <code>int32 pos_y = 3;</code>
+       */
+      public Builder setPosY(int value) {
+        
+        posY_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 pos_y = 3;</code>
+       */
+      public Builder clearPosY() {
+        
+        posY_ = 0;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:SyncPos)
+    }
+
+    // @@protoc_insertion_point(class_scope:SyncPos)
+    private static final com.proto.Scene.SyncPos DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new com.proto.Scene.SyncPos();
+    }
+
+    public static com.proto.Scene.SyncPos getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<SyncPos>
+        PARSER = new com.google.protobuf.AbstractParser<SyncPos>() {
+      @java.lang.Override
+      public SyncPos parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new SyncPos(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<SyncPos> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<SyncPos> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.proto.Scene.SyncPos getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_EnterSceneReq_descriptor;
   private static final 
@@ -4098,6 +4702,11 @@ public final class Scene {
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_ActorDissolve_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_SyncPos_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_SyncPos_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -4115,8 +4724,9 @@ public final class Scene {
       "\022\020\n\010actor_id\030\001 \001(\005\022\016\n\006npc_id\030\002 \001(\005\"K\n\tAc" +
       "torBorn\022!\n\013player_list\030\001 \003(\0132\014._PlayerIn" +
       "fo\022\033\n\010npc_list\030\002 \003(\0132\t._NpcInfo\"\"\n\rActor" +
-      "Dissolve\022\021\n\tactor_ids\030\001 \003(\005B\022\n\tcom.proto" +
-      "B\005Sceneb\006proto3"
+      "Dissolve\022\021\n\tactor_ids\030\001 \003(\005\"9\n\007SyncPos\022\020" +
+      "\n\010actor_id\030\001 \001(\005\022\r\n\005pos_x\030\002 \001(\005\022\r\n\005pos_y" +
+      "\030\003 \001(\005B\022\n\tcom.protoB\005Sceneb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -4158,6 +4768,12 @@ public final class Scene {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_ActorDissolve_descriptor,
         new java.lang.String[] { "ActorIds", });
+    internal_static_SyncPos_descriptor =
+      getDescriptor().getMessageTypes().get(6);
+    internal_static_SyncPos_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_SyncPos_descriptor,
+        new java.lang.String[] { "ActorId", "PosX", "PosY", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

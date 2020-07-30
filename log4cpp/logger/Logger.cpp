@@ -24,10 +24,10 @@ int Logger::initLog(const char* serverName)
 	log4cpp::Category& sub = log4cpp::Category::getInstance("sub1");
 #ifdef _DEBUG
 	//root.setPriority(log4cpp::Priority::NOTSET);
-	sub.setPriority(log4cpp::Priority::NOTSET);
+	sub.setPriority(log4cpp::Priority::DEBUG);
 #else
-	root.setPriority(log4cpp::Priority::NOTICE);
-	sub.setPriority(log4cpp::Priority::NOTICE);
+	root.setPriority(log4cpp::Priority::INFO);
+	sub.setPriority(log4cpp::Priority::INFO);
 #endif
 	std::string logFileName = serverName;
 	std::string logDirName = "../log/";
@@ -136,13 +136,13 @@ void Logger::logInfo(char* fmt, ...)
 	{
 		//formatLog(buff, &fmt[1], args);
 		log4cpp::Category& sub = log4cpp::Category::getInstance("sub1");
-		sub.notice(&fmt[1], args);
+		sub.info(&fmt[1], args);
 		/*std::string s = buff;
 		sub.notice(s);*/
 	}else {
 		//formatLog(buff, fmt, args);
 		log4cpp::Category& root = log4cpp::Category::getRoot();
-		root.notice(fmt, args);
+		root.info(fmt, args);
 		/*std::string s = buff;
 		root.notice(s);*/
 	}

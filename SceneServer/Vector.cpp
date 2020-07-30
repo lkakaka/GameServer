@@ -1,40 +1,52 @@
 #include "Vector.h"
 #include <math.h>
 
-template class Vector<int>;
-template class Vector<float>;
+template class Vector2<int>;
+template class Vector2<float>;
 
 template<typename T>
-Vector<T>::Vector() : x(0), y(0) {}
+Vector2<T>::Vector2() : x(0), y(0) {}
 
 template<typename T>
-Vector<T>::Vector(T x, T y) : x(x), y(y) {}
+Vector2<T>::Vector2(T x, T y) : x(x), y(y) {}
+
+//template<typename T>
+//float Vector2<T>::distance(Vector2* pos) {
+//	return sqrt((double(x) - pos->x) * (double(x) - pos->x) + (double(y) - pos->y) * (double(y) - pos->y));
+//}
+
+//template<typename T>
+//Vector2<float> Vector2<T>::dir(Vector2* pos) {
+//	float dis = distance(pos);
+//	if (dis <= 1e-6) return Vector2<float>(0.0, 0.0);
+//	return Vector2<float>((x - pos->x) / dis, (y - pos->y) / dis);
+//}
 
 template<typename T>
-float Vector<T>::distance(Vector* pos) {
-	return sqrt((x - pos->x) * (x - pos->x) + (y - pos->y) * (y - pos->y));
+Vector2<T> Vector2<T>::normalize() {
+	float len = length();
+	if (len <= 1e-6) return Vector2<T>(0.0, 0.0);
+	return Vector2<T>(x / len, y / len);
 }
 
 template<typename T>
-Vector<float> Vector<T>::dir(Vector* pos) {
-	float dis = distance(pos);
-	if (dis <= 1e-6) return Vector<float>(0.0, 0.0);
-	return Vector<float>((x - pos->x) / dis, (y - pos->y) / dis);
+Vector2<T> Vector2<T>::operator+(Vector2<T>&& v) {
+	return Vector2<T>(x + v.x, y + v.y);
 }
 
 template<typename T>
-Vector<float> Vector<T>::normalize() {
-	float len = sqrt(x * x + y * y);
-	if (len <= 1e-6) return Vector<float>(0.0, 0.0);
-	return Vector<float>(x / len, y / len);
+Vector2<T> Vector2<T>::operator-(Vector2<T>& v) {
+	return Vector2<T>(x - v.x, y - v.y);
 }
 
 template<typename T>
-Vector<T> Vector<T>::operator+(Vector<float>& v) {
-	return Vector<T>(x + v.x, y + v.y);
+Vector2<T> Vector2<T>::operator*(float mul) {
+	return Vector2<T>(x * mul, y * mul);
 }
 
 template<typename T>
-Vector<T> Vector<T>::operator*(float mul) {
-	return Vector<T>(x * mul, y * mul);
+Vector2<T> Vector2<T>::operator=(Vector2<T>& v) {
+	x = v.x;
+	y = v.y;
+	return *this;
 }

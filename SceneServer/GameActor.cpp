@@ -2,17 +2,18 @@
 #include "TimeUtil.h"
 #include <algorithm>
 #include "Logger.h"
+#include "GameScene.h"
 
-GameActor::GameActor(ActorType actorType, int actorId, PosChgFunc posChgFunc) :
-	m_actorType(actorType), m_actorId(actorId), m_pos(Vector<int>(0, 0)), m_moveSpeed(0), m_lastMoveTime(0),
-	m_posChgFunc(posChgFunc)
+GameActor::GameActor(ActorType actorType, int actorId, void* gameScene, GridChgFunc gridChgFunc) :
+	m_actorType(actorType), m_actorId(actorId), m_pos(Position(0, 0)), m_grid(Grid(0, 0)), m_moveSpeed(0), m_lastMoveTime(0),
+	m_gridChgFunc(gridChgFunc), m_gameScene(gameScene)
 {
 	
 }
 
-GameActor::GameActor(ActorType actorType, int actorId, int x, int y, PosChgFunc posChgFunc) :
-	m_actorType(actorType), m_actorId(actorId), m_pos(Vector<int>(x, y)), m_moveSpeed(0), m_lastMoveTime(0),
-	m_posChgFunc(posChgFunc)
+GameActor::GameActor(ActorType actorType, int actorId, int x, int y, void* gameScene, GridChgFunc posChgFunc) :
+	m_actorType(actorType), m_actorId(actorId), m_pos(Position(x, y)), m_grid(Grid(x / GRID_X_SIZE, y / GRID_Y_SIZE)), m_moveSpeed(0), m_lastMoveTime(0),
+	m_gridChgFunc(posChgFunc), m_gameScene(gameScene)
 {
 
 }
@@ -29,14 +30,23 @@ void GameActor::removeSightActors(std::set<int>& actors) {
 	}
 }
 
-void GameActor::setPos(int x, int y) {
+void GameActor::setPos(float x, float y, bool isTemp) {
 	m_pos.x = x;
 	m_pos.y = y;
-	m_posChgFunc(m_actorId, &m_pos);
-	Logger::logInfo("$pos:%d,%d", x, y);
+	if (isTemp) return;
+	if (m_grid.x != int(x / GRID_X_SIZE) || m_grid.y != int(y / GRID_Y_SIZE)) {
+		m_grid.x = x / GRID_X_SIZE;
+		m_grid.y = y / GRID_Y_SIZE;
+		//m_gridChgFunc(m_actorId, &m_grid);
+		if (m_gameScene != NULL) {
+			((GameScene*)m_gameScene)->onActorGridChg(m_actorId, &m_grid);
+		}
+	}
+	
+	Logger::logInfo("$pos:%0.3f, %0.3f, gird_x:%d, gird_y:%d", x, y, m_grid.x, m_grid.y);
 }
 
-void GameActor::setTgtPosList(std::vector<Vector<int>> tgtPosList) {
+void GameActor::setTgtPosList(std::vector<Position> tgtPosList) {
 	int64_t ts = TimeUtil::getCurrentTime();
 	if (!m_tgtPosList.empty()) {
 		updatePos(ts);
@@ -48,25 +58,27 @@ void GameActor::setTgtPosList(std::vector<Vector<int>> tgtPosList) {
 void GameActor::updatePos(int64_t ts) {
 	if (m_moveSpeed <= 0) return;
 	if (m_tgtPosList.empty()) return;
-	Vector<int>* tgt_pos = &m_tgtPosList[0];
-	float dist = tgt_pos->distance(&m_pos);
-	Vector<float> dir = tgt_pos->dir(&m_pos);
+	Position tgt_pos = m_tgtPosList[0];
+	Vector2<float> path = tgt_pos - m_pos;
+	float dist = path.length();
+	Vector2<float> dir = path.normalize();
+	//Vector2<float> dir = tgt_pos->dir(&m_pos);
 	float moveDist = m_moveSpeed * (ts - m_lastMoveTime) / 1000.0;
 	if (dist > moveDist) {
-		Vector<int> new_pos = m_pos + dir * moveDist;
-		if (new_pos.distance(&m_pos) <= 1e-6) return;
-		setPos(new_pos.x, new_pos.y);
+		Position tmpPos = m_pos + dir * moveDist;
+		if ((tmpPos - m_pos).length_2() <= 1e-6) return;
+		setPos(tmpPos.x, tmpPos.y);
 		m_lastMoveTime = ts;
 	}
 	else {
-		setPos(tgt_pos->x, tgt_pos->y);
 		m_lastMoveTime += dist / m_moveSpeed * 1000;
 		m_tgtPosList.erase(m_tgtPosList.begin());
-		if (m_tgtPosList.empty()) {
-			m_posChgFunc(m_actorId, &m_pos);
+		if (!m_tgtPosList.empty()) {
+			setPos(tgt_pos.x, tgt_pos.y, true);
+			updatePos(ts);
 		}
 		else {
-			updatePos(ts);
+			setPos(tgt_pos.x, tgt_pos.y);
 		}
 	}
 }

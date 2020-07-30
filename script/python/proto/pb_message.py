@@ -30,7 +30,8 @@ class Message:
     MSG_ID_MOVE_TO = 17
     MSG_ID_RPC_MSG = 18
     MSG_ID_RPC_MSG_RSP = 19
-    MSG_ID_TEST_REQ = 20
+    MSG_ID_SYNC_POS = 20
+    MSG_ID_TEST_REQ = 21
 
     _MsgId2Msg = {
         MSG_ID_ACTOR_BORN: proto.scene_pb2.ActorBorn,
@@ -52,6 +53,7 @@ class Message:
         MSG_ID_MOVE_TO: proto.role_pb2.MoveTo,
         MSG_ID_RPC_MSG: proto.server_only.common_pb2.RpcMsg,
         MSG_ID_RPC_MSG_RSP: proto.server_only.common_pb2.RpcMsgRsp,
+        MSG_ID_SYNC_POS: proto.scene_pb2.SyncPos,
         MSG_ID_TEST_REQ: proto.test_pb2.TestReq,
     }
     
@@ -75,6 +77,7 @@ class Message:
         proto.role_pb2.MoveTo: MSG_ID_MOVE_TO,
         proto.server_only.common_pb2.RpcMsg: MSG_ID_RPC_MSG,
         proto.server_only.common_pb2.RpcMsgRsp: MSG_ID_RPC_MSG_RSP,
+        proto.scene_pb2.SyncPos: MSG_ID_SYNC_POS,
         proto.test_pb2.TestReq: MSG_ID_TEST_REQ,
     }
     

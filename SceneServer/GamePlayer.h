@@ -10,7 +10,7 @@ private:
 	std::string m_name;
 	void* m_scriptObj;
 public:
-	GamePlayer(int connId, int actorId, int roleId, std::string name, int x, int y, PosChgFunc posChgFunc);
+	GamePlayer(int connId, int actorId, int roleId, std::string name, int x, int y, void* gameScene, GridChgFunc posChgFunc);
 	inline void setScriptObj(void* scriptObj) { m_scriptObj = scriptObj; }
 	void sendPacket(int msgId);
 

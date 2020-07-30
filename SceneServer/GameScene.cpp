@@ -52,7 +52,7 @@ void GameScene::onDestory()
 GamePlayer* GameScene::createPlayer(int connId, int roleId, const char* name, int x, int y)
 {
 	int actorId = m_maxActorId++;
-	GamePlayer* gamePlayer = new GamePlayer(connId, actorId, roleId, name, x, y, std::bind(&GameScene::onActorPosChg, this, std::placeholders::_1, std::placeholders::_2));
+	GamePlayer* gamePlayer = new GamePlayer(connId, actorId, roleId, name, x, y, this, std::bind(&GameScene::onActorGridChg, this, std::placeholders::_1, std::placeholders::_2));
 	m_actors.emplace(std::make_pair(actorId, gamePlayer));
 	m_players.emplace(std::make_pair(connId, gamePlayer));
 	SceneMgr::getSceneMgr()->addPlayer(connId, m_sceneUid);
@@ -68,7 +68,7 @@ void GameScene::onActorEnter(int actorId) {
 	}
 
 	std::set<int> neighbours;
-	m_AOIMgr.addNode(actor->getActorId(), actor->getX(), actor->getY(), neighbours);
+	m_AOIMgr.addNode(actor->getActorId(), actor->getGridX(), actor->getGridY(), neighbours);
 
 	if (!neighbours.empty()) {
 		auto py_state = PyGILState_Ensure();
@@ -123,7 +123,7 @@ void GameScene::onActorLeave(GameActor* gameActor) {
 void GameScene::onActorMove(GameActor* gameActor) {
 	std::set<int> enterIds;
 	std::set<int> leaveIds;
-	m_AOIMgr.moveNode(gameActor->getActorId(), gameActor->getX(), gameActor->getY(), leaveIds, enterIds);
+	m_AOIMgr.moveNode(gameActor->getActorId(), gameActor->getGridX(), gameActor->getGridY(), leaveIds, enterIds);
 	if (enterIds.empty() && leaveIds.empty()) return;
 
 	gameActor->addSightActors(enterIds);
@@ -191,7 +191,7 @@ void GameScene::removeActor(int actorId) {
 	Logger::logInfo("$remove actor, sceneId:%d, sceneUid:%d, actorId:%d", m_sceneId, m_sceneUid, actorId);
 }
 
-void GameScene::onActorPosChg(int actorId, Vector<int>* pos) {
+void GameScene::onActorGridChg(int actorId, Grid* grid) {
 	GameActor* actor = getActor(actorId);
 	if (actor == NULL) {
 		Logger::logError("move actor error, actor not found, sceneId:%d, sceneUid:%d, actorId:%d", m_sceneId, m_sceneUid, actorId);
@@ -199,6 +199,7 @@ void GameScene::onActorPosChg(int actorId, Vector<int>* pos) {
 	}
 
 	onActorMove(actor);
+	Logger::logDebug("$actor grid chg!!!");
 }
 
 bool GameScene::onRecvClientMsg(int connId, int msgId, char* data, int dataLen) {

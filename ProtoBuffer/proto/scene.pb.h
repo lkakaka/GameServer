@@ -47,7 +47,7 @@ struct TableStruct_proto_2fscene_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[6]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[7]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -66,6 +66,9 @@ extern EnterSceneReqDefaultTypeInternal _EnterSceneReq_default_instance_;
 class EnterSceneRsp;
 class EnterSceneRspDefaultTypeInternal;
 extern EnterSceneRspDefaultTypeInternal _EnterSceneRsp_default_instance_;
+class SyncPos;
+class SyncPosDefaultTypeInternal;
+extern SyncPosDefaultTypeInternal _SyncPos_default_instance_;
 class _NpcInfo;
 class _NpcInfoDefaultTypeInternal;
 extern _NpcInfoDefaultTypeInternal __NpcInfo_default_instance_;
@@ -77,6 +80,7 @@ template<> ::ActorBorn* Arena::CreateMaybeMessage<::ActorBorn>(Arena*);
 template<> ::ActorDissolve* Arena::CreateMaybeMessage<::ActorDissolve>(Arena*);
 template<> ::EnterSceneReq* Arena::CreateMaybeMessage<::EnterSceneReq>(Arena*);
 template<> ::EnterSceneRsp* Arena::CreateMaybeMessage<::EnterSceneRsp>(Arena*);
+template<> ::SyncPos* Arena::CreateMaybeMessage<::SyncPos>(Arena*);
 template<> ::_NpcInfo* Arena::CreateMaybeMessage<::_NpcInfo>(Arena*);
 template<> ::_PlayerInfo* Arena::CreateMaybeMessage<::_PlayerInfo>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
@@ -934,6 +938,151 @@ class ActorDissolve :
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_proto_2fscene_2eproto;
 };
+// -------------------------------------------------------------------
+
+class SyncPos :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:SyncPos) */ {
+ public:
+  SyncPos();
+  virtual ~SyncPos();
+
+  SyncPos(const SyncPos& from);
+  SyncPos(SyncPos&& from) noexcept
+    : SyncPos() {
+    *this = ::std::move(from);
+  }
+
+  inline SyncPos& operator=(const SyncPos& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline SyncPos& operator=(SyncPos&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const SyncPos& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const SyncPos* internal_default_instance() {
+    return reinterpret_cast<const SyncPos*>(
+               &_SyncPos_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    6;
+
+  friend void swap(SyncPos& a, SyncPos& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(SyncPos* other) {
+    if (other == this) return;
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline SyncPos* New() const final {
+    return CreateMaybeMessage<SyncPos>(nullptr);
+  }
+
+  SyncPos* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<SyncPos>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const SyncPos& from);
+  void MergeFrom(const SyncPos& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  #else
+  bool MergePartialFromCodedStream(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* InternalSerializeWithCachedSizesToArray(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(SyncPos* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "SyncPos";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_proto_2fscene_2eproto);
+    return ::descriptor_table_proto_2fscene_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kActorIdFieldNumber = 1,
+    kPosXFieldNumber = 2,
+    kPosYFieldNumber = 3,
+  };
+  // int32 actor_id = 1;
+  void clear_actor_id();
+  ::PROTOBUF_NAMESPACE_ID::int32 actor_id() const;
+  void set_actor_id(::PROTOBUF_NAMESPACE_ID::int32 value);
+
+  // int32 pos_x = 2;
+  void clear_pos_x();
+  ::PROTOBUF_NAMESPACE_ID::int32 pos_x() const;
+  void set_pos_x(::PROTOBUF_NAMESPACE_ID::int32 value);
+
+  // int32 pos_y = 3;
+  void clear_pos_y();
+  ::PROTOBUF_NAMESPACE_ID::int32 pos_y() const;
+  void set_pos_y(::PROTOBUF_NAMESPACE_ID::int32 value);
+
+  // @@protoc_insertion_point(class_scope:SyncPos)
+ private:
+  class _Internal;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::int32 actor_id_;
+  ::PROTOBUF_NAMESPACE_ID::int32 pos_x_;
+  ::PROTOBUF_NAMESPACE_ID::int32 pos_y_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_proto_2fscene_2eproto;
+};
 // ===================================================================
 
 
@@ -1218,9 +1367,57 @@ ActorDissolve::mutable_actor_ids() {
   return &actor_ids_;
 }
 
+// -------------------------------------------------------------------
+
+// SyncPos
+
+// int32 actor_id = 1;
+inline void SyncPos::clear_actor_id() {
+  actor_id_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SyncPos::actor_id() const {
+  // @@protoc_insertion_point(field_get:SyncPos.actor_id)
+  return actor_id_;
+}
+inline void SyncPos::set_actor_id(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  actor_id_ = value;
+  // @@protoc_insertion_point(field_set:SyncPos.actor_id)
+}
+
+// int32 pos_x = 2;
+inline void SyncPos::clear_pos_x() {
+  pos_x_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SyncPos::pos_x() const {
+  // @@protoc_insertion_point(field_get:SyncPos.pos_x)
+  return pos_x_;
+}
+inline void SyncPos::set_pos_x(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  pos_x_ = value;
+  // @@protoc_insertion_point(field_set:SyncPos.pos_x)
+}
+
+// int32 pos_y = 3;
+inline void SyncPos::clear_pos_y() {
+  pos_y_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SyncPos::pos_y() const {
+  // @@protoc_insertion_point(field_get:SyncPos.pos_y)
+  return pos_y_;
+}
+inline void SyncPos::set_pos_y(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  pos_y_ = value;
+  // @@protoc_insertion_point(field_set:SyncPos.pos_y)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

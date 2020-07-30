@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=_b('\n\tcom.protoB\005Scene'),
-  serialized_pb=_b('\n\x11proto/scene.proto\"2\n\rEnterSceneReq\x12\x0f\n\x07role_id\x18\x01 \x01(\x05\x12\x10\n\x08scene_id\x18\x02 \x01(\x05\"D\n\rEnterSceneRsp\x12\x0f\n\x07role_id\x18\x01 \x01(\x05\x12\x10\n\x08scene_id\x18\x02 \x01(\x05\x12\x10\n\x08\x65rr_code\x18\x03 \x01(\x05\"-\n\x0b_PlayerInfo\x12\x10\n\x08\x61\x63tor_id\x18\x01 \x01(\x05\x12\x0c\n\x04name\x18\x02 \x01(\t\",\n\x08_NpcInfo\x12\x10\n\x08\x61\x63tor_id\x18\x01 \x01(\x05\x12\x0e\n\x06npc_id\x18\x02 \x01(\x05\"K\n\tActorBorn\x12!\n\x0bplayer_list\x18\x01 \x03(\x0b\x32\x0c._PlayerInfo\x12\x1b\n\x08npc_list\x18\x02 \x03(\x0b\x32\t._NpcInfo\"\"\n\rActorDissolve\x12\x11\n\tactor_ids\x18\x01 \x03(\x05\x42\x12\n\tcom.protoB\x05Sceneb\x06proto3')
+  serialized_pb=_b('\n\x11proto/scene.proto\"2\n\rEnterSceneReq\x12\x0f\n\x07role_id\x18\x01 \x01(\x05\x12\x10\n\x08scene_id\x18\x02 \x01(\x05\"D\n\rEnterSceneRsp\x12\x0f\n\x07role_id\x18\x01 \x01(\x05\x12\x10\n\x08scene_id\x18\x02 \x01(\x05\x12\x10\n\x08\x65rr_code\x18\x03 \x01(\x05\"-\n\x0b_PlayerInfo\x12\x10\n\x08\x61\x63tor_id\x18\x01 \x01(\x05\x12\x0c\n\x04name\x18\x02 \x01(\t\",\n\x08_NpcInfo\x12\x10\n\x08\x61\x63tor_id\x18\x01 \x01(\x05\x12\x0e\n\x06npc_id\x18\x02 \x01(\x05\"K\n\tActorBorn\x12!\n\x0bplayer_list\x18\x01 \x03(\x0b\x32\x0c._PlayerInfo\x12\x1b\n\x08npc_list\x18\x02 \x03(\x0b\x32\t._NpcInfo\"\"\n\rActorDissolve\x12\x11\n\tactor_ids\x18\x01 \x03(\x05\"9\n\x07SyncPos\x12\x10\n\x08\x61\x63tor_id\x18\x01 \x01(\x05\x12\r\n\x05pos_x\x18\x02 \x01(\x05\x12\r\n\x05pos_y\x18\x03 \x01(\x05\x42\x12\n\tcom.protoB\x05Sceneb\x06proto3')
 )
 
 
@@ -253,6 +253,51 @@ _ACTORDISSOLVE = _descriptor.Descriptor(
   serialized_end=347,
 )
 
+
+_SYNCPOS = _descriptor.Descriptor(
+  name='SyncPos',
+  full_name='SyncPos',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='actor_id', full_name='SyncPos.actor_id', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='pos_x', full_name='SyncPos.pos_x', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='pos_y', full_name='SyncPos.pos_y', index=2,
+      number=3, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=349,
+  serialized_end=406,
+)
+
 _ACTORBORN.fields_by_name['player_list'].message_type = __PLAYERINFO
 _ACTORBORN.fields_by_name['npc_list'].message_type = __NPCINFO
 DESCRIPTOR.message_types_by_name['EnterSceneReq'] = _ENTERSCENEREQ
@@ -261,6 +306,7 @@ DESCRIPTOR.message_types_by_name['_PlayerInfo'] = __PLAYERINFO
 DESCRIPTOR.message_types_by_name['_NpcInfo'] = __NPCINFO
 DESCRIPTOR.message_types_by_name['ActorBorn'] = _ACTORBORN
 DESCRIPTOR.message_types_by_name['ActorDissolve'] = _ACTORDISSOLVE
+DESCRIPTOR.message_types_by_name['SyncPos'] = _SYNCPOS
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 EnterSceneReq = _reflection.GeneratedProtocolMessageType('EnterSceneReq', (_message.Message,), {
@@ -304,6 +350,13 @@ ActorDissolve = _reflection.GeneratedProtocolMessageType('ActorDissolve', (_mess
   # @@protoc_insertion_point(class_scope:ActorDissolve)
   })
 _sym_db.RegisterMessage(ActorDissolve)
+
+SyncPos = _reflection.GeneratedProtocolMessageType('SyncPos', (_message.Message,), {
+  'DESCRIPTOR' : _SYNCPOS,
+  '__module__' : 'proto.scene_pb2'
+  # @@protoc_insertion_point(class_scope:SyncPos)
+  })
+_sym_db.RegisterMessage(SyncPos)
 
 
 DESCRIPTOR._options = None

@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <iterator>
 
+// 视野范围（以格子为单位）
 #define X_VIEW_RANGE 5
 #define Y_VIEW_RANGE 5
 

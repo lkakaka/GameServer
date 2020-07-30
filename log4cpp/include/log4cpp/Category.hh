@@ -343,6 +343,7 @@ namespace log4cpp {
          * @param ... The arguments for stringFormat 
          **/  
         void info(const char* stringFormat, ...) throw();
+        void info(const char* stringFormat, va_list va) throw();
 
         /** 
          * Log a message with info priority.

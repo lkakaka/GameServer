@@ -45,6 +45,8 @@ std::shared_ptr<google::protobuf::Message> CreateMsgById(int msgId)
 		return std::shared_ptr<google::protobuf::Message>(new RpcMsg());
 		case MSG_ID_RPC_MSG_RSP:
 		return std::shared_ptr<google::protobuf::Message>(new RpcMsgRsp());
+		case MSG_ID_SYNC_POS:
+		return std::shared_ptr<google::protobuf::Message>(new SyncPos());
 		case MSG_ID_TEST_REQ:
 		return std::shared_ptr<google::protobuf::Message>(new TestReq());
 	}

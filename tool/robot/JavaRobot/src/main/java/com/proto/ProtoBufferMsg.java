@@ -19,7 +19,8 @@ public class ProtoBufferMsg {
 	public static final int MSG_ID_LOGIN_REQ = 15;
 	public static final int MSG_ID_LOGIN_RSP = 16;
 	public static final int MSG_ID_MOVE_TO = 17;
-	public static final int MSG_ID_TEST_REQ = 20;
+	public static final int MSG_ID_SYNC_POS = 20;
+	public static final int MSG_ID_TEST_REQ = 21;
 
 	public static Object createMsgById(int msgId, byte[] dat) {
 		try {
@@ -57,6 +58,8 @@ public class ProtoBufferMsg {
 					return Login.LoginRsp.parseFrom(dat);
 				case MSG_ID_MOVE_TO:
 					return Role.MoveTo.parseFrom(dat);
+				case MSG_ID_SYNC_POS:
+					return Scene.SyncPos.parseFrom(dat);
 				case MSG_ID_TEST_REQ:
 					return Test.TestReq.parseFrom(dat);
 			}
@@ -100,6 +103,8 @@ public class ProtoBufferMsg {
 				return Login.LoginRsp.newBuilder();
 			case MSG_ID_MOVE_TO:
 				return Role.MoveTo.newBuilder();
+			case MSG_ID_SYNC_POS:
+				return Scene.SyncPos.newBuilder();
 			case MSG_ID_TEST_REQ:
 				return Test.TestReq.newBuilder();
 		}
@@ -168,6 +173,10 @@ public class ProtoBufferMsg {
 	
 	public static Role.MoveTo.Builder createMoveToBuilder() {
 		return Role.MoveTo.newBuilder();
+	}
+	
+	public static Scene.SyncPos.Builder createSyncPosBuilder() {
+		return Scene.SyncPos.newBuilder();
 	}
 	
 	public static Test.TestReq.Builder createTestReqBuilder() {

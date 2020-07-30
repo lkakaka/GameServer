@@ -1,7 +1,7 @@
 #include "GameNpc.h"
 
-GameNpc::GameNpc(int actorId, int npcId, PosChgFunc posChgFunc) :
-	GameActor(ActorType::NPC, actorId, posChgFunc), m_npcId(npcId)
+GameNpc::GameNpc(int actorId, int npcId, void* gameScene, GridChgFunc gridChgFunc) :
+	GameActor(ActorType::NPC, actorId, gameScene, gridChgFunc), m_npcId(npcId)
 {
 
 }

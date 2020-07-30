@@ -320,6 +320,12 @@ namespace log4cpp {
             va_end(va);
         }
     }
+
+    void Category::info(const char* stringFormat, va_list va) throw() {
+        if (isPriorityEnabled(Priority::INFO)) {
+            _logUnconditionally(Priority::INFO, stringFormat, va);
+        }
+    }
     
     void Category::info(const std::string& message) throw() { 
         if (isPriorityEnabled(Priority::INFO))
