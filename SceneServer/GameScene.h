@@ -20,6 +20,9 @@ private:
 	void onPlayerEnter(GamePlayer* gamePlayer, std::set<int>& neighbours);
 	void onNpcEnter(GameNpc* gameNpc, std::set<int>& neighbours);
 
+	void onEnterSight(GameActor* actor, std::set<int>& enterIds);
+	void onLeaveSight(GameActor* actor, std::set<int>& leaveIds);
+
 	void _syncThreadFunc();
 public:
 	AOIMgr m_AOIMgr;
@@ -39,6 +42,7 @@ public:
 	void onCreate();
 
 	void onActorGridChg(int actorId, Grid* pos);
+	void onActorPosChg(int actorId, Position& pos);
 
 	bool onRecvClientMsg(int connId, int msgId, char* data, int dataLen);
 };

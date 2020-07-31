@@ -87,6 +87,12 @@ public class ServerCmd extends CmdDispatch {
         Util.logInfo("actor dissolve: actor_ids:%s", rsp.getActorIdsList());
     }
 
+    @CmdAnnotation(serverCmd = ProtoBufferMsg.MSG_ID_SYNC_POS)
+    private void onRecvActorSyncPos(Object param) {
+        Scene.SyncPos rsp = (Scene.SyncPos) param;
+        Util.logInfo("actor move, actor_id:%d, x:%d, y:%d", rsp.getActorId(), rsp.getPosX(), rsp.getPosY());
+    }
+
     @CmdAnnotation(serverCmd = ProtoBufferMsg.MSG_ID_GM_CMD_RSP)
     private void onRecvGmCmdRsp(Object param) {
         Role.GmCmdRsp rsp = (Role.GmCmdRsp) param;

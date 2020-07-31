@@ -71,6 +71,8 @@ void GameScene::onActorEnter(int actorId) {
 	m_AOIMgr.addNode(actor->getActorId(), actor->getGridX(), actor->getGridY(), neighbours);
 
 	if (!neighbours.empty()) {
+		onEnterSight(actor, neighbours);
+
 		auto py_state = PyGILState_Ensure();
 		PyObject* arg = PyTuple_New(2);
 		PyObject* actors = PyTuple_New(neighbours.size());
@@ -101,11 +103,31 @@ void GameScene::onNpcEnter(GameNpc* gameNpc, std::set<int>& neighbours) {
 	
 }
 
+void GameScene::onEnterSight(GameActor* actor, std::set<int>& enterIds) {
+	actor->addSightActors(enterIds);
+	for (int actorId : enterIds) {
+		GameActor* neiActor = getActor(actorId);
+		if (neiActor == NULL) continue;
+		neiActor->addSightActor(actorId);
+	}
+}
+
+void GameScene::onLeaveSight(GameActor* actor, std::set<int>& leaveIds) {
+	actor->removeSightActors(leaveIds);
+	for (int actorId : leaveIds) {
+		GameActor* neiActor = getActor(actorId);
+		if (neiActor == NULL) continue;
+		neiActor->removeSightActor(actorId);
+	}
+}
+
 void GameScene::onActorLeave(GameActor* gameActor) {
 	std::set<int> neighbours;
 	m_AOIMgr.removeNode(gameActor->getActorId(), neighbours);
 
 	if (!neighbours.empty()) {
+		onLeaveSight(gameActor, neighbours);
+
 		auto py_state = PyGILState_Ensure();
 		PyObject* arg = PyTuple_New(2);
 		PyObject* actors = PyTuple_New(neighbours.size());
@@ -126,8 +148,8 @@ void GameScene::onActorMove(GameActor* gameActor) {
 	m_AOIMgr.moveNode(gameActor->getActorId(), gameActor->getGridX(), gameActor->getGridY(), leaveIds, enterIds);
 	if (enterIds.empty() && leaveIds.empty()) return;
 
-	gameActor->addSightActors(enterIds);
-	gameActor->removeSightActors(leaveIds);
+	onEnterSight(gameActor, enterIds);
+	onLeaveSight(gameActor, leaveIds);
 
 	auto py_state = PyGILState_Ensure();
 	PyObject* arg = PyTuple_New(3);
@@ -200,6 +222,10 @@ void GameScene::onActorGridChg(int actorId, Grid* grid) {
 
 	onActorMove(actor);
 	Logger::logDebug("$actor grid chg!!!");
+}
+
+void GameScene::onActorPosChg(int actorId, Position& pos) {
+	
 }
 
 bool GameScene::onRecvClientMsg(int connId, int msgId, char* data, int dataLen) {

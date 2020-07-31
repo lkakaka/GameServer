@@ -50,9 +50,13 @@ public:
 	inline int getGridX() { return m_grid.x; }
 	inline int getGridY() { return m_grid.y; }
 	inline ActorType getActorType() { return m_actorType; }
+	inline bool isPlayer() { return m_actorType == PLYAER; }
+	inline bool isNpc() { return m_actorType == NPC; }
 
 	void addSightActors(std::set<int>& actors);
+	void addSightActor(int actorId);
 	void removeSightActors(std::set<int>& actors);
+	void removeSightActor(int actorId);
 
 	void setTgtPosList(std::vector<Position> tgtPosList);
 

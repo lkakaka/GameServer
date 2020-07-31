@@ -4,15 +4,16 @@
 
 class A {
 private:
-	int m_val;
+	
 public:
+	int m_val;
 	A(int val) : m_val(val) { printf("A constructor,%d\n", m_val); }
 	A(const A& a) : m_val(a.m_val){ printf("A assign constructor,%d\n", m_val); }
-	A& operator=(A& a) { 
+	/*A& operator=(const A& a) { 
 		m_val = a.m_val;
 		printf("A = operator,%d\n", m_val);
 		return *this;
-	}
+	}*/
 };
 
 
@@ -25,13 +26,14 @@ void test_func(std::vector<A> v) {
 
 int main() {
 	
-	std::vector<A> v;
-	v.emplace_back(1);
+	/*std::vector<A> v;
+	v.emplace_back(1);*/
 
-	/*A a(1);
+	A a(1);
 	A b(0);
-	b = a;*/
-	test_func(v);
+	b = a;
+	printf("val=%d\n", b.m_val);
+	//test_func(v);
 
 	//std::vector<A> v1 = v;
 

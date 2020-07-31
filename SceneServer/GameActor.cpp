@@ -3,6 +3,8 @@
 #include <algorithm>
 #include "Logger.h"
 #include "GameScene.h"
+#include "proto.h"
+
 
 GameActor::GameActor(ActorType actorType, int actorId, void* gameScene, GridChgFunc gridChgFunc) :
 	m_actorType(actorType), m_actorId(actorId), m_pos(Position(0, 0)), m_grid(Grid(0, 0)), m_moveSpeed(0), m_lastMoveTime(0),
@@ -20,28 +22,53 @@ GameActor::GameActor(ActorType actorType, int actorId, int x, int y, void* gameS
 
 void GameActor::addSightActors(std::set<int>& actors) {
 	for (int actor_id : actors) {
-		m_sightActors.erase(actor_id);
+		m_sightActors.insert(actor_id);
 	}
+}
+
+void GameActor::addSightActor(int actorId) {
+	m_sightActors.insert(actorId);
 }
 
 void GameActor::removeSightActors(std::set<int>& actors) {
 	for (int actor_id : actors) {
-		m_sightActors.insert(actor_id);
+		m_sightActors.erase(actor_id);
 	}
+}
+
+void GameActor::removeSightActor(int actorId) {
+	m_sightActors.erase(actorId);
 }
 
 void GameActor::setPos(float x, float y, bool isTemp) {
 	m_pos.x = x;
 	m_pos.y = y;
 	if (isTemp) return;
+
+	GameScene* gameScene = m_gameScene != NULL ? (GameScene*)m_gameScene : NULL;
 	if (m_grid.x != int(x / GRID_X_SIZE) || m_grid.y != int(y / GRID_Y_SIZE)) {
 		m_grid.x = x / GRID_X_SIZE;
 		m_grid.y = y / GRID_Y_SIZE;
 		//m_gridChgFunc(m_actorId, &m_grid);
-		if (m_gameScene != NULL) {
-			((GameScene*)m_gameScene)->onActorGridChg(m_actorId, &m_grid);
+		if (gameScene != NULL) {
+			gameScene->onActorGridChg(m_actorId, &m_grid);
 		}
 	}
+
+	if (gameScene != NULL) {
+		SyncPos pos_msg;
+		pos_msg.set_actor_id(m_actorId);
+		pos_msg.set_pos_x(getX());
+		pos_msg.set_pos_y(getY());
+		for (int actor_id : m_sightActors) {
+			GameActor* gameActor = gameScene->getActor(actor_id);
+			if (gameActor == NULL || !gameActor->isPlayer()) continue;
+			((GamePlayer*)gameActor)->sendToClient(MSG_ID_SYNC_POS, &pos_msg);
+		}
+
+		((GameScene*)m_gameScene)->onActorPosChg(m_actorId, m_pos);
+	}
+
 	
 	Logger::logInfo("$pos:%0.3f, %0.3f, gird_x:%d, gird_y:%d", x, y, m_grid.x, m_grid.y);
 }
