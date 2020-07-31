@@ -50,6 +50,7 @@ add_subdirectory(HttpServer)
 
 add_subdirectory(TestZmq)
 add_subdirectory(TestRedis)
+add_subdirectory(Test)
 
 
 
