@@ -38,6 +38,9 @@ class GMMgr(object):
 
     @_gm_cmd.reg_cmd("hotfix")
     def _gm_hotfix(self, args):
-        import hotfix.hotfix
-        hotfix.hotfix.start_hotfix()
+        if not args:
+            import hotfix.hotfix
+            hotfix.hotfix.start_hotfix()
+        else:
+            self.player.game_scene.service.rpc_call(args, "HotFix")
         return "ok"

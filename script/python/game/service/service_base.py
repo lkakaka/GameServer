@@ -5,18 +5,25 @@ from proto.pb_message import Message
 from game.util import logger
 from game.util.rpc import RpcMgr
 from game.util.db_proxy import DBProxy
+import game.util.cmd_util
 
 # import asyncio
 
 
 class ServiceBase:
 
+    rpc_proc = game.util.cmd_util.CmdDispatch("rpc_base")
+
     def __init__(self, s_cmd, c_cmd, rpc_proc=None):
         self._service_obj = Game.Service()
         self.db_proxy = DBProxy(self)
         self._s_cmd = s_cmd
         self._c_cmd = c_cmd
-        self._rpc_proc = rpc_proc
+        if rpc_proc is not None:
+            self._rpc_proc = rpc_proc
+        else:
+            self._rpc_proc = ServiceBase.rpc_proc
+        self._rpc_proc.reg_cmd_func("HotFix", ServiceBase._on_recv_hotfix)
         self._rpc_mgr = RpcMgr(self)
         s_cmd.reg_cmd_func(Message.MSG_ID_RPC_MSG_RSP, ServiceBase._on_recv_rpc_rsp_msg)
         s_cmd.reg_cmd_func(Message.MSG_ID_RPC_MSG, ServiceBase._on_recv_rpc_msg)
@@ -97,6 +104,10 @@ class ServiceBase:
 
     def _on_recv_rpc_rsp_msg(self, sender, msg_id, msg):
         self._rpc_mgr.on_recv_rpc_rsp_msg(sender, msg.rpc_id, msg.rpc_data)
+
+    def _on_recv_hotfix(self, sender):
+        import hotfix.hotfix
+        hotfix.hotfix.start_hotfix()
 
     def send_msg_to_client(self, conn_id, msg):
         msg_dat = msg.SerializeToString()
