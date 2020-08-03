@@ -24,13 +24,20 @@ endif (NOT WIN32)
 file(GLOB_RECURSE CURRENT_HEADERS *.h *.hpp)
 file(GLOB_RECURSE CURRENT_SRC *.cpp *.cc)
 
+file(GLOB_RECURSE PY_SRC  ../script/python/*.py)
+
+set(all_files ${CURRENT_HEADERS} ${CURRENT_SRC} ${PY_SRC})
+source_group_by_dir(all_files)
+
+#SOURCE_GROUP("PyScript" FILES ${PY_SRC})
+
 # 使用aux_source_directory vs中头文件会无法显示
 # aux_source_directory(./ MYSERVER_SRC_DIR)
 # aux_source_directory(./proto MYSERVER_PROTO_SRC_DIR)
 # aux_source_directory(./db MYSERVER_DB_DIR)
 # aux_source_directory(./py_module MYSERVER_PY_MOD_DIR)
 # add_executable(GameServer ${MYSERVER_SRC_DIR} ${MYSERVER_PROTO_SRC_DIR} ${MYSERVER_DB_DIR} ${MYSERVER_PY_MOD_DIR})
-add_executable(GameServer ${CURRENT_HEADERS} ${CURRENT_SRC} ${PROTO_SRC} ${COMMON_SRC})
+add_executable(GameServer ${CURRENT_HEADERS} ${CURRENT_SRC} ${PROTO_SRC} ${COMMON_SRC} ${PY_SRC})
 
 # message(STATUS ${CURRENT_HEADERS})
 # SOURCE_GROUP("include" FILES ${CURRENT_HEADERS})
