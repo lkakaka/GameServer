@@ -1,4 +1,4 @@
-# -*- encoding:utf-8 -*-
+﻿# -*- encoding:utf-8 -*-
 
 from game.service.service_base import ServiceBase
 from proto.pb_message import Message

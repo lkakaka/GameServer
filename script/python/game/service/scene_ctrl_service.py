@@ -1,3 +1,4 @@
+# -*- encoding:utf-8 -*-
 from game.service.service_base import ServiceBase
 from game.util import logger
 from game.util.const import ErrorCode

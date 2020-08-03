@@ -1,3 +1,4 @@
+# -*- encoding:utf-8 -*-
 
 import Config
 from game.util import logger

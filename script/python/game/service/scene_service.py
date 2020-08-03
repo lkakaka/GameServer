@@ -1,3 +1,4 @@
+# -*- encoding:utf-8 -*-
 from game.util import logger
 from proto.pb_message import Message
 from game.service.service_base import ServiceBase

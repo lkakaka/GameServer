@@ -1,3 +1,4 @@
+# -*- encoding:utf-8 -*-
 
 import PyDb
 from game.util import logger
@@ -146,7 +147,7 @@ class DBHandler:
         key = tbl.make_redis_index_key(tb_index)
         result = self._db_redis.exec_redis_cmd("ZRANGE {} 0 -1 WITHSCORES", key)
         print("redis result----", result)
-        if result and result[1] == DBHandler.INDEX_ALL_CACHED_SCORE:    # ÒÑÔÚredisÖĞÈ«»º´æ
+        if result and result[1] == DBHandler.INDEX_ALL_CACHED_SCORE:    # å·²åœ¨redisä¸­å…¨ç¼“å­˜
             for i in range(2, len(result), 2):
                 pri_key = result[i]
                 if pri_key == "":
@@ -164,15 +165,15 @@ class DBHandler:
         return lst
 
     def _cache_tbl_index_to_redis(self, tbls, tb_index, is_all_cached):
-        # ZADD key score member [[score member] [score member] ¡­]
-        # score=0,1£º´ú±íÊÇ·ñÒÑ¾­È«²¿»º´æÔÚredisÖĞ
-        # score=10£º´ú±íredis¼üÖµ(¾ßÌå¼ÇÂ¼)
+        # ZADD key score member [[score member] [score member] â€¦]
+        # score=0,1ï¼šä»£è¡¨æ˜¯å¦å·²ç»å…¨éƒ¨ç¼“å­˜åœ¨redisä¸­
+        # score=10ï¼šä»£è¡¨redisé”®å€¼(å…·ä½“è®°å½•)
         if not tbls:
             return
         key = tbls[0].make_redis_index_key(tb_index)
         redis_cmd = "EXISTS " + key
         redis_result = self._db_redis.exec_redis_cmd(redis_cmd)
-        if redis_result == 1:   # Ë÷Òı´æÔÚ
+        if redis_result == 1:   # ç´¢å¼•å­˜åœ¨
             if is_all_cached:
                 redis_cmd = "ZADD {} {} {}".format(key, DBHandler.INDEX_ALL_CACHED_SCORE, DBHandler.INDEX_ALL_CACHED)
             else:
@@ -207,7 +208,7 @@ class DBHandler:
             redis_cmd = "HSET " + pri_key
             for name in col_names:
                 val = tbl[name]
-                # todo: ÔõÃ´´æÈë¿Õ×Ö·û´®?
+                # todo: æ€ä¹ˆå­˜å…¥ç©ºå­—ç¬¦ä¸²?
                 if val == "":
                     redis_cmd += ' {} "{}"'.format(name, val)
                 else:
@@ -312,7 +313,7 @@ class DBHandler:
                 if old_tbl is None or tbl[col_name] != old_tbl[col_name]:
                     has_change = True
                     redis_cmd += " {} {}".format(col_name, tbl[col_name])
-                    # ¸üĞÂË÷Òı
+                    # æ›´æ–°ç´¢å¼•
                     indexs = tbl.get_indexs_by_col(col_name)
                     for tb_index in indexs:
                         if old_tbl is not None:
