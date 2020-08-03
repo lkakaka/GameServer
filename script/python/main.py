@@ -4,6 +4,16 @@ import os
 from game.util import logger
 import game.util.db_util
 import Timer
+import platform
+import builtins
+println = builtins.print
+
+is_win = platform.platform().find("Windows") >= 0
+def print_1(*args, **kwargs):
+    if is_win:
+        println(*args, **kwargs)
+
+builtins.print = print_1
 
 timer_id = 0
 
