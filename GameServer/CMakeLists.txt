@@ -10,9 +10,9 @@ add_definitions(-DOPEN_PROFILE_TRACK)
 
 gnu_setting(false)
 
-link_directories(${Boost_LIBRARY_DIRS} ${PYTHON_ROOT}/libs ${LOG4CPP_ROOT} ${PROTOBUFF_ROOT}/cmake/build 
+link_directories(${Boost_LIBRARY_DIRS} ${PYTHON_ROOT}/libs ${LOG4CPP_ROOT} ${PROTOBUFF_ROOT}/libs 
 ${DEPENDS_ROOT}/mysql/lib64 ${DBPLUGIN_ROOT} ${ZMQ_ROOT}/libs ${GAMEUTIL_ROOT} ${SCENE_ROOT} ${HTTP_SERVER_ROOT} ${GATEWAY_ROOT} ${REDIS_ROOT}/libs)
-include_directories(${Boost_INCLUDE_DIRS} ${PYTHON_ROOT}/include ${LOG4CPP_ROOT}/include ${PROTOBUFF_ROOT}/src 
+include_directories(${Boost_INCLUDE_DIRS} ${PYTHON_ROOT}/include ${LOG4CPP_ROOT}/include ${PROTOBUFF_ROOT}/include 
 ${DBPLUGIN_ROOT} ${DBPLUGIN_ROOT}/include ${ZMQ_ROOT}/include ${GAMEUTIL_ROOT} ${PROTO_ROOT} ${SCENE_ROOT} ${HTTP_SERVER_ROOT} ${DEPENDS_ROOT}/mysql/include
 ${GATEWAY_ROOT} ${REDIS_ROOT}/include)
 

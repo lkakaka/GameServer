@@ -61,7 +61,8 @@ set(HTTP_SERVER_ROOT ${PROJECT_SOURCE_DIR}/HttpServer)
 set(GATEWAY_ROOT ${PROJECT_SOURCE_DIR}/Gateway)
 
 set(BOOST_ROOT ../boost_1_70_0)
-set(PROTOBUFF_ROOT ../../protobuf-3.9.0)
+#set(PROTOBUFF_ROOT ../../protobuf-3.9.0)
+set(PROTOBUFF_ROOT ${DEPENDS_ROOT}/protobuf-3.9.0)
 find_package(Boost REQUIRED)
 
 file(GLOB_RECURSE PROTO_SRC ${PROTO_ROOT}/*.cpp ${PROTO_ROOT}/*.cc ${PROTO_ROOT}/*.h ${PROTO_ROOT}/*.hpp)

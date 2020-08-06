@@ -14,8 +14,10 @@
 	   cd protobuf-3.9.0/cmake
 	   mkdir build
 	   cd build
-	   cmake ..
+	   cmake -DCMAKE_INSTALL_PREFIX=../install ..
 	   打开工程protobuf.sln, 编译
+	   编译install工程, 安装头文件库文件到../install目录下
+	   拷贝头文件库文件到Depends/protobuf-3.9.0
 	   
 	   (不需要这步、编译好的python版已放在script/python/google下)
 	   python版安装（先生成protoc.exe，放到protobuf-3.9.0/src/目录下）
@@ -31,6 +33,15 @@
 		
 		4、mysql Connector/C++ 8.0.19 （mysql-connector-c++-8.0.19-winx64.zip）(https://dev.mysql.com/downloads/file/?id=492171)
 		已包含头文件和库文件
+		
+		5、hiredis (https://github.com/redis/hiredis.git)
+		cd hiredis
+		mkdir build
+		cd build
+		cmake -DCMAKE_INSTALL_PREFIX=./usr ..
+		打开工程, 编译
+		编译INSTALL工程,把头文件和库文件安装到./usr目录下
+		拷贝 ./usr目录下头文件库文件到工程里(Depends/hiredis/include/win, Depends/hiredis/libs/Debug[Release])
 		
 		
 	   
@@ -73,6 +84,8 @@
 		cd build
 		cmake -DCMAKE_INSTALL_PREFIX=./usr ..
 		make
+		make install
+		拷贝 ./usr目录下头文件库文件到工程里(Depends/hiredis/include/linux, Depends/hiredis/libs)
 		
 	   
 	   3、生成工程Makefile
