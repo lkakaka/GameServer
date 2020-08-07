@@ -56,6 +56,8 @@ set(GAMEUTIL_ROOT ${PROJECT_SOURCE_DIR}/GameUtil)
 set(PROTO_ROOT ${PROJECT_SOURCE_DIR}/ProtoBuffer)
 set(REDIS_ROOT ${DEPENDS_ROOT}/hiredis)
 set(DBPLUGIN_ROOT ${PROJECT_SOURCE_DIR}/DBPlugin)
+set(MYSQL_ROOT ${DEPENDS_ROOT}/mysql)
+set(MONGO_ROOT ${DEPENDS_ROOT}/mongo-c-driver)
 set(SCENE_ROOT ${PROJECT_SOURCE_DIR}/SceneServer)
 set(HTTP_SERVER_ROOT ${PROJECT_SOURCE_DIR}/HttpServer)
 set(GATEWAY_ROOT ${PROJECT_SOURCE_DIR}/Gateway)
@@ -65,10 +67,12 @@ set(BOOST_ROOT ../boost_1_70_0)
 set(PROTOBUFF_ROOT ${DEPENDS_ROOT}/protobuf-3.9.0)
 find_package(Boost REQUIRED)
 
+message(STATUS ${Boost_INCLUDE_DIRS})
+
 file(GLOB_RECURSE PROTO_SRC ${PROTO_ROOT}/*.cpp ${PROTO_ROOT}/*.cc ${PROTO_ROOT}/*.h ${PROTO_ROOT}/*.hpp)
 file(GLOB_RECURSE COMMON_SRC Common/*.cpp Common/*.h)
 
-message(STATUS ${PROTO_SRC})
+#message(STATUS ${PROTO_SRC})
 
 add_subdirectory(Math)
 add_subdirectory(log4cpp)
