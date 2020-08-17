@@ -1,3 +1,4 @@
+#ifdef WIN32
 #include "MongoDBHandler.h"
 
 #include <iterator>
@@ -69,3 +70,5 @@ MongoDBHandler::MongoDBHandler(std::string& dbUrl, std::string& dbName) : m_dbUr
     mongoc_client_destroy(client);
     mongoc_cleanup();
 }
+
+#endif

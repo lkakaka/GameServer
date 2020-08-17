@@ -1,4 +1,5 @@
 #pragma once
+#ifdef WIN32
 #include <vector>
 #include <set>
 #include <functional>
@@ -23,3 +24,4 @@ public:
 
 
 DATA_BASE_END
+#endif

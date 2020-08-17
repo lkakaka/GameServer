@@ -9,7 +9,9 @@
 
 #include "Logger.h"
 
+#ifdef WIN32
 #include "mongo/MongoDBHandler.h"
+#endif
 
 
 DBMgr* g_DBMgr;
@@ -44,10 +46,12 @@ DBHandler* DBMgr::createDBHander(char* dbName) {
 	}
 	DBHandler* dbHanler = new DBHandler(DBMgr::m_dbUrl, DBMgr::m_dbPort, DBMgr::m_dbUserName, DBMgr::m_dbPassword, dbName);
 	dbMgr->m_dbHanders.emplace(std::make_pair(dbName, dbHanler));
-
+	
+#ifdef WIN32
 	std::string mdb_uri = "mongodb://127.0.0.1:27017/?appname=client-example";
 	std::string mdb_name = "test";
 	MongoDBHandler mdb(mdb_uri, mdb_name);
+#endif
 
 	return dbHanler;
 }
