@@ -45,19 +45,23 @@
 
   Note: Value of 0 is reserved for special uses and thus constant values
   are always > 0.
-*/
 
-/*
   Note: the empty END_LIST macro at the end of list macros helps Doxygen
   correctly interpret documentation for the list item.
 */
+
+#define OPT_STR(X,Y,N) X##_str(Y,N)
+#define OPT_BOOL(X,Y,N) X##_bool(Y,N)
+#define OPT_NUM(X,Y,N) X##_num(Y,N)
+#define OPT_ANY(X,Y,N) X##_any(Y,N)
+
 
 #undef END_LIST
 #define END_LIST
 
 
 #define CLIENT_OPTION_LIST(x)                                                  \
-  OPT_BOOL(x,POOLING,1) /*!< disable/enable the pool. (Enabled by default)*/    \
+  OPT_BOOL(x,POOLING,1) /*!< disable/enable the pool. (Enabled by default)*/   \
   OPT_NUM(x,POOL_MAX_SIZE,2) /*!< size of the pool. (Defaults to 25)*/         \
   OPT_NUM(x,POOL_QUEUE_TIMEOUT,3) /*!< timeout for waiting for a connection in
   the pool (ms). (No timeout by default)*/                                     \
@@ -71,33 +75,75 @@
   /*! DNS name of the host, IPv4 address or IPv6 address */                  \
   OPT_STR(x,HOST,2)                                                          \
   OPT_NUM(x,PORT,3)        /*!< X Plugin port to connect to */               \
-  /*! Assign a priority (a number in range 1 to 100) to the last specified
-      host; these priorities are used to determine the order in which multiple
-      hosts are tried by the connection fail-over logic (see description
-      of `Session` class) */                                                 \
+  /*!
+    Assign a priority (a number in range 1 to 100) to the last specified
+    host; these priorities are used to determine the order in which multiple
+    hosts are tried by the connection fail-over logic (see description
+    of `Session` class)
+  */                                                                         \
   OPT_NUM(x,PRIORITY,4)                                                      \
   OPT_STR(x,USER,5)        /*!< user name */                                 \
   OPT_STR(x,PWD,6)         /*!< password */                                  \
   OPT_STR(x,DB,7)          /*!< default database */                          \
-  OPT_ANY(x,SSL_MODE,8)    /*!< define `SSLMode` option to be used */        \
+  /*!
+    Specify \ref SSLMode option to be used. In plain C code the value
+    should be a `#mysqlx_ssl_mode_t` enum constant.
+  */ \
+  OPT_ANY(x,SSL_MODE,8)                                                      \
   /*! path to a PEM file specifying trusted root certificates*/              \
   OPT_STR(x,SSL_CA,9)                                                        \
-  OPT_ANY(x,AUTH,10)      /*!< authentication method, PLAIN, MYSQL41, etc.*/ \
-  OPT_STR(x,SOCKET,11)    /*!< unix socket path*/                            \
-  OPT_NUM(x,CONNECT_TIMEOUT,12) /*!< timeout to connect*/                   \
-  OPT_STR(x,CONNECTION_ATTRIBUTES,13) /*!< Expects JSON with key:pair values*/ \
-
+  /*!
+    Authentication method to use, see \ref AuthMethod. In plain C code the value
+    should be a `#mysqlx_auth_method_t` enum constant.
+  */ \
+  OPT_ANY(x,AUTH,10)                                                        \
+  OPT_STR(x,SOCKET,11)    /*!< unix socket path */                          \
+  /*!
+    Sets connection timeout in milliseconds. In C++ code can be also set to
+    a `std::chrono::duration` value.
+  */ \
+  OPT_NUM(x,CONNECT_TIMEOUT,12)                                              \
+  /*!
+    Specifies connection attributes (key-value pairs) to be sent when a session
+    is created. The value is a JSON string (in C++ code can be also a `DbDoc`
+    object) defining additional attributes to be sent on top of the default
+    ones. Setting this option to `false` (in C++ code) or NULL (in plain C code)
+    disables sending any connection attributes (including the default ones).
+    Setting it to `true` (in C++ code) or empty string (in plain C code)
+    requests sending only the default attributes which is also the default
+    behavior when this option is not set.
+  */ \
+  OPT_STR(x,CONNECTION_ATTRIBUTES,13)                                        \
+  /*!
+    List of allowed TLS protocol versions, such as "TLSv1.2". The value is a
+    string with comma separated versions. In C++ code it can also be an
+    iterable container with versions.
+  */                                                                         \
+  OPT_STR(x,TLS_VERSIONS, 14)                                                \
+  /*!
+    List of allowed TLS cipher suites. The value is a string with
+    comma separated IANA cipher suitenames (such as
+    "TLS_RSA_WITH_3DES_EDE_CBC_SHA"). In C++ code it can also be an iterable
+    container with names.
+    Unknown cipher suites are silently ignored.
+  */                                                                         \
+  OPT_STR(x,TLS_CIPHERSUITES, 15)                                            \
+  /*!
+    If enabled (true) will check hostname for DNS SRV record and use its
+    configuration (hostname, port, priority and weight) to connect.
+  */                                                                        \
+  OPT_BOOL(x, DNS_SRV, 16)                                                  \
+  OPT_ANY(x,COMPRESSION,17) /*!< enable or disable compression */
   END_LIST
-
-#define OPT_STR(X,Y,N) X##_str(Y,N)
-#define OPT_BOOL(X,Y,N) X##_bool(Y,N)
-#define OPT_NUM(X,Y,N) X##_num(Y,N)
-#define OPT_ANY(X,Y,N) X##_any(Y,N)
 
 
 /*
   Names for options supported in the query part of a connection string and
   how they map to session options above.
+
+  Note: when adding new options to this list, also update doxygen docs
+  for mysqlx::SessionSettings URL ctor (include\mysqlx\devapi\settings.h) and
+  for mysqlx_get_session_from_url() (include\mysqlx\xapi.h).
 */
 
 #define URI_OPTION_LIST(X)  \
@@ -105,7 +151,10 @@
   X("ssl-ca", SSL_CA)       \
   X("auth", AUTH)           \
   X("connect-timeout", CONNECT_TIMEOUT) \
-  X("connection-attributes",CONNECTION_ATTRIBUTES)
+  X("connection-attributes",CONNECTION_ATTRIBUTES)\
+  X("tls-versions", TLS_VERSIONS) \
+  X("tls-ciphersuites", TLS_CIPHERSUITES) \
+  X("compression", COMPRESSION) \
   END_LIST
 
 
@@ -225,8 +274,50 @@
                         locked from the query results.  */ \
   END_LIST
 
+#define COMPRESSION_MODE_LIST(x) \
+  x(DISABLED,1)        /*!< Disables the compression.  */ \
+  x(PREFERRED,2)       /*!< Request compression, but not return error
+                         if compression is requested, but could not be 
+                         used */ \
+  x(REQUIRED,3)        /*!< Request compression and return error if
+                         compression is not supported by the server */ \
+  END_LIST
 
 // ----------------------------------------------------------------------------
+
+
+#define COLLECTION_OPTIONS_OPTION(X)\
+  X(REUSE,1) /*!< Use existing collection. Expects boolean value
+                  @anchor OPT_COLLECTION_REUSE */ \
+  X(VALIDATION,2) /*!< Collection validation options. Expects
+                       CollectionValidation or a json string.*/ \
+  END_LIST
+
+#define COLLECTION_VALIDATION_OPTION(X)\
+  X(SCHEMA,1) /*!< Collection validation schema, as defined by
+                    https://dev.mysql.com/doc/refman/8.0/en/json-validation-functions.html#function_json-schema-valid
+                */ \
+  X(LEVEL,2) /*!< Defines level of validation on the collection, see
+                  \ref CollectionValidation_Level "CollectionValidation::Level".
+                  In plain C code the value should be
+                  \ref opt_collection_validation_level "mysqlx_collection_validation_level_t".
+                  */ \
+  END_LIST
+
+
+  // Schema Validation Level
+
+//Windows defines STRICT as a macro... undefine it
+#ifdef STRICT
+  #undef STRICT
+#endif
+
+#define COLLECTION_VALIDATION_LEVEL(X)\
+  X(OFF,1) /*!< No validation will be done on the collection. */ \
+  X(STRICT,2) /*!< All collection documents have to comply to validation schema.
+               */ \
+  END_LIST
+
 
 
 #endif

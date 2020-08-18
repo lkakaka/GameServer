@@ -3,6 +3,7 @@
 #include <string>
 #include <map>
 #include <set>
+#include <iterator>
 
 void parseReply(redisReply* reply);
 

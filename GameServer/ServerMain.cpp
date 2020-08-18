@@ -20,10 +20,13 @@
 #include "Network.h"
 #include "CmdLine.h"
 
+#include "mysqlx/xdevapi.h"
+
 using namespace std;
 //GameService g_game_service;
 //extern struct GameService g_game_service;
 std::string g_cfgFileName = "";
+
 
 int main(int argc, char** argv)
 {

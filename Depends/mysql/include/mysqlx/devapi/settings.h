@@ -62,8 +62,10 @@ MYSQLX_ABI_BEGIN(2,0)
 class SessionOption
 {
 #define SESS_OPT_ENUM_any(X,N) X = N,
+#define SESS_OPT_ENUM_bool(X,N) X = N,
 #define SESS_OPT_ENUM_num(X,N) X = N,
 #define SESS_OPT_ENUM_str(X,N) X = N,
+#define SESS_OPT_ENUM_bool(X,N) X = N,
 
 public:
 
@@ -121,7 +123,6 @@ class ClientOption
 public:
 
   using SessionEnum = SessionOption::Enum;
-
 
   enum Enum {
     CLIENT_OPTION_LIST(CLIENT_OPT_ENUM)
@@ -183,8 +184,10 @@ std::string OptionName(ClientOption opt)
 #define CLT_OPT_NAME_str(X,N) CLT_OPT_NAME_any(X,N)
 
 #define SESS_OPT_NAME_any(X,N) case SessionOption::X: return #X;
+#define SESS_OPT_NAME_bool(X,N) SESS_OPT_NAME_any(X,N)
 #define SESS_OPT_NAME_num(X,N) SESS_OPT_NAME_any(X,N)
 #define SESS_OPT_NAME_str(X,N) SESS_OPT_NAME_any(X,N)
+#define SESS_OPT_NAME_bool(X,N) SESS_OPT_NAME_any(X,N)
 
 
   switch (opt)
@@ -213,6 +216,7 @@ inline std::string SessionOptionName(SessionOption opt)
 
 /**
   Modes to be used with `SSL_MODE` option
+  \anchor SSLMode
 */
 
 enum_class SSLMode
@@ -247,6 +251,7 @@ std::string SSLModeName(SSLMode m)
 
 /**
   Authentication methods to be used with `AUTH` option.
+  \anchor AuthMethod
 */
 
 enum_class AuthMethod
@@ -278,6 +283,39 @@ std::string AuthMethodName(AuthMethod m)
 
 /// @endcond
 
+/**
+  Values to be used with `COMPRESSION` option
+  \anchor CompressionMode
+*/
+
+enum_class CompressionMode
+{
+#define COMPRESSION_ENUM(X,N) X = N,
+
+  COMPRESSION_MODE_LIST(COMPRESSION_ENUM)
+};
+
+/// @cond DISABLED
+
+inline
+std::string CompressionModeName(CompressionMode m)
+{
+#define COMPRESSION_NAME(X,N) case CompressionMode::X: return #X;
+
+  switch (m)
+  {
+    COMPRESSION_MODE_LIST(COMPRESSION_NAME)
+  default:
+    {
+      std::ostringstream buf;
+      buf << "<UKNOWN (" << unsigned(m) << ")>" << std::ends;
+      return buf.str();
+    }
+  };
+}
+
+/// @endcond
+
 
 namespace internal {
 
@@ -289,10 +327,11 @@ namespace internal {
 
 struct Settings_traits
 {
-  using Options    = mysqlx::SessionOption;
-  using COptions   = mysqlx::ClientOption;
-  using SSLMode    = mysqlx::SSLMode;
-  using AuthMethod = mysqlx::AuthMethod;
+  using Options         = mysqlx::SessionOption;
+  using COptions        = mysqlx::ClientOption;
+  using SSLMode         = mysqlx::SSLMode;
+  using AuthMethod      = mysqlx::AuthMethod;
+  using CompressionMode = mysqlx::CompressionMode;
 
   static std::string get_mode_name(SSLMode mode)
   {
@@ -432,7 +471,7 @@ public:
     creating the session.
 
     A single host address is either a DNS host name, an IPv4 address of
-    the form "nn.nn.nn.nn" or an IPv6 address of the form "[nn:nn:nn:...]".
+    the form `nn.nn.nn.nn` or an IPv6 address of the form `[nn:nn:nn:...]`.
     On Unix systems a host can be specified as a path to a Unix domain
     socket - this path must start with `/` or `.`.
 
@@ -456,18 +495,27 @@ public:
 
     Possible connection options are:
 
-    - `ssl-mode` : define `SSLMode` option to be used
-    - `ssl-ca=`path : path to a PEM file specifying trusted root certificates
-    - `connection-attributes=` : the value is either a (possibly empty) list of
-    "key=value" pairs or a Boolean constant "true" or "false". If no value is
-    specified for a key, as in "key=" or "key" then empty string is assumed.\n
-    Examples:\n
-    "mysqlx://user@host?connection-attributes=[foo=bar,qux,baz=]"\n
-    "mysqlx://user@host?connection-attributes=false"\n
-    "mysqlx://user@host?connection-attributes=true"\n
-    "mysqlx://user@host?connection-attributes=[]"\n
-    "mysqlx://user@host?connection-attributes"\n
-
+    - `ssl-mode=...` : see `SessionOption::SSL_MODE`; the value is a case
+         insensitive name of the SSL mode
+    - `ssl-ca=...` : see `SessionOption::SSL_CA`
+    - `auth=...`: see `SessionOption::AUTH`; the value is a case insensitive
+        name of the authentication method
+    - `connect-timeout=...`: see `SessionOption::CONNECT_TIMEOUT`
+    - `connection-attributes=[...]` : see `SessionOption::CONNECTION_ATTRIBUTES`
+      but the key-value pairs are not given by a JSON document but as a list;\n
+      Examples:\n
+      `"mysqlx://user@host?connection-attributes=[foo=bar,qux,baz=]"` -
+        specify additional attributes to be sent\n
+      `"mysqlx://user@host?connection-attributes=false"` -
+        send no connection attributes\n
+      `"mysqlx://user@host?connection-attributes=true"` -
+        send default connection attributes\n
+      `"mysqlx://user@host?connection-attributes=[]"` -
+        the same as setting to `true`\n
+      `"mysqlx://user@host?connection-attributes"` -
+        the same as setting to `true`\n
+    - `tls-versions=[...]` : see `SessionOption::TLS_VERSIONS`
+    - `tls-ciphersuites=[...]` : see `SessionOption::TLS_CIPHERSUITES`
   */
 
   SessionSettings(const string &uri)

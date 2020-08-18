@@ -1,0 +1,12 @@
+------windows
+1.mysql-connector/C++
+
+需要安装MySQL8.0(官网说>5.7.9的版本也可以,但是本地编译并不通过)
+
+git clone https://github.com/mysql/mysql-connector-cpp.git
+cd mysql-connector-cpp
+git submodule update --init   支持JDBC
+mkdir build && cd build
+cmake -DWITH_JDBC=ON -DCMAKE_INSTALL_PREFIX=../install -DWITH_MYSQL=C:/Program\ Files/MySQL/MySQL\ Server\ 8.0 -DWITH_BOOST=E:/project/boost_1_70_0 -DWITH_SSL=C:/Program\ Files/OpenSSL -DBUNDLE_DEPENDENCIES=ON ..
+
+------linux

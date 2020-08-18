@@ -83,8 +83,9 @@ public:
 #define SETTINGS_OPT_ENUM_str(X,N)  X = N,
 #define SETTINGS_OPT_ENUM_num(X,N)  X = N,
 #define SETTINGS_OPT_ENUM_any(X,N)  X = N,
+#define SETTINGS_OPT_ENUM_bool(X,N) X = N,
 
-  enum Session_option_impl {
+  enum Session_option_impl{
     SESSION_OPTION_LIST(SETTINGS_OPT_ENUM)
     LAST
   };
@@ -125,6 +126,13 @@ public:
   };
 
   static  const char* auth_method_name(Auth_method method);
+
+  enum class Compression_mode {
+    COMPRESSION_MODE_LIST(SETTINGS_VAL_ENUM)
+    LAST
+  };
+
+  static const char* compression_mode_name(Compression_mode mode);
 
 protected:
 
@@ -218,6 +226,8 @@ protected:
     SSL_mode m_ssl_mode = SSL_mode::LAST;
     bool m_tcpip = false; // set to true if TCPIP connection was specified
     bool m_sock = false;  // set to true if socket connection was specified
+    bool m_tls_vers = false;
+    bool m_tls_ciphers = false;
 
     void erase(int);
     void init_connection_attr();
@@ -231,8 +241,10 @@ protected:
 
 
 #define SETTINGS_OPT_NAME_str(X,N)  case N: return #X;
+#define SETTINGS_OPT_NAME_bool(X,N)  case N: return #X;
 #define SETTINGS_OPT_NAME_num(X,N)  case N: return #X;
 #define SETTINGS_OPT_NAME_any(X,N)  case N: return #X;
+#define SETTINGS_OPT_NAME_bool(X,N)  case N: return #X;
 
 
 #define CLIENT_OPT_NAME_str(X,N)  case -N: return #X;
@@ -272,12 +284,22 @@ const char* Settings_impl::auth_method_name(Auth_method method)
 {
   switch (unsigned(method))
   {
-    SSL_MODE_LIST(SETTINGS_VAL_NAME)
+    AUTH_METHOD_LIST(SETTINGS_VAL_NAME)
     default:
       return nullptr;
   }
 }
 
+inline
+const char* Settings_impl::compression_mode_name(Compression_mode mode)
+{
+  switch (unsigned(mode))
+  {
+    COMPRESSION_MODE_LIST(SETTINGS_VAL_NAME)
+    default:
+      return nullptr;
+  }
+}
 
 /*
   Note: For options that can repeat, returns the last value.
@@ -304,10 +326,31 @@ const common::Value& Settings_impl::get(int opt) const
 inline
 bool Settings_impl::has_option(int opt) const
 {
+  // For options whose value is a list, we return true if we know the option
+  // was set even if no actual values are stored in m_options, which is the
+  // case when option value is an empty list.
+
+  switch (opt)
+  {
+  case Session_option_impl::TLS_VERSIONS:
+    if (m_data.m_tls_vers)
+      return true;
+    break;
+
+  case Session_option_impl::TLS_CIPHERSUITES:
+    if (m_data.m_tls_ciphers)
+      return true;
+    break;
+
+  default:
+    break;
+  }
+
   return m_data.m_options.cend() !=
-    find_if(m_data.m_options.cbegin(), m_data.m_options.cend(),
-      [opt](opt_val_t el) -> bool { return el.first == opt; }
-    );
+  find_if(m_data.m_options.cbegin(), m_data.m_options.cend(),
+    [opt](opt_val_t el) -> bool { return el.first == opt; }
+  );
+
 }
 
 
@@ -358,6 +401,9 @@ void Settings_impl::Data::erase(int opt)
     break;
   case Session_option_impl::SSL_MODE:
     m_ssl_mode = SSL_mode::LAST;
+    break;
+  case Session_option_impl::CONNECTION_ATTRIBUTES:
+    clear_connection_attr();
     break;
   default:
     break;

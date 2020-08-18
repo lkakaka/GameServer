@@ -1,5 +1,6 @@
 #include "MyBuffer.h"
 #include "../Common/ServerMacros.h"
+#include <iterator>
 //#include <stdexcept>
 //
 //#define THROW_EXCEPTION(msg) {std::logic_error ex(msg); throw std::exception(ex);}

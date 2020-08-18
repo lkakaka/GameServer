@@ -115,6 +115,8 @@ protected:
   // Handling multi-results
 
   bool has_data() const;
+
+  // Note: needs to be called before accessing the first result set.
   bool next_result();
 
 protected:
@@ -158,7 +160,7 @@ protected:
 
   WarningList get_warnings()
   {
-    assert(m_impl);
+    get_warning_count();
     return { *this };
   }
 
