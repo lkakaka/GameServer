@@ -19,36 +19,6 @@ using namespace sql;
 
 USING_DATA_BASE;
 
-std::u16string to_utf16(std::string str) // utf-8 to utf16
-{
-	return std::wstring_convert< std::codecvt_utf8_utf16<char16_t>, char16_t >{}.from_bytes(str);
-}
-
-std::string to_utf8(std::u16string str16)
-{
-	return std::wstring_convert< std::codecvt_utf8_utf16<char16_t>, char16_t >{}.to_bytes(str16);
-}
-
-std::u32string to_utf32(std::string str)
-{
-	return std::wstring_convert< std::codecvt_utf8<char32_t>, char32_t >{}.from_bytes(str);
-}
-
-std::string to_utf8(std::u32string str32)
-{
-	return std::wstring_convert< std::codecvt_utf8<char32_t>, char32_t >{}.to_bytes(str32);
-}
-
-std::wstring to_wchar_t(std::string str)
-{
-	return std::wstring_convert< std::codecvt_utf8<wchar_t>, wchar_t >{}.from_bytes(str);
-}
-
-std::string to_utf8(std::wstring wstr)
-{
-	return std::wstring_convert< std::codecvt_utf8<wchar_t>, wchar_t >{}.to_bytes(wstr);
-}
-
 
 DBHandler::~DBHandler()
 {
@@ -87,36 +57,36 @@ DBHandler::DBHandler(std::string& dbUrl, int dbPort, std::string& dbUserName, st
 		//const char* url = ("mysqlx://sa:xxxxxxxx@127.0.0.1/sakila");
 
 		//mysqlx::string userName(dbUserName);
-		////std::copy(dbUserName.begin(), dbUserName.end(), std::back_inserter(userName));
+		//std::copy(dbUserName.begin(), dbUserName.end(), std::back_inserter(userName));
 		//mysqlx::string pwd(to_utf16(dbPassword));
-		////std::copy(dbPassword.begin(), dbPassword.end(), std::back_inserter(pwd));
+		//std::copy(dbPassword.begin(), dbPassword.end(), std::back_inserter(pwd));
 	
-		//mysqlx::SessionSettings settings("localhost", 33060, dbUserName, dbPassword.c_str());
+		mysqlx::SessionSettings settings("localhost", 33060, dbUserName, dbPassword.c_str());
 
-		///*settings.set(mysqlx::SessionOption::USER, dbUserName);
-		//settings.set(mysqlx::SessionOption::PWD, dbPassword);*/
+		/*settings.set(mysqlx::SessionOption::USER, dbUserName);
+		settings.set(mysqlx::SessionOption::PWD, dbPassword);*/
 
-		//mysqlx::Session session(settings);
+		mysqlx::Session session(settings);
 
-		//mysqlx::Schema db = session.getSchema("test");
+		mysqlx::Schema db = session.getSchema(dbName);
 
-		//// Create a new collection 'my_collection'
-		//mysqlx::Collection myColl = db.createCollection("my_collection");
+		// Create a new collection 'my_collection'
+		mysqlx::Collection myColl = db.createCollection("my_collection");
 
-		//// Insert documents
-		//myColl.add(R"({"name": "Laurie", "age": 19})").execute();
-		//myColl.add(R"({"name": "Nadya", "age": 54})").execute();
-		//myColl.add(R"({"name": "Lukas", "age": 32})").execute();
+		// Insert documents
+		myColl.add(R"({"name": "Laurie", "age": 19})").execute();
+		myColl.add(R"({"name": "Nadya", "age": 54})").execute();
+		myColl.add(R"({"name": "Lukas", "age": 32})").execute();
 
-		//// Find a document
-		//mysqlx::DocResult docs = myColl.find("name like :param1 AND age < :param2").limit(1)
-		//	.bind("param1", "L%").bind("param2", 20).execute();
+		// Find a document
+		mysqlx::DocResult docs = myColl.find("name like :param1 AND age < :param2").limit(1)
+			.bind("param1", "L%").bind("param2", 20).execute();
 
-		//// Print document
-		//std::cout << docs.fetchOne();
+		// Print document
+		std::cout << docs.fetchOne() << std::endl;
 
-		//// Drop the collection
-		//db.dropCollection("my_collection");
+		// Drop the collection
+		db.dropCollection("my_collection");
 }
 
 void DBHandler::initTableSchema() {
