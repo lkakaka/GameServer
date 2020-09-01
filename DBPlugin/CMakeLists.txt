@@ -19,3 +19,4 @@ else()
 	target_link_libraries(DBPlugin zmq)
 endif()
 SET(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
+

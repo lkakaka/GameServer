@@ -89,6 +89,7 @@ add_subdirectory(TestRedis)
 add_subdirectory(Test)
 
 
+include(install.cmake)
 
 
 # if (NOT WIN32)

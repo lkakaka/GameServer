@@ -60,11 +60,11 @@ int main(int argc, char** argv)
 
 	std::string dbUrl = Config::getConfigStr(cfgName, "db_url");
 	if (dbUrl.length() > 0) {
-		DBMgr::m_dbUrl = dbUrl;
-		DBMgr::m_dbUserName = Config::getConfigStr(cfgName, "db_username");;
-		DBMgr::m_dbPassword = Config::getConfigStr(cfgName, "db_password");;
-		DBMgr::m_dbPort = Config::getConfigInt(cfgName, "db_port");
-		Logger::logInfo("$db config, url: %s, port:%d", dbUrl.c_str(), DBMgr::m_dbPort);
+		std::string dbUserName = Config::getConfigStr(cfgName, "db_username");
+		std::string dbPassword = Config::getConfigStr(cfgName, "db_password");
+		int dbPort = Config::getConfigInt(cfgName, "db_port");
+		new DBMgr(dbUserName, dbPassword, dbUrl, dbPort);
+		Logger::logInfo("$db config, url: %s, port:%d", dbUrl.c_str(), dbPort);
 	}
 
 	boost::asio::io_service io;

@@ -10,6 +10,12 @@
 #include "DataBase.h"
 #include "DBTable.h"
 
+#ifndef USE_MYSQLX
+#ifndef WIN32
+#define USE_MYSQLX
+#endif
+#endif
+
 DATA_BASE_BEGIN
 
 #define MAX_SQL_LENGTH (4 * 1024)  // sql”Ôæ‰≥§∂»

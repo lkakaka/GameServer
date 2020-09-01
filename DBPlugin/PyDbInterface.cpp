@@ -67,7 +67,7 @@ static PyObject* createDB(PyObject* self, PyObject* args)
 		PyErr_SetString(ModuleError, "create db handler failed");
 		Py_RETURN_NONE;
 	}
-	DBHandler* dbHandler = DBMgr::createDBHander(dbName);
+	DBHandler* dbHandler = DBMgr::getSingleton()->createDBHander(dbName);
 	if (dbHandler == NULL) {
 		Py_RETURN_NONE;
 	}
@@ -745,7 +745,7 @@ static PyObject* PyDbInst_New(struct _typeobject* tobj,
 		Logger::logInfo("$create db inst failed, arg error");
 		return NULL;
 	}
-	DBHandler* dbHandler = DBMgr::createDBHander(dbName);
+	DBHandler* dbHandler = DBMgr::getSingleton()->createDBHander(dbName);
 	if (dbHandler == NULL) {
 		Logger::logInfo("$create db inst failed, db handler exist, dbName:%s", dbName);
 		return NULL;

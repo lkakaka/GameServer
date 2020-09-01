@@ -48,7 +48,7 @@ DBHandler::DBHandler(std::string& dbUrl, int dbPort, std::string& dbUserName, st
 
 	// Connect to server
 	//mysqlx::Session session("localhost", dbPort, dbUserName, dbPassword);
-
+#ifdef USE_MYSQLX
 	/*mysqlx::SessionSettings settings(mysqlx::SessionOption::HOST, "localhost",
 		mysqlx::SessionOption::PORT, dbPort);*/
 	
@@ -87,6 +87,7 @@ DBHandler::DBHandler(std::string& dbUrl, int dbPort, std::string& dbUserName, st
 
 		// Drop the collection
 		db.dropCollection("my_collection");
+#endif
 }
 
 void DBHandler::initTableSchema() {

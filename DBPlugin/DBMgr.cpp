@@ -13,30 +13,16 @@
 #include "mongo/MongoDBHandler.h"
 #endif
 
+INIT_SINGLETON_CLASS(DBMgr)
 
-DBMgr* g_DBMgr;
-
-std::string DBMgr::m_dbUserName = "";
-std::string DBMgr::m_dbPassword = "";
-std::string DBMgr::m_dbUrl = "";
-int DBMgr::m_dbPort = 0;
-
-DBMgr* DBMgr::getDBMgrInstance()
-{
-	if (g_DBMgr == NULL)
-	{
-		g_DBMgr = new DBMgr();
-	}
-	return g_DBMgr;
-}
-
-DBMgr::DBMgr()
+DBMgr::DBMgr(std::string& dbUserName, std::string& dbPassword, std::string dbUrl, int dbPort) : 
+	m_dbUserName(dbUserName), m_dbPassword(dbPassword), m_dbUrl(dbUrl), m_dbPort(dbPort)
 {
 	
 }
 
 DBHandler* DBMgr::createDBHander(char* dbName) {
-	DBMgr* dbMgr = DBMgr::getDBMgrInstance();
+	DBMgr* dbMgr = DBMgr::getSingleton();
 	if (dbMgr == NULL) {
 		return NULL;
 	}
@@ -44,7 +30,7 @@ DBHandler* DBMgr::createDBHander(char* dbName) {
 	if (iter != dbMgr->m_dbHanders.end()) {
 		return iter->second;
 	}
-	DBHandler* dbHanler = new DBHandler(DBMgr::m_dbUrl, DBMgr::m_dbPort, DBMgr::m_dbUserName, DBMgr::m_dbPassword, dbName);
+	DBHandler* dbHanler = new DBHandler(m_dbUrl, m_dbPort, m_dbUserName, m_dbPassword, dbName);
 	dbMgr->m_dbHanders.emplace(std::make_pair(dbName, dbHanler));
 	
 #ifdef WIN32
@@ -58,7 +44,7 @@ DBHandler* DBMgr::createDBHander(char* dbName) {
 
 DBHandler* DBMgr::getDBHander(char* dbName) 
 {
-	DBMgr* dbMgr = DBMgr::getDBMgrInstance();
+	DBMgr* dbMgr = DBMgr::getSingleton();
 	if (dbMgr == NULL) {
 		return NULL;
 	}
