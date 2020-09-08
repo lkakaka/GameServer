@@ -4,6 +4,8 @@
 
 #define MAX_PACKET_LEN (64 * 1024)		// 数据包最大长度
 
+//ZmqInst* Singleton<ZmqInst>::_singleon;
+
 TcpConnection::TcpConnection(boost::asio::io_service& io, int connID, ConnCloseFunc closeFunc):
 	m_isClosed(false),
 	m_connID(connID),
