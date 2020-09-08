@@ -108,7 +108,9 @@ int main(int argc, char** argv)
 			return 0;
 		}
 
-		ZmqInst::initZmqInstance(serviceName.c_str(), routerAddr.c_str());
+		//ZmqInst::initZmqInstance(serviceName.c_str(), routerAddr.c_str());
+		ZmqInst* zmqInst = new ZmqInst(serviceName, routerAddr);
+		zmqInst->startZmqInst();
 		int port = Config::getConfigInt(cfgName, "port");
 		if (port > 0) {
 			Logger::logInfo("$gateway port:%d", port);

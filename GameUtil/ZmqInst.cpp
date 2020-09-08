@@ -1,29 +1,32 @@
 #include "ZmqInst.h"
 
-ZmqInst* ZmqInst::zmqInstance = NULL;
+//ZmqInst* ZmqInst::zmqInstance = NULL;
+//INIT_SINGLETON_CLASS(ZmqInst)
 
-ZmqInst::ZmqInst() : zmq_context(NULL), conn_socket(NULL), work_thread(NULL), m_recvCallback(NULL)
+ZmqInst::ZmqInst(std::string& name, std::string& router_addr) : m_name(name), m_router_addr(router_addr),
+	zmq_context(NULL), conn_socket(NULL), work_thread(NULL), m_recvCallback(NULL)
 {
-
+	//startZmqInst();
 }
 
 ZmqInst::~ZmqInst()
 {
 	destory();
 }
-
-void ZmqInst::initZmqInstance(const char* name, const char* router_addr) 
-{
-	if (zmqInstance != NULL) {
-		return;
-	}
-	ZmqInst::zmqInstance = new ZmqInst();
-	ZmqInst::zmqInstance->startZmqInst(name, router_addr);
-}
-
+//
+//void ZmqInst::initZmqInstance(const char* name, const char* router_addr) 
+//{
+//	if (zmqInstance != NULL) {
+//		return;
+//	}
+//	ZmqInst::zmqInstance = new ZmqInst();
+//	ZmqInst::zmqInstance->startZmqInst(name, router_addr);
+//}
+//
 ZmqInst* ZmqInst::getZmqInstance()
 {
-	return ZmqInst::zmqInstance;
+	//return ZmqInst::zmqInstance;
+	return ZmqInst::getSingleton();
 }
 
 void ZmqInst::setRecvCallback(ZmqRecvCallback callback)
@@ -89,7 +92,7 @@ void ZmqInst::run()
 	work_thread = new std::thread(threadFunc);
 }
 
-void ZmqInst::startZmqInst(const char* name, const char* router_addr)
+void ZmqInst::startZmqInst()
 {
 	zmq_context = zmq_init(1);
 
@@ -104,15 +107,15 @@ void ZmqInst::startZmqInst(const char* name, const char* router_addr)
 	conn_socket = zmq_socket(zmq_context, ZMQ_DEALER);
 
 	//char* pName = "client1";
-	if (zmq_setsockopt(conn_socket, ZMQ_IDENTITY, name, strlen(name)) < 0)
+	if (zmq_setsockopt(conn_socket, ZMQ_IDENTITY, m_name.c_str(), m_name.size()) < 0)
 	{
 		zmq_close(conn_socket);
 		zmq_ctx_destroy(zmq_context);
 		return;
 	}
 
-	std::string routerAddr = "tcp://";
-	routerAddr.append(router_addr);
+	std::string routerAddr = "tcp://" + m_router_addr;
+	//routerAddr.append(router_addr);
 	if (zmq_connect(conn_socket, routerAddr.c_str()) < 0) {
 		zmq_close(conn_socket);
 		zmq_ctx_destroy(zmq_context);
@@ -125,7 +128,7 @@ void ZmqInst::startZmqInst(const char* name, const char* router_addr)
 
 	run();
 
-	Logger::logInfo("$create zmq instance, name: %s, router addr:%s", name, routerAddr.c_str());
+	Logger::logInfo("$create zmq instance, name: %s, router addr:%s", m_name.c_str(), routerAddr.c_str());
 }
 
 void ZmqInst::destory() 

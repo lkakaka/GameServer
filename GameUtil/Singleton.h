@@ -5,7 +5,7 @@
 
 
 template<typename T>
-class Singleton
+class SERVER_EXPORT_API Singleton
 {
 public:
 	static T* _singleon;

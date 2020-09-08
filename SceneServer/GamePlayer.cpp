@@ -2,6 +2,7 @@
 #include "MyBuffer.h"
 #include "ZmqInst.h"
 
+//ZmqInst* Singleton<ZmqInst>::_singleon;
 
 GamePlayer::GamePlayer(int connId, int actorId, int roleId, std::string name, int x, int y, void* gameScene, GridChgFunc gridChgFunc): 
 	GameActor(ActorType::PLYAER, actorId, x, y, gameScene, gridChgFunc),
