@@ -35,8 +35,10 @@ public:
 	void destory();
 };
 
+#ifdef WIN32
 #ifdef SERVER_EXPORT
 INIT_SINGLETON_CLASS(ZmqInst);
 #endif // SERVER_EXPORT
+#endif // WIN32
 
 
