@@ -31,5 +31,5 @@ public:
 	}
 };
 
-#define INIT_SINGLETON_CLASS(cls) cls* Singleton<cls>::_singleon = NULL;
+#define INIT_SINGLETON_CLASS(cls) template<> cls* Singleton<cls>::_singleon = NULL;
 

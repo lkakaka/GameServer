@@ -7,6 +7,7 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:$DEPENDS_ROOT/Python38/li
 VERSION_RELEASE=Release
 VERSION_DEBUG=Debug
 VERSION=$VERSION_DEBUG
+#VERSION=$VERSION_RELEASE
 
 ulimit -c unlimited
 #echo "coredump-%e-%t" > /proc/sys/kernel/core_pattern
