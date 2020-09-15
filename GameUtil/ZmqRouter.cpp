@@ -1,6 +1,6 @@
 #include "ZmqRouter.h"
-
-#define MAX_MSG_LEN (64 * 1024)
+#include "MyBuffer.h"
+#include "Const.h"
 
 ZmqRouter* ZmqRouter::zmqRouter = NULL;
 
@@ -33,35 +33,45 @@ void ZmqRouter::run()
 {
 	Logger::logInfo("$zmq router running...");
 	auto threadFunc = [this]() {
-		char src_name[128]{ 0 };
-		char dst_name[128]{ 0 };
+		char src_name[MAX_PEER_NAME_LEN]{ 0 };
+		char dst_name[MAX_PEER_NAME_LEN]{ 0 };
 		char msg[MAX_MSG_LEN + 1]{ 0 };
 
 		while (1) {
-			zmq_recv(m_socket, src_name, sizeof(src_name), 0);
-			//zmq_recv(router_socket, NULL, 0, 0);
-			zmq_recv(m_socket, dst_name, sizeof(dst_name), 0);
-			int msgLen = 0;
-			zmq_recv(m_socket, (void*)&msgLen, 4, 0);
-			if (msgLen <= 0 || msgLen > MAX_MSG_LEN) {
-				Logger::logError("$error msg len(%d), src_name:%s, dst_name:%s", msgLen, src_name, dst_name);
+			int len = zmq_recv(m_socket, src_name, sizeof(src_name), 0);
+			if (len <= 0 || len >= MAX_PEER_NAME_LEN) {
+				Logger::logError("$recv src name len(%d) error!", len);
 				continue;
 			}
-			//zmq_recv(router_socket, NULL, 0, 0);
-			zmq_recv(m_socket, msg, msgLen, 0);
-			msg[msgLen] = '\0';
-
-			Logger::logInfo("$recv msg, src_name:%s, dst_name:%s, msg:%s", src_name, dst_name, msg);
+			src_name[len] = '\0';
+			len = zmq_recv(m_socket, msg, MAX_MSG_LEN, 0);
+			if (len <= 0 || len > MAX_MSG_LEN) {
+				Logger::logError("$recv msg len(%d) error!", len);
+				continue;
+			}
+			int dstNameLen = strlen(msg);
+			if (dstNameLen == 0 || dstNameLen >= MAX_PEER_NAME_LEN) {
+				Logger::logError("$dstNameLen (%d) error!", dstNameLen);
+				continue;
+			}
+			if (dstNameLen + 1 >= len) {
+				Logger::logError("$msg len error, dstNameLen:%d, recv_len:%d", dstNameLen, len);
+				continue;
+			}
+			memcpy(dst_name, msg, dstNameLen);
+			dst_name[dstNameLen] = '\0';
+			int iMsgBodyIdx = dstNameLen + 1;
+			int iMsgBodyLen = len - iMsgBodyIdx;
+			Logger::logInfo("$recv msg, src_name:%s, dst_name:%s, msg_len:%d", src_name, dst_name, iMsgBodyLen);
 
 			zmq_send(m_socket, dst_name, strlen(dst_name), ZMQ_SNDMORE);
-			//zmq_send(router_socket, "", 0, ZMQ_SNDMORE);
-			zmq_send(m_socket, src_name, strlen(src_name), ZMQ_SNDMORE);
-			zmq_send(m_socket, (void*)&msgLen, 4, ZMQ_SNDMORE);
-			//zmq_send(router_socket, "", 0, ZMQ_SNDMORE);
-			zmq_send(m_socket, msg, msgLen, 0);
+			int srcNameLen = strlen(src_name);
 
-			memset(src_name, 0, sizeof(src_name));
-			memset(dst_name, 0, sizeof(dst_name));
+			MyBuffer buffer;
+			buffer.writeString(src_name, strlen(src_name));
+			buffer.writeByte('\0');
+			buffer.writeString(&msg[iMsgBodyIdx], iMsgBodyLen);
+			zmq_send(m_socket, buffer.data(), buffer.size(), 0);
 		}
 
 		Logger::logInfo("$zmq router exit");

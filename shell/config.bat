@@ -1,5 +1,5 @@
 
-set version=release
+set version=debug
 
 if %version%==debug (
 #debug

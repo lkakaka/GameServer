@@ -29,7 +29,7 @@ public:
 	//static void initZmqInstance(const char* name, const char* router_addr);
 	void setRecvCallback(ZmqRecvCallback callback);
 
-	void sendData(const char* dstName, void* data, int datLen);
+	void sendData(const char* dstName, char* data, int datLen);
 
 	void startZmqInst();
 	void destory();

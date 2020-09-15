@@ -1,4 +1,7 @@
 #include "ZmqInst.h"
+#include "MyBuffer.h"
+#include "Logger.h"
+#include "Const.h"
 
 //ZmqInst* ZmqInst::zmqInstance = NULL;
 #ifndef WIN32
@@ -36,11 +39,13 @@ void ZmqInst::setRecvCallback(ZmqRecvCallback callback)
 	m_recvCallback = callback;
 }
 
-void ZmqInst::sendData(const char* dstName, void* data, int datLen)
+void ZmqInst::sendData(const char* dstName, char* data, int datLen)
 {
-	zmq_send(conn_socket, dstName, strlen(dstName), ZMQ_SNDMORE);
-	zmq_send(conn_socket, (char*)&datLen, 4, ZMQ_SNDMORE);
-	zmq_send(conn_socket, data, datLen, 0);
+	MyBuffer buffer;
+	buffer.writeString(dstName, strlen(dstName));
+	buffer.writeByte('\0');
+	buffer.writeString(data, datLen);
+	zmq_send(conn_socket, buffer.data(), buffer.size(), 0);
 }
 
 void ZmqInst::run() 
@@ -68,25 +73,25 @@ void ZmqInst::run()
 	//}
 	auto threadFunc = [this]() {
 		char src_name[128]{ 0 };
+		char msg[MAX_MSG_LEN + 1]{ 0 };
 		while (1) {
-			//zmq_recv(socket, NULL, 0, 0);
-			zmq_recv(this->conn_socket, src_name, sizeof(src_name), 0);
-			//zmq_recv(socket, NULL, 0, 0);
-			int msg_len = 0;
-			zmq_recv(this->conn_socket, &msg_len, sizeof(msg_len), 0);
-			if (msg_len <= 0) {
+			int len = zmq_recv(this->conn_socket, msg, MAX_MSG_LEN, 0);
+			if (len <= 0 || len > MAX_MSG_LEN) {
+				Logger::logError("$recv msg len(%d) error", len);
 				continue;
 			}
-			char* msg = new char[msg_len];
-			zmq_recv(this->conn_socket, msg, msg_len, 0);
-			if (m_recvCallback != NULL) {
-				m_recvCallback(src_name, msg, msg_len);
+			int srcNameLen = strlen(msg);
+			if (srcNameLen == 0 || srcNameLen + 1 >= len) {
+				Logger::logError("$recv msg len error, srcNameLen:%d, len:%d", srcNameLen, len);
+				continue;
 			}
-			//printf("recv msg from %s, msg:%s\n", src_name, msg);
-
-			memset(src_name, 0, sizeof(src_name));
-			delete[] msg;
-			//memset(msg, 0, sizeof(msg));
+			memcpy(src_name, &msg, srcNameLen);
+			src_name[srcNameLen] = '\0';
+			int iMsgBodyIdx = srcNameLen + 1;
+			int iMsgBodyLen = len - iMsgBodyIdx;
+			if (m_recvCallback != NULL) {
+				m_recvCallback(src_name, &msg[iMsgBodyIdx], iMsgBodyLen);
+			}
 		}
 
 		Logger::logInfo("$zmq intance exit");
