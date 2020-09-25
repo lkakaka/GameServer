@@ -1,4 +1,4 @@
-#include "ZmqRouter.h"
+﻿#include "ZmqRouter.h"
 #include "MyBuffer.h"
 #include "Const.h"
 
@@ -38,18 +38,58 @@ void ZmqRouter::run()
 		char msg[MAX_MSG_LEN + 1]{ 0 };
 
 		while (1) {
+			bool isOk = true;
 			int len = zmq_recv(m_socket, src_name, sizeof(src_name), 0);
 			if (len <= 0 || len >= MAX_PEER_NAME_LEN) {
 				Logger::logError("$recv src name len(%d) error!", len);
-				continue;
+				isOk = false;
+				// 不能continue，需要把数据接收完
+				//continue;
 			}
 			src_name[len] = '\0';
 			len = zmq_recv(m_socket, msg, MAX_MSG_LEN, 0);
 			if (len <= 0 || len > MAX_MSG_LEN) {
 				Logger::logError("$recv msg len(%d) error!", len);
+				isOk = false;
+				// 不能continue，需要把数据接收完
+				//continue;
+			}
+
+			int rcvMore = 0;
+			size_t sizeInt = sizeof(int);
+			zmq_getsockopt(m_socket, ZMQ_RCVMORE, &rcvMore, &sizeInt);
+			// 非法连接可能会有更多数据需要接收，需要把数据接收完，否则会影响其他连接的数据(linux会有问题，windows好像受影响)
+			while (rcvMore) {	
+				len = zmq_recv(m_socket, msg, MAX_MSG_LEN, 0);
+				zmq_getsockopt(m_socket, ZMQ_RCVMORE, &rcvMore, &sizeInt);
+				isOk = false;
+				Logger::logError("$recv msg error! maybe invalid connection!!");
+			}
+
+			if (!isOk) {
+				memset(msg, '\0', MAX_MSG_LEN);
+				memset(src_name, '\0', MAX_PEER_NAME_LEN);
 				continue;
 			}
-			int dstNameLen = strlen(msg);
+
+			int idstNameIdx = 0;
+			for (; idstNameIdx < len; idstNameIdx++) {
+				if (msg[idstNameIdx] == '\0') {
+					break;
+				}
+			}
+
+			if (idstNameIdx == 0 || idstNameIdx >= len) {
+				Logger::logError("$dstNameLen (%d) error!", idstNameIdx);
+				memset(msg, '\0', MAX_MSG_LEN);
+				memset(src_name, '\0', MAX_PEER_NAME_LEN);
+				continue;
+			}
+
+			memcpy(dst_name, msg, idstNameIdx);
+			dst_name[idstNameIdx] = '\0';
+
+			/*int dstNameLen = strlen(msg);
 			if (dstNameLen == 0 || dstNameLen >= MAX_PEER_NAME_LEN) {
 				Logger::logError("$dstNameLen (%d) error!", dstNameLen);
 				continue;
@@ -59,8 +99,8 @@ void ZmqRouter::run()
 				continue;
 			}
 			memcpy(dst_name, msg, dstNameLen);
-			dst_name[dstNameLen] = '\0';
-			int iMsgBodyIdx = dstNameLen + 1;
+			dst_name[dstNameLen] = '\0';*/
+			int iMsgBodyIdx = idstNameIdx + 1;
 			int iMsgBodyLen = len - iMsgBodyIdx;
 			Logger::logInfo("$recv msg, src_name:%s, dst_name:%s, msg_len:%d", src_name, dst_name, iMsgBodyLen);
 
