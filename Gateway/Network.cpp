@@ -6,7 +6,7 @@ static Network* g_network = NULL;
 Network::Network(boost::asio::io_service* io, int port)
 	: m_io(io),
 	//m_acceptor(*io, tcp::endpoint(tcp::v4(), port)),
-	m_curConnId(0)
+	m_curConnId(128)
 {
 	try {
 		m_acceptor.reset(new tcp::acceptor(*io, tcp::endpoint(tcp::v4(), port)));

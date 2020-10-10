@@ -21,14 +21,14 @@ void GamePlayer::sendToClient(int msgId, const char* msg, int msgLen) {
 	buffer.writeInt(m_connId);
 	buffer.writeInt(msgId);
 	buffer.writeString(msg, msgLen);
-	ZmqInst::getZmqInstance()->sendData("gateway", buffer.data(), buffer.size());
+	ZmqInst::getZmqInstance()->sendData("gateway", (char*)buffer.data(), buffer.size());
 }
 
 bool GamePlayer::onRecvClientMsg(int msgId, char* data, int dataLen) {
 	switch (msgId)
 	{
 		case MSG_ID_MOVE_TO: {
-			std::shared_ptr<google::protobuf::Message> msg = createMessage(msgId, data, dataLen);
+			std::shared_ptr<google::protobuf::Message> msg = createMessage(msgId, (char*)data, dataLen);
 			MoveTo* moveMsg = (MoveTo*)msg.get();
 			std::vector<Position> posList;
 			posList.emplace_back(moveMsg->pos_x(), moveMsg->pos_y());

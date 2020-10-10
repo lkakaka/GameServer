@@ -67,7 +67,7 @@ void MessageMgr::onRecvData(char* sender, char* data, int dataLen) {
 		bool isClientMsg = (buffer.readByte(true) == 0);
 		int connId = buffer.readInt(true);
 		msgId = buffer.readInt(true);
-		char* msgData = buffer.data();
+		char* msgData = (char*)buffer.data();
 		int msgLen = buffer.size();
 		if (!handleMsg(connId, msgId, msgData, msgLen)) {
 			auto py_state = PyGILState_Ensure();
@@ -95,7 +95,7 @@ void MessageMgr::onRecvData(char* sender, char* data, int dataLen) {
 			return;
 		}
 		msgId = buffer.readInt(true);
-		char* msgData = buffer.data();
+		char* msgData = (char*)buffer.data();
 		int msgLen = buffer.size();
 		if (!handleServiceMsg(msgId, msgData, msgLen)) {
 			auto py_state = PyGILState_Ensure();
@@ -149,7 +149,7 @@ void MessageMgr::sendToClient(int connID, int msgId, const char* msg, int msgLen
 	buffer.writeInt(connID);
 	buffer.writeInt(msgId);
 	buffer.writeString(msg, msgLen);
-	ZmqInst::getZmqInstance()->sendData("gateway", buffer.data(), buffer.size());
+	ZmqInst::getZmqInstance()->sendData("gateway", (char*)buffer.data(), buffer.size());
 }
 
 void MessageMgr::sendToServer(const char *serviceName, int msgId, const char* msg, int msgLen)
@@ -157,6 +157,6 @@ void MessageMgr::sendToServer(const char *serviceName, int msgId, const char* ms
 	MyBuffer buffer;
 	buffer.writeInt(msgId);
 	buffer.writeString(msg, msgLen);
-	ZmqInst::getZmqInstance()->sendData(serviceName, buffer.data(), buffer.size());
+	ZmqInst::getZmqInstance()->sendData(serviceName, (char*)buffer.data(), buffer.size());
 }
 

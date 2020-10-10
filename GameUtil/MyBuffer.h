@@ -6,14 +6,14 @@
 class SERVER_EXPORT_API MyBuffer
 {
 private:
-	std::vector<char> buffer;
+	std::vector<unsigned char> buffer;  // must be unsigned char
 public:
 
 	MyBuffer();
 	MyBuffer(const char* data, int len);
 
 	inline int size() { return buffer.size(); }
-	inline char* data() { return buffer.data(); }
+	inline unsigned char* data() { return buffer.data(); }
 	inline void remove(int len) { buffer.erase(buffer.begin(), buffer.begin() + len); }
 
 	int readInt(bool isRemove);

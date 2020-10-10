@@ -82,7 +82,7 @@ void TcpConnection::parsePacket()
 		m_readBuf.remove(4); // 移除数据总长度字段
 		int msgId = m_readBuf.readInt(true);
 		int msgLen = packetLen - 8;
-		dispatchClientMsg(msgId, msgLen, m_readBuf.data());
+		dispatchClientMsg(msgId, msgLen, (char*)m_readBuf.data());
 		m_readBuf.remove(msgLen);
 		dataLen = m_readBuf.size();
 		Logger::logInfo("$receive client msg, connId:%d, msgId:%d", m_connID, msgId);
@@ -96,9 +96,9 @@ void TcpConnection::dispatchClientMsg(int msgId, int msgLen, const char* msgData
 	buffer.writeInt(msgId);
 	buffer.writeString(msgData, msgLen);
 	if (msgId == MSG_ID_LOGIN_REQ || msgId == MSG_ID_CREATE_ROLE_REQ || msgId == MSG_ID_ENTER_GAME) {
-		ZmqInst::getZmqInstance()->sendData("login", buffer.data(), buffer.size());
+		ZmqInst::getZmqInstance()->sendData("login", (char*)buffer.data(), buffer.size());
 	} else {
-		ZmqInst::getZmqInstance()->sendData("scene", buffer.data(), buffer.size());
+		ZmqInst::getZmqInstance()->sendData("scene", (char*)buffer.data(), buffer.size());
 	}
 }
 
@@ -108,7 +108,7 @@ void TcpConnection::sendMsgToService(int msgId, int msgLen, const char* msgData,
 	buffer.writeInt(m_connID); // 统一格式
 	buffer.writeInt(msgId);
 	buffer.writeString(msgData, msgLen);
-	ZmqInst::getZmqInstance()->sendData(serviceName, buffer.data(), buffer.size());
+	ZmqInst::getZmqInstance()->sendData(serviceName, (char*)buffer.data(), buffer.size());
 }
 
 void TcpConnection::sendMsgToClient(int msgId, char* data, int dataLen) {
