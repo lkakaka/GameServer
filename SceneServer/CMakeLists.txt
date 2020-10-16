@@ -11,7 +11,7 @@ link_directories(${LOG4CPP_ROOT} ${PYTHON_ROOT}/libs ${Boost_LIBRARY_DIRS} ${PRO
 file(GLOB_RECURSE CURRENT_HEADERS *.h *.hpp)
 file(GLOB_RECURSE CURRENT_SRC *.cpp *cc)
 add_library(SceneServer SHARED ${CURRENT_HEADERS} ${CURRENT_SRC} ${COMMON_SRC} ${PROTO_SRC})
-target_link_libraries(SceneServer log4cpp GameUtil)
+target_link_libraries(SceneServer log4cpp GameUtil Detour)
 if(WIN32)
 	target_link_libraries(SceneServer debug libprotobufd optimized libprotobuf)
 	target_link_libraries(SceneServer libzmq-v142-mt-4_3_3)

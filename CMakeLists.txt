@@ -75,6 +75,8 @@ file(GLOB_RECURSE COMMON_SRC Common/*.cpp Common/*.h)
 #message(STATUS ${PROTO_SRC})
 
 add_subdirectory(Math)
+add_subdirectory(Detour)
+add_subdirectory(DetourCrowd)
 add_subdirectory(log4cpp)
 add_subdirectory(GameUtil)
 add_subdirectory(DBPlugin)
