@@ -7,7 +7,7 @@
 
 
 GameScene::GameScene(int sceneId, int sceneUid, void* scriptObj) : m_maxActorId(0), m_sceneId(sceneId), m_sceneUid(sceneUid),
-m_scriptObj(scriptObj)
+m_scriptObj(scriptObj), m_detour(new SceneDetourMgr())
 {
 
 }
@@ -30,6 +30,7 @@ void GameScene::onCreate()
 	/*m_AOIMgr.removeNode(2);
 	m_AOIMgr.dump();*/
 	m_syncThread.reset(new std::thread(std::bind(&GameScene::_syncThreadFunc, this)));
+	m_detour->initNavMesh();
 }
 
 void GameScene::_syncThreadFunc() {
@@ -234,4 +235,8 @@ bool GameScene::onRecvClientMsg(int connId, int msgId, char* data, int dataLen) 
 		return false;
 	}
 	return player->onRecvClientMsg(msgId, data, dataLen);
+}
+
+void GameScene::loadNavMesh() {
+	
 }

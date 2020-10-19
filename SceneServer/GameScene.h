@@ -5,6 +5,7 @@
 #include "GameNpc.h"
 #include "AOIMgr.h"
 #include <thread>
+#include "DetourMgr.h"
 
 class GameScene
 {
@@ -16,6 +17,8 @@ private:
 	void* m_scriptObj;
 	int m_maxActorId;
 	std::shared_ptr<std::thread> m_syncThread;
+
+	std::shared_ptr<SceneDetourMgr> m_detour;
 
 	void onPlayerEnter(GamePlayer* gamePlayer, std::set<int>& neighbours);
 	void onNpcEnter(GameNpc* gameNpc, std::set<int>& neighbours);
@@ -45,5 +48,7 @@ public:
 	void onActorPosChg(int actorId, Position& pos);
 
 	bool onRecvClientMsg(int connId, int msgId, char* data, int dataLen);
+
+	void loadNavMesh();
 };
 
