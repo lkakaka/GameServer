@@ -13,9 +13,13 @@ SceneDetourMgr::~SceneDetourMgr()
 
 bool SceneDetourMgr::initNavMesh() 
 {
+	#ifdef WIN32
 	FILE* fp = fopen("../../res/all_tiles_navmesh.bin", "rb");
+	#else
+	FILE* fp = fopen("../res/all_tiles_navmesh.bin", "rb");
+	#endif
 	if (!fp) {
-		Logger::logError("not found scene navmesh file£¡£¡£¡");
+		Logger::logError("$not found scene navmesh file£¡£¡£¡");
 		return false;
 	}
 

@@ -36,6 +36,7 @@ class LoginService(ServiceBase):
         #     return
         # todo:验证账号
         self._conn_dict[conn_id] = msg.account
+        logger.log_info("recv login req conn_id={}", conn_id)
         rsp_msg.err_code = game.util.const.ErrorCode.OK
         self.send_msg_to_client(conn_id, rsp_msg)
 
