@@ -14,7 +14,6 @@ import game.scene.game_actor
 
 
 class GamePlayer(game.scene.game_actor.GameActor):
-
     _c_cmd = game.util.cmd_util.CmdDispatch("c_player")
 
     def __init__(self, e_player, game_scene, conn_id, role_id):
@@ -106,4 +105,7 @@ class GamePlayer(game.scene.game_actor.GameActor):
         tbl_player.role_name = "rename"
         # tbl_player.account = "aa"
         self.game_scene.service.db_proxy.update(tbl_player)
-
+        start_pos = (0, 0, 0)
+        end_pos = (100, 0, 100)
+        path = self.game_scene.scene_obj.findPath(start_pos, end_pos)
+        logger.log_info("find path {0}->{1}, {2}", start_pos, end_pos, path)

@@ -1,7 +1,10 @@
 #include "DetourMgr.h"
 #include "Logger.h"
 
-SceneDetourMgr::SceneDetourMgr() : m_mesh(NULL)
+#define MAX_POLY_PATH 100
+#define MAX_STRAIGHT_PATH 300
+
+SceneDetourMgr::SceneDetourMgr() : m_mesh(NULL), m_query(NULL)
 {
 
 }
@@ -9,17 +12,14 @@ SceneDetourMgr::SceneDetourMgr() : m_mesh(NULL)
 SceneDetourMgr::~SceneDetourMgr()
 {
 	freeNaveMesh();
+	dtFreeNavMeshQuery(m_query);
 }
 
-bool SceneDetourMgr::initNavMesh() 
+bool SceneDetourMgr::initNavMesh(char* meshFileName) 
 {
-	#ifdef WIN32
-	FILE* fp = fopen("../../res/all_tiles_navmesh.bin", "rb");
-	#else
-	FILE* fp = fopen("../res/all_tiles_navmesh.bin", "rb");
-	#endif
+	FILE* fp = fopen(meshFileName, "rb");
 	if (!fp) {
-		Logger::logError("$not found scene navmesh file£¡£¡£¡");
+		Logger::logError("$not found scene navmesh file; %s£¡£¡£¡", meshFileName);
 		return false;
 	}
 
@@ -90,6 +90,13 @@ bool SceneDetourMgr::initNavMesh()
 	}
 
 	m_mesh = mesh;
+	m_query = dtAllocNavMeshQuery();
+	status = m_query->init(m_mesh, 1000);
+	if (dtStatusFailed(status)) {
+		Logger::logError("$init scene navmesh error, navmesh query init failed");
+		fclose(fp);
+		return false;
+	}
 
 	fclose(fp);
 	Logger::logInfo("$init scene navmesh success");
@@ -100,4 +107,31 @@ void SceneDetourMgr::freeNaveMesh()
 {
 	dtFreeNavMesh(m_mesh);
 	m_mesh = NULL;
+}
+
+void SceneDetourMgr::findPath(float* sPos, float* ePos, std::vector<float>* path) {
+	float halfExtents[3]{1, 1, 1};
+	dtQueryFilter filter;
+	dtPolyRef startRef;
+	m_query->findNearestPoly(sPos, halfExtents, &filter, &startRef, 0);
+	dtPolyRef endRef;
+	m_query->findNearestPoly(ePos, halfExtents, &filter, &endRef, 0);
+	dtPolyRef polyPath[MAX_POLY_PATH];
+	int pathCount = 0;
+	m_query->findPath(startRef, endRef, sPos, ePos,
+		&filter, polyPath, &pathCount, MAX_POLY_PATH);
+	if (pathCount > 0) {
+		float straightPath[MAX_STRAIGHT_PATH];
+		int nstraightPath;
+		m_query->findStraightPath(sPos, ePos, polyPath, pathCount,
+			straightPath, NULL, NULL, &nstraightPath, MAX_STRAIGHT_PATH);
+
+		//m_path_len = nstraightPath;
+		for (int i = 0; i < nstraightPath && i < MAX_STRAIGHT_PATH / 3; ++i)
+		{
+			path->push_back(straightPath[i * 3]);
+			path->push_back(straightPath[i * 3 + 1]);
+			path->push_back(straightPath[i * 3 + 2]);
+		}
+	}
 }

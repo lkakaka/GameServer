@@ -6,6 +6,7 @@
 #include "AOIMgr.h"
 #include <thread>
 #include "DetourMgr.h"
+#include "Vector.h"
 
 class GameScene
 {
@@ -49,6 +50,7 @@ public:
 
 	bool onRecvClientMsg(int connId, int msgId, char* data, int dataLen);
 
-	void loadNavMesh();
+	bool loadNavMesh(char* meshFileName);
+	void findPath(float *sPos, float* ePos, std::vector<float>* path);
 };
 

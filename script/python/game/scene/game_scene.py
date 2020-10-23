@@ -1,5 +1,6 @@
 # -*- encoding:utf-8 -*-
 import weakref
+import os
 
 import Scene
 import game.scene.game_player
@@ -18,6 +19,9 @@ class GameScene:
         self.player_dict = {}
         self.player_conn_dict = {}
         # print("scene obj =", self.scene_obj, self.scene_obj.scene_uid)
+        self.det_file_name = os.path.dirname(os.path.abspath(__file__)) + "/../../../../res/" + "all_tiles_navmesh.bin"
+        logger.log_info("scene det_file:{0}", self.det_file_name)
+        self.scene_obj.loadNavMesh(self.det_file_name)
 
     @property
     def scene_uid(self):

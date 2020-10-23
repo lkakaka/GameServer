@@ -75,11 +75,64 @@ static PyObject* onPlayerEnter(PyObject* self, PyObject* args)
 	Py_RETURN_TRUE;
 }
 
+static PyObject* loadNavMesh(PyObject* self, PyObject* args) {
+	char* meshFileName;
+	if (!PyArg_ParseTuple(args, "s", &meshFileName)) {
+		Logger::logError("$loadNavMesh failed, arg error");
+		Py_RETURN_FALSE;
+	}
+
+	GameScene* gameScene = ((PySceneObj*)self)->gameScene;
+	if (gameScene->loadNavMesh(meshFileName)) {
+		Py_RETURN_TRUE;
+	}
+	Py_RETURN_FALSE;
+}
+
+static PyObject* findPath(PyObject* self, PyObject* args) {
+	PyObject* spos, *epos;
+	if (!PyArg_ParseTuple(args, "OO", &spos, &epos)) {
+		Logger::logError("$find path, arg error");
+		Py_RETURN_NONE;
+	}
+	if (!PyTuple_Check(spos) || !PyTuple_Check(epos)) {
+		Logger::logError("$find path, pos format error!!");
+		Py_RETURN_NONE;
+	}
+	float startX = PyFloat_AsDouble(PyTuple_GetItem(spos, 0));
+	float startY = PyFloat_AsDouble(PyTuple_GetItem(spos, 1));
+	float startZ = PyFloat_AsDouble(PyTuple_GetItem(spos, 2));
+	float endX = PyFloat_AsDouble(PyTuple_GetItem(epos, 0));
+	float endY = PyFloat_AsDouble(PyTuple_GetItem(epos, 1));
+	float endZ = PyFloat_AsDouble(PyTuple_GetItem(epos, 2));
+	GameScene* gameScene = ((PySceneObj*)self)->gameScene;
+	float startPos[3]{ startX, startY, startZ };
+	float endPos[3]{ endX, endY, endZ };
+	std::vector<float> path;
+	gameScene->findPath(startPos, endPos, &path);
+	if (path.empty()) {
+		Py_RETURN_NONE;
+	}
+
+	PyObject* pathTuple = PyTuple_New(path.size() / 3);
+	int idx = 0;
+	for (auto iter = path.begin(); iter != path.end(); iter += 3) {
+		PyObject* pos = PyTuple_New(3);
+		for (int i = 0; i < 3; i++) {
+			PyTuple_SetItem(pos, i, PyFloat_FromDouble(*(iter + i)));
+		}
+		PyTuple_SetItem(pathTuple, idx++, pos);
+	}
+	return pathTuple;
+}
+
 static PyMethodDef tp_methods[] = {
 	//{"getSceneById", getSceneById, METH_VARARGS, ""},
 	{"createPlayer", (PyCFunction)createPlayer, METH_VARARGS, ""},
 	{"removeActor", (PyCFunction)removeActor, METH_VARARGS, ""},
 	{"onPlayerEnter", (PyCFunction)onPlayerEnter, METH_VARARGS, ""},
+	{"loadNavMesh", (PyCFunction)loadNavMesh, METH_VARARGS, "" },
+	{"findPath", (PyCFunction)findPath, METH_VARARGS, ""},
 	{NULL, NULL}           /* sentinel */
 };
 

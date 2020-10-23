@@ -30,7 +30,6 @@ void GameScene::onCreate()
 	/*m_AOIMgr.removeNode(2);
 	m_AOIMgr.dump();*/
 	m_syncThread.reset(new std::thread(std::bind(&GameScene::_syncThreadFunc, this)));
-	m_detour->initNavMesh();
 }
 
 void GameScene::_syncThreadFunc() {
@@ -237,6 +236,10 @@ bool GameScene::onRecvClientMsg(int connId, int msgId, char* data, int dataLen) 
 	return player->onRecvClientMsg(msgId, data, dataLen);
 }
 
-void GameScene::loadNavMesh() {
-	
+bool GameScene::loadNavMesh(char* meshFileName) {
+	return m_detour->initNavMesh(meshFileName);
+}
+
+void GameScene::findPath(float* sPos, float* ePos, std::vector<float>* path) {
+	m_detour->findPath(sPos, ePos, path);
 }
