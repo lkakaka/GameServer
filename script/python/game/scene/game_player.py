@@ -105,7 +105,7 @@ class GamePlayer(game.scene.game_actor.GameActor):
         tbl_player.role_name = "rename"
         # tbl_player.account = "aa"
         self.game_scene.service.db_proxy.update(tbl_player)
-        start_pos = (0, 0, 0)
-        end_pos = (100, 0, 100)
+        start_pos = (15, 10, -47)
+        end_pos = (43, 10, -1)
         path = self.game_scene.scene_obj.findPath(start_pos, end_pos)
         logger.log_info("find path {0}->{1}, {2}", start_pos, end_pos, path)

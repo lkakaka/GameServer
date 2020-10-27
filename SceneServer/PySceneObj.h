@@ -1,7 +1,6 @@
 #pragma once
-#define PY_SSIZE_T_CLEAN
-#include "Python.h"
-#include "structmember.h"
+
+#include "PyTypeBase.h"
 #include "GameScene.h"
 
 class PySceneObj {
@@ -11,6 +10,13 @@ public:
 	PyObject* scene_uid;
 };
 
-bool addPySceneObj(PyObject* module);
+class PyTypeSceneObj : public PyTypeBase {
+public:
+	DECLARE_CONSTRUTOR(PyTypeSceneObj);
+	TYPE_DECALARE_ALL
+};
+
+#define MAKE_SCENE_OBJ_TYPE(tp_name, obj_name, tp_size) new PySceneObjType(tp_name, obj_name, tp_size)
+
 
 

@@ -1,7 +1,6 @@
 #pragma once
 
-#define PY_SSIZE_T_CLEAN
-#include "Python.h"
+#include "PyTypeBase.h"
 #include "GamePlayer.h"
 
 class PyGamePlayer
@@ -11,5 +10,13 @@ public:
 	GamePlayer* gamePlayer;
 };
 
-bool addPyGamePlayer(PyObject* module);
+class PyTypeGamePlayer : public PyTypeBase
+{
+public:
+	DECLARE_CONSTRUTOR(PyTypeGamePlayer);
+	TYPE_METHOD_DECLARE;
+	TYPE_NEWFUNC_DECLARE;
+	TYPE_FREEFUNC_DECLARE;
+
+};
 

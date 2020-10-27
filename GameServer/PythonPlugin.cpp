@@ -1,6 +1,6 @@
 
 #include "PythonPlugin.h"
-#include "PyDbInterface.h"
+#include "PyDb.h"
 //#include "py_module/PyModule.h"
 #include "Logger.h"
 #include "py_module/PyModule.h"

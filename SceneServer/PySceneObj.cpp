@@ -2,8 +2,6 @@
 #include "Logger.h"
 #include "SceneMgr.h"
 
-static PyTypeObject PySceneObj_Type;
-
 static PyObject* PySceneObj_New(struct _typeobject* tobj, PyObject* args, PyObject* obj2) {
 	int sceneId;
 	PyObject* scriptObj;
@@ -84,6 +82,10 @@ static PyObject* loadNavMesh(PyObject* self, PyObject* args) {
 
 	GameScene* gameScene = ((PySceneObj*)self)->gameScene;
 	if (gameScene->loadNavMesh(meshFileName)) {
+		float startPos[3]{ 15, 10, -47 };
+		float endPos[3]{ 43, 10, -1 };
+		std::vector<float> path;
+		gameScene->findPath(startPos, endPos, &path);
 		Py_RETURN_TRUE;
 	}
 	Py_RETURN_FALSE;
@@ -141,33 +143,9 @@ static PyMemberDef tp_members[] = {
 	{NULL}
 };
 
+TYPE_CONSTRUTOR(PyTypeSceneObj) {}
+TYPE_MEMBER(PyTypeSceneObj, tp_members)
+TYPE_METHOD(PyTypeSceneObj, tp_methods)
+TYPE_NEWFUNC(PyTypeSceneObj, PySceneObj_New)
+TYPE_FREEFUNC(PyTypeSceneObj, PySceneObj_Free)
 
-static void initPySceneObj_Type()
-{
-	memset(&PySceneObj_Type, 0, sizeof(PySceneObj_Type));
-	PySceneObj_Type.ob_base = { PyObject_HEAD_INIT(NULL) 0 };
-	PySceneObj_Type.tp_name = "Scene.SceneObj";
-	PySceneObj_Type.tp_basicsize = sizeof(PySceneObj);
-	PySceneObj_Type.tp_getattro = PyObject_GenericGetAttr;
-	PySceneObj_Type.tp_flags = Py_TPFLAGS_DEFAULT;
-	PySceneObj_Type.tp_methods = tp_methods;
-	PySceneObj_Type.tp_members = tp_members;
-	PySceneObj_Type.tp_new = PySceneObj_New;
-	PySceneObj_Type.tp_free = PySceneObj_Free;
-}
-
-bool addPySceneObj(PyObject* module) {
-	initPySceneObj_Type();
-	if (PyType_Ready(&PySceneObj_Type) < 0) {
-		Logger::logError("$add py scene obj error, ready type failed");
-		return false;
-	}
-
-	Py_INCREF(&PySceneObj_Type);
-	if (PyModule_AddObject(module, "SceneObj", (PyObject*)& PySceneObj_Type) < 0){
-		Py_DECREF(&PySceneObj_Type);
-		Logger::logError("$add py scene obj error, add failed");
-		return false;
-	}
-	return true;
-}

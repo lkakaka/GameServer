@@ -3,8 +3,6 @@
 #include "Logger.h"
 #include "SceneMgr.h"
 
-static PyTypeObject PyPlayer_Type;
-
 static PyObject* PyPlayer_New(struct _typeobject* tobj, PyObject* args, PyObject* obj2) {
 	PyObject* tuple;
 	PyObject* scriptObj;
@@ -54,31 +52,10 @@ static PyMethodDef tp_methods[] = {
 };
 
 
-static void initPyGamePlayer_Type()
-{
-	memset(&PyPlayer_Type, 0, sizeof(PyPlayer_Type));
-	PyPlayer_Type.ob_base = { PyObject_HEAD_INIT(NULL) 0 };
-	PyPlayer_Type.tp_name = "Scene.Player";
-	PyPlayer_Type.tp_basicsize = sizeof(PyGamePlayer);
-	PyPlayer_Type.tp_getattro = PyObject_GenericGetAttr;
-	PyPlayer_Type.tp_flags = Py_TPFLAGS_DEFAULT;
-	PyPlayer_Type.tp_methods = tp_methods;
-	PyPlayer_Type.tp_new = PyPlayer_New;
-	PyPlayer_Type.tp_free = PyPlayer_Free;
+TYPE_CONSTRUTOR(PyTypeGamePlayer){
+
 }
 
-bool addPyGamePlayer(PyObject* module) {
-	initPyGamePlayer_Type();
-	if (PyType_Ready(&PyPlayer_Type) < 0) {
-		Logger::logError("$add py player obj error, ready type failed");
-		return false;
-	}
-
-	Py_INCREF(&PyPlayer_Type);
-	if (PyModule_AddObject(module, "Player", (PyObject*)& PyPlayer_Type) < 0) {
-		Py_DECREF(&PyPlayer_Type);
-		Logger::logError("$add py player obj error, add failed");
-		return false;
-	}
-	return true;
-}
+TYPE_METHOD(PyTypeGamePlayer, tp_methods)
+TYPE_NEWFUNC(PyTypeGamePlayer, PyPlayer_New)
+TYPE_FREEFUNC(PyTypeGamePlayer, PyPlayer_Free)

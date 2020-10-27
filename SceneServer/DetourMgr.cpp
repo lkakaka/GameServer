@@ -2,7 +2,7 @@
 #include "Logger.h"
 
 #define MAX_POLY_PATH 100
-#define MAX_STRAIGHT_PATH 300
+#define MAX_STRAIGHT_PATH 100
 
 SceneDetourMgr::SceneDetourMgr() : m_mesh(NULL), m_query(NULL)
 {
@@ -121,13 +121,13 @@ void SceneDetourMgr::findPath(float* sPos, float* ePos, std::vector<float>* path
 	m_query->findPath(startRef, endRef, sPos, ePos,
 		&filter, polyPath, &pathCount, MAX_POLY_PATH);
 	if (pathCount > 0) {
-		float straightPath[MAX_STRAIGHT_PATH];
+		float straightPath[MAX_STRAIGHT_PATH * 3];
 		int nstraightPath;
 		m_query->findStraightPath(sPos, ePos, polyPath, pathCount,
 			straightPath, NULL, NULL, &nstraightPath, MAX_STRAIGHT_PATH);
 
 		//m_path_len = nstraightPath;
-		for (int i = 0; i < nstraightPath && i < MAX_STRAIGHT_PATH / 3; ++i)
+		for (int i = 0; i < nstraightPath; ++i)
 		{
 			path->push_back(straightPath[i * 3]);
 			path->push_back(straightPath[i * 3 + 1]);

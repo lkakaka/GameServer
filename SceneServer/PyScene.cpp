@@ -4,7 +4,7 @@
 #include "PyGamePlayer.h"
 
 static PyObject* ModuleError;
-static char* ModuleName = "Scene";
+static const char* ModuleName = "Scene";
 
 static PyObject* getSceneByID(PyObject* self, PyObject* args)
 {
@@ -39,11 +39,14 @@ PyMODINIT_FUNC PyInit_Scene(void)
 		goto error;
 	}
 
-	if (!addPySceneObj(module)) {
+	PyTypeSceneObj* sceneObjType = MAKE_PY_OBJ_TYPE(PyTypeSceneObj, ModuleName, "SceneObj", sizeof(PySceneObj));
+	if (!sceneObjType->addPyTypeObj(module)) {
 		goto error;
 	}
 
-	if (!addPyGamePlayer(module)) {
+
+	PyTypeGamePlayer* pyGamePlayer = MAKE_PY_OBJ_TYPE(PyTypeGamePlayer, ModuleName, "Player", sizeof(PyGamePlayer));
+	if (!pyGamePlayer->addPyTypeObj(module)) {
 		goto error;
 	}
 

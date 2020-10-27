@@ -2,7 +2,7 @@
 #include "Logger.h"
 #include "Profile/ProfileTrack.h"
 
-static PyTypeObject PyRedisObj_Type;
+//static PyTypeObject PyRedisObj_Type;
 
 
 static PyObject* PyRedisObj_New(struct _typeobject* tobj, PyObject* args, PyObject* obj2) {
@@ -90,32 +90,41 @@ static PyMethodDef tp_methods[] = {
 //};
 
 
-static void initPyRedisObj_Type()
+//static void initPyRedisObj_Type()
+//{
+//	memset(&PyRedisObj_Type, 0, sizeof(PyRedisObj_Type));
+//	PyRedisObj_Type.ob_base = { PyObject_HEAD_INIT(NULL) 0 };
+//	PyRedisObj_Type.tp_name = "DB.Redis";
+//	PyRedisObj_Type.tp_basicsize = sizeof(PyRedisObj);
+//	PyRedisObj_Type.tp_getattro = PyObject_GenericGetAttr;
+//	PyRedisObj_Type.tp_flags = Py_TPFLAGS_DEFAULT;
+//	PyRedisObj_Type.tp_methods = tp_methods;
+//	//PyRedisObj_Type.tp_members = tp_members;
+//	PyRedisObj_Type.tp_new = PyRedisObj_New;
+//	PyRedisObj_Type.tp_free = PyRedisObj_Free;
+//}
+//
+//bool addPyRedisObj(PyObject* module) {
+//	initPyRedisObj_Type();
+//	if (PyType_Ready(&PyRedisObj_Type) < 0) {
+//		Logger::logError("$add py redis obj error, ready type failed");
+//		return false;
+//	}
+//
+//	Py_INCREF(&PyRedisObj_Type);
+//	if (PyModule_AddObject(module, "Redis", (PyObject*)&PyRedisObj_Type) < 0) {
+//		Py_DECREF(&PyRedisObj_Type);
+//		Logger::logError("$add py redis obj error, add failed");
+//		return false;
+//	}
+//	return true;
+//}
+
+TYPE_CONSTRUTOR(PyTypeRedis)
 {
-	memset(&PyRedisObj_Type, 0, sizeof(PyRedisObj_Type));
-	PyRedisObj_Type.ob_base = { PyObject_HEAD_INIT(NULL) 0 };
-	PyRedisObj_Type.tp_name = "DB.Redis";
-	PyRedisObj_Type.tp_basicsize = sizeof(PyRedisObj);
-	PyRedisObj_Type.tp_getattro = PyObject_GenericGetAttr;
-	PyRedisObj_Type.tp_flags = Py_TPFLAGS_DEFAULT;
-	PyRedisObj_Type.tp_methods = tp_methods;
-	//PyRedisObj_Type.tp_members = tp_members;
-	PyRedisObj_Type.tp_new = PyRedisObj_New;
-	PyRedisObj_Type.tp_free = PyRedisObj_Free;
 }
 
-bool addPyRedisObj(PyObject* module) {
-	initPyRedisObj_Type();
-	if (PyType_Ready(&PyRedisObj_Type) < 0) {
-		Logger::logError("$add py redis obj error, ready type failed");
-		return false;
-	}
+TYPE_METHOD(PyTypeRedis, tp_methods);
+TYPE_NEWFUNC(PyTypeRedis, PyRedisObj_New);
+TYPE_FREEFUNC(PyTypeRedis, PyRedisObj_Free);
 
-	Py_INCREF(&PyRedisObj_Type);
-	if (PyModule_AddObject(module, "Redis", (PyObject*)&PyRedisObj_Type) < 0) {
-		Py_DECREF(&PyRedisObj_Type);
-		Logger::logError("$add py redis obj error, add failed");
-		return false;
-	}
-	return true;
-}

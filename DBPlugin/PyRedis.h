@@ -1,7 +1,6 @@
 #pragma once
 
-#define PY_SSIZE_T_CLEAN
-#include "Python.h"
+#include "PyTypeBase.h"
 
 #include "../Common/ServerExports.h"
 #include "Redis.h"
@@ -14,4 +13,15 @@ public:
 	Redis* redis;
 };
 
-bool addPyRedisObj(PyObject* module);
+class PyTypeRedis : public PyTypeBase
+{
+public:
+	DECLARE_CONSTRUTOR(PyTypeRedis);
+
+	TYPE_METHOD_DECLARE;
+	TYPE_NEWFUNC_DECLARE;
+	TYPE_FREEFUNC_DECLARE;
+};
+
+
+//bool addPyRedisObj(PyObject* module);
