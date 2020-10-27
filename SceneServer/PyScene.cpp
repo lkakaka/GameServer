@@ -36,27 +36,23 @@ PyMODINIT_FUNC PyInit_Scene(void)
 	ModuleError = PyErr_NewException("Scene.error", NULL, NULL);
 	Py_XINCREF(ModuleError);
 	if (PyModule_AddObject(module, "error", ModuleError) < 0) {
-		goto error;
+		Py_XDECREF(ModuleError);
+		Py_CLEAR(ModuleError);
+		Py_DECREF(module);
+		return NULL;
 	}
 
 	PyTypeSceneObj* sceneObjType = MAKE_PY_OBJ_TYPE(PyTypeSceneObj, ModuleName, "SceneObj", sizeof(PySceneObj));
 	if (!sceneObjType->addPyTypeObj(module)) {
-		goto error;
+		return NULL;
 	}
-
 
 	PyTypeGamePlayer* pyGamePlayer = MAKE_PY_OBJ_TYPE(PyTypeGamePlayer, ModuleName, "Player", sizeof(PyGamePlayer));
 	if (!pyGamePlayer->addPyTypeObj(module)) {
-		goto error;
+		return NULL;
 	}
 
 	return module;
-
-error:
-	Py_XDECREF(ModuleError);
-	Py_CLEAR(ModuleError);
-	Py_DECREF(module);
-	return NULL;
 }
 
 void initSceneModule() {
