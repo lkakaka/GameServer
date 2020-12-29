@@ -16,8 +16,11 @@ public:
 	inline unsigned char* data() { return buffer.data(); }
 	inline void remove(int len) { buffer.erase(buffer.begin(), buffer.begin() + len); }
 
-	int readInt(bool isRemove);
-	unsigned char readByte(bool isRemove);
+	int readInt();
+	unsigned char readByte();
+
+	int getInt();
+	unsigned char getByte();
 	
 	void writeInt(int val);
 	void writeByte(unsigned char val);

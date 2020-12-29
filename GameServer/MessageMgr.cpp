@@ -64,9 +64,9 @@ void MessageMgr::onRecvData(char* sender, char* data, int dataLen) {
 			Logger::logError("$recv %s msg format error, data len < 9", sender);
 			return;
 		}
-		bool isClientMsg = (buffer.readByte(true) == 0);
-		int connId = buffer.readInt(true);
-		msgId = buffer.readInt(true);
+		bool isClientMsg = (buffer.readByte() == 0);
+		int connId = buffer.readInt();
+		msgId = buffer.readInt();
 		char* msgData = (char*)buffer.data();
 		int msgLen = buffer.size();
 		if (!handleMsg(connId, msgId, msgData, msgLen)) {
@@ -94,7 +94,7 @@ void MessageMgr::onRecvData(char* sender, char* data, int dataLen) {
 			Logger::logError("$recv %s msg format error, data len <= 4", sender);
 			return;
 		}
-		msgId = buffer.readInt(true);
+		msgId = buffer.readInt();
 		char* msgData = (char*)buffer.data();
 		int msgLen = buffer.size();
 		if (!handleServiceMsg(msgId, msgData, msgLen)) {
@@ -115,12 +115,12 @@ void MessageMgr::onGatewayRecvData(char* sender, char* data, int dataLen) {
 	MyBuffer buffer(data, dataLen);
 	if (dataLen < 8) {
 		int connId = -1;
-		if (dataLen >= 4) connId = buffer.readInt(true);
+		if (dataLen >= 4) connId = buffer.readInt();
 		Logger::logError("$recv %s msg format error, data len(%d) < 8, connId:%d", sender, dataLen, connId);
 		return;
 	}
-	int connId = buffer.readInt(true);
-	int msgId = buffer.readInt(true);
+	int connId = buffer.readInt();
+	int msgId = buffer.readInt();
 	if (msgId == MSG_ID_CLIENT_DISCONNECT) {
 		std::shared_ptr<google::protobuf::Message> msg = createMessage(msgId, &data[8], dataLen - 8);
 		ClientDisconnect* recvMsg = (ClientDisconnect*)msg.get();

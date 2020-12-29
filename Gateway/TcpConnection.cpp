@@ -70,7 +70,7 @@ void TcpConnection::parsePacket()
 	while (dataLen > 0) {
 		if (dataLen < 4) return;
 		
-		int packetLen = m_readBuf.readInt(false);
+		int packetLen = m_readBuf.getInt();
 		if (packetLen < 8 || packetLen > MAX_PACKET_LEN) {
 			Logger::logInfo("$packet len(%d) error", packetLen);
 			close("packet format error");
@@ -79,8 +79,8 @@ void TcpConnection::parsePacket()
 		// 当前数据长度小于协议包长度
 		if (dataLen < packetLen) return;
 
-		m_readBuf.remove(4); // 移除数据总长度字段
-		int msgId = m_readBuf.readInt(true);
+		m_readBuf.readInt(); // 移除数据总长度字段
+		int msgId = m_readBuf.readInt();
 		int msgLen = packetLen - 8;
 		dispatchClientMsg(msgId, msgLen, (char*)m_readBuf.data());
 		m_readBuf.remove(msgLen);

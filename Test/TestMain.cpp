@@ -28,6 +28,10 @@ int main() {
 	
 	/*std::vector<A> v;
 	v.emplace_back(1);*/
+
+	int i = 2;
+	int j = i > 1 ? 0 : 1;
+
 	unsigned char x = 128;
 	int y = x;
 	int z = y << 24;
