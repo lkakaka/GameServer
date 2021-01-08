@@ -1,8 +1,4 @@
 #!/bin/bash
 source _set_path.sh
 echo $LD_LIBRARY_PATH
-if [ "$VERSION" == "$VERSION_RELEASE" ];then
-../bin/GameServer ../conf/login.cfg &
-else
-../bin/GameServer_d ../conf/login.cfg &
-fi
+$GAME_SERVER ./conf/login.cfg &
