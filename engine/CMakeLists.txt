@@ -62,7 +62,7 @@ set(SCENE_ROOT ${PROJECT_SOURCE_DIR}/SceneServer)
 set(HTTP_SERVER_ROOT ${PROJECT_SOURCE_DIR}/HttpServer)
 set(GATEWAY_ROOT ${PROJECT_SOURCE_DIR}/Gateway)
 
-set(BOOST_ROOT ../boost_1_70_0)
+set(BOOST_ROOT ../../boost_1_70_0)
 #set(PROTOBUFF_ROOT ../../protobuf-3.9.0)
 set(PROTOBUFF_ROOT ${DEPENDS_ROOT}/protobuf-3.9.0)
 find_package(Boost REQUIRED)
