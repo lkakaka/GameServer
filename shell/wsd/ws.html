@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+
+<input type="text" id="text"/><button onclick="send()">Send</button> 
+<button onclick="restart()" id="restart">restart</button> 
+<button onclick="start_all()" id="start_all">start_all</button> 
+<button onclick="stop_all()" id="stop_all">stop_all</button> 
+<pre id="log"></pre>
+
+<script>
+  // helper function: log message to screen
+  function log(msg) {
+    document.getElementById('log').textContent += msg + '\n';
+  }
+  
+  function clear_msg(){
+	document.getElementById('log').textContent = ""
+ }
+  
+  //发送消息
+  function send(){
+	  var message = document.getElementById('text').value;
+	  ws.send(message);
+	  log('send MESSAGE: ' + message);
+  }
+ 
+function restart(){
+	clear_msg();
+	  ws.send("restart");
+	  log('restart server');
+  }
+  
+  function start_all(){
+	clear_msg();
+	  ws.send("start_all");
+	  log('restart server');
+  }
+  
+  function stop_all(){
+	clear_msg();
+	  ws.send("stop_all");
+	  log('restart server');
+  }
+
+  // setup websocket with callbacks
+  var ws = new WebSocket('ws://111.229.80.201:8080/');
+  ws.onopen = function() {
+    log('CONNECT');
+  };
+  ws.onclose = function() {
+    log('DISCONNECT');
+  };
+  ws.onmessage = function(event) {
+    log('MESSAGE: ' + event.data);
+  };
+  ws.onerror = function(event) {
+  log("WebSocket error observed:" + event.data);
+};
+</script>
