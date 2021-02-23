@@ -46,7 +46,7 @@
 		
 	   
 		生成项目vs工程
-	   执行工程目录下的_cmake.bat
+	   执行engine目录下的_cmake.bat
 	
 	2) linux：
 		需安装cmake(3.0+) gcc gcc-c++、python3.8、mysql
@@ -89,7 +89,7 @@
 		
 	   
 	   3、生成工程Makefile
-	   执行工程目录下的_cmake.sh
+	   执行engine目录下的_cmake.sh
 	   cd build
 	   make
 
