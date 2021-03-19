@@ -5,6 +5,10 @@ import com.game.RobotMgr;
 import com.proto.ProtoBufferMsg;
 import com.proto.Role;
 import com.proto.Test;
+import com.util.RC4;
+
+import javax.crypto.Cipher;
+import java.nio.charset.Charset;
 
 public class CommandCmd extends CmdDispatch {
     public String cmd;
@@ -110,5 +114,21 @@ public class CommandCmd extends CmdDispatch {
         builder.setId(10).setMsg("hello");
         GameRobot robot = RobotMgr.getInstance().getOneRobot();
         robot.sendProto(ProtoBufferMsg.MSG_ID_TEST_REQ, builder.build());
+    }
+
+    @CmdAnnotation(inputCmd = "rc4")
+    private void rc4() throws Exception {
+        String key = "testrc4";
+        RC4 rc4 = new RC4(key.getBytes());
+        String plainText = "Hello RC4";
+        byte[] cipherText = rc4.encryptWithRC4(plainText);
+//        byte[] cipherText = rc4.encrypt(plainText.getBytes());
+        String strCipherText = new String(cipherText, Charset.forName("ASCII"));
+        System.out.println(strCipherText);
+
+        byte[] decodeBytes = rc4.decryptWithRC4(strCipherText, cipherText);
+//        byte[] decodeBytes = rc4.decrypt(cipherText);
+        String decodeText = new String(decodeBytes);
+        System.out.println(decodeText);
     }
 }

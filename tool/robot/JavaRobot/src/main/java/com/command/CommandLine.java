@@ -20,7 +20,8 @@ public class CommandLine {
             e.printStackTrace();
             return;
         }
-        LineReader lineReader = LineReaderBuilder.builder().terminal(terminal).history(new DefaultHistory()).build();
+//        LineReader lineReader = LineReaderBuilder.builder().terminal(terminal).history(new DefaultHistory()).build();
+        LineReader lineReader = LineReaderBuilder.builder().terminal(terminal).build();
         String prompt = "command> ";
 
         Thread t = new Thread(new Runnable() {
