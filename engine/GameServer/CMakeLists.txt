@@ -6,15 +6,16 @@
 # find_package(Boost REQUIRED)
 # find_package(PythonLibs REQUIRED)
 
-add_definitions(-DOPEN_PROFILE_TRACK)
+add_definitions(-DOPEN_PROFILE_TRACK -DLUA_BUILD_AS_DLL)
 
 gnu_setting(false)
 
 link_directories(${Boost_LIBRARY_DIRS} ${PYTHON_ROOT}/libs ${LOG4CPP_ROOT} ${PROTOBUFF_ROOT}/libs 
-${DEPENDS_ROOT}/mysql/lib64 ${DBPLUGIN_ROOT} ${ZMQ_ROOT}/libs ${GAMEUTIL_ROOT} ${SCENE_ROOT} ${HTTP_SERVER_ROOT} ${GATEWAY_ROOT} ${REDIS_ROOT}/libs ${MONGO_ROOT}/libs)
+${DEPENDS_ROOT}/mysql/lib64 ${DBPLUGIN_ROOT} ${ZMQ_ROOT}/libs ${GAMEUTIL_ROOT} ${SCENE_ROOT} ${HTTP_SERVER_ROOT} ${GATEWAY_ROOT} ${REDIS_ROOT}/libs ${MONGO_ROOT}/libs 
+${LUA_ROOT}/libs)
 include_directories(${Boost_INCLUDE_DIRS} ${PYTHON_ROOT}/include ${LOG4CPP_ROOT}/include ${PROTOBUFF_ROOT}/include 
 ${DBPLUGIN_ROOT} ${DBPLUGIN_ROOT}/include ${ZMQ_ROOT}/include ${GAMEUTIL_ROOT} ${PROTO_ROOT} ${SCENE_ROOT} ${HTTP_SERVER_ROOT} ${DEPENDS_ROOT}/mysql/include
-${GATEWAY_ROOT} ${REDIS_ROOT}/include ${MONGO_ROOT}/include)
+${GATEWAY_ROOT} ${REDIS_ROOT}/include ${MONGO_ROOT}/include ${LUA_ROOT}/include)
 
 if (NOT WIN32)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}-pthread")
@@ -42,7 +43,7 @@ add_executable(GameServer ${CURRENT_HEADERS} ${CURRENT_SRC} ${PROTO_SRC} ${COMMO
 # message(STATUS ${CURRENT_HEADERS})
 # SOURCE_GROUP("include" FILES ${CURRENT_HEADERS})
 add_dependencies(GameServer DBPlugin)
-target_link_libraries(GameServer MathFunction log4cpp DBPlugin GameUtil SceneServer HttpServer Gateway hiredis)
+target_link_libraries(GameServer MathFunction log4cpp DBPlugin GameUtil SceneServer HttpServer Gateway hiredis lua)
 if(WIN32)
 	target_link_libraries(GameServer debug libprotobufd optimized libprotobuf)
 	target_link_libraries(GameServer libzmq-v142-mt-4_3_3)
