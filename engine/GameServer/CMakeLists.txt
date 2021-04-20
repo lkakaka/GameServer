@@ -6,7 +6,10 @@
 # find_package(Boost REQUIRED)
 # find_package(PythonLibs REQUIRED)
 
-add_definitions(-DOPEN_PROFILE_TRACK -DLUA_BUILD_AS_DLL)
+add_definitions(-DOPEN_PROFILE_TRACK)
+if (WIN32)
+	add_definitions(-DLUA_BUILD_AS_DLL)
+endif (WIN32)
 
 gnu_setting(false)
 
@@ -43,13 +46,13 @@ add_executable(GameServer ${CURRENT_HEADERS} ${CURRENT_SRC} ${PROTO_SRC} ${COMMO
 # message(STATUS ${CURRENT_HEADERS})
 # SOURCE_GROUP("include" FILES ${CURRENT_HEADERS})
 add_dependencies(GameServer DBPlugin)
-target_link_libraries(GameServer MathFunction log4cpp DBPlugin GameUtil SceneServer HttpServer Gateway hiredis lua)
+target_link_libraries(GameServer MathFunction log4cpp DBPlugin GameUtil SceneServer HttpServer Gateway hiredis)
 if(WIN32)
 	target_link_libraries(GameServer debug libprotobufd optimized libprotobuf)
-	target_link_libraries(GameServer libzmq-v142-mt-4_3_3)
+	target_link_libraries(GameServer libzmq-v142-mt-4_3_3 lua)
 else()
 	target_link_libraries(GameServer protobuf)
-	target_link_libraries(GameServer zmq)
+	target_link_libraries(GameServer zmq liblua.a)
 endif()
 
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
