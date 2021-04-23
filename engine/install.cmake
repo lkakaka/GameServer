@@ -7,13 +7,13 @@ if(WIN32)
 		# 不在release目录下的dll拷贝到bin/Debug目录下
 		if(NOT release_ver)
 		   # message(STATUS ${DLL_FILE})
-		   INSTALL(FILES ${DLL_FILE} CONFIGURATIONS Debug DESTINATION ${PROJECT_SOURCE_DIR}/bin/Debug)
+		   INSTALL(FILES ${DLL_FILE} CONFIGURATIONS Debug DESTINATION ${PROJECT_OUT_PATH}/Debug)
 		endif()
 		
 		# 不在Debug目录下的dll拷贝到bin/Release目录下
 		if(NOT debug_ver)
 		  # message(STATUS ${DLL_FILE}) 
-		  INSTALL(FILES ${DLL_FILE} CONFIGURATIONS Release DESTINATION ${PROJECT_SOURCE_DIR}/bin/Release)
+		  INSTALL(FILES ${DLL_FILE} CONFIGURATIONS Release DESTINATION ${PROJECT_OUT_PATH}/Release)
 		endif()
 	endforeach(DLL_FILE)
 endif(WIN32)

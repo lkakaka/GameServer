@@ -22,6 +22,8 @@
 
 #include "mysqlx/xdevapi.h"
 
+#include "lua/LuaPlugin.h"
+
 using namespace std;
 //GameService g_game_service;
 //extern struct GameService g_game_service;
@@ -81,6 +83,8 @@ int main(int argc, char** argv)
 		scriptObj = callPyFunction("main", funcName.c_str(), NULL);
 		PyGILState_Release(py_state);
 	}
+
+	LuaPlugin::initLua();
 
 	GameService::g_gameService = new GameService(serviceName, serviceType, scriptObj);
 

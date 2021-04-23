@@ -55,6 +55,6 @@ else()
 	target_link_libraries(GameServer zmq liblua.a)
 endif()
 
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_OUT_PATH})
 set_target_properties(GameServer PROPERTIES DEBUG_POSTFIX "_d")
 

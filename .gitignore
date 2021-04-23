@@ -5,3 +5,4 @@ script/python/py_cffi/Release/
 script/python/.idea/
 shell/coredump*
 log/
+bin/

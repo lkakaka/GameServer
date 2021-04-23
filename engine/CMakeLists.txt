@@ -47,6 +47,8 @@ endmacro(source_group_by_dir)
 
 message(STATUS ${PROJECT_SOURCE_DIR})
 
+set(PROJECT_OUT_PATH ${PROJECT_SOURCE_DIR}/../bin)
+
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set(DEPENDS_ROOT ${PROJECT_SOURCE_DIR}/Depends)
 set(LOG4CPP_ROOT ${PROJECT_SOURCE_DIR}/log4cpp)

@@ -81,8 +81,8 @@ void initPython()
 	PyRun_SimpleString("sys.path.append(os.path.abspath('../../../../Python-3.8.0/PCbuild/amd64'))");
 	PyRun_SimpleString("sys.path.append(os.path.abspath('..') + '/script/python')");
 	PyRun_SimpleString("sys.path.append(os.path.abspath('..') + '/Depends/Python38')");
-	PyRun_SimpleString("sys.path.append(os.path.abspath('../..') + '/script/python')");
-	PyRun_SimpleString("sys.path.append(os.path.abspath('../..') + '/Depends/Python38')");
+	PyRun_SimpleString("sys.path.append(os.path.abspath('../../..') + '/script/python')");
+	PyRun_SimpleString("sys.path.append(os.path.abspath('../../..') + '/Depends/Python38')");
 #else
 	PyRun_SimpleString("sys.path.append(os.path.abspath('..') + '/script/python')");
 	PyRun_SimpleString("sys.path.append(os.path.abspath('..') + '/Depends/Python38')");
