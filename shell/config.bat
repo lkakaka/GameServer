@@ -1,13 +1,13 @@
 
-set version=release
+set version=debug
 
 if %version%==debug (
 #debug
-set ExePath=..\engine\bin\Debug\
+set ExePath=..\bin\Debug\
 set GameServerExe=GameServer_d.exe
 ) else ( 
 #release
-set ExePath=..\engine\bin\Release\
+set ExePath=..\bin\Release\
 set GameServerExe=GameServer.exe
 )
 

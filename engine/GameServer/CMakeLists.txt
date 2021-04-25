@@ -57,4 +57,5 @@ endif()
 
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_OUT_PATH})
 set_target_properties(GameServer PROPERTIES DEBUG_POSTFIX "_d")
+set_target_properties(GameServer PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${PROJECT_OUT_PATH}")
 
