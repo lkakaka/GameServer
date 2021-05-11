@@ -4,9 +4,9 @@
 #include "Const.h"
 
 //ZmqInst* ZmqInst::zmqInstance = NULL;
-#ifndef WIN32
+//#ifndef WIN32
 INIT_SINGLETON_CLASS(ZmqInst)
-#endif
+//#endif
 
 ZmqInst::ZmqInst(std::string& name, std::string& router_addr) : m_name(name), m_router_addr(router_addr),
 	zmq_context(NULL), conn_socket(NULL), work_thread(NULL), m_recvCallback(NULL)

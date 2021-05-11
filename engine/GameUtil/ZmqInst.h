@@ -11,7 +11,7 @@
 
 #define ZmqRecvCallback std::function<void(char*, char*, int)>
 
-class SERVER_EXPORT_API ZmqInst : public Singleton<ZmqInst> {
+class ZmqInst : public Singleton<ZmqInst> {
 private:
 	//static ZmqInst* zmqInstance;
 	void* zmq_context;
@@ -35,10 +35,10 @@ public:
 	void destory();
 };
 
-#ifdef WIN32
-#ifdef SERVER_EXPORT
-INIT_SINGLETON_CLASS(ZmqInst);
-#endif // SERVER_EXPORT
-#endif // WIN32
+//#ifdef WIN32
+//#ifdef SERVER_EXPORT
+//INIT_SINGLETON_CLASS(ZmqInst);
+//#endif // SERVER_EXPORT
+//#endif // WIN32
 
 

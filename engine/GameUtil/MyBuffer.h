@@ -3,7 +3,7 @@
 #include <string>
 #include "../Common/ServerExports.h"
 
-class SERVER_EXPORT_API MyBuffer
+class MyBuffer
 {
 private:
 	std::vector<unsigned char> buffer;  // must be unsigned char

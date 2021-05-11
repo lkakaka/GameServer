@@ -11,7 +11,7 @@ link_directories(${LOG4CPP_ROOT} ${Boost_LIBRARY_DIRS} ${PROTOBUFF_ROOT}/libs ${
 file(GLOB_RECURSE CURRENT_HEADERS *.h *.hpp)
 file(GLOB_RECURSE CURRENT_SRC *.cpp *cc)
 #add_executable(Gateway ${CURRENT_HEADERS} ${CURRENT_SRC} ${PROTO_SRC})
-add_library(Gateway SHARED ${CURRENT_HEADERS} ${CURRENT_SRC} ${PROTO_SRC})
+add_library(Gateway ${CURRENT_HEADERS} ${CURRENT_SRC} ${PROTO_SRC})
 target_link_libraries(Gateway log4cpp GameUtil)
 if(WIN32)
 	target_link_libraries(Gateway debug libprotobufd optimized libprotobuf)

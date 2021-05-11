@@ -8,7 +8,7 @@
 #include <thread>
 #include <functional>
 
-class SERVER_EXPORT_API ZmqRouter {
+class ZmqRouter {
 private:
 	static ZmqRouter* zmqRouter;
 	void* zmq_context;

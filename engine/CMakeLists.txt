@@ -14,6 +14,12 @@ macro(gnu_setting pthread)
 	endif (CMAKE_COMPILER_IS_GNUCXX)
 endmacro()
 
+macro(gnu_cxx_flag flag)
+	if (CMAKE_COMPILER_IS_GNUCXX)
+ 		set(CMAKE_CXX_FLAGS "${flag} ${CMAKE_CXX_FLAGS}")
+	endif (CMAKE_COMPILER_IS_GNUCXX)
+endmacro()
+
 macro(source_group_by_dir source_files)
     if(MSVC)
         set(sgbd_cur_dir ${CMAKE_CURRENT_SOURCE_DIR})

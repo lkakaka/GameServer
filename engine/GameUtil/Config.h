@@ -5,7 +5,7 @@
 
 #define ERROR_CONFIG_INT -0x0FFFFFFF
 
-class SERVER_EXPORT_API Config
+class Config
 {
 public:
 	static bool checkFileExist(char* fileName);

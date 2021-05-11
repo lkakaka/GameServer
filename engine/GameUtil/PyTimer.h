@@ -4,4 +4,4 @@
 
 #include "../Common/ServerExports.h"
 
-SERVER_EXPORT_API void initTimerModule();
+void initTimerModule();

@@ -52,7 +52,7 @@ if(WIN32)
 	target_link_libraries(GameServer libzmq-v142-mt-4_3_3 lua)
 else()
 	target_link_libraries(GameServer protobuf)
-	target_link_libraries(GameServer zmq liblua.a)
+	target_link_libraries(GameServer zmq liblua.a dl)
 endif()
 
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_OUT_PATH})

@@ -4,13 +4,14 @@ set(CMAKE_DEBUG_POSTFIX "_d")
 add_definitions(-DSERVER_EXPORT -DOPEN_PROFILE_TRACK)
 
 gnu_setting(false)
+gnu_cxx_flag("-fPIC")
 
 include_directories(${LOG4CPP_ROOT}/include ${PYTHON_ROOT}/include ${Boost_INCLUDE_DIRS} ${ZMQ_ROOT}/include)
 link_directories(${LOG4CPP_ROOT} ${PYTHON_ROOT}/libs ${Boost_LIBRARY_DIRS} ${ZMQ_ROOT}/libs)
 
 file(GLOB_RECURSE CURRENT_HEADERS *.h *.hpp)
 file(GLOB_RECURSE CURRENT_SRC *.cpp *cc)
-add_library(GameUtil SHARED ${CURRENT_HEADERS} ${CURRENT_SRC} ${COMMON_SRC})
+add_library(GameUtil ${CURRENT_HEADERS} ${CURRENT_SRC} ${COMMON_SRC})
 target_link_libraries(GameUtil log4cpp)
 if(WIN32)
 	target_link_libraries(GameUtil libzmq-v142-mt-4_3_3)

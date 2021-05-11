@@ -15,7 +15,7 @@
 #endif // OPEN_PROFILE_TRACK
 
 
-class SERVER_EXPORT_API ProfileTrack
+class ProfileTrack
 {
 	long m_startTime;
 	std::string m_name;

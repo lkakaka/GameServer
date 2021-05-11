@@ -84,7 +84,8 @@ int main(int argc, char** argv)
 		PyGILState_Release(py_state);
 	}
 
-	LuaPlugin::initLua();
+	new LuaPlugin();
+	LuaPlugin::getLuaPlugin()->initLua();
 
 	GameService::g_gameService = new GameService(serviceName, serviceType, scriptObj);
 

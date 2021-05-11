@@ -20,7 +20,7 @@ typedef struct
 	int triggerCnt;
 }Timer;
 
-class SERVER_EXPORT_API TimerMgr
+class TimerMgr
 {
 private:
 	boost::asio::io_service* m_io;

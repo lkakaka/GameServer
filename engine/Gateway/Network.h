@@ -22,7 +22,7 @@
 using boost::asio::ip::tcp;
 using boost::system::error_code;
 
-class SERVER_EXPORT_API Network : std::enable_shared_from_this<Network>
+class Network : std::enable_shared_from_this<Network>
 {
 private:
 	int m_curConnId = 0;
@@ -49,5 +49,5 @@ public:
 	void removeConnection(int connID, const char* reason);
 };
 
-SERVER_EXPORT_API void startNetwork(boost::asio::io_service* io, int port);
+ void startNetwork(boost::asio::io_service* io, int port);
 

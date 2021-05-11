@@ -10,7 +10,7 @@ typedef std::function<void(int, const char*)> ConnCloseFunc;
 
 using boost::asio::ip::tcp;
 
-class SERVER_EXPORT_API TcpConnection : public std::enable_shared_from_this<TcpConnection>
+class TcpConnection : public std::enable_shared_from_this<TcpConnection>
 {
 private:
 	tcp::socket m_socket;
