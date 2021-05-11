@@ -1,2 +1,2 @@
 #!/bin/bash
-./websocketd --port 8080 ./ws.sh
+./websocketd --port 8090 ./ws.sh

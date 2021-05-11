@@ -12,9 +12,9 @@ VERSION=$VERSION_DEBUG
 #VERSION=$VERSION_RELEASE
 
 if [ "$VERSION" == "$VERSION_RELEASE" ];then
-GAME_SERVER=../engine/bin/GameServer
+GAME_SERVER=../bin/GameServer
 else
-GAME_SERVER=../engine/bin/GameServer_d
+GAME_SERVER=../bin/GameServer_d
 fi
 
 ulimit -c unlimited
