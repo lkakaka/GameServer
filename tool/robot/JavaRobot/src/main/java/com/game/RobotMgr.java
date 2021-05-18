@@ -6,26 +6,28 @@ import java.util.Map;
 import java.util.Random;
 
 public class RobotMgr {
-    private static final String m_serverIP = "127.0.0.1";
-//    private static final String m_serverIP = "111.229.80.201";
+    private static final String m_localServerIP = "127.0.0.1";
+    private static final String m_remoteServerIP = "111.229.80.201";
     private static final int m_serverPort = 30000;
 
     private static final RobotMgr m_robotMgr = new RobotMgr();
     public Map<String, GameRobot> robotMap = new HashMap<>();
 
-    public void addRobot(String account) {
+    public void addRobot(String account, boolean bRemoteServer) {
         if (robotMap.containsKey(account)) {
             return;
         }
 
+        String serverIP = bRemoteServer ? m_remoteServerIP : m_localServerIP;
+
         GameRobot gameRobot = new GameRobot();
-        gameRobot.setServerIP(RobotMgr.m_serverIP);
+        gameRobot.setServerIP(serverIP);
         gameRobot.setServerPort(RobotMgr.m_serverPort);
         gameRobot.setAccount(account);
         gameRobot.init();
         gameRobot.login();
         robotMap.put(account, gameRobot);
-        System.out.println("add robot, account:" + account);
+        System.out.println(String.format("add robot, serverIP:%s, account:%s", serverIP, account));
     }
 
     public void removeRobot(String account) {

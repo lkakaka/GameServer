@@ -52,8 +52,13 @@ public class CommandCmd extends CmdDispatch {
             return;
         }
 
+        boolean isRemote = false;
+        if (params.length >= 2) {
+            if (params[1].equals("1")) isRemote = true;
+        }
+
         String account = params[0];
-        RobotMgr.getInstance().addRobot(account);
+        RobotMgr.getInstance().addRobot(account, isRemote);
         System.out.println("addRobot successful, account:" + account);
     }
 
