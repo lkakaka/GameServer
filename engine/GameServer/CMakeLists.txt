@@ -41,7 +41,11 @@ source_group_by_dir(all_files)
 # aux_source_directory(./db MYSERVER_DB_DIR)
 # aux_source_directory(./py_module MYSERVER_PY_MOD_DIR)
 # add_executable(GameServer ${MYSERVER_SRC_DIR} ${MYSERVER_PROTO_SRC_DIR} ${MYSERVER_DB_DIR} ${MYSERVER_PY_MOD_DIR})
-add_executable(GameServer ${CURRENT_HEADERS} ${CURRENT_SRC} ${PROTO_SRC} ${COMMON_SRC} ${PY_SRC})
+
+#add_executable(GameServer ${CURRENT_HEADERS} ${CURRENT_SRC} ${PROTO_SRC} ${COMMON_SRC} ${PY_SRC})
+
+add_executable(GameServer ${CURRENT_HEADERS} ${CURRENT_SRC} ${COMMON_SRC} ${PY_SRC})
+
 
 # message(STATUS ${CURRENT_HEADERS})
 # SOURCE_GROUP("include" FILES ${CURRENT_HEADERS})
