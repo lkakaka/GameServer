@@ -5,15 +5,15 @@ add_definitions(-DSERVER_EXPORT -DOPEN_PROFILE_TRACK)
 
 gnu_setting(true)
 
-include_directories(${LOG4CPP_ROOT}/include ${Boost_INCLUDE_DIRS} ${PROTOBUFF_ROOT}/include ${GAMEUTIL_ROOT} ${ZMQ_ROOT}/include ${PROTO_ROOT})
-link_directories(${LOG4CPP_ROOT} ${Boost_LIBRARY_DIRS} ${PROTOBUFF_ROOT}/libs ${GAMEUTIL_ROOT} ${ZMQ_ROOT}/libs ${PYTHON_ROOT}/libs)
+include_directories(${LOG4CPP_ROOT}/include ${Boost_INCLUDE_DIRS} ${PROTOBUFF_ROOT}/include ${GAMELIB_ROOT} ${ZMQ_ROOT}/include ${PROTO_ROOT})
+link_directories(${LOG4CPP_ROOT} ${Boost_LIBRARY_DIRS} ${PROTOBUFF_ROOT}/libs ${GAMELIB_ROOT} ${ZMQ_ROOT}/libs ${PYTHON_ROOT}/libs)
 
 file(GLOB_RECURSE CURRENT_HEADERS *.h *.hpp)
 file(GLOB_RECURSE CURRENT_SRC *.cpp *cc)
 #add_executable(Gateway ${CURRENT_HEADERS} ${CURRENT_SRC} ${PROTO_SRC})
 #add_library(Gateway ${CURRENT_HEADERS} ${CURRENT_SRC} ${PROTO_SRC})
 add_library(Gateway ${CURRENT_HEADERS} ${CURRENT_SRC})
-target_link_libraries(Gateway log4cpp GameUtil ProtoBuffer)
+target_link_libraries(Gateway log4cpp GameLib ProtoBuffer)
 if(WIN32)
 	target_link_libraries(Gateway debug libprotobufd optimized libprotobuf)
 	target_link_libraries(Gateway libzmq-v142-mt-4_3_3)
