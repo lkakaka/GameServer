@@ -2,6 +2,7 @@
 from game.util import logger
 from proto.pb_message import Message
 from game.service.service_base import ServiceBase
+from game.service.service_addr import LOCAL_SCENE_CTRL_SERVICE_ADDR
 import game.scene.game_scene
 import game.scene.game_player
 import game.util.timer
@@ -34,7 +35,7 @@ class SceneService(ServiceBase):
             else:
                 logger.log_error("reg scene error, err_code:{}, scene_id:{}", err_code, scene_id)
 
-        future = self.rpc_call("scene_ctrl", "RegScene", timeout=10.0, scene_id=scene_id, scene_uid=scene.scene_uid)
+        future = self.rpc_call(LOCAL_SCENE_CTRL_SERVICE_ADDR, "RegScene", timeout=10.0, scene_id=scene_id, scene_uid=scene.scene_uid)
         future.on_fin += _reg_callback
         future.on_timeout += _reg_callback
 

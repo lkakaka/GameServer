@@ -19,15 +19,23 @@
 #include "server.hpp"
 #include "Network.h"
 #include "CmdLine.h"
+#include "ServiceInfo.h"
 
 #include "mysqlx/xdevapi.h"
 
 #include "lua/LuaPlugin.h"
 
+
 using namespace std;
 //GameService g_game_service;
 //extern struct GameService g_game_service;
 std::string g_cfgFileName = "";
+
+std::string getServerConfigStr(const char* key);
+static int getServerConfigInt(const char* key);
+static void initZmqRouter(int port);
+static int initZmqEntity(boost::asio::io_service* io);
+
 
 
 int main(int argc, char** argv)
@@ -36,15 +44,21 @@ int main(int argc, char** argv)
 		printf("arg count error");
 		return 0;
 	}
-	char* cfgName = argv[1];
+	const char* cfgName = argv[1];
 	if (!Config::checkFileExist(cfgName)) {
 		printf("cfg file not exist, file name: %s", cfgName);
 		return 0;
 	}
-
 	g_cfgFileName = cfgName;
+	Config* config = new Config(cfgName);
 
-	std::string serviceName = Config::getConfigStr(cfgName, "service_name");
+	int serverId = getServerConfigInt("server_id");
+	if (serverId <= 0) {
+		printf("$not config server id, config file: %s", cfgName);
+		return 0;
+	}
+
+	std::string serviceName = getServerConfigStr("service_name");
 	if (serviceName.length() == 0) {
 		printf("$not config service name, file name: %s", cfgName);
 		return 0;
@@ -56,15 +70,23 @@ int main(int argc, char** argv)
 		return 0;
 	}
 
+	int serviceId = getServerConfigInt("service_id");
+	if (serviceId < 0) {
+		printf("$service id error, serviceName: %s", serviceName.c_str());
+		return 0;
+	}
+
+	ServiceInfo* serviceInfo = new ServiceInfo(serverId, serviceType, serviceId);
+
 	Logger::initLog(serviceName.c_str());
 	Logger::logInfo("$dfas,%%n");
 	//g_game_service.service_name = serviceName;
 
-	std::string dbUrl = Config::getConfigStr(cfgName, "db_url");
+	std::string dbUrl = getServerConfigStr("db_url");
 	if (dbUrl.length() > 0) {
-		std::string dbUserName = Config::getConfigStr(cfgName, "db_username");
-		std::string dbPassword = Config::getConfigStr(cfgName, "db_password");
-		int dbPort = Config::getConfigInt(cfgName, "db_port");
+		std::string dbUserName = getServerConfigStr("db_username");
+		std::string dbPassword = getServerConfigStr("db_password");
+		int dbPort = getServerConfigInt("db_port");
 		new DBMgr(dbUserName, dbPassword, dbUrl, dbPort);
 		Logger::logInfo("$db config, url: %s, port:%d", dbUrl.c_str(), dbPort);
 	}
@@ -76,7 +98,7 @@ int main(int argc, char** argv)
 	ZmqInst::getZmqInstance()->setRecvCallback(MessageMgr::onRecvData);*/
 	
 	PyObject* scriptObj = NULL;
-	std::string funcName = Config::getConfigStr(cfgName, "script_init_func");
+	std::string funcName = getServerConfigStr("script_init_func");
 	if (funcName.length() > 0) {
 		initPython();
 		auto py_state = PyGILState_Ensure();
@@ -87,6 +109,7 @@ int main(int argc, char** argv)
 	new LuaPlugin();
 	LuaPlugin::getLuaPlugin()->initLua();
 
+	//ServiceAddr addr(serverId, serviceType, serviceId);
 	GameService::g_gameService = new GameService(serviceName, serviceType, scriptObj);
 
 	// Initialise the http server.
@@ -102,29 +125,30 @@ int main(int argc, char** argv)
 	//	Logger::logInfo("$start http server, ip: %s, port:%s", httpServerIp.c_str(), httpServerPort.c_str());
 	//}
 
-	int router_port = Config::getConfigInt(cfgName, "router_port");
+	int router_port = getServerConfigInt("router_port");
 	if (router_port > 0) {
-		ZmqRouter::initZmqRouter(serviceName.c_str(), router_port);
-	}
-	else {
-		std::string routerAddr = Config::getConfigStr(cfgName, "router_addr");
-		if (routerAddr.length() == 0) {
-			Logger::logError("$not config router addr, file name: %s", cfgName);
-			return 0;
-		}
+		//ZmqRouter::initZmqRouter(serviceName.c_str(), router_port);
+		initZmqRouter(router_port);
+	} else {
+		initZmqEntity(&io);
+		//std::string routerAddr = Config::getConfigStr(cfgName, "router_addr");
+		//if (routerAddr.length() == 0) {
+		//	Logger::logError("$not config router addr, file name: %s", cfgName);
+		//	return 0;
+		//}
 
-		//ZmqInst::initZmqInstance(serviceName.c_str(), routerAddr.c_str());
-		ZmqInst* zmqInst = new ZmqInst(serviceName, routerAddr);
-		zmqInst->startZmqInst();
-		int port = Config::getConfigInt(cfgName, "port");
-		if (port > 0) {
-			Logger::logInfo("$gateway port:%d", port);
-			Network::initNetwork(&io, port);
-			ZmqInst::getZmqInstance()->setRecvCallback(MessageMgr::onGatewayRecvData);
-		}
-		else {
-			ZmqInst::getZmqInstance()->setRecvCallback(MessageMgr::onRecvData);
-		}
+		////ZmqInst::initZmqInstance(serviceName.c_str(), routerAddr.c_str());
+		//ZmqInst* zmqInst = new ZmqInst(serviceName, routerAddr);
+		//zmqInst->startZmqInst();
+		//int port = Config::getConfigInt(cfgName, "port");
+		//if (port > 0) {
+		//	Logger::logInfo("$gateway port:%d", port);
+		//	Network::initNetwork(&io, port);
+		//	ZmqInst::getZmqInstance()->setRecvCallback(MessageMgr::onGatewayRecvData);
+		//}
+		//else {
+		//	ZmqInst::getZmqInstance()->setRecvCallback(MessageMgr::onRecvData);
+		//}
 	}
 
 	/*DBPlugin* dbPlugin = new DBPlugin();
@@ -165,6 +189,48 @@ int main(int argc, char** argv)
 
 	finalizePython();
 	Logger::logInfo("$MyServer exit!!!");
+
+	return 0;
+}
+
+
+static std::string getServerConfigStr(const char* key) {
+	return Config::getSingleton()->getConfigStr(key);
+}
+
+static int getServerConfigInt(const char* key) {
+	return Config::getSingleton()->getConfigInt(key);
+}
+
+static void initZmqRouter(int port) {
+	ZmqRouter::initZmqRouter(GameService::g_gameService->service_name.c_str(), port);
+}
+
+static int initZmqEntity(boost::asio::io_service* io) {
+	std::string routerAddr = getServerConfigStr("router_addr");
+	if (routerAddr.length() == 0) {
+		Logger::logError("$not config router addr, file name: %s", g_cfgFileName.c_str());
+		return 1;
+	}
+
+	//ServiceAddr* addr = GameService::g_gameService->getServiceAddr();
+	int serviceGroup = ServiceInfo::getSingleton()->getServiceGroup();
+	int serviceType = ServiceInfo::getSingleton()->getServiceType();
+	int serviceId = ServiceInfo::getSingleton()->getServiceId();
+	ServiceAddr addr(serviceGroup, serviceType, serviceId);
+
+	//ZmqInst::initZmqInstance(serviceName.c_str(), routerAddr.c_str());
+	ZmqInst* zmqInst = new ZmqInst(addr, routerAddr);
+	zmqInst->startZmqInst();
+	int port = getServerConfigInt("port");
+	if (port > 0) {
+		Logger::logInfo("$gateway port:%d", port);
+		Network::initNetwork(io, port);
+		ZmqInst::getZmqInstance()->setRecvCallback(MessageMgr::onGatewayRecvData);
+	}
+	else {
+		ZmqInst::getZmqInstance()->setRecvCallback(MessageMgr::onRecvData);
+	}
 
 	return 0;
 }

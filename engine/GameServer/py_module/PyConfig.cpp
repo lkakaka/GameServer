@@ -17,7 +17,7 @@ static PyObject* getConfigInt(PyObject* self, PyObject* args)
 		Py_RETURN_NONE;
 	}
 
-	int val = Config::getConfigInt(g_cfgFileName.c_str(), key);
+	int val = Config::getSingleton()->getConfigInt(key);
 	return PyLong_FromLong(val);
 }
 
@@ -30,7 +30,7 @@ static PyObject* getConfigStr(PyObject* self, PyObject* args)
 		Py_RETURN_NONE;
 	}
 
-	std::string val = Config::getConfigStr(g_cfgFileName.c_str(), key);
+	std::string val = Config::getSingleton()->getConfigStr(key);
 	return PyUnicode_FromString(val.c_str());
 }
 

@@ -1,6 +1,9 @@
 ﻿# -*- encoding:utf-8 -*-
 
 from game.service.service_base import ServiceBase
+from game.service.service_addr import ServiceAddr
+from game.service.service_addr import LOCAL_DB_SERVICE_ADDR
+from game.service.service_addr import LOCAL_SCENE_CTRL_SERVICE_ADDR
 from proto.pb_message import Message
 from game.util.const import ErrorCode
 from game.util import logger
@@ -76,7 +79,7 @@ class LoginService(ServiceBase):
             logger.log_error("create role error, account:{}, msg.account:{}", account, msg.account)
             return
 
-        self.rpc_call("db", "CreateRole", conn_id=conn_id, account=msg.account, role_name=msg.role_name)
+        self.rpc_call(LOCAL_DB_SERVICE_ADDR, "CreateRole", conn_id=conn_id, account=msg.account, role_name=msg.role_name)
 
     @_c_cmd.reg_cmd(Message.MSG_ID_ENTER_GAME)
     def _on_recv_enter_game(self, conn_id, msg_id, msg):
@@ -113,7 +116,7 @@ class LoginService(ServiceBase):
             if err_code != game.util.const.ErrorCode.OK:
                 return
 
-        future = self.rpc_call("scene_ctrl", "EnterScene", timeout=30, conn_id=conn_id, role_id=tbl["role_id"])
+        future = self.rpc_call(LOCAL_SCENE_CTRL_SERVICE_ADDR, "EnterScene", timeout=30, conn_id=conn_id, role_id=tbl["role_id"])
         future.on_fin += _on_query_login_scene
         future.on_timeout += _on_query_login_scene
         logger.log_info("send enter scene req to scene ctrl, conn_id:{}, account:{}", conn_id, account)

@@ -4,15 +4,22 @@
 #include <string.h>
 #include <stdlib.h>
 
-bool Config::checkFileExist(char* fileName)
+
+INIT_SINGLETON_CLASS(Config)
+
+Config::Config(const char* cfgFile) : cfgFile(cfgFile) {
+
+}
+
+bool Config::checkFileExist(const char* fileName)
 {
 	std::ifstream in(fileName);
 	return in.good();
 }
 
-std::string Config::getConfigStr(const char* configFileName, char* key)
+std::string Config::getConfigStr(const char* key)
 {
-	std::ifstream in(configFileName);
+	std::ifstream in(cfgFile);
 	//char line[128]{0};
 
 	std::string line;
@@ -34,9 +41,9 @@ std::string Config::getConfigStr(const char* configFileName, char* key)
 	return "";
 }
 
-int Config::getConfigInt(const char* configFileName, char* key)
+int Config::getConfigInt(const char* key)
 {
-	std::string val = getConfigStr(configFileName, key);
+	std::string val = getConfigStr(key);
 	if (val.length() == 0) {
 		return ERROR_CONFIG_INT;
 	}

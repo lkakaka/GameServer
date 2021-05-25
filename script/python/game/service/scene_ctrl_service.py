@@ -35,5 +35,5 @@ class SceneCtrlService(ServiceBase):
         if scene is None:
             logger.log_info("enter scene failed, not found scene, scene_id:{}, role_id:{}", scene_id, role_id)
             return ErrorCode.NOT_FOUND_SCENE
-        self.rpc_call(scene.service_name, "Scene_EnterScene", conn_id=conn_id, role_id=role_id, scene_uid=scene.scene_uid)
+        self.rpc_call(scene.service_addr, "Scene_EnterScene", conn_id=conn_id, role_id=role_id, scene_uid=scene.scene_uid)
         return ErrorCode.OK

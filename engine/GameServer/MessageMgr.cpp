@@ -8,11 +8,14 @@
 #include "MyBuffer.h"
 #include "SceneMgr.h"
 #include "proto.h"
+#include "ServiceType.h"
+#include "CommEntity.h"
+#include "ServiceInfo.h"
 
 
 bool handleMsg(int connId, int msgId, char* data, int dataLen)
 {
-	if (GameService::g_gameService->getServieType() == SERVIE_TYPE_SCENE) {
+	if (GameService::g_gameService->getServieType() == SERVICE_TYPE_SCENE) {
 		if (SceneMgr::getSceneMgr()->handleClientMsg(connId, msgId, data, dataLen)) {
 			return true;
 		}
@@ -57,9 +60,11 @@ bool handleServiceMsg(int msgId, char* data, int dataLen)
 }
 
 void MessageMgr::onRecvData(char* sender, char* data, int dataLen) {
+	ServiceAddr srcAddr;
+	srcAddr.parseAddr(sender);
 	int msgId = 0;
 	MyBuffer buffer(data, dataLen);
-	if (strcmp(sender, "gateway") == 0) {
+	if (srcAddr.getServiceType() == SERVICE_TYPE_GATEWAY) {
 		if (dataLen < 9) {
 			Logger::logError("$recv %s msg format error, data len < 9", sender);
 			return;
@@ -74,18 +79,21 @@ void MessageMgr::onRecvData(char* sender, char* data, int dataLen) {
 			PyObject* arg = PyTuple_New(3);
 			if (isClientMsg) {
 				PyTuple_SetItem(arg, 0, PyLong_FromLong(connId));
-			}
-			else {
-				PyTuple_SetItem(arg, 0, Py_BuildValue("s", sender));
-			}
-			PyTuple_SetItem(arg, 1, PyLong_FromLong(msgId));
-			PyTuple_SetItem(arg, 2, Py_BuildValue("y#", msgData, msgLen));
-			if (isClientMsg) {
+				PyTuple_SetItem(arg, 1, PyLong_FromLong(msgId));
+				PyTuple_SetItem(arg, 2, Py_BuildValue("y#", msgData, msgLen));
 				GameService::g_gameService->callPyFunc("on_recv_client_msg", arg);
 			}
 			else {
+				PyObject* pArgs = Py_BuildValue("iii", srcAddr.getServiceGroup(), srcAddr.getServiceType(), srcAddr.getServiceId());
+				PyObject* pyObj = GameService::g_gameService->callPyFunc("create_service_addr", pArgs);
+				PyTuple_SetItem(arg, 0, pyObj);
+				PyTuple_SetItem(arg, 1, PyLong_FromLong(msgId));
+				PyTuple_SetItem(arg, 2, Py_BuildValue("y#", msgData, msgLen));
 				GameService::g_gameService->callPyFunc("on_recv_service_msg", arg);
+				Py_INCREF(pArgs);
+				Py_INCREF(pyObj);
 			}
+			Py_INCREF(arg);
 			PyGILState_Release(py_state);
 		}
 	}
@@ -100,10 +108,20 @@ void MessageMgr::onRecvData(char* sender, char* data, int dataLen) {
 		if (!handleServiceMsg(msgId, msgData, msgLen)) {
 			auto py_state = PyGILState_Ensure();
 			PyObject* arg = PyTuple_New(3);
-			PyTuple_SetItem(arg, 0, Py_BuildValue("s", sender));
+
+			//PyObject* pModule = PyImport_ImportModule("game.service.service_addr");//这里是要调用的文件名
+			//PyObject* pFunc = PyObject_GetAttrString(pModule, "ServiceAddr");//这里是要调用的函数名
+			PyObject* pArgs = Py_BuildValue("iii", srcAddr.getServiceGroup(), srcAddr.getServiceType(), srcAddr.getServiceId());
+			//PyObject* pyObj = PyEval_CallObject(pFunc, pArgs);//调用函数
+
+			PyObject* pyObj = GameService::g_gameService->callPyFunc("create_service_addr", pArgs);
+
+			PyTuple_SetItem(arg, 0, pyObj);
 			PyTuple_SetItem(arg, 1, PyLong_FromLong(msgId));
 			PyTuple_SetItem(arg, 2, Py_BuildValue("y#", msgData, msgLen));
 			GameService::g_gameService->callPyFunc("on_recv_service_msg", arg);
+			Py_INCREF(pArgs);
+				Py_INCREF(pyObj);
 			PyGILState_Release(py_state);
 		}
 	}
@@ -138,25 +156,28 @@ void MessageMgr::onGatewayRecvData(char* sender, char* data, int dataLen) {
 	Logger::logInfo("$recv msg, sender:%s,  msgId:%d", sender, msgId);
 }
 
-void MessageMgr::sendToClient(int connID, int msgId, google::protobuf::Message* msg) {
-	std::string msgData;
-	msg->SerializeToString(&msgData);
-	sendToClient(connID, msgId, msgData.c_str(), msgData.length());
-}
+//void MessageMgr::sendToClient(int connID, int msgId, google::protobuf::Message* msg) {
+//	std::string msgData;
+//	msg->SerializeToString(&msgData);
+//	sendToClient(connID, msgId, msgData.c_str(), msgData.length());
+//}
 
 void MessageMgr::sendToClient(int connID, int msgId, const char* msg, int msgLen) {
 	MyBuffer buffer;
 	buffer.writeInt(connID);
 	buffer.writeInt(msgId);
 	buffer.writeString(msg, msgLen);
-	ZmqInst::getZmqInstance()->sendData("gateway", (char*)buffer.data(), buffer.size());
+	//ZmqInst::getZmqInstance()->sendData("gateway", (char*)buffer.data(), buffer.size());
+	ServiceAddr addr(ServiceInfo::getSingleton()->getServiceGroup(), ServiceType::SERVICE_TYPE_GATEWAY, 0);
+	ZmqInst::getZmqInstance()->sendToService(&addr, (char*)buffer.data(), buffer.size());
 }
 
-void MessageMgr::sendToServer(const char *serviceName, int msgId, const char* msg, int msgLen)
+void MessageMgr::sendToServer(ServiceAddr* addr, int msgId, const char* msg, int msgLen)
 {
 	MyBuffer buffer;
 	buffer.writeInt(msgId);
 	buffer.writeString(msg, msgLen);
-	ZmqInst::getZmqInstance()->sendData(serviceName, (char*)buffer.data(), buffer.size());
+	//ZmqInst::getZmqInstance()->sendData(serviceName, (char*)buffer.data(), buffer.size());
+	ZmqInst::getZmqInstance()->sendToService(addr, (char*)buffer.data(), buffer.size());
 }
 

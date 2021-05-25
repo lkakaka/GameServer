@@ -1,6 +1,7 @@
 #include "PyService.h"
 #include "Logger.h"
-#include "..//MessageMgr.h"
+#include "../MessageMgr.h"
+#include "ServiceType.h"
 
 static PyTypeObject PyService_Type;
 
@@ -38,17 +39,30 @@ static PyObject* sendMsgToClient(PyObject* self, PyObject* args)
 
 static PyObject* sendMsgToService(PyObject* self, PyObject* args)
 {
-	char* serviceName = NULL;
+	PyObject* serviceAddr = NULL;
 	int msgId;
 	Py_ssize_t msgLen;
 	char* msg = NULL;
-	if (!PyArg_ParseTuple(args, "siy#", &serviceName, &msgId, &msg, &msgLen)) {
+	if (!PyArg_ParseTuple(args, "Oiy#", &serviceAddr, &msgId, &msg, &msgLen)) {
 		Logger::logError("$send msg to service error, args error");
 		//PyErr_SetString(ModuleError, "sendMessageToService failed");
 		Py_RETURN_FALSE;
 	}
 
-	MessageMgr::sendToServer(serviceName, msgId, msg, msgLen);
+	if (serviceAddr == NULL) {
+		Logger::logError("$send msg to service error, service addr is null");
+		Py_RETURN_FALSE;
+	}
+
+	PyObject* pyServiceGroup = PyObject_GetAttrString(serviceAddr, "service_group");
+	PyObject* pyServiceType = PyObject_GetAttrString(serviceAddr, "service_type");
+	PyObject* pyServiceId = PyObject_GetAttrString(serviceAddr, "service_id");
+	int serviceGroup = PyLong_AsLong(pyServiceGroup);
+	int serviceType = PyLong_AsLong(pyServiceType);
+	int serviceId = PyLong_AsLong(pyServiceId);
+
+	ServiceAddr addr(serviceGroup, serviceType, serviceId);
+	MessageMgr::sendToServer(&addr, msgId, msg, msgLen);
 	Py_RETURN_TRUE;
 }
 

@@ -1,6 +1,8 @@
 #include "TcpConnection.h"
 #include "proto.h"
 #include "ZmqInst.h"
+#include "ServiceType.h"
+#include "ServiceInfo.h"
 
 #define MAX_PACKET_LEN (64 * 1024)		// 数据包最大长度
 
@@ -96,19 +98,26 @@ void TcpConnection::dispatchClientMsg(int msgId, int msgLen, const char* msgData
 	buffer.writeInt(msgId);
 	buffer.writeString(msgData, msgLen);
 	if (msgId == MSG_ID_LOGIN_REQ || msgId == MSG_ID_CREATE_ROLE_REQ || msgId == MSG_ID_ENTER_GAME) {
-		ZmqInst::getZmqInstance()->sendData("login", (char*)buffer.data(), buffer.size());
+		//ZmqInst::getZmqInstance()->sendData("login", (char*)buffer.data(), buffer.size());
+		ServiceAddr addr(ServiceInfo::getSingleton()->getServiceGroup(), ServiceType::SERVICE_TYPE_LOGIN, 0);
+		ZmqInst::getZmqInstance()->sendToService(&addr, (char*)buffer.data(), buffer.size());
 	} else {
-		ZmqInst::getZmqInstance()->sendData("scene", (char*)buffer.data(), buffer.size());
+		//ZmqInst::getZmqInstance()->sendData("scene", (char*)buffer.data(), buffer.size());
+
+		ServiceAddr addr(ServiceInfo::getSingleton()->getServiceGroup(), ServiceType::SERVICE_TYPE_SCENE, 0);
+		ZmqInst::getZmqInstance()->sendToService(&addr, (char*)buffer.data(), buffer.size());
 	}
 }
 
-void TcpConnection::sendMsgToService(int msgId, int msgLen, const char* msgData, const char* serviceName) {
+void TcpConnection::sendMsgToService(int msgId, int msgLen, const char* msgData, ServiceAddr* addr) {
 	MyBuffer buffer;
 	buffer.writeByte(1);
 	buffer.writeInt(m_connID); // 统一格式
 	buffer.writeInt(msgId);
 	buffer.writeString(msgData, msgLen);
-	ZmqInst::getZmqInstance()->sendData(serviceName, (char*)buffer.data(), buffer.size());
+	//ZmqInst::getZmqInstance()->sendData(serviceName, (char*)buffer.data(), buffer.size());
+
+	ZmqInst::getZmqInstance()->sendToService(addr, (char*)buffer.data(), buffer.size());
 }
 
 void TcpConnection::sendMsgToClient(int msgId, char* data, int dataLen) {
@@ -174,5 +183,6 @@ void TcpConnection::doShutDown(const char* reason)
 	msg.set_reason(reason);
 	std::string msgData;
 	msg.SerializeToString(&msgData);
-	sendMsgToService(MSG_ID_CLIENT_DISCONNECT, msgData.length(), msgData.c_str(), "scene");
+	ServiceAddr addr(ServiceInfo::getSingleton()->getServiceGroup(), ServiceType::SERVICE_TYPE_SCENE, 0);
+	sendMsgToService(MSG_ID_CLIENT_DISCONNECT, msgData.length(), msgData.c_str(), &addr);
 }

@@ -8,10 +8,17 @@
 INIT_SINGLETON_CLASS(ZmqInst)
 //#endif
 
-ZmqInst::ZmqInst(std::string& name, std::string& router_addr) : m_name(name), m_router_addr(router_addr),
+//ZmqInst::ZmqInst(std::string& name, std::string& router_addr) : m_name(name), m_router_addr(router_addr),
+//	zmq_context(NULL), conn_socket(NULL), work_thread(NULL), m_recvCallback(NULL)
+//{
+//	//startZmqInst();
+//}
+
+ZmqInst::ZmqInst(ServiceAddr& addr, std::string& routerAddr) : CommEntityInf(addr), m_router_addr(routerAddr),
 	zmq_context(NULL), conn_socket(NULL), work_thread(NULL), m_recvCallback(NULL)
 {
 	//startZmqInst();
+	m_name = *addr.getName();
 }
 
 ZmqInst::~ZmqInst()
@@ -39,13 +46,27 @@ void ZmqInst::setRecvCallback(ZmqRecvCallback callback)
 	m_recvCallback = callback;
 }
 
-void ZmqInst::sendData(const char* dstName, char* data, int datLen)
-{
+//void ZmqInst::sendData(const char* dstName, char* data, int datLen)
+//{
+//	MyBuffer buffer;
+//	buffer.writeString(dstName, strlen(dstName));
+//	buffer.writeByte('\0');
+//	buffer.writeString(data, datLen);
+//	zmq_send(conn_socket, buffer.data(), buffer.size(), 0);
+//}
+
+void ZmqInst::sendToService(ServiceAddr* dstAddr, char* msg, int msgLen) {
 	MyBuffer buffer;
-	buffer.writeString(dstName, strlen(dstName));
+	//dstAddr->serialize(&buffer);
+	std::string* addrName = dstAddr->getName();
+	buffer.writeString(addrName->c_str(), addrName->size());
 	buffer.writeByte('\0');
-	buffer.writeString(data, datLen);
+	buffer.writeString(msg, msgLen);
 	zmq_send(conn_socket, buffer.data(), buffer.size(), 0);
+}
+
+void ZmqInst::onRecvServiceMsg(ServiceAddr* srcAddr, char* msg, int msgLen) {
+
 }
 
 void ZmqInst::run() 
@@ -72,7 +93,7 @@ void ZmqInst::run()
 	//	zmq_msg_close(&reply);
 	//}
 	auto threadFunc = [this]() {
-		char src_name[128]{ 0 };
+		char srcAddr[128]{ 0 };
 		char msg[MAX_MSG_LEN + 1]{ 0 };
 		while (1) {
 			int len = zmq_recv(this->conn_socket, msg, MAX_MSG_LEN, 0);
@@ -80,17 +101,17 @@ void ZmqInst::run()
 				Logger::logError("$recv msg len(%d) error", len);
 				continue;
 			}
-			int srcNameLen = strlen(msg);
-			if (srcNameLen == 0 || srcNameLen + 1 >= len) {
-				Logger::logError("$recv msg len error, srcNameLen:%d, len:%d", srcNameLen, len);
+			int srcAddrLen = strlen(msg);
+			if (srcAddrLen == 0 || srcAddrLen + 1 >= len) {
+				Logger::logError("$recv msg len error, srcAddrLen:%d, len:%d", srcAddrLen, len);
 				continue;
 			}
-			memcpy(src_name, &msg, srcNameLen);
-			src_name[srcNameLen] = '\0';
-			int iMsgBodyIdx = srcNameLen + 1;
+			memcpy(srcAddr, &msg, srcAddrLen);
+			srcAddr[srcAddrLen] = '\0';
+			int iMsgBodyIdx = srcAddrLen + 1;
 			int iMsgBodyLen = len - iMsgBodyIdx;
 			if (m_recvCallback != NULL) {
-				m_recvCallback(src_name, &msg[iMsgBodyIdx], iMsgBodyLen);
+				m_recvCallback(srcAddr, &msg[iMsgBodyIdx], iMsgBodyLen);
 			}
 		}
 

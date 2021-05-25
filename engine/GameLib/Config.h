@@ -2,14 +2,18 @@
 #include <string>
 //#include "GameUtil.h"
 #include "../Common/ServerExports.h"
+#include "Singleton.h"
 
 #define ERROR_CONFIG_INT -0x0FFFFFFF
 
-class Config
+class Config : public Singleton<Config>
 {
+private:
+	std::string cfgFile;
 public:
-	static bool checkFileExist(char* fileName);
-	static std::string getConfigStr(const char* configFileName, char* key);
-	static int getConfigInt(const char* configFileName, char* key);
+	Config(const char* cfgFile);
+	static bool checkFileExist(const char* fileName);
+	std::string getConfigStr(const char* key);
+	int getConfigInt(const char* key);
 };
 

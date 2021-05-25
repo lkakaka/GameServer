@@ -89,7 +89,7 @@ static void testProfile() {
 
 static void testConfig() {
 #if TEST_CONFIG
-	int port = Config::getConfigInt("../../conf/gateway.cfg", "port");
+	int port = Config::getSingleton()->getConfigInt("port");
 	int a = 0x8fffffff;
 	int b = a << 1;
 	int c = a << 2;

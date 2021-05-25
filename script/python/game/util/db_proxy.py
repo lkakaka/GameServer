@@ -1,5 +1,6 @@
 
 import weakref
+from game.service.service_addr import LOCAL_DB_SERVICE_ADDR
 
 
 class DBProxy(object):
@@ -8,7 +9,7 @@ class DBProxy(object):
         self._service_obj = weakref.ref(service_obj)
 
     def load(self, tb_name, **kwargs):
-        return self._service_obj().rpc_call("db", "RpcLoadDB", tb_name=tb_name, **kwargs)
+        return self._service_obj().rpc_call(LOCAL_DB_SERVICE_ADDR, "RpcLoadDB", tb_name=tb_name, **kwargs)
 
     def load_multi(self, tbls):
         if type(tbls) not in (list, tuple):
@@ -16,7 +17,7 @@ class DBProxy(object):
         tbl_lst = []
         for tbl in tbls:
             tbl_lst.append(tbl.to_dict(cols=None))
-        return self._service_obj().rpc_call("db", "RpcLoadDBMulti", tbl_list=tuple(tbl_lst))
+        return self._service_obj().rpc_call(LOCAL_DB_SERVICE_ADDR, "RpcLoadDBMulti", tbl_list=tuple(tbl_lst))
 
     def insert(self, tbls):
         if type(tbls) not in (list, tuple):
@@ -24,7 +25,7 @@ class DBProxy(object):
         tbl_lst = []
         for tbl in tbls:
             tbl_lst.append(tbl.to_dict(cols=None))
-        return self._service_obj().rpc_call("db", "RpcInsertDB", tbl_list=tuple(tbl_lst))
+        return self._service_obj().rpc_call(LOCAL_DB_SERVICE_ADDR, "RpcInsertDB", tbl_list=tuple(tbl_lst))
 
     def update(self, tbls, cols=None):
         if type(tbls) not in (list, tuple):
@@ -32,7 +33,7 @@ class DBProxy(object):
         tbl_lst = []
         for tbl in tbls:
             tbl_lst.append(tbl.to_dict(cols=cols))
-        return self._service_obj().rpc_call("db", "RpcUpdateDB", tbl_list=tuple(tbl_lst))
+        return self._service_obj().rpc_call(LOCAL_DB_SERVICE_ADDR, "RpcUpdateDB", tbl_list=tuple(tbl_lst))
 
     # def update_sync(self, tb_name, tbls, cols=None):
     #     if type(tbls) not in (list, tuple):
@@ -93,4 +94,4 @@ class DBProxy(object):
         tbl_lst = []
         for tbl in tbls:
             tbl_lst.append(tbl.to_dict(cols=cols))
-        return self._service_obj().rpc_call("db", "RpcDeleteDB", tbl_list=tuple(tbl_lst))
+        return self._service_obj().rpc_call(LOCAL_DB_SERVICE_ADDR, "RpcDeleteDB", tbl_list=tuple(tbl_lst))

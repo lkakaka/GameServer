@@ -5,6 +5,7 @@
 #include "MyBuffer.h"
 #include "../Common/ServerExports.h"
 #include <mutex>
+#include "CommEntity.h"
 
 typedef std::function<void(int, const char*)> ConnCloseFunc;
 
@@ -35,7 +36,7 @@ public:
 	void doRead();
 	void parsePacket();
 	void dispatchClientMsg(int msgId, int msgLen, const char* msgData);
-	void sendMsgToService(int msgId, int msgLen, const char* msgData, const char* serviceName);
+	void sendMsgToService(int msgId, int msgLen, const char* msgData, ServiceAddr* addr);
 	void sendMsgToClient(int msgId, char* data, int dataLen);
 	void sendData(std::vector<char>& dat);
 	void doShutDown(const char* reason);

@@ -74,14 +74,14 @@ class RpcMgr(object):
     def remove_future(self, rpc_id):
         self._futures.pop(rpc_id, None)
 
-    def rpc_call(self, service_name, rpc_func_name, time_out=DEFAULT_TIME_OUT, **kwargs):
+    def rpc_call(self, dst_srv_addr, rpc_func_name, time_out=DEFAULT_TIME_OUT, **kwargs):
         rpc_msg = Message.create_msg_by_id(Message.MSG_ID_RPC_MSG)
         rpc_id = self.alloc_rpc_id()
         rpc_msg.rpc_id = rpc_id
         rpc_msg.rpc_func = rpc_func_name
         rpc_msg.rpc_param = repr(kwargs)
         future = self._add_future(rpc_id, time_out)
-        self.service.send_msg_to_service(service_name, rpc_msg)
+        self.service.send_msg_to_service(dst_srv_addr, rpc_msg)
         return future
 
     def on_recv_rpc_rsp_msg(self, sender, rpc_id, rpc_data):

@@ -7,6 +7,7 @@ from game.util import logger
 from game.util.rpc import RpcMgr
 from game.util.db_proxy import DBProxy
 import game.util.cmd_util
+from game.service.service_addr import ServiceAddr
 
 # import asyncio
 
@@ -40,6 +41,9 @@ class ServiceBase:
             return
         import game.util.id_mgr
         game.util.id_mgr.IDMgr.connect_redis(redis_ip, redis_port)
+
+    def create_service_addr(self, service_group, service_type, service_id):
+        return ServiceAddr(service_group, service_type, service_id)
 
     # def start_asyncio_loop(self):
     #     loop = asyncio.get_event_loop()
@@ -115,10 +119,13 @@ class ServiceBase:
         msg_id = Message.get_msg_id(msg)
         self._service_obj.sendMsgToClient(conn_id, msg_id, msg_dat)
 
-    def send_msg_to_service(self, dst_srv, msg):
+    def send_msg_to_service(self, dst_srv_addr, msg):
+        if type(dst_srv_addr) != ServiceAddr:
+            logger.log_error("send msg to service, dst_srv_addr:{0} invalid", dst_srv_addr)
+            return
         msg_dat = msg.SerializeToString()
         msg_id = Message.get_msg_id(msg)
-        self._service_obj.sendMsgToService(dst_srv, msg_id, msg_dat)
+        self._service_obj.sendMsgToService(dst_srv_addr, msg_id, msg_dat)
 
-    def rpc_call(self, dst_srv, func_name, timeout=RpcMgr.DEFAULT_TIME_OUT, **kwargs):
-        return self._rpc_mgr.rpc_call(dst_srv, func_name, timeout, **kwargs)
+    def rpc_call(self, dst_srv_addr, func_name, timeout=RpcMgr.DEFAULT_TIME_OUT, **kwargs):
+        return self._rpc_mgr.rpc_call(dst_srv_addr, func_name, timeout, **kwargs)

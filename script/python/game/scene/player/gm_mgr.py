@@ -2,6 +2,7 @@ import weakref
 
 import game.util.logger
 import game.util.cmd_util
+from game.service.service_addr import ServiceAddr
 
 
 class GMMgr(object):
@@ -42,5 +43,9 @@ class GMMgr(object):
             import hotfix.hotfix
             hotfix.hotfix.start_hotfix()
         else:
-            self.player.game_scene.service.rpc_call(args, "HotFix")
+            arg_list = args.split(",")
+            service_group = int(arg_list[0])
+            service_type = int(arg_list[1])
+            service_id = int(arg_list[2])
+            self.player.game_scene.service.rpc_call(ServiceAddr(service_group, service_type, service_id), "HotFix")
         return "ok"

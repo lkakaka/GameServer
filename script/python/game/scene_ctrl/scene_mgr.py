@@ -2,10 +2,10 @@ from game.util import logger
 
 
 class _Scene(object):
-    def __init__(self, scene_id, scene_uid, service_name):
+    def __init__(self, scene_id, scene_uid, service_addr):
         self.scene_id = scene_id
         self.scene_uid = scene_uid
-        self.service_name = service_name
+        self.service_addr = service_addr
         self.player_list = []
 
 
@@ -17,13 +17,13 @@ class SceneMgr(object):
         self._scene_by_uid = {}
         self._players = {}  # {role_id: scene_uid}
 
-    def reg_scene(self, scene_id, scene_uid, service_name):
+    def reg_scene(self, scene_id, scene_uid, service_addr):
         if scene_id not in self._all_scene:
             self._all_scene[scene_id] = {}
         scenes = self._all_scene[scene_id]
         if scene_uid in scenes:
             logger.log_error("scene uid has exist, scene_id:{}, scene_uid:{}", scene_id, scene_uid)
-        scene = _Scene(scene_id, scene_uid, service_name)
+        scene = _Scene(scene_id, scene_uid, service_addr)
         self._all_scene[scene_id][scene_uid] = scene
         self._scene_by_uid[scene_uid] = scene
         logger.log_info("reg scene, scene_id:{}, scene_uid:{}", scene_id, scene_uid)
