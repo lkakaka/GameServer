@@ -194,19 +194,19 @@ int main(int argc, char** argv)
 }
 
 
-static std::string getServerConfigStr(const char* key) {
+std::string getServerConfigStr(const char* key) {
 	return Config::getSingleton()->getConfigStr(key);
 }
 
-static int getServerConfigInt(const char* key) {
+int getServerConfigInt(const char* key) {
 	return Config::getSingleton()->getConfigInt(key);
 }
 
-static void initZmqRouter(int port) {
+void initZmqRouter(int port) {
 	ZmqRouter::initZmqRouter(GameService::g_gameService->service_name.c_str(), port);
 }
 
-static int initZmqEntity(boost::asio::io_service* io) {
+int initZmqEntity(boost::asio::io_service* io) {
 	std::string routerAddr = getServerConfigStr("router_addr");
 	if (routerAddr.length() == 0) {
 		Logger::logError("$not config router addr, file name: %s", g_cfgFileName.c_str());

@@ -1,4 +1,3 @@
-#pragma once
 #include "ServiceInfo.h"
 
 INIT_SINGLETON_CLASS(ServiceInfo)

@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <vector>
 #include <string>
+#include <string.h>
 
 class SERVER_EXPORT_API StrUtil
 {

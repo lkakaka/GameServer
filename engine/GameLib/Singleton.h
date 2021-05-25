@@ -2,6 +2,7 @@
 
 #include "../Common/ServerExports.h"
 #include <assert.h>
+#include <cstddef>
 
 
 template<typename T>
