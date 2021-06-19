@@ -122,7 +122,8 @@ class ServiceBase:
     def send_msg_to_service(self, dst_srv_addr, msg):
         if type(dst_srv_addr) != ServiceAddr:
             logger.log_error("send msg to service, dst_srv_addr:{0} invalid", dst_srv_addr)
-            return
+            raise Exception("srv addr error!!");
+            # return
         msg_dat = msg.SerializeToString()
         msg_id = Message.get_msg_id(msg)
         self._service_obj.sendMsgToService(dst_srv_addr, msg_id, msg_dat)

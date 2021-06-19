@@ -104,14 +104,22 @@ void ZmqRouter::run()
 			int iMsgBodyLen = len - iMsgBodyIdx;
 			Logger::logInfo("$recv msg, src_name:%s, dst_name:%s, msg_len:%d", src_name, dst_name, iMsgBodyLen);
 
-			zmq_send(m_socket, dst_name, strlen(dst_name), ZMQ_SNDMORE);
+			int ret = zmq_send(m_socket, dst_name, strlen(dst_name), ZMQ_SNDMORE);
+			if (ret <= 0) {
+				Logger::logError("$router dst_name fail, src_name:%s, dst_name:%s, msg_len:%d", src_name, dst_name, iMsgBodyLen);
+			} else {
+				Logger::logInfo("$router msg, ret:%d", ret);
+			}
 			int srcNameLen = strlen(src_name);
 
 			MyBuffer buffer;
 			buffer.writeString(src_name, strlen(src_name));
 			buffer.writeByte('\0');
 			buffer.writeString(&msg[iMsgBodyIdx], iMsgBodyLen);
-			zmq_send(m_socket, buffer.data(), buffer.size(), 0);
+			ret = zmq_send(m_socket, buffer.data(), buffer.size(), 0);
+			if (ret <= 0) {
+				Logger::logError("$router msg fail, src_name:%s, dst_name:%s, msg_len:%d", src_name, dst_name, iMsgBodyLen);
+			}
 		}
 
 		Logger::logInfo("$zmq router exit");

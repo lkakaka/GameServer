@@ -69,7 +69,7 @@ bool SceneDetourMgr::initNavMesh(char* meshFileName)
 			fclose(fp);
 			Logger::logError("$init scene navmesh error, NavMeshTileHeader readLen:%d", readLen);
 			return false;
-		}
+		} 
 
 		if (!tileHeader.tileRef || !tileHeader.dataSize)
 			break;
@@ -86,7 +86,14 @@ bool SceneDetourMgr::initNavMesh(char* meshFileName)
 			return false;
 		}
 
-		mesh->addTile(data, tileHeader.dataSize, DT_TILE_FREE_DATA, tileHeader.tileRef, 0);
+		dtStatus status = mesh->addTile(data, tileHeader.dataSize, DT_TILE_FREE_DATA, tileHeader.tileRef, 0);
+		if (dtStatusFailed(status))
+		{
+			dtFree(data);
+			fclose(fp);
+			Logger::logError("$init scene navmesh error, add title failed");
+			return false;
+		}
 	}
 
 	m_mesh = mesh;

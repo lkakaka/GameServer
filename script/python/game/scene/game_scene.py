@@ -8,6 +8,7 @@ from game.util import logger
 from proto.pb_message import Message
 from game.util.const import ErrorCode
 
+from game.data import cfg_scene
 
 class GameScene:
 
@@ -19,7 +20,9 @@ class GameScene:
         self.player_dict = {}
         self.player_conn_dict = {}
         # print("scene obj =", self.scene_obj, self.scene_obj.scene_uid)
-        self.det_file_name = os.path.dirname(os.path.abspath(__file__)) + "/../../../../res/" + "all_tiles_navmesh.bin"
+        scene_cfg = cfg_scene.find(scene_id)
+        self.det_file_name = os.path.dirname(os.path.abspath(__file__)) + "/../../../../res/" + scene_cfg.nav_name
+        # self.det_file_name = os.path.dirname(os.path.abspath(__file__)) + "/../../../../res/" + "all_tiles_navmesh.bin"
         logger.log_info("scene det_file:{0}", self.det_file_name)
         self.scene_obj.loadNavMesh(self.det_file_name)
 

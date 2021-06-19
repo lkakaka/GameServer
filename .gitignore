@@ -3,6 +3,7 @@ script/python/__pycache__/
 */__pycache__/
 script/python/py_cffi/Release/
 script/python/.idea/
+*/.idea/
 shell/coredump*
 log/
 bin/

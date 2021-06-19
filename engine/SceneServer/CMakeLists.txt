@@ -2,6 +2,7 @@
 set(CMAKE_DEBUG_POSTFIX "_d")
 
 add_definitions(-DSERVER_EXPORT -DOPEN_PROFILE_TRACK)
+#add_definitions(-DDT_POLYREF64) # polyref π”√64Œª
 
 gnu_setting(false)
 

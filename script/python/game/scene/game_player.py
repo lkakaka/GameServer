@@ -11,6 +11,7 @@ import game.scene.player.item_mgr
 import game.scene.player.gm_mgr
 
 import game.scene.game_actor
+from game.service.service_addr import LOCAL_DB_SERVICE_ADDR
 
 
 class GamePlayer(game.scene.game_actor.GameActor):
@@ -92,7 +93,7 @@ class GamePlayer(game.scene.game_actor.GameActor):
         rsp_msg.id = 10
         rsp_msg.msg = "welcome to game world, " + self.name
         self.send_msg_to_client(rsp_msg)
-        self.send_msg_to_service("db", msg)
+        self.send_msg_to_service(LOCAL_DB_SERVICE_ADDR, msg)
 
         def on_load_cb(err_code, lst):
             print("on_load_cb----", lst)
@@ -105,7 +106,9 @@ class GamePlayer(game.scene.game_actor.GameActor):
         tbl_player.role_name = "rename"
         # tbl_player.account = "aa"
         self.game_scene.service.db_proxy.update(tbl_player)
-        start_pos = (15, 10, -47)
-        end_pos = (43, 10, -1)
+        # start_pos = (15, 10, -47)
+        # end_pos = (43, 10, -1)
+        start_pos = (-665610, 0, -689073)
+        end_pos = (-641419, 0, -709361)
         path = self.game_scene.scene_obj.findPath(start_pos, end_pos)
         logger.log_info("find path {0}->{1}, {2}", start_pos, end_pos, path)

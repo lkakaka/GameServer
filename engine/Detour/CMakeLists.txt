@@ -1,5 +1,7 @@
 file(GLOB SOURCES Source/*.cpp)
 
+#add_definitions(-DDT_POLYREF64) # polyref π”√64Œª
+
 if(RECASTNAVIGATION_STATIC)
     add_library(Detour STATIC ${SOURCES})
 else()
