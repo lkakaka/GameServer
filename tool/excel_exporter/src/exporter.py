@@ -7,7 +7,7 @@ class Exporter:
 
     @staticmethod
     def run():
-        Exporter.walk_dir("./doc", lambda path, f_name: Exporter.handle_excel(path, f_name))
+        Exporter.walk_dir("../doc", lambda path, f_name: Exporter.handle_excel(path, f_name))
 
     @staticmethod
     def handle_excel(path, f_name):

@@ -139,9 +139,9 @@ class SheetParser(object):
         render_ctx["index_data"] = self.index_data
         render_ctx["col_name_idx"] = self.col_name_idx
         env = Environment(loader=FileSystemLoader(
-            'templates'), trim_blocks=True)
+            '../templates'), trim_blocks=True)
         template = env.get_template("template.py")
         result = template.render(**render_ctx)
         tb_name = "cfg_{0}".format(self.sheet.name.lower())
-        with open("../../script/python/game/data/{0}.py".format(tb_name), "w", encoding="utf-8") as f:
+        with open("../../../script/python/game/data/{0}.py".format(tb_name), "w", encoding="utf-8") as f:
             f.write(result)

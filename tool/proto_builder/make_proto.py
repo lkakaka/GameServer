@@ -4,10 +4,10 @@ from jinja2 import Environment
 from jinja2 import FileSystemLoader
 
 PROTO_PATH = "./proto"
-OUTPUT_PATH = "../ProtoBuffer"
-JAVA_OUTPUT_PATH = "./robot/JavaRobot/src/main/java"
-PY_OUTPUT_PATH = "../script/python"
-COCOS_PATH = "../../CocosGameDemo/Classes/proto"
+OUTPUT_PATH = "../../engine/ProtoBuffer"
+JAVA_OUTPUT_PATH = "../robot/JavaRobot/src/main/java"
+PY_OUTPUT_PATH = "../../script/python"
+COCOS_PATH = "../../../CocosGameDemo/Classes/proto"
 
 
 class Proto(object):
