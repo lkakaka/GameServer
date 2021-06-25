@@ -1,5 +1,6 @@
 import Config
 
+
 class ServiceType:
     SERVICE_TYPE_UNKNOW = -1
     SERVICE_TYPE_START = 0
@@ -21,7 +22,7 @@ class ServiceAddr(object):
         self.service_type = service_type
         self.service_id = service_id
 
-    def to_string(self):
+    def __str__(self):
         return "{0}.{1}.{2}".format(self.service_group, self.service_type, self.service_id)
 
     @staticmethod

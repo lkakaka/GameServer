@@ -1,4 +1,5 @@
 # -*- encoding:utf-8 -*-
+import Config
 from game.util import logger
 from proto.pb_message import Message
 from game.service.service_base import ServiceBase
@@ -7,6 +8,7 @@ import game.scene.game_scene
 import game.scene.game_player
 import game.util.timer
 import game.util.const
+import game.util.str_util
 
 
 class SceneService(ServiceBase):
@@ -23,7 +25,11 @@ class SceneService(ServiceBase):
     def on_service_start(self):
         ServiceBase.on_service_start(self)
         logger.log_info("Scene Service Start!!")
-        game.util.timer.add_timer(3, lambda: self.create_scene(1))
+        scene_ids = Config.getConfigStr("scene_ids")
+        # game.util.timer.add_timer(3, lambda _scene_id=1: self.create_scene(_scene_id))
+        # game.util.timer.add_timer(3, lambda _scene_id=101: self.create_scene(_scene_id))
+        for scene_id in game.util.str_util.parse_to_int_list(scene_ids):
+            game.util.timer.add_timer(3, lambda _scene_id=scene_id: self.create_scene(_scene_id))
 
     def create_scene(self, scene_id):
         scene = game.scene.game_scene.GameScene(self, scene_id)
@@ -31,13 +37,14 @@ class SceneService(ServiceBase):
 
         def _reg_callback(err_code):
             if err_code == game.util.const.ErrorCode.OK:
-                logger.log_info("reg scene success, result:{}", err_code)
+                logger.log_info("reg scene success, result:{0}", err_code)
             else:
-                logger.log_error("reg scene error, err_code:{}, scene_id:{}", err_code, scene_id)
+                logger.log_error("reg scene error, err_code:{0}, scene_id:{1}", err_code, scene_id)
 
         future = self.rpc_call(LOCAL_SCENE_CTRL_SERVICE_ADDR, "RegScene", timeout=60.0, scene_id=scene_id, scene_uid=scene.scene_uid)
         future.on_fin += _reg_callback
         future.on_timeout += _reg_callback
+        logger.log_info("create scene, scene_id:{0}, scene_uid:{1}".format(scene_id, scene.scene_uid))
 
     def get_player_scene(self, conn_id):
         scene_id = self._player_to_scene.get(conn_id)
@@ -75,6 +82,7 @@ class SceneService(ServiceBase):
 
     @_rpc_proc.reg_cmd("Scene_EnterScene")
     def _on_recv_rpc_enter_scene(self, sender, conn_id, role_id, scene_uid):
+        logger.log_info("recv rpc enter scnene, conn_id:{0}, role_id{1}, scene_uid:{2}", conn_id, role_id, scene_uid)
         scene = self._scenes.get(scene_uid)
         self._player_to_scene[conn_id] = scene_uid
         scene.prepare_enter_scene(conn_id, role_id)
@@ -83,8 +91,11 @@ class SceneService(ServiceBase):
     def _on_recv_disconnect(self, sender, msg_id, msg):
         game_scene = self.get_player_scene(msg.conn_id)
         if game_scene is None:
-            logger.log_info("_on_recv_disconnect error, not found player in scene, conn_id:{}", msg.conn_id)
+            logger.log_info("_on_recv_disconnect error, not found player's scene, conn_id:{}", msg.conn_id)
             return
         player = game_scene.get_player_by_conn_id(msg.conn_id)
+        if player is None:
+            logger.log_info("_on_recv_disconnect error, not found player in scene, conn_id:{}", msg.conn_id)
+            return
         game_scene.remove_player(player.role_id, msg.reason)
 

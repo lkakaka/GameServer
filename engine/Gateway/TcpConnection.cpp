@@ -12,6 +12,7 @@ TcpConnection::TcpConnection(boost::asio::io_service& io, int connID, ConnCloseF
 	m_isClosed(false),
 	m_connID(connID),
 	m_socket(io),
+	m_sceneServiceId(-1),
 	m_closeFunc(closeFunc)
 {
 
@@ -104,8 +105,12 @@ void TcpConnection::dispatchClientMsg(int msgId, int msgLen, const char* msgData
 	} else {
 		//ZmqInst::getZmqInstance()->sendData("scene", (char*)buffer.data(), buffer.size());
 
-		ServiceAddr addr(ServiceInfo::getSingleton()->getServiceGroup(), ServiceType::SERVICE_TYPE_SCENE, 0);
+		ServiceAddr addr(ServiceInfo::getSingleton()->getServiceGroup(), ServiceType::SERVICE_TYPE_SCENE, m_sceneServiceId);
 		ZmqInst::getZmqInstance()->sendToService(&addr, (char*)buffer.data(), buffer.size());
+
+		if (m_sceneServiceId < 0) {
+			Logger::logError("$player not in scene, connId:%d, msgId:%d", m_connID, msgId);
+		}
 	}
 }
 
@@ -183,6 +188,11 @@ void TcpConnection::doShutDown(const char* reason)
 	msg.set_reason(reason);
 	std::string msgData;
 	msg.SerializeToString(&msgData);
-	ServiceAddr addr(ServiceInfo::getSingleton()->getServiceGroup(), ServiceType::SERVICE_TYPE_SCENE, 0);
+	ServiceAddr addr(ServiceInfo::getSingleton()->getServiceGroup(), ServiceType::SERVICE_TYPE_SCENE, m_sceneServiceId);
 	sendMsgToService(MSG_ID_CLIENT_DISCONNECT, msgData.length(), msgData.c_str(), &addr);
+}
+
+void TcpConnection::setSceneServiceId(int sceneServiceId) {
+	m_sceneServiceId = sceneServiceId;
+	Logger::logDebug("$set secene service id, connId:%d, sceneServiceId:%d", m_connID, sceneServiceId);
 }

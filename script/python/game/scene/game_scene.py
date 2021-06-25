@@ -3,17 +3,21 @@ import weakref
 import os
 
 import Scene
+import Config
 import game.scene.game_player
 from game.util import logger
 from proto.pb_message import Message
 from game.util.const import ErrorCode
 
 from game.data import cfg_scene
+from game.service.service_addr import LOCAL_GATEWAY_SERVICE_ADDR
+
 
 class GameScene:
 
     def __init__(self, service, scene_id):
         self.service = service
+        self.scene_service_id = Config.getConfigInt("service_id")
         self.scene_id = scene_id
         self.scene_obj = Scene.SceneObj(scene_id, self)
         self._actors = {}
@@ -44,11 +48,16 @@ class GameScene:
     def _add_load_tb(self, role_id):
         tbls = []
         # player
-        tbl_player = game.util.db_util.create_tbl_obj("player")
+        # tbl_player = game.util.db_util.create_tbl_obj("player")
+        # tbl_player.role_id = role_id
+        # tbls.append(tbl_player)
+        tbl_player = game.db.tbl.tbl_player.TblPlayer()
         tbl_player.role_id = role_id
         tbls.append(tbl_player)
         # item
-        tbl_item = game.util.db_util.create_tbl_obj("item")
+        # tbl_item = game.util.db_util.create_tbl_obj("item")
+        # tbl_item.role_id = role_id
+        tbl_item = game.db.tbl.tbl_item.TblItem()
         tbl_item.role_id = role_id
         tbls.append(tbl_item)
 
@@ -78,6 +87,10 @@ class GameScene:
         self.on_player_enter(game_player)
 
     def on_player_enter(self, game_player):
+        msg = Message.create_msg_by_id(Message.MSG_ID_SWITCH_SCENE_SERVICE)
+        msg.conn_id = game_player.conn_id
+        msg.scene_service_id = self.scene_service_id
+        self.service.send_msg_to_service(LOCAL_GATEWAY_SERVICE_ADDR, msg)
         self.scene_obj.onPlayerEnter(game_player.actor_id)
         logger.log_info("player enter scene, role_id:{}, scene_uid:{}, name:{}", game_player.role_id, self.scene_uid, game_player.name)
 

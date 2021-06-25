@@ -63,6 +63,7 @@ static PyObject* sendMsgToService(PyObject* self, PyObject* args)
 
 	ServiceAddr addr(serviceGroup, serviceType, serviceId);
 	MessageMgr::sendToServer(&addr, msgId, msg, msgLen);
+	Logger::logInfo("$send msg to service %s, msgId:%d", addr.getName()->c_str(), msgId);
 	Py_RETURN_TRUE;
 }
 

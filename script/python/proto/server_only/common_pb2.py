@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=_b('\n\tcom.protoB\006Common'),
-  serialized_pb=_b('\n\x1eproto/server_only/common.proto\"=\n\x06RpcMsg\x12\x0e\n\x06rpc_id\x18\x01 \x01(\x05\x12\x10\n\x08rpc_func\x18\x02 \x01(\t\x12\x11\n\trpc_param\x18\x03 \x01(\t\"-\n\tRpcMsgRsp\x12\x0e\n\x06rpc_id\x18\x01 \x01(\x05\x12\x10\n\x08rpc_data\x18\x02 \x01(\tB\x13\n\tcom.protoB\x06\x43ommonb\x06proto3')
+  serialized_pb=_b('\n\x1eproto/server_only/common.proto\"=\n\x06RpcMsg\x12\x0e\n\x06rpc_id\x18\x01 \x01(\x05\x12\x10\n\x08rpc_func\x18\x02 \x01(\t\x12\x11\n\trpc_param\x18\x03 \x01(\t\"-\n\tRpcMsgRsp\x12\x0e\n\x06rpc_id\x18\x01 \x01(\x05\x12\x10\n\x08rpc_data\x18\x02 \x01(\t\"?\n\x12SwitchSceneService\x12\x0f\n\x07\x63onn_id\x18\x01 \x01(\x05\x12\x18\n\x10scene_service_id\x18\x02 \x01(\x05\x42\x13\n\tcom.protoB\x06\x43ommonb\x06proto3')
 )
 
 
@@ -108,8 +108,47 @@ _RPCMSGRSP = _descriptor.Descriptor(
   serialized_end=142,
 )
 
+
+_SWITCHSCENESERVICE = _descriptor.Descriptor(
+  name='SwitchSceneService',
+  full_name='SwitchSceneService',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='conn_id', full_name='SwitchSceneService.conn_id', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='scene_service_id', full_name='SwitchSceneService.scene_service_id', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=144,
+  serialized_end=207,
+)
+
 DESCRIPTOR.message_types_by_name['RpcMsg'] = _RPCMSG
 DESCRIPTOR.message_types_by_name['RpcMsgRsp'] = _RPCMSGRSP
+DESCRIPTOR.message_types_by_name['SwitchSceneService'] = _SWITCHSCENESERVICE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 RpcMsg = _reflection.GeneratedProtocolMessageType('RpcMsg', (_message.Message,), {
@@ -125,6 +164,13 @@ RpcMsgRsp = _reflection.GeneratedProtocolMessageType('RpcMsgRsp', (_message.Mess
   # @@protoc_insertion_point(class_scope:RpcMsgRsp)
   })
 _sym_db.RegisterMessage(RpcMsgRsp)
+
+SwitchSceneService = _reflection.GeneratedProtocolMessageType('SwitchSceneService', (_message.Message,), {
+  'DESCRIPTOR' : _SWITCHSCENESERVICE,
+  '__module__' : 'proto.server_only.common_pb2'
+  # @@protoc_insertion_point(class_scope:SwitchSceneService)
+  })
+_sym_db.RegisterMessage(SwitchSceneService)
 
 
 DESCRIPTOR._options = None

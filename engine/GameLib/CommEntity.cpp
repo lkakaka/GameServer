@@ -25,6 +25,7 @@ void ServiceAddr::parseAddr(char* addr) {
 	serviceGroup = atoi(vec[0].c_str());
 	serviceType = atoi(vec[1].c_str());
 	serviceId = atoi(vec[2].c_str());
+	addrName = toString();
 }
 
 

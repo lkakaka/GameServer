@@ -13,11 +13,13 @@ SceneMgr* SceneMgr::getSceneMgr() {
 }
 
 SceneMgr::SceneMgr(): m_maxSceneUid(1)
-{}
+{
+	m_serviceId = Config::getSingleton()->getConfigInt("service_id");
+}
 
 
 int SceneMgr::allocSceneUid() {
-	return m_maxSceneUid++;
+	return (m_serviceId << 20) + m_maxSceneUid++;
 }
 
 GameScene* SceneMgr::createScene(int sceneId, void* scriptObj)
@@ -49,11 +51,11 @@ void SceneMgr::destroyScene(int sceneUid) {
 		Logger::logError("$destory scene failed, scene uid(%d) not exist", sceneUid);
 		return;
 	}
-	m_scenes.erase(sceneUid);
 	GameScene* gameScene = (GameScene*)iter->second;
 	gameScene->onDestory();
 	Logger::logInfo("$destroy scene, scene_uid:%d, sceneId:%d", sceneUid, gameScene->getSceneId());
 	delete gameScene;
+	m_scenes.erase(sceneUid);
 }
 
 void SceneMgr::addPlayer(int conn_id, int scene_uid) {

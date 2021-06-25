@@ -6,6 +6,7 @@
 #include "Timer.h"
 #include <functional>
 #include "Profile/ProfileTrack.h"
+#include "../Common/PyCommon.h"
 
 static PyObject* ModuleError;
 static char* ModuleName = "Timer";
@@ -21,7 +22,9 @@ public:
 		auto py_state = PyGILState_Ensure();
 		Py_DECREF(m_cb);
 		PyGILState_Release(py_state);
-		//printf("~_CallbackHander------------\n");
+		/*if (PyGILState_Check() > 0) {
+			Logger::logInfo("$_CallbackHander------------");
+		}*/
 	}
 };
 
@@ -46,11 +49,17 @@ static PyObject* pyAddTimer(PyObject* self, PyObject* args)
 	long timerId = TimerMgr::getTimerInstance()->addTimer(firstInterval, interval, loopCnt, [callbackHander](int timerId){
 		auto py_state = PyGILState_Ensure();
 		{
+			Logger::logInfo("$execute py timer:%d", timerId);
 			PROFILE_TRACK_WITH_TIME("py_timer", 10);
-			PyObject_CallObject(callbackHander->m_cb, NULL);
+			PyObject* result = PyObject_CallObject(callbackHander->m_cb, NULL);
+			if (result == NULL)
+			{
+				logPyException();
+			}
 		}
 		PyGILState_Release(py_state);
 		});
+	Logger::logInfo("$add py timer:%d", timerId);
 	return Py_BuildValue("l", timerId);
 }
 
@@ -61,6 +70,7 @@ static PyObject* pyRemoveTimer(PyObject* self, PyObject* args)
 		PyErr_SetString(ModuleError, "args error");
 		Py_RETURN_FALSE;
 	}
+	Logger::logInfo("$remove py timer:%d", timerId);
 	TimerMgr::getTimerInstance()->removeTimer(timerId, true);
 	Py_RETURN_TRUE;
 }

@@ -23,6 +23,10 @@ class RpcMsgRspDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<RpcMsgRsp> _instance;
 } _RpcMsgRsp_default_instance_;
+class SwitchSceneServiceDefaultTypeInternal {
+ public:
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<SwitchSceneService> _instance;
+} _SwitchSceneService_default_instance_;
 static void InitDefaultsscc_info_RpcMsg_proto_2fserver_5fonly_2fcommon_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
@@ -51,7 +55,21 @@ static void InitDefaultsscc_info_RpcMsgRsp_proto_2fserver_5fonly_2fcommon_2eprot
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_RpcMsgRsp_proto_2fserver_5fonly_2fcommon_2eproto =
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info_RpcMsgRsp_proto_2fserver_5fonly_2fcommon_2eproto}, {}};
 
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_proto_2fserver_5fonly_2fcommon_2eproto[2];
+static void InitDefaultsscc_info_SwitchSceneService_proto_2fserver_5fonly_2fcommon_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::_SwitchSceneService_default_instance_;
+    new (ptr) ::SwitchSceneService();
+    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::SwitchSceneService::InitAsDefaultInstance();
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_SwitchSceneService_proto_2fserver_5fonly_2fcommon_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info_SwitchSceneService_proto_2fserver_5fonly_2fcommon_2eproto}, {}};
+
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_proto_2fserver_5fonly_2fcommon_2eproto[3];
 static constexpr ::PROTOBUF_NAMESPACE_ID::EnumDescriptor const** file_level_enum_descriptors_proto_2fserver_5fonly_2fcommon_2eproto = nullptr;
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_proto_2fserver_5fonly_2fcommon_2eproto = nullptr;
 
@@ -71,37 +89,48 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_proto_2fserver_5fonly_2fcommon
   ~0u,  // no _weak_field_map_
   PROTOBUF_FIELD_OFFSET(::RpcMsgRsp, rpc_id_),
   PROTOBUF_FIELD_OFFSET(::RpcMsgRsp, rpc_data_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::SwitchSceneService, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::SwitchSceneService, conn_id_),
+  PROTOBUF_FIELD_OFFSET(::SwitchSceneService, scene_service_id_),
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, sizeof(::RpcMsg)},
   { 8, -1, sizeof(::RpcMsgRsp)},
+  { 15, -1, sizeof(::SwitchSceneService)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_RpcMsg_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_RpcMsgRsp_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_SwitchSceneService_default_instance_),
 };
 
 const char descriptor_table_protodef_proto_2fserver_5fonly_2fcommon_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n\036proto/server_only/common.proto\"=\n\006RpcM"
   "sg\022\016\n\006rpc_id\030\001 \001(\005\022\020\n\010rpc_func\030\002 \001(\t\022\021\n\t"
   "rpc_param\030\003 \001(\t\"-\n\tRpcMsgRsp\022\016\n\006rpc_id\030\001"
-  " \001(\005\022\020\n\010rpc_data\030\002 \001(\tB\023\n\tcom.protoB\006Com"
-  "monb\006proto3"
+  " \001(\005\022\020\n\010rpc_data\030\002 \001(\t\"\?\n\022SwitchSceneSer"
+  "vice\022\017\n\007conn_id\030\001 \001(\005\022\030\n\020scene_service_i"
+  "d\030\002 \001(\005B\023\n\tcom.protoB\006Commonb\006proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_proto_2fserver_5fonly_2fcommon_2eproto_deps[1] = {
 };
-static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_proto_2fserver_5fonly_2fcommon_2eproto_sccs[2] = {
+static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_proto_2fserver_5fonly_2fcommon_2eproto_sccs[3] = {
   &scc_info_RpcMsg_proto_2fserver_5fonly_2fcommon_2eproto.base,
   &scc_info_RpcMsgRsp_proto_2fserver_5fonly_2fcommon_2eproto.base,
+  &scc_info_SwitchSceneService_proto_2fserver_5fonly_2fcommon_2eproto.base,
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_proto_2fserver_5fonly_2fcommon_2eproto_once;
 static bool descriptor_table_proto_2fserver_5fonly_2fcommon_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_proto_2fserver_5fonly_2fcommon_2eproto = {
-  &descriptor_table_proto_2fserver_5fonly_2fcommon_2eproto_initialized, descriptor_table_protodef_proto_2fserver_5fonly_2fcommon_2eproto, "proto/server_only/common.proto", 171,
-  &descriptor_table_proto_2fserver_5fonly_2fcommon_2eproto_once, descriptor_table_proto_2fserver_5fonly_2fcommon_2eproto_sccs, descriptor_table_proto_2fserver_5fonly_2fcommon_2eproto_deps, 2, 0,
+  &descriptor_table_proto_2fserver_5fonly_2fcommon_2eproto_initialized, descriptor_table_protodef_proto_2fserver_5fonly_2fcommon_2eproto, "proto/server_only/common.proto", 236,
+  &descriptor_table_proto_2fserver_5fonly_2fcommon_2eproto_once, descriptor_table_proto_2fserver_5fonly_2fcommon_2eproto_sccs, descriptor_table_proto_2fserver_5fonly_2fcommon_2eproto_deps, 3, 0,
   schemas, file_default_instances, TableStruct_proto_2fserver_5fonly_2fcommon_2eproto::offsets,
-  file_level_metadata_proto_2fserver_5fonly_2fcommon_2eproto, 2, file_level_enum_descriptors_proto_2fserver_5fonly_2fcommon_2eproto, file_level_service_descriptors_proto_2fserver_5fonly_2fcommon_2eproto,
+  file_level_metadata_proto_2fserver_5fonly_2fcommon_2eproto, 3, file_level_enum_descriptors_proto_2fserver_5fonly_2fcommon_2eproto, file_level_service_descriptors_proto_2fserver_5fonly_2fcommon_2eproto,
 };
 
 // Force running AddDescriptors() at dynamic initialization time.
@@ -796,6 +825,302 @@ void RpcMsgRsp::InternalSwap(RpcMsgRsp* other) {
 }
 
 
+// ===================================================================
+
+void SwitchSceneService::InitAsDefaultInstance() {
+}
+class SwitchSceneService::_Internal {
+ public:
+};
+
+SwitchSceneService::SwitchSceneService()
+  : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:SwitchSceneService)
+}
+SwitchSceneService::SwitchSceneService(const SwitchSceneService& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      _internal_metadata_(nullptr) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::memcpy(&conn_id_, &from.conn_id_,
+    static_cast<size_t>(reinterpret_cast<char*>(&scene_service_id_) -
+    reinterpret_cast<char*>(&conn_id_)) + sizeof(scene_service_id_));
+  // @@protoc_insertion_point(copy_constructor:SwitchSceneService)
+}
+
+void SwitchSceneService::SharedCtor() {
+  ::memset(&conn_id_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&scene_service_id_) -
+      reinterpret_cast<char*>(&conn_id_)) + sizeof(scene_service_id_));
+}
+
+SwitchSceneService::~SwitchSceneService() {
+  // @@protoc_insertion_point(destructor:SwitchSceneService)
+  SharedDtor();
+}
+
+void SwitchSceneService::SharedDtor() {
+}
+
+void SwitchSceneService::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const SwitchSceneService& SwitchSceneService::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_SwitchSceneService_proto_2fserver_5fonly_2fcommon_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void SwitchSceneService::Clear() {
+// @@protoc_insertion_point(message_clear_start:SwitchSceneService)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  ::memset(&conn_id_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&scene_service_id_) -
+      reinterpret_cast<char*>(&conn_id_)) + sizeof(scene_service_id_));
+  _internal_metadata_.Clear();
+}
+
+#if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+const char* SwitchSceneService::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    CHK_(ptr);
+    switch (tag >> 3) {
+      // int32 conn_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
+          conn_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // int32 scene_service_id = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
+          scene_service_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag, &_internal_metadata_, ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+#else  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+bool SwitchSceneService::MergePartialFromCodedStream(
+    ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!PROTOBUF_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+  // @@protoc_insertion_point(parse_start:SwitchSceneService)
+  for (;;) {
+    ::std::pair<::PROTOBUF_NAMESPACE_ID::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // int32 conn_id = 1;
+      case 1: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (8 & 0xFF)) {
+
+          DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
+                   ::PROTOBUF_NAMESPACE_ID::int32, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_INT32>(
+                 input, &conn_id_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 scene_service_id = 2;
+      case 2: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (16 & 0xFF)) {
+
+          DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
+                   ::PROTOBUF_NAMESPACE_ID::int32, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_INT32>(
+                 input, &scene_service_id_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SkipField(
+              input, tag, _internal_metadata_.mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:SwitchSceneService)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:SwitchSceneService)
+  return false;
+#undef DO_
+}
+#endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+
+void SwitchSceneService::SerializeWithCachedSizes(
+    ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:SwitchSceneService)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 conn_id = 1;
+  if (this->conn_id() != 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32(1, this->conn_id(), output);
+  }
+
+  // int32 scene_service_id = 2;
+  if (this->scene_service_id() != 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32(2, this->scene_service_id(), output);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFields(
+        _internal_metadata_.unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:SwitchSceneService)
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* SwitchSceneService::InternalSerializeWithCachedSizesToArray(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:SwitchSceneService)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 conn_id = 1;
+  if (this->conn_id() != 0) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->conn_id(), target);
+  }
+
+  // int32 scene_service_id = 2;
+  if (this->scene_service_id() != 0) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->scene_service_id(), target);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:SwitchSceneService)
+  return target;
+}
+
+size_t SwitchSceneService::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:SwitchSceneService)
+  size_t total_size = 0;
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::ComputeUnknownFieldsSize(
+        _internal_metadata_.unknown_fields());
+  }
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // int32 conn_id = 1;
+  if (this->conn_id() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->conn_id());
+  }
+
+  // int32 scene_service_id = 2;
+  if (this->scene_service_id() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->scene_service_id());
+  }
+
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void SwitchSceneService::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:SwitchSceneService)
+  GOOGLE_DCHECK_NE(&from, this);
+  const SwitchSceneService* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<SwitchSceneService>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:SwitchSceneService)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:SwitchSceneService)
+    MergeFrom(*source);
+  }
+}
+
+void SwitchSceneService::MergeFrom(const SwitchSceneService& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:SwitchSceneService)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.conn_id() != 0) {
+    set_conn_id(from.conn_id());
+  }
+  if (from.scene_service_id() != 0) {
+    set_scene_service_id(from.scene_service_id());
+  }
+}
+
+void SwitchSceneService::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:SwitchSceneService)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void SwitchSceneService::CopyFrom(const SwitchSceneService& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:SwitchSceneService)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool SwitchSceneService::IsInitialized() const {
+  return true;
+}
+
+void SwitchSceneService::InternalSwap(SwitchSceneService* other) {
+  using std::swap;
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(conn_id_, other->conn_id_);
+  swap(scene_service_id_, other->scene_service_id_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata SwitchSceneService::GetMetadata() const {
+  return GetMetadataStatic();
+}
+
+
 // @@protoc_insertion_point(namespace_scope)
 PROTOBUF_NAMESPACE_OPEN
 template<> PROTOBUF_NOINLINE ::RpcMsg* Arena::CreateMaybeMessage< ::RpcMsg >(Arena* arena) {
@@ -803,6 +1128,9 @@ template<> PROTOBUF_NOINLINE ::RpcMsg* Arena::CreateMaybeMessage< ::RpcMsg >(Are
 }
 template<> PROTOBUF_NOINLINE ::RpcMsgRsp* Arena::CreateMaybeMessage< ::RpcMsgRsp >(Arena* arena) {
   return Arena::CreateInternal< ::RpcMsgRsp >(arena);
+}
+template<> PROTOBUF_NOINLINE ::SwitchSceneService* Arena::CreateMaybeMessage< ::SwitchSceneService >(Arena* arena) {
+  return Arena::CreateInternal< ::SwitchSceneService >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
 

@@ -22,6 +22,9 @@ private:
 	int m_connID;
 	bool m_isClosed;
 	std::mutex m_sendMutex;
+
+	int m_sceneServiceId; // ËùÔÚ³¡¾°
+
 	//std::shared_ptr<Network> m_network;
 	ConnCloseFunc m_closeFunc;
 
@@ -41,5 +44,7 @@ public:
 	void sendData(std::vector<char>& dat);
 	void doShutDown(const char* reason);
 	void close(const char* reason);
+
+	void setSceneServiceId(int sceneServiceId);
 };
 

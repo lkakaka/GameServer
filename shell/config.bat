@@ -16,6 +16,7 @@ set ServerCmd=%ExePath%%GameServerExe%
 set RouterConfig="./conf/router.cfg"
 set SceneCtrlConfig="./conf/scene_ctrl.cfg"
 set SceneConfig="./conf/scene.cfg"
+set Scene1Config="./conf/scene1.cfg"
 set GatewayConfig="./conf/gateway.cfg"
 set DBConfig="./conf/db.cfg"
 set LoginConfig="./conf/login.cfg"

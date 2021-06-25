@@ -81,12 +81,14 @@ class ServiceBase:
     def on_recv_service_msg(self, sender, msg_id, msg_data):
         logger.log_info("recv service msg, sender:{}, msg_id:{}", sender, msg_id)
         func = self._s_cmd.get_cmd_func(msg_id)
+        # print("func==", func)
         if func is None:
             logger.log_info("on_recv_service_msg error, not found cmd func, msgId:{}", msg_id)
             return
         msg = Message.create_msg_by_id(msg_id)
         msg.ParseFromString(msg_data)
         func(self, sender, msg_id, msg)
+        print("func==1", func)
 
     def _on_recv_rpc_msg(self, sender, msg_id, msg):
         if self._rpc_proc is None:
@@ -109,6 +111,7 @@ class ServiceBase:
 
     def _on_recv_rpc_rsp_msg(self, sender, msg_id, msg):
         self._rpc_mgr.on_recv_rpc_rsp_msg(sender, msg.rpc_id, msg.rpc_data)
+        # print("_on_recv_rpc_rsp_msg------")
 
     def _on_recv_hotfix(self, sender):
         import hotfix.hotfix

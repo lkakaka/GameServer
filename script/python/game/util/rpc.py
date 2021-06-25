@@ -85,9 +85,10 @@ class RpcMgr(object):
         return future
 
     def on_recv_rpc_rsp_msg(self, sender, rpc_id, rpc_data):
+        # print("on_recv_rpc_rsp_msg--------", sender, rpc_id)
         future = self._futures.pop(rpc_id, None)
         if future is None:
-            logger.log_error("not found rpc futurue, rpc_id:{}", rpc_id)
+            logger.log_error("not found rpc future, rpc_id:{0}", rpc_id)
             return
         future.on_recv_rsp(rpc_data)
 

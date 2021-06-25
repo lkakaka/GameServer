@@ -19,7 +19,7 @@ class Item(object):
         self.count = count
 
     def to_tbl_item(self):
-        tbl_item = game.util.db_util.create_tbl_obj("item")
+        tbl_item = game.db.tbl.tbl_item.TblItem .db_util.create_tbl_obj("item")
         tbl_item.item_uid = self.item_uid
         tbl_item.role_id = self.role_id
         tbl_item.item_id = self.item_id

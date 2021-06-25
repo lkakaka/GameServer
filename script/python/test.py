@@ -19,6 +19,16 @@ from game import util
 # proto_name = "LoginReq"
 # print(re.sub('(?P<value>\w)', match_func, proto_name))
 
+class A:
+    a = ""
+    def __init__(self):
+        self.b = 0
+
+    def __setattr__(self, k, v):
+        pass
+
+print("A __dict__", A.__dict__)
+
 
 def test_kw(x, a=1):
     print("test kw--", a)

@@ -73,14 +73,25 @@ long TimerMgr::addTimer(int firstInterval, int interval, int loopCnt, TimerCallb
 
 void TimerMgr::removeTimer(long timerId, bool needCancel)
 {
-	std::unique_lock<std::mutex> lock(m_timerMutex);
-	auto iter = m_timerMap.find(timerId);
-	if (iter == m_timerMap.end()) {
-		return;
+	Timer timer;
+	/** 这里锁的范围只要到从m_timerMap移除掉 timer即可
+	如果锁的作用范围是整个函数，线程1在获取锁后运行到函数中间切换到另外一个线程2，线程2获取了GIL锁开始运行，然后会停在m_timerMutex的获取那一行， 
+	然后线程1继续， 如果是Py层的Timer,线程1会销毁_CallbackHander对象(PyTimer.cpp中)，而在_CallbackHander的析构函数中会去获取PY GIL锁, 
+	而此时的GIL锁是线程2拥有，导致死锁。
+	**/
+	{
+		std::unique_lock<std::mutex> lock(m_timerMutex);
+		auto iter = m_timerMap.find(timerId);
+		if (iter == m_timerMap.end()) {
+			return;
+		}
+
+		Logger::logInfo("$remove timer:%d", timerId);
+
+		timer = iter->second;
+		m_timerMap.erase(timerId);
 	}
-	
-	Timer timer = iter->second;
-	m_timerMap.erase(timerId);
+
 	if (needCancel) {
 		timer.timer->cancel();
 	}

@@ -24,6 +24,7 @@
 #include "mysqlx/xdevapi.h"
 
 #include "lua/LuaPlugin.h"
+#include "GatewayEntry.h"
 
 
 using namespace std;
@@ -224,9 +225,11 @@ int initZmqEntity(boost::asio::io_service* io) {
 	zmqInst->startZmqInst();
 	int port = getServerConfigInt("port");
 	if (port > 0) {
-		Logger::logInfo("$gateway port:%d", port);
+		initGateway(io, port);
+		/*Logger::logInfo("$gateway port:%d", port);
 		Network::initNetwork(io, port);
-		ZmqInst::getZmqInstance()->setRecvCallback(MessageMgr::onGatewayRecvData);
+		MessageDispatch* messageHandler = new MessageDispatch();
+		ZmqInst::getZmqInstance()->setRecvCallback(std::bind(&MessageDispatch::onRecvMessage, messageHandler, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));*/
 	}
 	else {
 		ZmqInst::getZmqInstance()->setRecvCallback(MessageMgr::onRecvData);

@@ -19,8 +19,8 @@ public class ProtoBufferMsg {
 	public static final int MSG_ID_LOGIN_REQ = 15;
 	public static final int MSG_ID_LOGIN_RSP = 16;
 	public static final int MSG_ID_MOVE_TO = 17;
-	public static final int MSG_ID_SYNC_POS = 20;
-	public static final int MSG_ID_TEST_REQ = 21;
+	public static final int MSG_ID_SYNC_POS = 21;
+	public static final int MSG_ID_TEST_REQ = 22;
 
 	public static Object createMsgById(int msgId, byte[] dat) {
 		try {

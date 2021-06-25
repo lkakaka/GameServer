@@ -126,35 +126,35 @@ void MessageMgr::onRecvData(char* sender, char* data, int dataLen) {
 		}
 	}
 
-	Logger::logDebug("$recv msg, sender:%s,  msgId:%d", sender, msgId);
+	Logger::logDebug("$recv msg, sender:%s,  msgId:%d", srcAddr.getName()->c_str(), msgId);
 }
 
-void MessageMgr::onGatewayRecvData(char* sender, char* data, int dataLen) {
-	MyBuffer buffer(data, dataLen);
-	if (dataLen < 8) {
-		int connId = -1;
-		if (dataLen >= 4) connId = buffer.readInt();
-		Logger::logError("$recv %s msg format error, data len(%d) < 8, connId:%d", sender, dataLen, connId);
-		return;
-	}
-	int connId = buffer.readInt();
-	int msgId = buffer.readInt();
-	if (msgId == MSG_ID_CLIENT_DISCONNECT) {
-		std::shared_ptr<google::protobuf::Message> msg = createMessage(msgId, &data[8], dataLen - 8);
-		ClientDisconnect* recvMsg = (ClientDisconnect*)msg.get();
-		Network::getNetworkInstance()->removeConnection(recvMsg->conn_id(), recvMsg->reason().c_str());
-	}
-	else {
-		TcpConnection* connection = Network::getConnById(connId);
-		if (connection == NULL) {
-			Logger::logError("$send packet error, connId(%d) is not exist, msgId:%d", connId, msgId);
-			return;
-		}
-		connection->sendMsgToClient(msgId, &data[8], dataLen - 8);
-	}
-
-	Logger::logInfo("$recv msg, sender:%s,  msgId:%d", sender, msgId);
-}
+//void MessageMgr::onGatewayRecvData(char* sender, char* data, int dataLen) {
+//	MyBuffer buffer(data, dataLen);
+//	if (dataLen < 8) {
+//		int connId = -1;
+//		if (dataLen >= 4) connId = buffer.readInt();
+//		Logger::logError("$recv %s msg format error, data len(%d) < 8, connId:%d", sender, dataLen, connId);
+//		return;
+//	}
+//	int connId = buffer.readInt();
+//	int msgId = buffer.readInt();
+//	if (msgId == MSG_ID_CLIENT_DISCONNECT) {
+//		std::shared_ptr<google::protobuf::Message> msg = createMessage(msgId, &data[8], dataLen - 8);
+//		ClientDisconnect* recvMsg = (ClientDisconnect*)msg.get();
+//		Network::getNetworkInstance()->removeConnection(recvMsg->conn_id(), recvMsg->reason().c_str());
+//	}
+//	else {
+//		TcpConnection* connection = Network::getConnById(connId);
+//		if (connection == NULL) {
+//			Logger::logError("$send packet error, connId(%d) is not exist, msgId:%d", connId, msgId);
+//			return;
+//		}
+//		connection->sendMsgToClient(msgId, &data[8], dataLen - 8);
+//	}
+//
+//	Logger::logInfo("$recv msg, sender:%s,  msgId:%d", sender, msgId);
+//}
 
 //void MessageMgr::sendToClient(int connID, int msgId, google::protobuf::Message* msg) {
 //	std::string msgData;
@@ -175,6 +175,8 @@ void MessageMgr::sendToClient(int connID, int msgId, const char* msg, int msgLen
 void MessageMgr::sendToServer(ServiceAddr* addr, int msgId, const char* msg, int msgLen)
 {
 	MyBuffer buffer;
+	// 发往gateway的消息都需要一个connId
+	if (addr->getServiceType() == SERVICE_TYPE_GATEWAY) buffer.writeInt(-1);
 	buffer.writeInt(msgId);
 	buffer.writeString(msg, msgLen);
 	//ZmqInst::getZmqInstance()->sendData(serviceName, (char*)buffer.data(), buffer.size());

@@ -10,6 +10,7 @@ private:
 	int m_maxSceneUid;
 	std::map<int, GameScene*> m_scenes;
 	std::map<int, int> m_player_scene;
+	int m_serviceId;
 	SceneMgr();
 public:
 	static SceneMgr* getSceneMgr();

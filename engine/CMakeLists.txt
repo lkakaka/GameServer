@@ -76,6 +76,7 @@ set(BOOST_ROOT ../../boost_1_70_0)
 set(PROTOBUFF_ROOT ${DEPENDS_ROOT}/protobuf-3.9.0)
 find_package(Boost REQUIRED)
 
+message(STATUS ${Boost_LIBRARY_DIRS})
 message(STATUS ${Boost_INCLUDE_DIRS})
 
 file(GLOB_RECURSE PROTO_SRC ${PROTO_ROOT}/*.cpp ${PROTO_ROOT}/*.cc ${PROTO_ROOT}/*.h ${PROTO_ROOT}/*.hpp)

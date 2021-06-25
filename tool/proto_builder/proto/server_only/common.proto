@@ -14,4 +14,9 @@ message RpcMsgRsp {
 	string rpc_data = 2;
 }
 
+message SwitchSceneService {
+	int32 conn_id = 1;
+	int32 scene_service_id = 2;
+}
+
 
