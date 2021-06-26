@@ -110,13 +110,15 @@ class LoginService(ServiceBase):
             return
 
         tbl = tbls[0]
-        self._send_enter_game_rsp(conn_id, ErrorCode.OK, tbl)
 
-        def _on_query_login_scene(err_code, scene_id=None, scene_uid=None):
-            if err_code != game.util.const.ErrorCode.OK:
+        def _on_query_login_scene(error_code, scene_id=None, scene_uid=None):
+            if error_code != game.util.const.ErrorCode.OK:
+                self._send_enter_game_rsp(conn_id, error_code)
                 return
+            self._send_enter_game_rsp(conn_id, ErrorCode.OK, tbl)
 
-        future = self.rpc_call(LOCAL_SCENE_CTRL_SERVICE_ADDR, "EnterScene", timeout=30, conn_id=conn_id, role_id=tbl["role_id"])
+        future = self.rpc_call(LOCAL_SCENE_CTRL_SERVICE_ADDR, "Player_EnterGame", timeout=30,
+                               conn_id=conn_id, role_id=tbl["role_id"])
         future.on_fin += _on_query_login_scene
         future.on_timeout += _on_query_login_scene
         logger.log_info("send enter scene req to scene ctrl, conn_id:{}, account:{}", conn_id, account)

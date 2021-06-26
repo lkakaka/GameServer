@@ -4,13 +4,15 @@ import os
 
 import Scene
 import Config
-import game.scene.game_player
+from game.scene.game_player import GamePlayer
 from game.util import logger
 from proto.pb_message import Message
 from game.util.const import ErrorCode
 
 from game.data import cfg_scene
 from game.service.service_addr import LOCAL_GATEWAY_SERVICE_ADDR
+from game.service.service_addr import LOCAL_SCENE_CTRL_SERVICE_ADDR
+import game.util.multi_index_container
 
 
 class GameScene:
@@ -21,8 +23,7 @@ class GameScene:
         self.scene_id = scene_id
         self.scene_obj = Scene.SceneObj(scene_id, self)
         self._actors = {}
-        self.player_dict = {}
-        self.player_conn_dict = {}
+        self._mic_player = game.util.multi_index_container.MultiIndexContainer(GamePlayer)
         # print("scene obj =", self.scene_obj, self.scene_obj.scene_uid)
         scene_cfg = cfg_scene.find(scene_id)
         self.det_file_name = os.path.dirname(os.path.abspath(__file__)) + "/../../../../res/" + scene_cfg.nav_name
@@ -48,15 +49,10 @@ class GameScene:
     def _add_load_tb(self, role_id):
         tbls = []
         # player
-        # tbl_player = game.util.db_util.create_tbl_obj("player")
-        # tbl_player.role_id = role_id
-        # tbls.append(tbl_player)
         tbl_player = game.db.tbl.tbl_player.TblPlayer()
         tbl_player.role_id = role_id
         tbls.append(tbl_player)
         # item
-        # tbl_item = game.util.db_util.create_tbl_obj("item")
-        # tbl_item.role_id = role_id
         tbl_item = game.db.tbl.tbl_item.TblItem()
         tbl_item.role_id = role_id
         tbls.append(tbl_item)
@@ -85,6 +81,7 @@ class GameScene:
         game_player = self.create_player(conn_id, role_id, sorted_tbls)
         self.add_player(game_player)
         self.on_player_enter(game_player)
+        game_player.on_enter_scene()
 
     def on_player_enter(self, game_player):
         msg = Message.create_msg_by_id(Message.MSG_ID_SWITCH_SCENE_SERVICE)
@@ -99,14 +96,16 @@ class GameScene:
         x, y = 0, 0
         move_speed = 10
         player_info = self.scene_obj.createPlayer(conn_id, role_id, tb_player.role_name, x, y, move_speed)
-        game_player = game.scene.game_player.GamePlayer(player_info, self, conn_id, role_id)
+        game_player = GamePlayer(player_info, self, conn_id, role_id)
         game_player.init_player_data(sorted_tbls)
         return game_player
 
     def add_player(self, game_player):
-        self.player_dict[game_player.role_id] = game_player
-        self.player_conn_dict[game_player.conn_id] = weakref.ref(game_player)
-        self._actors[game_player.actor_id] = weakref.ref(game_player)
+        if self.get_player_by_role_id(game_player.role_id) is not None:
+            logger.log_error("player exist, role_id:{0}", game_player.role_id)
+            return
+        self._mic_player.add_elem(game_player)
+        self._actors[game_player.actor_id] = game_player
 
     def remove_player(self, role_id, reason):
         player = self.get_player_by_role_id(role_id)
@@ -114,31 +113,29 @@ class GameScene:
             return
         # self.scene_obj.removePlayer()
         self.scene_obj.removeActor(player.actor_id)
-        self.player_dict.pop(role_id, None)
-        self.player_conn_dict.pop(player.conn_id, None)
+        self._mic_player.remove_elem(player)
         self._actors.pop(player.actor_id, None)
         self.service.on_remove_player(player.conn_id)
+        player.on_leave_scene()
 
-        logger.log_info("remove player, reason:{}", reason)
+        logger.log_info("remove player, role_id:{0}, reason:{1}", role_id, reason)
 
     def tick_player(self, role_id, reason):
         player = self.get_player_by_role_id(role_id)
         if player is None:
             return
         self.remove_player(role_id, reason)
+        player.on_leave_game()
         msg = Message.create_msg_by_id(Message.MSG_ID_CLIENT_DISCONNECT)
         msg.conn_id = player.conn_id
         msg.reason = reason
         self.service.send_msg_to_client(player.conn_id, msg)
 
     def get_player_by_conn_id(self, conn_id):
-        weak_player = self.player_conn_dict.get(conn_id)
-        if weak_player is None:
-            return None
-        return weak_player()
+        return self._mic_player.get_one_elem(GamePlayer.ATTR_CONN_ID, conn_id)
 
     def get_player_by_role_id(self, role_id):
-        return self.player_dict.get(role_id)
+        return self._mic_player.get_one_elem(GamePlayer.ATTR_ROLE_ID, role_id)
 
     def get_actor(self, actor_id):
         weak_actor = self._actors.get(actor_id, None)
@@ -152,7 +149,7 @@ class GameScene:
             logger.log_error("on_recv_service_msg error, not found player, msgId:{}", msg_id)
             return
 
-        player.on_recv_client_msg(msg_id, msg_data)
+        player.msg_handler.on_recv_client_msg(msg_id, msg_data)
 
     def _on_enter_sight(self, actor, enter_ids):
         if not enter_ids:
@@ -205,4 +202,9 @@ class GameScene:
         self._on_enter_sight(actor, enter_ids)
         self._on_leave_sight(actor, leave_ids, False)
 
+    def destroy(self):
+        self.service.remove_scene(self.scene_uid)
+
+    def on_destroy(self):
+        self.service.rpc_call(LOCAL_SCENE_CTRL_SERVICE_ADDR, "UnRegScene", scene_uid=self.scene_uid)
 

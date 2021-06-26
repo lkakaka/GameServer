@@ -19,6 +19,7 @@ class ServiceBase:
     def __init__(self, s_cmd, c_cmd, rpc_proc=None):
         self._service_obj = Game.Service()
         self.db_proxy = DBProxy(self)
+        self.gm_handler = None
         self._s_cmd = s_cmd
         self._c_cmd = c_cmd
         if rpc_proc is not None:

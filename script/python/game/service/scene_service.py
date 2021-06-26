@@ -9,6 +9,7 @@ import game.scene.game_player
 import game.util.timer
 import game.util.const
 import game.util.str_util
+from game.gm.gm_handler import GMHandler
 
 
 class SceneService(ServiceBase):
@@ -21,6 +22,7 @@ class SceneService(ServiceBase):
         ServiceBase.__init__(self, SceneService._s_cmd, SceneService._c_cmd, SceneService._rpc_proc)
         self._scenes = {}
         self._player_to_scene = {}
+        self.gm_handler = GMHandler(self)
 
     def on_service_start(self):
         ServiceBase.on_service_start(self)
@@ -45,6 +47,10 @@ class SceneService(ServiceBase):
         future.on_fin += _reg_callback
         future.on_timeout += _reg_callback
         logger.log_info("create scene, scene_id:{0}, scene_uid:{1}".format(scene_id, scene.scene_uid))
+
+    def remove_scene(self, scene_uid):
+        scene = self._scenes.pop(scene_uid, None)
+        scene.on_destroy()
 
     def get_player_scene(self, conn_id):
         scene_id = self._player_to_scene.get(conn_id)
@@ -98,4 +104,5 @@ class SceneService(ServiceBase):
             logger.log_info("_on_recv_disconnect error, not found player in scene, conn_id:{}", msg.conn_id)
             return
         game_scene.remove_player(player.role_id, msg.reason)
+        player.on_leave_game()
 

@@ -45,13 +45,13 @@ class SceneMgr(object):
         self._scene_mi_container.add_elem(scene)
         logger.log_info("reg scene, scene_id:{}, scene_uid:{}", scene_id, scene_uid)
 
-    def unreg_scene(self, scene_id, scene_uid):
+    def unreg_scene(self, scene_uid):
         scene = self.get_scene_by_uid(scene_uid)
         if scene is None:
-            logger.log_error("unreg scene not found, scene_id:{}, scene_uid:{}", scene_id, scene_uid)
+            logger.log_error("unreg scene not found, scene_uid:{}", scene_uid)
             return
         self._scene_mi_container.remove_elem(scene)
-        logger.log_info("unreg scene, scene_id:{}, scene_uid:{}", scene_id, scene_uid)
+        logger.log_info("unreg scene, scene_id:{}, scene_uid:{}", scene.scene_id, scene_uid)
 
     def get_min_player_scene(self, scene_id):
         scenes = self.get_scenes_by_id(scene_id)
