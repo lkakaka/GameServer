@@ -45,6 +45,7 @@ void TcpCommEntity::sendToService(ServiceAddr* dstAddr, char* msg, int msgLen) {
 	buffer.writeInt(msgLen);
 	buffer.writeString(msg, msgLen);
 	send((char*)buffer.data(), buffer.size());
+	Logger::logInfo("$tcp comm send msg to service %s, len:%d!!!", dstAddr->getName()->c_str(), msgLen);
 }
 
 void TcpCommEntity::onConnect() {

@@ -83,6 +83,7 @@ void ClientNet::_send() {
 	size_t len = m_socket->write_some(buf);
 	if (len > 0) {
 		m_sendBuff.erase(m_sendBuff.begin(), m_sendBuff.begin() + len);
+		Logger::logDebug("$send data success, len=%d", len);
 		_send();
 	}
 

@@ -41,9 +41,10 @@ void dispatchServiceMsg(SCConnection* conn, ServiceAddr* dst, char* data, int le
 		buffer.writeInt(len);
 		buffer.writeString(data, len);
 		dstConn->send((char*)buffer.data(), buffer.size());
+		Logger::logInfo("$dispatch msg %s->%s, len:%d ", srcAddr->getName()->c_str(), dst->getName()->c_str(), len);
 	}
 	else {
-		Logger::logError("$dst not connected!!");
+		Logger::logError("$dispatch msg error, dst:%s not connected!!", dst->getName()->c_str());
 	}
 }
 

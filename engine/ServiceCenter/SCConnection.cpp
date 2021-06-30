@@ -12,6 +12,11 @@ SCConnection::SCConnection(int connID, tcp::socket& socket, ConnCloseCallback cl
 void SCConnection::onRead(char* data, int len) {
 	Logger::logDebug("$read data, len=%d", len);
 	m_recvBuffer.writeString(data, len);
+	parse();
+}
+
+void SCConnection::parse() {
+	
 	int buffSize = m_recvBuffer.size();
 	if (buffSize < 16) return;
 	int msgLen = m_recvBuffer.getInt(12);
@@ -30,5 +35,6 @@ void SCConnection::onRead(char* data, int len) {
 		handleServiceMsg(m_recvBuffer.data(), msgLen);
 	}*/
 	m_recvBuffer.remove(msgLen);
+	parse();
 }
 

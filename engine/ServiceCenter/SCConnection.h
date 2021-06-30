@@ -11,6 +11,8 @@ private:
 	MyBuffer m_recvBuffer;
 	bool m_isVerify;
 	ServiceAddr m_serviceAddr;
+private:
+	void parse();
 public:
 	SCConnection(int connID, tcp::socket& socket, ConnCloseCallback closeCallback);
 	inline void startRead() { doRead(); }

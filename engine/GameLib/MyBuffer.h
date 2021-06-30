@@ -11,7 +11,7 @@ private:
 	std::vector<unsigned char> buffer;  // must be unsigned char
 	int cur_pos; // current read pos
 private:
-	unsigned char* MyBuffer::getCurrentData();
+	unsigned char* getCurrentData();
 	void moveCurrentPos(int offset);
 public:
 
