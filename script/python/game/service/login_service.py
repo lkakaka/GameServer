@@ -47,7 +47,7 @@ class LoginService(ServiceBase):
         self._load_role_list(conn_id, msg.account)
 
     def _load_role_list(self, conn_id, account):
-        def on_load_role_list(err_code, tbls):
+        def on_load_role_list(err_code, tbls=[]):
             print("on_load_role_list---", tbls)
             self._on_load_role_list(account, err_code, tbls)
 

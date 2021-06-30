@@ -15,11 +15,12 @@ from game.gm.gm_handler import GMHandler
 class SceneService(ServiceBase):
 
     _s_cmd = game.util.cmd_util.CmdDispatch("s_scene")
-    _c_cmd = game.util.cmd_util.CmdDispatch("c_scene")
+    # _c_cmd = game.util.cmd_util.CmdDispatch("c_scene")
     _rpc_proc = game.util.cmd_util.CmdDispatch("rpc_scene")
 
     def __init__(self):
-        ServiceBase.__init__(self, SceneService._s_cmd, SceneService._c_cmd, SceneService._rpc_proc)
+        # ServiceBase.__init__(self, SceneService._s_cmd, SceneService._c_cmd, SceneService._rpc_proc)
+        ServiceBase.__init__(self, SceneService._s_cmd, None, SceneService._rpc_proc)
         self._scenes = {}
         self._player_to_scene = {}
         self.gm_handler = GMHandler(self)
@@ -60,12 +61,12 @@ class SceneService(ServiceBase):
 
     def on_recv_client_msg(self, conn_id, msg_id, msg_data):
         logger.log_info("recv client msg, conn_id:{}, msg_id:{}", conn_id, msg_id)
-        func = SceneService._c_cmd.get_cmd_func(msg_id)
-        if func is not None:
-            msg = Message.create_msg_by_id(msg_id)
-            msg.ParseFromString(msg_data)
-            func(self, conn_id, msg_id, msg)
-            return
+        # func = SceneService._c_cmd.get_cmd_func(msg_id, need_exist=False)
+        # if func is not None:
+        #     msg = Message.create_msg_by_id(msg_id)
+        #     msg.ParseFromString(msg_data)
+        #     func(self, conn_id, msg_id, msg)
+        #     return
 
         game_scene = self.get_player_scene(conn_id)
         if game_scene is None:
@@ -97,11 +98,11 @@ class SceneService(ServiceBase):
     def _on_recv_disconnect(self, sender, msg_id, msg):
         game_scene = self.get_player_scene(msg.conn_id)
         if game_scene is None:
-            logger.log_info("_on_recv_disconnect error, not found scene, conn_id:{}", msg.conn_id)
+            logger.log_error("_on_recv_disconnect error, not found scene, conn_id:{}", msg.conn_id)
             return
         player = game_scene.get_player_by_conn_id(msg.conn_id)
         if player is None:
-            logger.log_info("_on_recv_disconnect error, player not in scene, conn_id:{}", msg.conn_id)
+            logger.log_error("_on_recv_disconnect error, player not in scene, conn_id:{}", msg.conn_id)
             return
         game_scene.remove_player(player.role_id, msg.reason)
         player.on_leave_game()

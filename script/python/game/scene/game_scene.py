@@ -65,7 +65,7 @@ class GameScene:
         # name = msg.role_info.role_name
 
         if err_code != ErrorCode.OK:
-            logger.log_error("load player data error, role_id:{}, ", role_id)
+            logger.log_error("load player data error, role_id:{0}, conn_id:{1}", role_id, conn_id)
             return
 
         sorted_tbls = {}
@@ -102,8 +102,8 @@ class GameScene:
 
     def add_player(self, game_player):
         if self.get_player_by_role_id(game_player.role_id) is not None:
-            logger.log_error("player exist, role_id:{0}", game_player.role_id)
-            return
+            logger.log_warn("player exist, role_id:{0}", game_player.role_id)
+            self.remove_player(game_player.role_id, "repeated")
         self._mic_player.add_elem(game_player)
         self._actors[game_player.actor_id] = game_player
 

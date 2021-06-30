@@ -27,9 +27,9 @@ class CmdDispatch:
             return
         self._cmd_funcs[cmd_id] = cmd_func
 
-    def get_cmd_func(self, cmd_id):
+    def get_cmd_func(self, cmd_id, need_exist=True):
         cmd_func = self._cmd_funcs.get(cmd_id, None)
-        if cmd_func is None:
+        if cmd_func is None and need_exist:
             logger.log_error("not found cmd func, name:{}, cmd_id:{}", self._name, cmd_id)
 
         return cmd_func
