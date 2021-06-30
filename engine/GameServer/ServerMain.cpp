@@ -9,7 +9,6 @@
 #include "DBMgr.h"
 #include "PythonPlugin.h"
 #include "../Common/PyCommon.h"
-#include "ZmqInst.h"
 #include "ZmqRouter.h"
 #include "Timer.h"
 #include "UnitTest.h"
@@ -25,6 +24,8 @@
 
 #include "lua/LuaPlugin.h"
 #include "GatewayEntry.h"
+#include "ServiceCenter.h"
+#include "ServiceCommEntityMgr.h"
 
 
 using namespace std;
@@ -35,7 +36,7 @@ std::string g_cfgFileName = "";
 std::string getServerConfigStr(const char* key);
 static int getServerConfigInt(const char* key);
 static void initZmqRouter(int port);
-static int initZmqEntity(boost::asio::io_service* io);
+static int initCommEntity(boost::asio::io_service* io);
 
 
 
@@ -94,9 +95,6 @@ int main(int argc, char** argv)
 
 	boost::asio::io_service io;
 	TimerMgr::initTimerMgr(&io);
-
-	/*ZmqInst::initZmqInstance(serviceName.c_str(), routerAddr.c_str());
-	ZmqInst::getZmqInstance()->setRecvCallback(MessageMgr::onRecvData);*/
 	
 	PyObject* scriptObj = NULL;
 	std::string funcName = getServerConfigStr("script_init_func");
@@ -129,38 +127,12 @@ int main(int argc, char** argv)
 	int router_port = getServerConfigInt("router_port");
 	if (router_port > 0) {
 		//ZmqRouter::initZmqRouter(serviceName.c_str(), router_port);
-		initZmqRouter(router_port);
+		
+		initServiceCenter(&io, router_port);
+		//initZmqRouter(router_port);
 	} else {
-		initZmqEntity(&io);
-		//std::string routerAddr = Config::getConfigStr(cfgName, "router_addr");
-		//if (routerAddr.length() == 0) {
-		//	Logger::logError("$not config router addr, file name: %s", cfgName);
-		//	return 0;
-		//}
-
-		////ZmqInst::initZmqInstance(serviceName.c_str(), routerAddr.c_str());
-		//ZmqInst* zmqInst = new ZmqInst(serviceName, routerAddr);
-		//zmqInst->startZmqInst();
-		//int port = Config::getConfigInt(cfgName, "port");
-		//if (port > 0) {
-		//	Logger::logInfo("$gateway port:%d", port);
-		//	Network::initNetwork(&io, port);
-		//	ZmqInst::getZmqInstance()->setRecvCallback(MessageMgr::onGatewayRecvData);
-		//}
-		//else {
-		//	ZmqInst::getZmqInstance()->setRecvCallback(MessageMgr::onRecvData);
-		//}
+		initCommEntity(&io);
 	}
-
-	/*DBPlugin* dbPlugin = new DBPlugin();
-	dbPlugin->initDBPlugin("");*/
-
-	/*DBMgr* dbMgr = new DBMgr("test");
-	TblPlayer* tblPlayer = new TblPlayer();
-	std::vector<ReflectObject*> tbls;
-	tbls.push_back((ReflectObject*)tblPlayer);
-	dbMgr->initDbTable(tbls);*/
-	//DBMgr::getDBMgrInstance();
 
 	//Network::initNetwork(&io);
 //	int port = Config::getConfigInt(cfgName, "port");
@@ -207,10 +179,16 @@ void initZmqRouter(int port) {
 	ZmqRouter::initZmqRouter(GameService::g_gameService->service_name.c_str(), port);
 }
 
-int initZmqEntity(boost::asio::io_service* io) {
-	std::string routerAddr = getServerConfigStr("router_addr");
-	if (routerAddr.length() == 0) {
-		Logger::logError("$not config router addr, file name: %s", g_cfgFileName.c_str());
+int initCommEntity(boost::asio::io_service* io) {
+	std::string centerServiceIp = getServerConfigStr("center_service_ip");
+	if (centerServiceIp.length() == 0) {
+		Logger::logError("$not config center service ip, file name: %s", g_cfgFileName.c_str());
+		return 1;
+	}
+
+	int centerServicePort = getServerConfigInt("center_service_port");
+	if (centerServicePort <= 0) {
+		Logger::logError("$not config center service port, file name: %s", g_cfgFileName.c_str());
 		return 1;
 	}
 
@@ -220,20 +198,32 @@ int initZmqEntity(boost::asio::io_service* io) {
 	int serviceId = ServiceInfo::getSingleton()->getServiceId();
 	ServiceAddr addr(serviceGroup, serviceType, serviceId);
 
-	//ZmqInst::initZmqInstance(serviceName.c_str(), routerAddr.c_str());
-	ZmqInst* zmqInst = new ZmqInst(addr, routerAddr);
-	zmqInst->startZmqInst();
-	int port = getServerConfigInt("port");
-	if (port > 0) {
+	CommEntityMgr* commEntityMgr = new CommEntityMgr();
+	CommEntityInf* commEntity = commEntityMgr->createCommEntity(io, addr, centerServiceIp.c_str(), centerServicePort);
+
+	if (serviceType == SERVICE_TYPE_GATEWAY) {
+		int port = getServerConfigInt("port");
 		initGateway(io, port);
-		/*Logger::logInfo("$gateway port:%d", port);
-		Network::initNetwork(io, port);
-		MessageDispatch* messageHandler = new MessageDispatch();
-		ZmqInst::getZmqInstance()->setRecvCallback(std::bind(&MessageDispatch::onRecvMessage, messageHandler, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));*/
 	}
 	else {
-		ZmqInst::getZmqInstance()->setRecvCallback(MessageMgr::onRecvData);
+		commEntity->setRecvCallback(MessageMgr::onRecvData);
 	}
+	commEntity->start();
+
+	////ZmqInst::initZmqInstance(serviceName.c_str(), routerAddr.c_str());
+	//ZmqInst* zmqInst = new ZmqInst(addr, routerAddr);
+	//zmqInst->startZmqInst();
+	//int port = getServerConfigInt("port");
+	//if (port > 0) {
+	//	initGateway(io, port);
+	//	/*Logger::logInfo("$gateway port:%d", port);
+	//	Network::initNetwork(io, port);
+	//	MessageDispatch* messageHandler = new MessageDispatch();
+	//	ZmqInst::getZmqInstance()->setRecvCallback(std::bind(&MessageDispatch::onRecvMessage, messageHandler, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));*/
+	//}
+	//else {
+	//	ZmqInst::getZmqInstance()->setRecvCallback(MessageMgr::onRecvData);
+	//}
 
 	return 0;
 }

@@ -8,6 +8,7 @@ class MulitIndexAttrCannotSetException(Exception):
 class MultiIndexElement(object):
     _in_container = False
     _multi_index_attr_names = []
+
     # note: 做为索引的字段不能修改
     @staticmethod
     def define_multi_index_attr_names():
@@ -33,7 +34,7 @@ class MultiIndexElement(object):
     def __setattr__(self, key, value):
         if not self._in_container or key not in self._multi_index_attr_names:
             return object.__setattr__(self, key, value)
-        raise MulitIndexAttrCannotSetException("cannot change mulit index attr val!!, attr:{0}".format(key))
+        raise MulitIndexAttrCannotSetException("cannot change multi index attr val!!, attr:{0}".format(key))
 
 
 class MultiIndexContainer(object):
@@ -142,7 +143,7 @@ class MultiIndexContainer(object):
 class MultiIndexElementTest(MultiIndexElement):
     @staticmethod
     def define_multi_index_attr_names():
-        return ("a", "b", ("a", "b"))
+        return "a", "b", ("a", "b")
 
     def __init__(self, a, b, c):
         self.a = a

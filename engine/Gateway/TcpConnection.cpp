@@ -1,6 +1,6 @@
 #include "TcpConnection.h"
 #include "proto.h"
-#include "ZmqInst.h"
+#include "ServiceCommEntityMgr.h"
 #include "ServiceType.h"
 #include "ServiceInfo.h"
 
@@ -99,14 +99,11 @@ void TcpConnection::dispatchClientMsg(int msgId, int msgLen, const char* msgData
 	buffer.writeInt(msgId);
 	buffer.writeString(msgData, msgLen);
 	if (msgId == MSG_ID_LOGIN_REQ || msgId == MSG_ID_CREATE_ROLE_REQ || msgId == MSG_ID_ENTER_GAME) {
-		//ZmqInst::getZmqInstance()->sendData("login", (char*)buffer.data(), buffer.size());
 		ServiceAddr addr(ServiceInfo::getSingleton()->getServiceGroup(), ServiceType::SERVICE_TYPE_LOGIN, 0);
-		ZmqInst::getZmqInstance()->sendToService(&addr, (char*)buffer.data(), buffer.size());
+		CommEntityMgr::getSingleton()->getCommEntity()->sendToService(&addr, (char*)buffer.data(), buffer.size());
 	} else {
-		//ZmqInst::getZmqInstance()->sendData("scene", (char*)buffer.data(), buffer.size());
-
 		ServiceAddr addr(ServiceInfo::getSingleton()->getServiceGroup(), ServiceType::SERVICE_TYPE_SCENE, m_sceneServiceId);
-		ZmqInst::getZmqInstance()->sendToService(&addr, (char*)buffer.data(), buffer.size());
+		CommEntityMgr::getSingleton()->getCommEntity()->sendToService(&addr, (char*)buffer.data(), buffer.size());
 
 		if (m_sceneServiceId < 0) {
 			Logger::logError("$player not in scene, connId:%d, msgId:%d", m_connID, msgId);
@@ -120,9 +117,8 @@ void TcpConnection::sendMsgToService(int msgId, int msgLen, const char* msgData,
 	buffer.writeInt(m_connID); // 统一格式
 	buffer.writeInt(msgId);
 	buffer.writeString(msgData, msgLen);
-	//ZmqInst::getZmqInstance()->sendData(serviceName, (char*)buffer.data(), buffer.size());
-
-	ZmqInst::getZmqInstance()->sendToService(addr, (char*)buffer.data(), buffer.size());
+	
+	CommEntityMgr::getSingleton()->getCommEntity()->sendToService(addr, (char*)buffer.data(), buffer.size());
 }
 
 void TcpConnection::sendMsgToClient(int msgId, char* data, int dataLen) {

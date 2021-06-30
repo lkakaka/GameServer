@@ -2,7 +2,7 @@
 
 #include "proto.h"
 #include "Logger.h"
-#include "ZmqInst.h"
+#include "ServiceCommEntityMgr.h"
 #include "PythonPlugin.h"
 #include "GameService.h"
 #include "MyBuffer.h"
@@ -59,14 +59,14 @@ bool handleServiceMsg(int msgId, char* data, int dataLen)
 	return false;
 }
 
-void MessageMgr::onRecvData(char* sender, char* data, int dataLen) {
-	ServiceAddr srcAddr;
-	srcAddr.parseAddr(sender);
+void MessageMgr::onRecvData(ServiceAddr* srcAddr, char* data, int dataLen) {
+	/*ServiceAddr srcAddr;
+	srcAddr.parseAddr(sender);*/
 	int msgId = 0;
 	MyBuffer buffer(data, dataLen);
-	if (srcAddr.getServiceType() == SERVICE_TYPE_GATEWAY) {
+	if (srcAddr->getServiceType() == SERVICE_TYPE_GATEWAY) {
 		if (dataLen < 9) {
-			Logger::logError("$recv %s msg format error, data len < 9", sender);
+			Logger::logError("$recv %s msg format error, data len < 9", srcAddr->getName()->c_str());
 			return;
 		}
 		bool isClientMsg = (buffer.readByte() == 0);
@@ -84,7 +84,7 @@ void MessageMgr::onRecvData(char* sender, char* data, int dataLen) {
 				GameService::g_gameService->callPyFunc("on_recv_client_msg", arg);
 			}
 			else {
-				PyObject* pArgs = Py_BuildValue("iii", srcAddr.getServiceGroup(), srcAddr.getServiceType(), srcAddr.getServiceId());
+				PyObject* pArgs = Py_BuildValue("iii", srcAddr->getServiceGroup(), srcAddr->getServiceType(), srcAddr->getServiceId());
 				PyObject* pyObj = GameService::g_gameService->callPyFunc("create_service_addr", pArgs);
 				PyTuple_SetItem(arg, 0, pyObj);
 				PyTuple_SetItem(arg, 1, PyLong_FromLong(msgId));
@@ -99,7 +99,7 @@ void MessageMgr::onRecvData(char* sender, char* data, int dataLen) {
 	}
 	else {
 		if (dataLen <= 4) {
-			Logger::logError("$recv %s msg format error, data len <= 4", sender);
+			Logger::logError("$recv %s msg format error, data len <= 4", srcAddr->getName()->c_str());
 			return;
 		}
 		msgId = buffer.readInt();
@@ -111,7 +111,7 @@ void MessageMgr::onRecvData(char* sender, char* data, int dataLen) {
 
 			//PyObject* pModule = PyImport_ImportModule("game.service.service_addr");//这里是要调用的文件名
 			//PyObject* pFunc = PyObject_GetAttrString(pModule, "ServiceAddr");//这里是要调用的函数名
-			PyObject* pArgs = Py_BuildValue("iii", srcAddr.getServiceGroup(), srcAddr.getServiceType(), srcAddr.getServiceId());
+			PyObject* pArgs = Py_BuildValue("iii", srcAddr->getServiceGroup(), srcAddr->getServiceType(), srcAddr->getServiceId());
 			//PyObject* pyObj = PyEval_CallObject(pFunc, pArgs);//调用函数
 
 			PyObject* pyObj = GameService::g_gameService->callPyFunc("create_service_addr", pArgs);
@@ -126,7 +126,7 @@ void MessageMgr::onRecvData(char* sender, char* data, int dataLen) {
 		}
 	}
 
-	Logger::logDebug("$recv msg, sender:%s,  msgId:%d", srcAddr.getName()->c_str(), msgId);
+	Logger::logDebug("$recv msg, sender:%s,  msgId:%d", srcAddr->getName()->c_str(), msgId);
 }
 
 //void MessageMgr::onGatewayRecvData(char* sender, char* data, int dataLen) {
@@ -167,9 +167,8 @@ void MessageMgr::sendToClient(int connID, int msgId, const char* msg, int msgLen
 	buffer.writeInt(connID);
 	buffer.writeInt(msgId);
 	buffer.writeString(msg, msgLen);
-	//ZmqInst::getZmqInstance()->sendData("gateway", (char*)buffer.data(), buffer.size());
 	ServiceAddr addr(ServiceInfo::getSingleton()->getServiceGroup(), ServiceType::SERVICE_TYPE_GATEWAY, 0);
-	ZmqInst::getZmqInstance()->sendToService(&addr, (char*)buffer.data(), buffer.size());
+	CommEntityMgr::getSingleton()->getCommEntity()->sendToService(&addr, (char*)buffer.data(), buffer.size());
 }
 
 void MessageMgr::sendToServer(ServiceAddr* addr, int msgId, const char* msg, int msgLen)
@@ -179,7 +178,6 @@ void MessageMgr::sendToServer(ServiceAddr* addr, int msgId, const char* msg, int
 	if (addr->getServiceType() == SERVICE_TYPE_GATEWAY) buffer.writeInt(-1);
 	buffer.writeInt(msgId);
 	buffer.writeString(msg, msgLen);
-	//ZmqInst::getZmqInstance()->sendData(serviceName, (char*)buffer.data(), buffer.size());
-	ZmqInst::getZmqInstance()->sendToService(addr, (char*)buffer.data(), buffer.size());
+	CommEntityMgr::getSingleton()->getCommEntity()->sendToService(addr, (char*)buffer.data(), buffer.size());
 }
 

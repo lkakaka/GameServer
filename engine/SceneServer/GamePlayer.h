@@ -3,7 +3,6 @@
 #include <string>
 #include "GameActor.h"
 #include "proto.h"
-#include "ZmqInst.h"
 
 class GamePlayer : public GameActor {
 private:

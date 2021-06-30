@@ -35,6 +35,7 @@ public class Network {
             InetSocketAddress addr = new InetSocketAddress(m_serverIP, m_serverPort);
             m_sc.connect(addr);
             m_sc.configureBlocking(false);
+            System.out.println("xx1");
             startWork();
             if (m_eventHandler != null) {
                 m_eventHandler.onConnected();

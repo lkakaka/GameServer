@@ -63,17 +63,11 @@ class SceneCtrlService(ServiceBase):
             logger.log_info("player switch scene failed, not found scene, scene_uid:{0}, role_id:{1}", scene_uid,
                             role_id)
             return ErrorCode.NOT_FOUND_SCENE
-        player_info = self._player_mgr.get_player_info_by_role_id(role_id)
-        player_info.state = PlayerState.SWITCHING
-        player_info.scene_uid = 0
-        player_info.scene_id = 0
+        self._player_mgr.switch_state(role_id, PlayerState.SWITCHING, scene_uid=0, scene_id=0)
         logger.log_info("player switch scene, role_id:{0}, scene_uid:{1}", role_id, scene_uid)
         self.rpc_call(scene.service_addr, "Scene_EnterScene", conn_id=conn_id, role_id=role_id, scene_uid=scene_uid)
         return ErrorCode.OK
 
     @_rpc_proc.reg_cmd("Player_EnterScene")
     def _on_player_enter_scene(self, sender, role_id, scene_uid, scene_id):
-        player_info = self._player_mgr.get_player_info_by_role_id(role_id)
-        player_info.state = PlayerState.IN_SCENE
-        player_info.scene_uid = scene_uid
-        player_info.scene_id = scene_id
+        self._player_mgr.switch_state(role_id, PlayerState.IN_SCENE, scene_uid=scene_uid, scene_id=scene_id)

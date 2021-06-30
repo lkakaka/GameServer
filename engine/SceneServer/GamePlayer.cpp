@@ -1,6 +1,6 @@
 #include "GamePlayer.h"
 #include "MyBuffer.h"
-#include "ZmqInst.h"
+#include "ServiceCommEntityMgr.h"
 #include "ServiceType.h"
 #include "ServiceInfo.h"
 
@@ -23,9 +23,8 @@ void GamePlayer::sendToClient(int msgId, const char* msg, int msgLen) {
 	buffer.writeInt(m_connId);
 	buffer.writeInt(msgId);
 	buffer.writeString(msg, msgLen);
-	//ZmqInst::getZmqInstance()->sendData("gateway", (char*)buffer.data(), buffer.size());
 	ServiceAddr addr(ServiceInfo::getSingleton()->getServiceGroup(), ServiceType::SERVICE_TYPE_GATEWAY, 0);
-	ZmqInst::getZmqInstance()->sendToService(&addr, (char*)buffer.data(), buffer.size());
+	CommEntityMgr::getSingleton()->getCommEntity()->sendToService(&addr, (char*)buffer.data(), buffer.size());
 }
 
 bool GamePlayer::onRecvClientMsg(int msgId, char* data, int dataLen) {

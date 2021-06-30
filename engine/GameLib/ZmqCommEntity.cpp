@@ -1,11 +1,11 @@
-#include "ZmqInst.h"
+#include "ZmqCommEntity.h"
 #include "MyBuffer.h"
 #include "Logger.h"
 #include "Const.h"
 
 //ZmqInst* ZmqInst::zmqInstance = NULL;
 //#ifndef WIN32
-INIT_SINGLETON_CLASS(ZmqInst)
+INIT_SINGLETON_CLASS(ZmqCommEntity)
 //#endif
 
 //ZmqInst::ZmqInst(std::string& name, std::string& router_addr) : m_name(name), m_router_addr(router_addr),
@@ -14,14 +14,15 @@ INIT_SINGLETON_CLASS(ZmqInst)
 //	//startZmqInst();
 //}
 
-ZmqInst::ZmqInst(ServiceAddr& addr, std::string& routerAddr) : CommEntityInf(addr), m_router_addr(routerAddr),
-	zmq_context(NULL), conn_socket(NULL), work_thread(NULL), m_recvCallback(NULL)
+ZmqCommEntity::ZmqCommEntity(ServiceAddr& addr, const char* serverIp, int serverPort) : CommEntityInf(addr),
+	m_serverIp(serverIp), m_serverPort(serverPort),
+	zmq_context(NULL), conn_socket(NULL), work_thread(NULL)
 {
 	//startZmqInst();
 	m_name = *addr.getName();
 }
 
-ZmqInst::~ZmqInst()
+ZmqCommEntity::~ZmqCommEntity()
 {
 	destory();
 }
@@ -35,16 +36,6 @@ ZmqInst::~ZmqInst()
 //	ZmqInst::zmqInstance->startZmqInst(name, router_addr);
 //}
 //
-ZmqInst* ZmqInst::getZmqInstance()
-{
-	//return ZmqInst::zmqInstance;
-	return ZmqInst::getSingleton();
-}
-
-void ZmqInst::setRecvCallback(ZmqRecvCallback callback)
-{
-	m_recvCallback = callback;
-}
 
 //void ZmqInst::sendData(const char* dstName, char* data, int datLen)
 //{
@@ -55,7 +46,7 @@ void ZmqInst::setRecvCallback(ZmqRecvCallback callback)
 //	zmq_send(conn_socket, buffer.data(), buffer.size(), 0);
 //}
 
-void ZmqInst::sendToService(ServiceAddr* dstAddr, char* msg, int msgLen) {
+void ZmqCommEntity::sendToService(ServiceAddr* dstAddr, char* msg, int msgLen) {
 	MyBuffer buffer;
 	//dstAddr->serialize(&buffer);
 	std::string* addrName = dstAddr->getName();
@@ -65,11 +56,7 @@ void ZmqInst::sendToService(ServiceAddr* dstAddr, char* msg, int msgLen) {
 	zmq_send(conn_socket, buffer.data(), buffer.size(), 0);
 }
 
-void ZmqInst::onRecvServiceMsg(ServiceAddr* srcAddr, char* msg, int msgLen) {
-
-}
-
-void ZmqInst::run() 
+void ZmqCommEntity::run()
 {
 	Logger::logInfo("$zmq intance running...");
 	//while (1) {
@@ -110,8 +97,10 @@ void ZmqInst::run()
 			srcAddr[srcAddrLen] = '\0';
 			int iMsgBodyIdx = srcAddrLen + 1;
 			int iMsgBodyLen = len - iMsgBodyIdx;
+			ServiceAddr srcServiceAddr;
+			srcServiceAddr.parseAddr(srcAddr);
 			if (m_recvCallback != NULL) {
-				m_recvCallback(srcAddr, &msg[iMsgBodyIdx], iMsgBodyLen);
+				m_recvCallback(&srcServiceAddr, &msg[iMsgBodyIdx], iMsgBodyLen);
 			}
 		}
 
@@ -120,7 +109,7 @@ void ZmqInst::run()
 	work_thread = new std::thread(threadFunc);
 }
 
-void ZmqInst::startZmqInst()
+void ZmqCommEntity::start()
 {
 	zmq_context = zmq_init(1);
 
@@ -142,9 +131,11 @@ void ZmqInst::startZmqInst()
 		return;
 	}
 
-	std::string routerAddr = "tcp://" + m_router_addr;
+	char routerAddr[64]{ 0 };
+	sprintf(routerAddr, "tcp://%s:%d", m_serverIp.c_str(), m_serverPort);
+	//std::string routerAddr = "tcp://" + m_router_addr;
 	//routerAddr.append(router_addr);
-	if (zmq_connect(conn_socket, routerAddr.c_str()) < 0) {
+	if (zmq_connect(conn_socket, routerAddr) < 0) {
 		zmq_close(conn_socket);
 		zmq_ctx_destroy(zmq_context);
 		return;
@@ -156,10 +147,10 @@ void ZmqInst::startZmqInst()
 
 	run();
 
-	Logger::logInfo("$create zmq instance, name: %s, router addr:%s", m_name.c_str(), routerAddr.c_str());
+	Logger::logInfo("$create zmq instance, name: %s, router addr:%s:%d", m_name.c_str(), m_serverIp.c_str(), m_serverPort);
 }
 
-void ZmqInst::destory() 
+void ZmqCommEntity::destory()
 {
 	if (zmq_context != NULL) {
 		zmq_close(conn_socket);

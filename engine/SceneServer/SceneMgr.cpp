@@ -1,6 +1,7 @@
 #include "SceneMgr.h"
 #include "Logger.h"
 #include "proto.h"
+#include "Config.h"
 
 
 SceneMgr* SceneMgr::g_sceneMgr = NULL;

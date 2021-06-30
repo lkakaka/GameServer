@@ -88,7 +88,7 @@ class SceneService(ServiceBase):
 
     @_rpc_proc.reg_cmd("Scene_EnterScene")
     def _on_recv_rpc_enter_scene(self, sender, conn_id, role_id, scene_uid):
-        logger.log_info("recv rpc enter scnene, conn_id:{0}, role_id{1}, scene_uid:{2}", conn_id, role_id, scene_uid)
+        logger.log_info("recv rpc enter scene, conn_id:{0}, role_id{1}, scene_uid:{2}", conn_id, role_id, scene_uid)
         scene = self._scenes.get(scene_uid)
         self._player_to_scene[conn_id] = scene_uid
         scene.prepare_enter_scene(conn_id, role_id)
@@ -97,11 +97,11 @@ class SceneService(ServiceBase):
     def _on_recv_disconnect(self, sender, msg_id, msg):
         game_scene = self.get_player_scene(msg.conn_id)
         if game_scene is None:
-            logger.log_info("_on_recv_disconnect error, not found player's scene, conn_id:{}", msg.conn_id)
+            logger.log_info("_on_recv_disconnect error, not found scene, conn_id:{}", msg.conn_id)
             return
         player = game_scene.get_player_by_conn_id(msg.conn_id)
         if player is None:
-            logger.log_info("_on_recv_disconnect error, not found player in scene, conn_id:{}", msg.conn_id)
+            logger.log_info("_on_recv_disconnect error, player not in scene, conn_id:{}", msg.conn_id)
             return
         game_scene.remove_player(player.role_id, msg.reason)
         player.on_leave_game()

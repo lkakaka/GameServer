@@ -5,6 +5,7 @@
 #include "MyBuffer.h"
 #include "Config.h"
 #include "ServiceType.h"
+#include <functional>
 
 class ServiceAddr {
 private:
@@ -29,13 +30,17 @@ public:
 	void parseAddr(char* addr);
 };
 
+typedef std::function<void(ServiceAddr*, char*, int)> CommRecvCallback;
+
 class CommEntityInf {
 protected:
 	ServiceAddr addr;
+	CommRecvCallback m_recvCallback;
 public:
-	CommEntityInf(ServiceAddr& addr): addr(addr) { };
+	CommEntityInf(ServiceAddr& addr): addr(addr), m_recvCallback(NULL) { };
 	virtual void sendToService(ServiceAddr* dstAddr, char* msg, int msgLen) = 0;
-	virtual void onRecvServiceMsg(ServiceAddr* srcAddr, char* msg, int msgLen) = 0;
+	inline void setRecvCallback(CommRecvCallback callback) { m_recvCallback = callback; }
+	virtual void start() = 0;
 };
 
 

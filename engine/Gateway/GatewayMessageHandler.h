@@ -4,5 +4,5 @@
 
 class GatewayMessageHandler : public IMessageHandler, public Singleton<GatewayMessageHandler> {
 public:
-	void onRecvMessage(char* sender, char* data, int dataLen);
+	void onRecvMessage(ServiceAddr* sender, char* data, int dataLen);
 };

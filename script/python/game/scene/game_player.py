@@ -25,7 +25,7 @@ class GamePlayer(game.scene.game_actor.GameActor, MultiIndexElement):
 
     @staticmethod
     def define_multi_index_attr_names():
-        return (GamePlayer.ATTR_ROLE_ID, GamePlayer.ATTR_CONN_ID)
+        return GamePlayer.ATTR_ROLE_ID, GamePlayer.ATTR_CONN_ID
 
     def __init__(self, e_player, game_scene, conn_id, role_id):
         game.scene.game_actor.GameActor.__init__(self, e_player[1])
