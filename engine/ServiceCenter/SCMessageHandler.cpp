@@ -27,7 +27,7 @@ void handleVerifyMsg(SCConnection* conn, ServiceAddr* sender, char* data, int le
 	conn->setVerify(true);
 	conn->setServiceAddr(*sender);
 	SCNet::getSingleton()->addServiceConnection(sender->getName()->c_str(), conn);
-	Logger::logInfo("$service %s connected!!", sender->getName()->c_str());
+	Logger::logInfo("$service %s connected!!, connId:%d", sender->getName()->c_str(), conn->getConnID());
 }
 
 void dispatchServiceMsg(SCConnection* conn, ServiceAddr* dst, char* data, int len) {
@@ -41,9 +41,12 @@ void dispatchServiceMsg(SCConnection* conn, ServiceAddr* dst, char* data, int le
 		buffer.writeInt(len);
 		buffer.writeString(data, len);
 		dstConn->send((char*)buffer.data(), buffer.size());
-		Logger::logInfo("$dispatch msg %s->%s, len:%d ", srcAddr->getName()->c_str(), dst->getName()->c_str(), len);
+		int msgId = -1;
+		if (len >= 4) msgId = buffer.getInt(16);
+		Logger::logInfo("$dispatch msg %s->%s, msgId:%d, len:%d ", srcAddr->getName()->c_str(), dst->getName()->c_str(), msgId, len);
 	}
 	else {
+		// todo: ´æ´¢ÏûÏ¢
 		Logger::logError("$dispatch msg error, dst:%s not connected!!", dst->getName()->c_str());
 	}
 }

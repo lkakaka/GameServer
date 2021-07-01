@@ -30,12 +30,11 @@ void SCNet::closeConnection(void* conn, const char* reason)
 	}
 
 	auto iter = m_conns.find(connId);
-	if (iter != m_conns.end())
-	{
+	if (iter != m_conns.end()) {
 		m_conns.erase(iter);
 	}
 	
-	scConn->close();
+	scConn->destroy();
 
 	delete scConn;
 }

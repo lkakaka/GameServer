@@ -23,11 +23,12 @@ private:
 
 private:
 	void _send();
-
+	
 protected:
 	void doRead();
 	// 子类处理
 	virtual void onRead(char* data, int len) = 0;
+	void close(const char* reason);
 
 public:
 	Connection(int connID, tcp::socket& socket, ConnCloseCallback closeCallback);
@@ -38,7 +39,8 @@ public:
 
 	void send(const char* data, int len);
 
-	void close();
+	void destroy();
+	
 };
 
 NS_GAME_NET_END

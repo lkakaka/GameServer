@@ -164,8 +164,8 @@ void MessageMgr::onRecvData(ServiceAddr* srcAddr, char* data, int dataLen) {
 
 void MessageMgr::sendToClient(int connID, int msgId, const char* msg, int msgLen) {
 	MyBuffer buffer;
-	buffer.writeInt(connID);
 	buffer.writeInt(msgId);
+	buffer.writeInt(connID);
 	buffer.writeString(msg, msgLen);
 	ServiceAddr addr(ServiceInfo::getSingleton()->getServiceGroup(), ServiceType::SERVICE_TYPE_GATEWAY, 0);
 	CommEntityMgr::getSingleton()->getCommEntity()->sendToService(&addr, (char*)buffer.data(), buffer.size());
@@ -174,9 +174,9 @@ void MessageMgr::sendToClient(int connID, int msgId, const char* msg, int msgLen
 void MessageMgr::sendToServer(ServiceAddr* addr, int msgId, const char* msg, int msgLen)
 {
 	MyBuffer buffer;
+	buffer.writeInt(msgId);
 	// 发往gateway的消息都需要一个connId
 	if (addr->getServiceType() == SERVICE_TYPE_GATEWAY) buffer.writeInt(-1);
-	buffer.writeInt(msgId);
 	buffer.writeString(msg, msgLen);
 	CommEntityMgr::getSingleton()->getCommEntity()->sendToService(addr, (char*)buffer.data(), buffer.size());
 }

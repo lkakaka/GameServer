@@ -65,6 +65,7 @@ void ClientNet::_read() {
 void ClientNet::disConnect() {
 	m_socket->shutdown(boost::asio::socket_base::shutdown_type::shutdown_both);
 	m_isConnected = false;
+	tryConnect();
 }
 
 
@@ -78,6 +79,7 @@ bool ClientNet::send(const char* data, int len) {
 }
 
 void ClientNet::_send() {
+	if (!m_isConnected) return;
 	if (m_sendBuff.size() == 0) return;
 	boost::asio::const_buffer buf(&m_sendBuff.front(), m_sendBuff.size());
 	size_t len = m_socket->write_some(buf);

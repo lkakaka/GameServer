@@ -46,10 +46,13 @@ class MsgHandler(object):
 
     @_c_cmd.reg_cmd(Message.MSG_ID_TEST_REQ)
     def _on_recv_test_req(self, msg_id, msg):
+        game_scene = self.player.game_scene
         print("$player recv test req, role_id:{}, msg:{}", self.player.role_id, msg)
         rsp_msg = Message.create_msg_by_id(Message.MSG_ID_TEST_REQ)
         rsp_msg.id = 10
-        rsp_msg.msg = "welcome to game world, " + self.player.name
+        rsp_msg.msg = "welcome to game world, {0}, scene_id:{1}, scene_uid:{2}".format(self.player.name,
+                                                                                       game_scene.scene_id,
+                                                                                       game_scene.scene_uid)
         self.player.send_msg_to_client(rsp_msg)
         self.player.send_msg_to_service(LOCAL_DB_SERVICE_ADDR, msg)
 

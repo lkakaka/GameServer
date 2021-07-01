@@ -51,13 +51,13 @@ void handMsg(int msgId, int connId, char* data, int dataLen) {
 void GatewayMessageHandler::onRecvMessage(ServiceAddr* sender, char* data, int dataLen) {
 	MyBuffer buffer(data, dataLen);
 	if (dataLen < 8) {
-		int connId = -1;
-		if (dataLen >= 4) connId = buffer.readInt();
-		Logger::logError("$recv %s msg format error, data len(%d) < 8, connId:%d", sender->getName()->c_str(), dataLen, connId);
+		/*int connId = -1;
+		if (dataLen >= 4) connId = buffer.readInt();*/
+		Logger::logError("$recv %s msg format error, data len(%d) < 8", sender->getName()->c_str(), dataLen);
 		return;
 	}
-	int connId = buffer.readInt();
 	int msgId = buffer.readInt();
+	int connId = buffer.readInt();
 	
 	Logger::logInfo("$recv msg, sender:%s, msgId:%d, connId:%d", sender->getName()->c_str(), msgId, connId);
 	// 网关处理的消息

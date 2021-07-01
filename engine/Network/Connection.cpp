@@ -43,7 +43,7 @@ void Connection::doRead()
 		{
 			const std::string err_str = error.message();
 			Logger::logError("$close connection, %s", err_str.c_str());
-			m_closeCallback(this, "client disconnected");
+			close("client disconnected");
 			return;
 		}
 		if (bytes_transferred > 0)
@@ -96,13 +96,18 @@ void Connection::_send() {
 		});*/
 }
 
-void Connection::close() {
+void Connection::close(const char* reason) {
+	if (m_isClosed) return;
 	m_isClosed = true;
+	m_closeCallback(this, reason);
+	//Logger::logInfo("$connection close, id:%d, reason:%s", m_connID, reason);
+}
+
+void Connection::destroy() {
 	try {
 		m_socket.shutdown(m_socket.shutdown_both);
 	}
 	catch (boost::system::system_error e) {
 		Logger::logError("socket shutdown error, %s", e.what());
 	}
-	Logger::logInfo("$connection close, id:%d", m_connID);
 }

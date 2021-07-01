@@ -102,12 +102,13 @@ void TcpConnection::dispatchClientMsg(int msgId, int msgLen, const char* msgData
 		ServiceAddr addr(ServiceInfo::getSingleton()->getServiceGroup(), ServiceType::SERVICE_TYPE_LOGIN, 0);
 		CommEntityMgr::getSingleton()->getCommEntity()->sendToService(&addr, (char*)buffer.data(), buffer.size());
 	} else {
-		ServiceAddr addr(ServiceInfo::getSingleton()->getServiceGroup(), ServiceType::SERVICE_TYPE_SCENE, m_sceneServiceId);
-		CommEntityMgr::getSingleton()->getCommEntity()->sendToService(&addr, (char*)buffer.data(), buffer.size());
-
 		if (m_sceneServiceId < 0) {
 			Logger::logError("$player not in scene, connId:%d, msgId:%d", m_connID, msgId);
+			close("player not in scene");
+			return;
 		}
+		ServiceAddr addr(ServiceInfo::getSingleton()->getServiceGroup(), ServiceType::SERVICE_TYPE_SCENE, m_sceneServiceId);
+		CommEntityMgr::getSingleton()->getCommEntity()->sendToService(&addr, (char*)buffer.data(), buffer.size());
 	}
 }
 

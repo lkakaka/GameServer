@@ -20,8 +20,8 @@ void GamePlayer::sendToClient(int msgId, google::protobuf::Message* msg) {
 
 void GamePlayer::sendToClient(int msgId, const char* msg, int msgLen) {
 	MyBuffer buffer;
-	buffer.writeInt(m_connId);
 	buffer.writeInt(msgId);
+	buffer.writeInt(m_connId);
 	buffer.writeString(msg, msgLen);
 	ServiceAddr addr(ServiceInfo::getSingleton()->getServiceGroup(), ServiceType::SERVICE_TYPE_GATEWAY, 0);
 	CommEntityMgr::getSingleton()->getCommEntity()->sendToService(&addr, (char*)buffer.data(), buffer.size());
