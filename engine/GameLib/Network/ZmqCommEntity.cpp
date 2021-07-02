@@ -1,7 +1,7 @@
 #include "ZmqCommEntity.h"
-#include "MyBuffer.h"
+#include "../MyBuffer.h"
 #include "Logger.h"
-#include "Const.h"
+#include "../Const.h"
 
 //ZmqInst* ZmqInst::zmqInstance = NULL;
 //#ifndef WIN32
@@ -14,7 +14,7 @@ INIT_SINGLETON_CLASS(ZmqCommEntity)
 //	//startZmqInst();
 //}
 
-ZmqCommEntity::ZmqCommEntity(ServiceAddr& addr, const char* serverIp, int serverPort) : CommEntityInf(addr),
+ZmqCommEntity::ZmqCommEntity(ServiceAddr& addr, const char* serverIp, int serverPort) : IServiceCommEntity(addr),
 	m_serverIp(serverIp), m_serverPort(serverPort),
 	zmq_context(NULL), conn_socket(NULL), work_thread(NULL)
 {

@@ -1,8 +1,7 @@
 #pragma once
 #include <vector>
 //#include <google/protobuf/message.h>
-#include "Network.h"
-#include "CommEntity.h"
+#include "Network/CommEntity.h"
 
 class MessageMgr
 {

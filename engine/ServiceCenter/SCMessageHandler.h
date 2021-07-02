@@ -1,5 +1,5 @@
 #pragma once
-#include "IMessageHandler.h"
+#include "Network/IMessageHandler.h"
 #include "Singleton.h"
 #include "SCConnection.h"
 

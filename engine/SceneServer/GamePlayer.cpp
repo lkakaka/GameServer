@@ -1,6 +1,6 @@
 #include "GamePlayer.h"
 #include "MyBuffer.h"
-#include "ServiceCommEntityMgr.h"
+#include "Network/ServiceCommEntityMgr.h"
 #include "ServiceType.h"
 #include "ServiceInfo.h"
 

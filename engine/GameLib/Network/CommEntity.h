@@ -1,10 +1,10 @@
 #pragma once
 
 #include "Logger.h"
-#include "../Common/ServerExports.h"
-#include "MyBuffer.h"
-#include "Config.h"
-#include "ServiceType.h"
+#include "../../Common/ServerExports.h"
+#include "../MyBuffer.h"
+#include "../Config.h"
+#include "../ServiceType.h"
 #include <functional>
 
 class ServiceAddr {
@@ -32,14 +32,14 @@ public:
 
 typedef std::function<void(ServiceAddr*, char*, int)> CommRecvCallback;
 
-class CommEntityInf {
+class IServiceCommEntity {
 protected:
 	ServiceAddr addr;
 	CommRecvCallback m_recvCallback;
 public:
-	CommEntityInf(ServiceAddr& addr): addr(addr), m_recvCallback(NULL) { };
-	virtual void sendToService(ServiceAddr* dstAddr, char* msg, int msgLen) = 0;
+	IServiceCommEntity(ServiceAddr& addr): addr(addr), m_recvCallback(NULL) { };
 	inline void setRecvCallback(CommRecvCallback callback) { m_recvCallback = callback; }
+	virtual void sendToService(ServiceAddr* dstAddr, char* msg, int msgLen) = 0;
 	virtual void start() = 0;
 };
 

@@ -3,14 +3,14 @@
 #include "zmq.h"
 #include "Logger.h"
 //#include "GameUtil.h"
-#include "../Common/ServerExports.h"
-#include "Singleton.h"
+#include "../../Common/ServerExports.h"
+#include "../Singleton.h"
 #include "CommEntity.h"
 
 #include <thread>
 #include <functional>
 
-class ZmqCommEntity : public Singleton<ZmqCommEntity>, public CommEntityInf {
+class ZmqCommEntity : public Singleton<ZmqCommEntity>, public IServiceCommEntity {
 private:
 	//static ZmqInst* zmqInstance;
 	void* zmq_context;

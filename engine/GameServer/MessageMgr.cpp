@@ -2,14 +2,14 @@
 
 #include "proto.h"
 #include "Logger.h"
-#include "ServiceCommEntityMgr.h"
+#include "Network/ServiceCommEntityMgr.h"
 #include "PythonPlugin.h"
 #include "GameService.h"
 #include "MyBuffer.h"
 #include "SceneMgr.h"
 #include "proto.h"
 #include "ServiceType.h"
-#include "CommEntity.h"
+#include "Network/CommEntity.h"
 #include "ServiceInfo.h"
 
 

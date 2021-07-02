@@ -1,6 +1,6 @@
 #include "SCMessageHandler.h"
 #include "Logger.h"
-#include "Network.h"
+#include "Network/Network.h"
 #include "SCNet.h"
 
 extern const char* CONN_KEY;

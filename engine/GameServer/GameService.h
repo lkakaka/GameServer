@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include "Python.h"
-#include "CommEntity.h"
+#include "Network/CommEntity.h"
 #include "ServiceType.h"
 
 class GameService {

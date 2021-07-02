@@ -6,17 +6,17 @@
 
 INIT_SINGLETON_CLASS(CommEntityMgr)
 
-CommEntityInf* CommEntityMgr::createZmqCommEntity(ServiceAddr& addr, const char* serverIp, int serverPort) {
+IServiceCommEntity* CommEntityMgr::createZmqCommEntity(ServiceAddr& addr, const char* serverIp, int serverPort) {
 	m_commEntity = new ZmqCommEntity(addr, serverIp, serverPort);
 	return m_commEntity;
 }
 
-CommEntityInf* CommEntityMgr::createTcpCommEntity(boost::asio::io_context* io, ServiceAddr& addr, const char* serverIp, int serverPort) {
+IServiceCommEntity* CommEntityMgr::createTcpCommEntity(boost::asio::io_context* io, ServiceAddr& addr, const char* serverIp, int serverPort) {
 	m_commEntity = new TcpCommEntity(io, addr, serverIp, serverPort);
 	return m_commEntity;
 }
 
-CommEntityInf* CommEntityMgr::createCommEntity(boost::asio::io_context* io, ServiceAddr& addr, const char* serverIp, int serverPort) {
+IServiceCommEntity* CommEntityMgr::createCommEntity(boost::asio::io_context* io, ServiceAddr& addr, const char* serverIp, int serverPort) {
 #ifdef USE_ZMQ_ENTITY
 	return createZmqCommEntity(addr, serverIp, serverPort);
 #else

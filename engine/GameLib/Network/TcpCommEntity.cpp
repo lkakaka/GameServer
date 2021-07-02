@@ -5,8 +5,8 @@ extern const char* CONN_KEY;
 INIT_SINGLETON_CLASS(TcpCommEntity)
 
 TcpCommEntity::TcpCommEntity(boost::asio::io_context* io, ServiceAddr& addr, const char* serverIp, int port) :
-	CommEntityInf(addr),
-	ClientNet(io, serverIp, port)
+	IServiceCommEntity(addr),
+	ClientConnection(io, serverIp, port)
 {
 
 }

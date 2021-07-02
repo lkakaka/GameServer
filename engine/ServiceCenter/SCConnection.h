@@ -1,21 +1,19 @@
 #pragma once
 
-#include "Connection.h"
+#include "Network/ServerConnection.h"
 #include "MyBuffer.h"
-#include "CommEntity.h"
+#include "Network/CommEntity.h"
 
 USE_NS_GAME_NET
 
-class SCConnection : public Connection {
+class SCConnection : public ServerConnection {
 private:
-	MyBuffer m_recvBuffer;
 	bool m_isVerify;
 	ServiceAddr m_serviceAddr;
 private:
 	void parse();
 public:
 	SCConnection(int connID, tcp::socket& socket, ConnCloseCallback closeCallback);
-	inline void startRead() { doRead(); }
 
 	inline bool isVerify() { return m_isVerify; }
 	inline void setVerify(bool isVerify) { m_isVerify = isVerify; }
@@ -24,6 +22,6 @@ public:
 	inline ServiceAddr* getServiceAddr() { return &m_serviceAddr; } 
 
 protected:
-	void onRead(char* data, int len);
+	void parseMessage();
 };
 

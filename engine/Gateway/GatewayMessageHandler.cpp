@@ -1,35 +1,34 @@
 #include "GatewayMessageHandler.h"
 #include "proto.h"
 #include "Logger.h"
-#include "Network.h"
-
+#include "GatewayNet.h"
+#include "GatewayConnection.h"
 
 INIT_SINGLETON_CLASS(GatewayMessageHandler)
-
 
 void handMsg_ClientDisconnect(int msgId, int connId, char* data, int dataLen) {
 	std::shared_ptr<google::protobuf::Message> msg = createMessage(msgId, data, dataLen);
 	ClientDisconnect* recvMsg = (ClientDisconnect*)msg.get();
-	Network::getNetworkInstance()->removeConnection(recvMsg->conn_id(), recvMsg->reason().c_str());
+	GatewayNet::getSingleton()->removeConnection(recvMsg->conn_id(), recvMsg->reason().c_str());
 	Logger::logInfo("recv client disconnect msg, connId:%d", connId);
 }
 
 void handMsg_SwitchSceneService(int msgId, int connId, char* data, int dataLen) {
 	std::shared_ptr<google::protobuf::Message> msg = createMessage(msgId, data, dataLen);
 	SwitchSceneService* recvMsg = (SwitchSceneService*)msg.get();
-	TcpConnection* conn = Network::getNetworkInstance()->getConnById(recvMsg->conn_id());
+	GatewayConnection* conn = (GatewayConnection*)GatewayNet::getSingleton()->getConnection(recvMsg->conn_id());
 	if (conn == NULL) Logger::logError("$SwitchSceneService not found conn:%d", recvMsg->conn_id());
 	conn->setSceneServiceId(recvMsg->scene_service_id());
 }
 
 // 消息默认处理发给客户端
 void handMsg_Default(int msgId, int connId, char* data, int dataLen) {
-	TcpConnection* connection = Network::getConnById(connId);
-	if (connection == NULL) {
+	GatewayConnection* conn = (GatewayConnection*)GatewayNet::getSingleton()->getConnection(connId);
+	if (conn == NULL) {
 		Logger::logError("$send msg fail, connId(%d) is not exist, msgId:%d", connId, msgId);
 		return;
 	}
-	connection->sendMsgToClient(msgId, data, dataLen);
+	conn->sendMsgToClient(msgId, data, dataLen);
 	Logger::logInfo("$send msg to client, msgId:%d, connId:%d", msgId, connId);
 }
 

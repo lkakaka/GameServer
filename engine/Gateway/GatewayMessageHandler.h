@@ -1,5 +1,5 @@
 #pragma once
-#include "IMessageHandler.h"
+#include "Network/IMessageHandler.h"
 #include "Singleton.h"
 
 class GatewayMessageHandler : public IMessageHandler, public Singleton<GatewayMessageHandler> {

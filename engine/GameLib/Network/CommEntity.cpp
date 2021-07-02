@@ -1,7 +1,7 @@
 #include "CommEntity.h"
 #include "Logger.h"
-#include "Const.h"
-#include "StrUtil.h"
+#include "../Const.h"
+#include "../StrUtil.h"
 
 const char* CONN_KEY = "abc123";
 

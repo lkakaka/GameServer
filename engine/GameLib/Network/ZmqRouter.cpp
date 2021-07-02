@@ -1,6 +1,6 @@
 ﻿#include "ZmqRouter.h"
-#include "MyBuffer.h"
-#include "Const.h"
+#include "../MyBuffer.h"
+#include "../Const.h"
 
 ZmqRouter* ZmqRouter::zmqRouter = NULL;
 

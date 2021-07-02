@@ -1,12 +1,12 @@
 #pragma once
-#include "ClientNet.h"
-#include "MyBuffer.h"
+#include "ClientConnection.h"
+#include "../MyBuffer.h"
 #include <functional>
 #include "CommEntity.h"
 
 USE_NS_GAME_NET
 
-class TcpCommEntity : public ClientNet, public Singleton<TcpCommEntity>, public CommEntityInf {
+class TcpCommEntity : public ClientConnection, public Singleton<TcpCommEntity>, public IServiceCommEntity {
 private:
 	std::string m_serverIp;
 	int m_serverPort;

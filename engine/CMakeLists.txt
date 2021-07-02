@@ -71,7 +71,7 @@ set(SCENE_ROOT ${PROJECT_SOURCE_DIR}/SceneServer)
 set(HTTP_SERVER_ROOT ${PROJECT_SOURCE_DIR}/HttpServer)
 set(GATEWAY_ROOT ${PROJECT_SOURCE_DIR}/Gateway)
 set(SERVICE_CENTER_ROOT ${PROJECT_SOURCE_DIR}/ServiceCenter)
-set(NETWORK_ROOT ${PROJECT_SOURCE_DIR}/Network)
+#set(NETWORK_ROOT ${PROJECT_SOURCE_DIR}/Network)
 
 set(BOOST_ROOT ../../boost_1_70_0)
 #set(PROTOBUFF_ROOT ../../protobuf-3.9.0)
@@ -86,7 +86,7 @@ file(GLOB_RECURSE COMMON_SRC Common/*.cpp Common/*.h)
 
 #message(STATUS ${PROTO_SRC})
 
-add_subdirectory(Network)
+#add_subdirectory(Network)
 add_subdirectory(Math)
 add_subdirectory(Detour)
 add_subdirectory(DetourCrowd)

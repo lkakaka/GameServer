@@ -9,14 +9,13 @@
 #include "DBMgr.h"
 #include "PythonPlugin.h"
 #include "../Common/PyCommon.h"
-#include "ZmqRouter.h"
+#include "Network/ZmqRouter.h"
 #include "Timer.h"
 #include "UnitTest.h"
 #include "Config.h"
 #include "MessageMgr.h"
 #include "GameService.h"
 #include "server.hpp"
-#include "Network.h"
 #include "CmdLine.h"
 #include "ServiceInfo.h"
 
@@ -25,7 +24,7 @@
 #include "lua/LuaPlugin.h"
 #include "GatewayEntry.h"
 #include "ServiceCenter.h"
-#include "ServiceCommEntityMgr.h"
+#include "Network/ServiceCommEntityMgr.h"
 
 
 using namespace std;
@@ -199,7 +198,7 @@ int initCommEntity(boost::asio::io_service* io) {
 	ServiceAddr addr(serviceGroup, serviceType, serviceId);
 
 	CommEntityMgr* commEntityMgr = new CommEntityMgr();
-	CommEntityInf* commEntity = commEntityMgr->createCommEntity(io, addr, centerServiceIp.c_str(), centerServicePort);
+	IServiceCommEntity* commEntity = commEntityMgr->createCommEntity(io, addr, centerServiceIp.c_str(), centerServicePort);
 
 	if (serviceType == SERVICE_TYPE_GATEWAY) {
 		int port = getServerConfigInt("port");
