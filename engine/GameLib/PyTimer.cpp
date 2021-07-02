@@ -9,7 +9,7 @@
 #include "../Common/PyCommon.h"
 
 static PyObject* ModuleError;
-static char* ModuleName = "Timer";
+static const char* ModuleName = "Timer";
 
 class _CallbackHander {
 public:

@@ -5,7 +5,7 @@
 #include "Config.h"
 
 static PyObject* ModuleError;
-static char* ModuleName = "Config";
+static const char* ModuleName = "Config";
 extern std::string g_cfgFileName;
 
 static PyObject* getConfigInt(PyObject* self, PyObject* args)

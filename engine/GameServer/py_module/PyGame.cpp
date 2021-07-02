@@ -4,7 +4,7 @@
 #include "PyService.h"
 
 static PyObject* ModuleError;
-static char* ModuleName = "Game";
+static const char* ModuleName = "Game";
 
 static PyMethodDef module_methods[] = {
 	/*{"sendMsgToClient", (PyCFunction)sendMsgToClient, METH_VARARGS, ""},

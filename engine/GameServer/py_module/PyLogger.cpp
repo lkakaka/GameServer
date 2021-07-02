@@ -4,7 +4,7 @@
 #include "../PythonPlugin.h"
 
 static PyObject* ModuleError;
-static char* ModuleName = "Logger";
+static const char* ModuleName = "Logger";
 
 static PyObject* logInfo(PyObject* self, PyObject* args)
 {
