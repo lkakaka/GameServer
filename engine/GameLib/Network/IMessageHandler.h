@@ -1,5 +1,5 @@
 #pragma once
-#include "CommEntity.h"
+#include "ServiceAddr.h"
 
 class IMessageHandler {
 public:

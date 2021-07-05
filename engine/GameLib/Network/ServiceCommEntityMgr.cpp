@@ -17,10 +17,10 @@ IServiceCommEntity* CommEntityMgr::createTcpCommEntity(boost::asio::io_context* 
 }
 
 IServiceCommEntity* CommEntityMgr::createCommEntity(boost::asio::io_context* io, ServiceAddr& addr, const char* serverIp, int serverPort) {
-#ifdef USE_ZMQ_ENTITY
+#ifdef SERVICE_COMM_ENTITY_ZMQ
 	return createZmqCommEntity(addr, serverIp, serverPort);
 #else
 	return createTcpCommEntity(io, addr, serverIp, serverPort);
-#endif // USE_ZMQ_ENTITY
+#endif // SERVICE_COMM_ENTITY_ZMQ
 
 }

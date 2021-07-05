@@ -1,7 +1,7 @@
 #include "TcpCommEntity.h"
 #include "Logger.h"
 
-extern const char* CONN_KEY;
+extern const char* SERVICE_CONN_KEY;
 INIT_SINGLETON_CLASS(TcpCommEntity)
 
 TcpCommEntity::TcpCommEntity(boost::asio::io_context* io, ServiceAddr& addr, const char* serverIp, int port) :
@@ -28,8 +28,8 @@ void TcpCommEntity::_parse() {
 	int serviceId = m_recvBuf.readInt();
 	packetLen = m_recvBuf.readInt(); // ¶Á³ö³¤¶È
 	ServiceAddr sender(serviceGroup, serviceType, serviceId);
-	if (m_recvCallback != NULL) {
-		m_recvCallback(&sender, (char*)m_recvBuf.data(), packetLen);
+	if (messageHandler != NULL) {
+		messageHandler->onRecvMessage(&sender, (char*)m_recvBuf.data(), packetLen);
 	}
 
 	m_recvBuf.remove(packetLen);
@@ -53,9 +53,9 @@ void TcpCommEntity::onConnect() {
 	buffer.writeInt(addr.getServiceGroup());
 	buffer.writeInt(addr.getServiceType());
 	buffer.writeInt(addr.getServiceId());
-	buffer.writeInt(strlen(CONN_KEY));
-	int len = strlen(CONN_KEY);
-	buffer.writeString(CONN_KEY, strlen(CONN_KEY));
+	buffer.writeInt(strlen(SERVICE_CONN_KEY));
+	int len = strlen(SERVICE_CONN_KEY);
+	buffer.writeString(SERVICE_CONN_KEY, strlen(SERVICE_CONN_KEY));
 	send((char*)buffer.data(), buffer.size());
 	Logger::logInfo("$connected center service!!!");
 }

@@ -3,7 +3,7 @@
 call config.bat
 
 ::cd ../bin/Debug
-start "Router-"%ServerCmd% %ServerCmd% %RouterConfig%
+start "CenterServer-"%ServerCmd% %ServerCmd% %CenterConfig%
 start "DBServer-"%ServerCmd% %ServerCmd% %DBConfig%
 start "SceneCtrlServer-"%ServerCmd% %ServerCmd% %SceneCtrlConfig%
 start "SceneServer-"%ServerCmd% %ServerCmd% %SceneConfig%

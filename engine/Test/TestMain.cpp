@@ -10,6 +10,7 @@ public:
 	long long a;
 	/*virtual void test1() {};
 	virtual void test2() {};*/
+	~Base() { printf("~Base\n"); };
 };
 
 class Base1 {
@@ -31,6 +32,7 @@ class A {
 private:
 	
 public:
+	std::shared_ptr<Base> b;
 	int m_val;
 	A(int val) : m_val(val) { printf("A constructor,%d\n", m_val); }
 	A(const A& a) : m_val(a.m_val){ printf("A assign constructor,%d\n", m_val); }
@@ -39,6 +41,10 @@ public:
 		printf("A = operator,%d\n", m_val);
 		return *this;
 	}*/
+
+	~A() { 
+		printf("~A\n"); 
+	}
 };
 
 
@@ -68,7 +74,13 @@ std::vector<std::string> split(char* str, const char* delimiters) {
 int main() {
 
 
-	int bs = sizeof(Base);
+	std::shared_ptr<Base> p(new Base());
+	A* a = new A(1);
+	a->b = p;
+	p.reset();
+	delete a;
+
+	/*int bs = sizeof(Base);
 	int ds = sizeof(Drive);
 	Base b;
 	Drive d;
@@ -85,7 +97,7 @@ int main() {
 	int serviceNo = atoi(v[2].c_str());
 
 
-	int size = sizeof(long long);
+	int size = sizeof(long long);*/
 
 
 	/*std::vector<A> v;

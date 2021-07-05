@@ -1,9 +1,7 @@
-#include "CommEntity.h"
+#include "ServiceAddr.h"
 #include "Logger.h"
 #include "../Const.h"
 #include "../StrUtil.h"
-
-const char* CONN_KEY = "abc123";
 
 ServiceAddr::ServiceAddr() : serviceGroup(0), serviceType(0), serviceId(0) {
 	addrName = toString();

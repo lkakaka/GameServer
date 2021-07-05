@@ -1,8 +1,8 @@
 #pragma once
 #include "ClientConnection.h"
 #include "../MyBuffer.h"
-#include <functional>
-#include "CommEntity.h"
+#include "ServiceCommEntity.h"
+#include "../Singleton.h"
 
 USE_NS_GAME_NET
 

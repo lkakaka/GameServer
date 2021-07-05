@@ -1,8 +1,8 @@
 #pragma once
-#include "CommEntity.h"
+#include "ServiceCommEntity.h"
 #include "boost/asio.hpp"
-
-//#define USE_ZMQ_ENTITY
+#include "Network.h"
+#include "../Singleton.h"
 
 class CommEntityMgr : public Singleton<CommEntityMgr> {
 private:

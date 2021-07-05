@@ -1,7 +1,8 @@
 #include "PyService.h"
 #include "Logger.h"
-#include "../MessageMgr.h"
 #include "ServiceType.h"
+#include "ServiceInfo.h"
+#include "Network/ServiceCommEntityMgr.h"
 
 static PyTypeObject PyService_Type;
 
@@ -33,7 +34,15 @@ static PyObject* sendMsgToClient(PyObject* self, PyObject* args)
 		Py_RETURN_FALSE;
 	}
 
-	MessageMgr::sendToClient(connId, msgId, msg, msgLen);
+	//MessageMgr::sendToClient(connId, msgId, msg, msgLen);
+
+	MyBuffer buffer;
+	buffer.writeInt(msgId);
+	buffer.writeInt(connId);
+	buffer.writeString(msg, msgLen);
+	ServiceAddr addr(ServiceInfo::getSingleton()->getServiceGroup(), ServiceType::SERVICE_TYPE_GATEWAY, 0);
+	CommEntityMgr::getSingleton()->getCommEntity()->sendToService(&addr, (char*)buffer.data(), buffer.size());
+
 	Py_RETURN_TRUE;
 }
 
@@ -62,7 +71,15 @@ static PyObject* sendMsgToService(PyObject* self, PyObject* args)
 	int serviceId = PyLong_AsLong(pyServiceId);
 
 	ServiceAddr addr(serviceGroup, serviceType, serviceId);
-	MessageMgr::sendToServer(&addr, msgId, msg, msgLen);
+	//MessageMgr::sendToServer(&addr, msgId, msg, msgLen);
+
+	MyBuffer buffer;
+	buffer.writeInt(msgId);
+	// 发往gateway的消息都需要一个connId
+	if (addr.getServiceType() == SERVICE_TYPE_GATEWAY) buffer.writeInt(-1);
+	buffer.writeString(msg, msgLen);
+	CommEntityMgr::getSingleton()->getCommEntity()->sendToService(&addr, (char*)buffer.data(), buffer.size());
+
 	Logger::logInfo("$send msg to service %s, msgId:%d", addr.getName()->c_str(), msgId);
 	Py_RETURN_TRUE;
 }

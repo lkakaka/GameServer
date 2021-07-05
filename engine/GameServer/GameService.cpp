@@ -19,3 +19,29 @@ PyObject* GameService::callPyFunc(const char* funcName, PyObject* args) {
 	}
 	return obj;
 }
+
+void GameService::dispatchClientMsgToScript(int connId, int msgId, const char* data, int len) {
+	auto py_state = PyGILState_Ensure();
+	PyObject* arg = PyTuple_New(3);
+	PyTuple_SetItem(arg, 0, PyLong_FromLong(connId));
+	PyTuple_SetItem(arg, 1, PyLong_FromLong(msgId));
+	PyTuple_SetItem(arg, 2, Py_BuildValue("y#", data, len));
+	callPyFunc("on_recv_client_msg", arg);
+	Py_INCREF(arg);
+	PyGILState_Release(py_state);
+}
+
+void GameService::dispatchServiceMsgToScript(ServiceAddr* srcAddr, int msgId, const char* data, int len) {
+	auto py_state = PyGILState_Ensure();
+	PyObject* arg = PyTuple_New(3);
+	PyObject* pArgs = Py_BuildValue("iii", srcAddr->getServiceGroup(), srcAddr->getServiceType(), srcAddr->getServiceId());
+	PyObject* pyObj = callPyFunc("create_service_addr", pArgs);
+	PyTuple_SetItem(arg, 0, pyObj);
+	PyTuple_SetItem(arg, 1, PyLong_FromLong(msgId));
+	PyTuple_SetItem(arg, 2, Py_BuildValue("y#", data, len));
+	callPyFunc("on_recv_service_msg", arg);
+	Py_INCREF(arg);
+	Py_INCREF(pArgs);
+	Py_INCREF(pyObj);
+	PyGILState_Release(py_state);
+}

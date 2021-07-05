@@ -5,7 +5,7 @@
 //#include "GameUtil.h"
 #include "../../Common/ServerExports.h"
 #include "../Singleton.h"
-#include "CommEntity.h"
+#include "ServiceCommEntity.h"
 
 #include <thread>
 #include <functional>

@@ -3,7 +3,7 @@
 #include <map>
 
 static std::map<std::string, ServiceType> serviceName2Type = {
-	{"router", ServiceType::SERVICE_TYPE_ROUTER},
+	{"center", ServiceType::SERVICE_TYPE_CENTER},
 	{"gateway", ServiceType::SERVICE_TYPE_GATEWAY},
 	{"login", ServiceType::SERVICE_TYPE_LOGIN},
 	{"db", ServiceType::SERVICE_TYPE_DB},

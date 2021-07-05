@@ -3,10 +3,10 @@
 #include "Network/ServiceCommEntityMgr.h"
 #include "ServiceType.h"
 #include "ServiceInfo.h"
+#include "Network/Network.h"
 
-#define MAX_PACKET_LEN (64 * 1024)		// 数据包最大长度
-
-GatewayConnection::GatewayConnection(int connID, std::shared_ptr<tcp::socket> socket, ConnCloseCallback closeCallback) : ServerConnection(connID, socket, closeCallback)
+GatewayConnection::GatewayConnection(int connID, std::shared_ptr<tcp::socket> socket, ConnCloseCallback closeCallback) : 
+	ServerConnection(connID, socket, closeCallback)
 {
 
 }
@@ -28,7 +28,7 @@ void GatewayConnection::parsePacket()
 		if (dataLen < 4) return;
 		
 		int packetLen = m_recvBuffer.getInt();
-		if (packetLen < 8 || packetLen > MAX_PACKET_LEN) {
+		if (packetLen < 8 || packetLen > MAX_CLIENT_PACKET_LEN) {
 			Logger::logInfo("$packet len(%d) error", packetLen);
 			close("packet format error");
 			return;
@@ -66,15 +66,15 @@ void GatewayConnection::dispatchClientMsg(int msgId, int msgLen, const char* msg
 	}
 }
 
-void GatewayConnection::sendMsgToService(int msgId, int msgLen, const char* msgData, ServiceAddr* addr) {
-	MyBuffer buffer;
-	buffer.writeByte(1);
-	buffer.writeInt(getConnID()); // 统一格式
-	buffer.writeInt(msgId);
-	buffer.writeString(msgData, msgLen);
-	
-	CommEntityMgr::getSingleton()->getCommEntity()->sendToService(addr, (char*)buffer.data(), buffer.size());
-}
+//void GatewayConnection::sendMsgToService(int msgId, int msgLen, const char* msgData, ServiceAddr* addr) {
+//	MyBuffer buffer;
+//	buffer.writeByte(1);
+//	buffer.writeInt(getConnID()); // 统一格式
+//	buffer.writeInt(msgId);
+//	buffer.writeString(msgData, msgLen);
+//	
+//	CommEntityMgr::getSingleton()->getCommEntity()->sendToService(addr, (char*)buffer.data(), buffer.size());
+//}
 
 void GatewayConnection::sendMsgToClient(int msgId, char* data, int dataLen) {
 	int packetLen = dataLen + 8;

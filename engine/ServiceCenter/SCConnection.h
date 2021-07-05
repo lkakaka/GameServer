@@ -2,7 +2,7 @@
 
 #include "Network/ServerConnection.h"
 #include "MyBuffer.h"
-#include "Network/CommEntity.h"
+#include "Network/ServiceCommEntity.h"
 
 USE_NS_GAME_NET
 

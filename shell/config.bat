@@ -13,7 +13,7 @@ set GameServerExe=GameServer.exe
 
 set ServerCmd=%ExePath%%GameServerExe%
 
-set RouterConfig="./conf/router.cfg"
+set CenterConfig="./conf/center.cfg"
 set SceneCtrlConfig="./conf/scene_ctrl.cfg"
 set SceneConfig="./conf/scene.cfg"
 set Scene1Config="./conf/scene1.cfg"

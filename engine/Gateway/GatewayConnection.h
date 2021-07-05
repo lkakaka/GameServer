@@ -4,7 +4,7 @@
 #include "MyBuffer.h"
 #include "../Common/ServerExports.h"
 #include <mutex>
-#include "Network/CommEntity.h"
+#include "Network/ServiceCommEntity.h"
 #include "Network/ServerConnection.h"
 
 USE_NS_GAME_NET
@@ -23,7 +23,7 @@ public:
 
 	void parsePacket();
 	void dispatchClientMsg(int msgId, int msgLen, const char* msgData);
-	void sendMsgToService(int msgId, int msgLen, const char* msgData, ServiceAddr* addr);
+	//void sendMsgToService(int msgId, int msgLen, const char* msgData, ServiceAddr* addr);
 	void sendMsgToClient(int msgId, char* data, int dataLen);
 
 	void setSceneServiceId(int sceneServiceId);

@@ -15,5 +15,6 @@ public:
 	static bool checkFileExist(const char* fileName);
 	std::string getConfigStr(const char* key);
 	int getConfigInt(const char* key);
+	inline const char* getConfigFileName() { return cfgFile.c_str(); }
 };
 

@@ -3,7 +3,7 @@
 #include "Network/Network.h"
 #include "SCNet.h"
 
-extern const char* CONN_KEY;
+extern const char* SERVICE_CONN_KEY;
 
 INIT_SINGLETON_CLASS(SCMessageHandler)
 
@@ -13,13 +13,13 @@ void SCMessageHandler::onRecvMessage(ServiceAddr* sender, char* data, int dataLe
 }
 
 void handleVerifyMsg(SCConnection* conn, ServiceAddr* sender, char* data, int len) {
-	int keyLen = strlen(CONN_KEY);
+	int keyLen = strlen(SERVICE_CONN_KEY);
 	if (keyLen != len) {
 		Logger::logError("$verify msg len mismatch! len:%d,%d", len, keyLen);
 		SCNet::getSingleton()->closeConnection(conn, "verify failed");
 		return;
 	}
-	if (std::strncmp(CONN_KEY, (char*)data, len) != 0) {
+	if (std::strncmp(SERVICE_CONN_KEY, (char*)data, len) != 0) {
 		Logger::logError("$verify msg content mismatch!");
 		SCNet::getSingleton()->closeConnection(conn, "verify failed");
 		return;

@@ -99,8 +99,8 @@ void ZmqCommEntity::run()
 			int iMsgBodyLen = len - iMsgBodyIdx;
 			ServiceAddr srcServiceAddr;
 			srcServiceAddr.parseAddr(srcAddr);
-			if (m_recvCallback != NULL) {
-				m_recvCallback(&srcServiceAddr, &msg[iMsgBodyIdx], iMsgBodyLen);
+			if (messageHandler != NULL) {
+				messageHandler->onRecvMessage(&srcServiceAddr, &msg[iMsgBodyIdx], iMsgBodyLen);
 			}
 		}
 
