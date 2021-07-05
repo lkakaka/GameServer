@@ -20,9 +20,9 @@ USE_NS_GAME_NET
 
 class GatewayNet : public ServerNetwork, public Singleton<GatewayNet> {
 protected:
-	ServerConnection* onAccept(tcp::socket& socket);
+	ServerConnection* onAccept(std::shared_ptr<tcp::socket> socket);
 public:
-	GatewayNet();
+	GatewayNet(boost::asio::io_service* io);
 
 	void onCloseConnection(ServerConnection* conn, const char* reason);
 };

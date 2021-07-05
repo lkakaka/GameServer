@@ -3,12 +3,12 @@
 
 INIT_SINGLETON_CLASS(SCNet)
 
-SCNet::SCNet()
+SCNet::SCNet(boost::asio::io_service* io) : ServerNetwork(io)
 {
 
 }
 
-ServerConnection* SCNet::onAccept(tcp::socket& socket) {
+ServerConnection* SCNet::onAccept(std::shared_ptr<tcp::socket> socket) {
 	int connId = allocConnID();
 	SCConnection* conn = new SCConnection(connId, socket, std::bind(&ServerNetwork::closeConnection, this, std::placeholders::_1, std::placeholders::_2));
 	return conn;

@@ -15,7 +15,7 @@ NS_GAME_NET_BEGIN
 class ServerConnection : public std::enable_shared_from_this<ServerConnection> {
 private:
 	int m_connID;
-	tcp::socket m_socket;
+	std::shared_ptr<tcp::socket> m_socket;
 	std::vector<char> m_readBuf;
 	std::vector<char> m_sendBuf;
 	bool m_isClosed;
@@ -35,10 +35,10 @@ protected:
 	void close(const char* reason);
 
 public:
-	ServerConnection(int connID, tcp::socket& socket, ConnCloseCallback closeCallback);
+	ServerConnection(int connID, std::shared_ptr<tcp::socket> socket, ConnCloseCallback closeCallback);
 	virtual ~ServerConnection();
 
-	tcp::socket& getSocket();
+	std::shared_ptr<tcp::socket> getSocket();
 	int getConnID() const;
 
 	inline void startRead() { _read(); }

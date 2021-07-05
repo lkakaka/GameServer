@@ -4,14 +4,14 @@
 
 USE_NS_GAME_NET
 
-ServerNetwork::ServerNetwork() : m_acceptor(NULL)
+ServerNetwork::ServerNetwork(boost::asio::io_service* io) : m_acceptor(NULL), m_ioService(io)
 {
 
 }
 
-void ServerNetwork::start(boost::asio::io_service& io, int port) {
+void ServerNetwork::start(int port) {
 	try {
-		m_acceptor.reset(new tcp::acceptor(io, tcp::endpoint(tcp::v4(), port)));
+		m_acceptor.reset(new tcp::acceptor(*m_ioService, tcp::endpoint(tcp::v4(), port)));
 		doAccept();
 	}
 	catch (std::exception& e) {
@@ -23,14 +23,14 @@ void ServerNetwork::start(boost::asio::io_service& io, int port) {
 
 void ServerNetwork::doAccept()
 {
-	//boost::shared_ptr<tcp::socket> psocket(new tcp::socket(*m_io));
+	std::shared_ptr<tcp::socket> psocket(new tcp::socket(*m_ioService));
 
 	/*std::shared_ptr<TcpConnection> conn(new TcpConnection(*m_io, allocConnID(), std::bind(&Network::closeConnection, this, std::placeholders::_1, std::placeholders::_2)));
 	std::shared_ptr<TcpConnection> conn;*/
-	m_acceptor->async_accept(std::bind(&ServerNetwork::acceptHandler, this, std::placeholders::_1, std::placeholders::_2));
+	m_acceptor->async_accept(*psocket, std::bind(&ServerNetwork::acceptHandler, this, psocket, std::placeholders::_1));
 }
 
-static void closeInvalidSocket(tcp::socket* sock) {
+static void closeInvalidSocket(std::shared_ptr<tcp::socket> sock) {
 	try {
 		sock->shutdown(sock->shutdown_both);
 	}
@@ -40,7 +40,7 @@ static void closeInvalidSocket(tcp::socket* sock) {
 	Logger::logInfo("$close invalid socket!!!");
 }
 
-void ServerNetwork::acceptHandler(boost::system::error_code ec, tcp::socket sock) {
+void ServerNetwork::acceptHandler(std::shared_ptr<tcp::socket> sock, boost::system::error_code ec) {
 	if (!ec) {
 		//TcpConnection* conn = new TcpConnection(std::move(psocket.get()));
 		ServerConnection* conn = onAccept(sock);
@@ -52,13 +52,15 @@ void ServerNetwork::acceptHandler(boost::system::error_code ec, tcp::socket sock
 			m_conns.emplace(std::make_pair(conn->getConnID(), conn));
 			conn->startRead();
 			try {
-				Logger::logInfo("$client connected, %s", sock.remote_endpoint().address().to_string().c_str());
+				std::string clientIp = sock->remote_endpoint().address().to_string();
+				unsigned short clientPort = sock->remote_endpoint().port();
+				Logger::logInfo("$client connected, ip:%s, port:%d", clientIp.c_str(), clientPort);
 			}
 			catch (std::exception e) {
 				Logger::logInfo("$client connected, cannot get remote addr , e:%s", e.what());
 			}
 		} else { 
-			closeInvalidSocket(&sock);
+			closeInvalidSocket(sock);
 		}
 	}
 	doAccept();

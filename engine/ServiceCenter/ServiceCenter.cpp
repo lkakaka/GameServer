@@ -8,6 +8,6 @@ using boost::asio::ip::tcp;
 
 void initServiceCenter(boost::asio::io_service* io, int port) {
 	new SCMessageHandler();
-	SCNet* scNet = new SCNet();
-	scNet->start(*io, port);
+	SCNet* scNet = new SCNet(io);
+	scNet->start(port);
 }

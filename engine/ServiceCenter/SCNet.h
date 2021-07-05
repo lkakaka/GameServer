@@ -11,9 +11,9 @@ private:
 	std::unordered_map<std::string, std::shared_ptr<ServerConnection>> m_serviceConns;
 
 protected:
-	ServerConnection* onAccept(tcp::socket& socket);
+	ServerConnection* onAccept(std::shared_ptr<tcp::socket> socket);
 public:
-	SCNet();
+	SCNet(boost::asio::io_service* io);
 
 	void onCloseConnection(ServerConnection* conn, const char* reason);
 	void addServiceConnection(const char* serviceAddr, SCConnection* conn);

@@ -6,7 +6,7 @@
 
 #define MAX_PACKET_LEN (64 * 1024)		// 数据包最大长度
 
-GatewayConnection::GatewayConnection(int connID, tcp::socket& socket, ConnCloseCallback closeCallback) : ServerConnection(connID, socket, closeCallback)
+GatewayConnection::GatewayConnection(int connID, std::shared_ptr<tcp::socket> socket, ConnCloseCallback closeCallback) : ServerConnection(connID, socket, closeCallback)
 {
 
 }

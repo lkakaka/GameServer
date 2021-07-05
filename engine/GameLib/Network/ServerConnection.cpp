@@ -6,10 +6,10 @@ USE_NS_GAME_NET
 
 #define READ_BUFF_SIZE 1024
 
-ServerConnection::ServerConnection(int connID, tcp::socket& socket, ConnCloseCallback closeCallback) :
+ServerConnection::ServerConnection(int connID, std::shared_ptr<tcp::socket> socket, ConnCloseCallback closeCallback) :
 	m_isClosed(false), m_isSending(false),
 	m_connID(connID),
-	m_socket(std::move(socket)),
+	m_socket(socket),
 	m_closeCallback(closeCallback)
 {
 	m_readBuf.resize(READ_BUFF_SIZE);
@@ -18,14 +18,14 @@ ServerConnection::ServerConnection(int connID, tcp::socket& socket, ConnCloseCal
 ServerConnection::~ServerConnection()
 {
 	try {
-		this->m_socket.close();
+		this->m_socket->close();
 	}catch (boost::system::system_error e) {
 		Logger::logError("socket close error, %s", e.what());
 	}
 	Logger::logDebug("$delete ServerConnection: connId:%d", m_connID);
 }
 
-tcp::socket& ServerConnection::getSocket()
+std::shared_ptr<tcp::socket> ServerConnection::getSocket()
 {
 	return m_socket;
 }
@@ -39,7 +39,7 @@ void ServerConnection::_read()
 {
 	m_readBuf.assign(READ_BUFF_SIZE, 0);
 	auto buf = boost::asio::buffer(m_readBuf, READ_BUFF_SIZE);
-	m_socket.async_receive(buf, [buf, this](const boost::system::error_code& error, size_t bytes_transferred) {
+	m_socket->async_receive(buf, [buf, this](const boost::system::error_code& error, size_t bytes_transferred) {
 		if (error)
 		{
 			const std::string err_str = error.message();
@@ -86,7 +86,7 @@ void ServerConnection::send(const char* data, int len) {
 void ServerConnection::_send() {
 	if (m_sendBuf.size() == 0) return;
 	boost::asio::const_buffer buf(&m_sendBuf.front(), m_sendBuf.size());
-	size_t len = m_socket.write_some(buf);
+	size_t len = m_socket->write_some(buf);
 	if (len > 0) {
 		m_sendBuf.erase(m_sendBuf.begin(), m_sendBuf.begin() + len);
 		_send();

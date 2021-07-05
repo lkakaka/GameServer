@@ -3,13 +3,13 @@
 
 INIT_SINGLETON_CLASS(GatewayNet)
 
-GatewayNet::GatewayNet()
+GatewayNet::GatewayNet(boost::asio::io_service* io) : ServerNetwork(io)
 {
 }
 
-ServerConnection* GatewayNet::onAccept(tcp::socket& socket) {
+ServerConnection* GatewayNet::onAccept(std::shared_ptr<tcp::socket> sock) {
 	int connId = allocConnID();
-	GatewayConnection* conn = new GatewayConnection(connId, socket, std::bind(&ServerNetwork::closeConnection, this, std::placeholders::_1, std::placeholders::_2));
+	GatewayConnection* conn = new GatewayConnection(connId, sock, std::bind(&ServerNetwork::closeConnection, this, std::placeholders::_1, std::placeholders::_2));
 	return conn;
 }
 

@@ -4,7 +4,7 @@
 
 #define MAX_MSG_LEN 64 * 1024
 
-SCConnection::SCConnection(int connID, tcp::socket& socket, ConnCloseCallback closeCallback) :
+SCConnection::SCConnection(int connID, std::shared_ptr<tcp::socket> socket, ConnCloseCallback closeCallback) :
 	ServerConnection(connID, socket, closeCallback),
 	m_isVerify(false)
 {

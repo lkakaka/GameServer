@@ -13,7 +13,7 @@ private:
 private:
 	void parse();
 public:
-	SCConnection(int connID, tcp::socket& socket, ConnCloseCallback closeCallback);
+	SCConnection(int connID, std::shared_ptr<tcp::socket> socket, ConnCloseCallback closeCallback);
 
 	inline bool isVerify() { return m_isVerify; }
 	inline void setVerify(bool isVerify) { m_isVerify = isVerify; }

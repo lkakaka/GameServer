@@ -18,7 +18,7 @@ protected:
 	void parseMessage();
 
 public:
-	GatewayConnection(int connID, tcp::socket& socket, ConnCloseCallback closeCallback);
+	GatewayConnection(int connID, std::shared_ptr<tcp::socket> sock, ConnCloseCallback closeCallback);
 	~GatewayConnection();
 
 	void parsePacket();
