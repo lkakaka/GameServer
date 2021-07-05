@@ -75,8 +75,14 @@ void SCMessageHandler::dispatchServiceMsg(SCConnection* conn, ServiceAddr* dst, 
 
 void SCMessageHandler::addMsgCache(ServiceAddr* dst, MyBuffer* buffer) {
 	std::string* dstAddr = dst->getName();
-	auto pair = msgCaches.try_emplace(*dstAddr, std::vector<MyBuffer>());
-	pair.first->second.push_back(*buffer);
+	auto iter = msgCaches.find(*dstAddr);
+	if (iter == msgCaches.end()) {
+		msgCaches.emplace(*dstAddr, std::vector<MyBuffer>());
+		iter = msgCaches.find(*dstAddr);
+	}
+	iter->second.push_back(*buffer);
+	//auto pair = msgCaches.try_emplace(*dstAddr, std::vector<MyBuffer>());
+	//pair.first->second.push_back(*buffer);
 }
 
 void SCMessageHandler::dispatchCacheMsg(SCConnection* conn) {
