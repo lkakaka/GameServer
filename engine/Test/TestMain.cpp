@@ -74,9 +74,9 @@ std::vector<std::string> split(char* str, const char* delimiters) {
 
 int main() {
 
-	std::map<std::string, std::vector<std::string>> m;
+	/*std::map<std::string, std::vector<std::string>> m;
 	auto pair = m.try_emplace("a", std::vector<std::string>());
-	pair.first->second.push_back("aa");
+	pair.first->second.push_back("aa");*/
 
 	/*std::shared_ptr<Base> p(new Base());
 	A* a = new A(1);
