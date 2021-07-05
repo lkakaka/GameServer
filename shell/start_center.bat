@@ -1,9 +1,9 @@
 @echo off
 
 call config.bat
-::set ConfigFile="../../conf/router.cfg"
+::set ConfigFile="../../conf/center.cfg"
 
 ::cd ../bin/Debug
 
-%ServerCmd% %RouterConfig%
+%ServerCmd% %CenterConfig%
 ::pause
