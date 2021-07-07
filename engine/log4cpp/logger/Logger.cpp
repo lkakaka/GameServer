@@ -127,7 +127,7 @@ void Logger::logWarning(const char* fmt, ...)
 	va_end(args);
 }
 
-void Logger::logInfo(char* fmt, ...)
+void Logger::logInfo(const char* fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);

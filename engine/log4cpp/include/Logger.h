@@ -23,7 +23,7 @@ public:
 	static void formatLog(char* buff, const char* fmt, va_list va);
 	static void logDebug(const char* fmt, ...);
 	static void logWarning(const char* fmt, ...);
-	static void logInfo(char* fmt, ...);
+	static void logInfo(const char* fmt, ...);
 	static void logError(const char* fmt, ...);
 };
 

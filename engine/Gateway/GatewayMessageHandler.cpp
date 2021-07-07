@@ -52,13 +52,13 @@ void GatewayMessageHandler::onRecvMessage(ServiceAddr* sender, char* data, int d
 	if (dataLen < 8) {
 		/*int connId = -1;
 		if (dataLen >= 4) connId = buffer.readInt();*/
-		Logger::logError("$recv %s msg format error, data len(%d) < 8", sender->getName()->c_str(), dataLen);
+		Logger::logError("$recv %s msg format error, data len(%d) < 8", sender->getName(), dataLen);
 		return;
 	}
 	int msgId = buffer.readInt();
 	int connId = buffer.readInt();
 	
-	Logger::logInfo("$recv msg, sender:%s, msgId:%d, connId:%d", sender->getName()->c_str(), msgId, connId);
+	Logger::logInfo("$recv msg, sender:%s, msgId:%d, connId:%d", sender->getName(), msgId, connId);
 	// 网关处理的消息
 	handMsg(msgId, connId, &data[8], dataLen - 8);
 }

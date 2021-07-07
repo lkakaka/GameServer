@@ -49,8 +49,8 @@ ZmqCommEntity::~ZmqCommEntity()
 void ZmqCommEntity::sendToService(ServiceAddr* dstAddr, char* msg, int msgLen) {
 	MyBuffer buffer;
 	//dstAddr->serialize(&buffer);
-	std::string* addrName = dstAddr->getName();
-	buffer.writeString(addrName->c_str(), addrName->size());
+	const char* addrName = dstAddr->getName();
+	buffer.writeString(addrName, strlen(addrName));
 	buffer.writeByte('\0');
 	buffer.writeString(msg, msgLen);
 	zmq_send(conn_socket, buffer.data(), buffer.size(), 0);

@@ -80,7 +80,7 @@ static PyObject* sendMsgToService(PyObject* self, PyObject* args)
 	buffer.writeString(msg, msgLen);
 	CommEntityMgr::getSingleton()->getCommEntity()->sendToService(&addr, (char*)buffer.data(), buffer.size());
 
-	Logger::logInfo("$send msg to service %s, msgId:%d", addr.getName()->c_str(), msgId);
+	Logger::logInfo("$send msg to service %s, msgId:%d", addr.getName(), msgId);
 	Py_RETURN_TRUE;
 }
 

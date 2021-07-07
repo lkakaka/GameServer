@@ -57,7 +57,7 @@ bool ServiceMessageHandler::handleEngineGatewayMsg(int connId, int msgId, char* 
 
 int ServiceMessageHandler::handleGatewayMessage(ServiceAddr* srcAddr, char* data, int dataLen) {
 	if (dataLen < 9) {
-		Logger::logError("$recv %s msg format error, data len < 9", srcAddr->getName()->c_str());
+		Logger::logError("$recv %s msg format error, data len < 9", srcAddr->getName());
 		return 0;
 	}
 	MyBuffer buffer(data, dataLen);
@@ -84,7 +84,7 @@ bool ServiceMessageHandler::handleEngineServiceMsg(int msgId, char* data, int da
 
 int ServiceMessageHandler::handleServiceMessage(ServiceAddr* srcAddr, char* data, int dataLen) {
 	if (dataLen <= 4) {
-		Logger::logError("$recv %s msg format error, data len <= 4", srcAddr->getName()->c_str());
+		Logger::logError("$recv %s msg format error, data len <= 4", srcAddr->getName());
 		return 0;
 	}
 	MyBuffer buffer(data, dataLen);
@@ -107,5 +107,5 @@ void ServiceMessageHandler::onRecvMessage(ServiceAddr* srcAddr, char* data, int 
 		handleServiceMessage(srcAddr, data, dataLen);
 	}
 
-	Logger::logDebug("$recv msg, sender:%s,  msgId:%d", srcAddr->getName()->c_str(), msgId);
+	Logger::logDebug("$recv msg, sender:%s,  msgId:%d", srcAddr->getName(), msgId);
 }

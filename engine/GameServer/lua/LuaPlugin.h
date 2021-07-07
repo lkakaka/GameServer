@@ -1,4 +1,7 @@
 #pragma once
+
+#define SOL_ALL_SAFETIES_ON 1
+
 extern "C" {
 #include "lua.h"
 #include "lauxlib.h"
@@ -8,16 +11,21 @@ extern "C" {
 #include "Singleton.h"
 #include "../Common/ServerExports.h"
 
+#include "sol/sol.hpp"
+
 class LuaPlugin : public Singleton<LuaPlugin> {
 private:
-	lua_State* m_lua;
+	//lua_State* m_lua;
 
+	std::shared_ptr<sol::state> m_lua;
 
 public:
 	LuaPlugin();
 	~LuaPlugin();
 	void initLua();
 	static LuaPlugin* getLuaPlugin();
+
+	bool callLuaFunc(const char* modName, const char* funcName);
 };
 
 //

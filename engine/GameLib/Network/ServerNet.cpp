@@ -16,7 +16,7 @@ void ServerNetwork::start(int port) {
 	}
 	catch (std::exception& e) {
 		Logger::logError("$%s, port:%d", e.what(), port);
-		return;
+		throw(e);
 	}
 	Logger::logInfo("$start listen, port:%d", port);
 }

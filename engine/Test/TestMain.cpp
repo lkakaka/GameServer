@@ -4,6 +4,8 @@
 #include <string.h>
 #include <map>
 
+//#define _TEST_MAIN
+
 
 class Base {
 public:
@@ -71,6 +73,7 @@ std::vector<std::string> split(char* str, const char* delimiters) {
 	return vec;
 }
 
+#ifdef _TEST_MAIN
 
 int main() {
 
@@ -124,3 +127,5 @@ int main() {
 
 	return 1;
 }
+
+#endif // _TEST_MAIN

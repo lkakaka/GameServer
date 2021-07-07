@@ -18,7 +18,7 @@ public:
 	ServiceAddr(int serviceGroup, int serviceType, int serviceId);
 	void serialize(MyBuffer* buffer); 
 	
-	inline std::string* getName() { return &addrName; }
+	inline const char* getName() { return addrName.c_str(); }
 	inline int getServiceGroup() { return serviceGroup; }
 	inline int getServiceType() { return serviceType; }
 	inline int getServiceId() { return serviceId; }

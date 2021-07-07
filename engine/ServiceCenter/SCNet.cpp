@@ -17,7 +17,7 @@ ServerConnection* SCNet::onAccept(std::shared_ptr<tcp::socket> socket) {
 void SCNet::onCloseConnection(ServerConnection* conn, const char* reason)
 {
 	SCConnection* scConn = (SCConnection*)conn;
-	auto iter = m_serviceConns.find(scConn->getServiceAddr()->getName()->c_str());
+	auto iter = m_serviceConns.find(scConn->getServiceAddr()->getName());
 	if (iter != m_serviceConns.end())
 	{
 		m_serviceConns.erase(iter);

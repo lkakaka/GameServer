@@ -12,13 +12,14 @@ if (WIN32)
 endif (WIN32)
 
 gnu_setting(false)
+open_vs_cplus17()
 
 link_directories(${Boost_LIBRARY_DIRS} ${PYTHON_ROOT}/libs ${LOG4CPP_ROOT} ${PROTOBUFF_ROOT}/libs 
 ${DEPENDS_ROOT}/mysql/lib64 ${DBPLUGIN_ROOT} ${ZMQ_ROOT}/libs ${GAMELIB_ROOT} ${SCENE_ROOT} ${HTTP_SERVER_ROOT} ${GATEWAY_ROOT} ${REDIS_ROOT}/libs ${MONGO_ROOT}/libs 
 ${LUA_ROOT}/libs ${SERVICE_CENTER_ROOT})
 include_directories(${Boost_INCLUDE_DIRS} ${PYTHON_ROOT}/include ${LOG4CPP_ROOT}/include ${PROTOBUFF_ROOT}/include 
 ${DBPLUGIN_ROOT} ${DBPLUGIN_ROOT}/include ${ZMQ_ROOT}/include ${GAMELIB_ROOT} ${PROTO_ROOT} ${SCENE_ROOT} ${HTTP_SERVER_ROOT} ${DEPENDS_ROOT}/mysql/include
-${GATEWAY_ROOT} ${REDIS_ROOT}/include ${MONGO_ROOT}/include ${LUA_ROOT}/include ${SERVICE_CENTER_ROOT})
+${GATEWAY_ROOT} ${REDIS_ROOT}/include ${MONGO_ROOT}/include ${LUA_ROOT}/include ${SERVICE_CENTER_ROOT} ${SOL_ROOT})
 
 if (NOT WIN32)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}-pthread")
