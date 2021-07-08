@@ -1,7 +1,18 @@
+#define TEST_SOL
+
+#ifdef TEST_SOL
 #define SOL_ALL_SAFETIES_ON 1
+
+extern "C" {
+#include "lua.h"
+#include "lauxlib.h"
+#include "lualib.h"
+}
+
 #include <sol/sol.hpp>
 
 #include <iostream>
+
 
 int main() {
 	std::cout << "=== self_call ===" << std::endl;
@@ -34,3 +45,5 @@ int main() {
 
 	return 0;
 }
+
+#endif

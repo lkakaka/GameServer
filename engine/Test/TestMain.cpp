@@ -3,6 +3,7 @@
 #include <vector>
 #include <string.h>
 #include <map>
+#include <memory>
 
 //#define _TEST_MAIN
 
