@@ -8,6 +8,7 @@ OUTPUT_PATH = "../../engine/ProtoBuffer"
 JAVA_OUTPUT_PATH = "../robot/JavaRobot/src/main/java"
 PY_OUTPUT_PATH = "../../script/python"
 COCOS_PATH = "../../../CocosGameDemo/Classes/proto"
+LUA_OUTPUT_PATH = "../../script/lua"
 
 
 class Proto(object):
@@ -78,28 +79,30 @@ class ProtoBuilder(object):
         for path, dir_names, file_list in os.walk(PROTO_PATH):
             print(path, dir_names, file_list)
             for file_name in file_list:
-                ProtoBuilder.make_proto_file("{}/{}".format(path, file_name))
+                ProtoBuilder.make_proto_file(path, file_name)
                 # ProtoBuilder.make_proto_file("{}/{}".format(path, file_name))
                 # ProtoBuilder.make_proto_file(path, file_name)
 
         ProtoBuilder.gen_proto_file()
 
     @staticmethod    
-    def make_proto_file(file_name):
+    def make_proto_file(path, file_name):
+        print(path, file_name)
         if not file_name.endswith(".proto"):
             return
 
+        file_full_name = "{}/{}".format(path, file_name)
         # file_name = PROTO_PATH + "/" + file_name
-        print("make proto file: " + file_name)
-        os.system("protoc --cpp_out={} --proto_path=./ --proto_path={} {}".format(OUTPUT_PATH, PROTO_PATH, file_name))
-        os.system("protoc --python_out={} --proto_path=./ --proto_path={} {}".format(PY_OUTPUT_PATH, PROTO_PATH, file_name))
-        if file_name.find("server_only") < 0:
-            os.system("protoc --java_out={} --proto_path=./ --proto_path={} {}".format(JAVA_OUTPUT_PATH, PROTO_PATH, file_name))
+        print("make proto file: " + file_full_name)
+        os.system("protoc --cpp_out={} --proto_path=./ --proto_path={} {}".format(OUTPUT_PATH, PROTO_PATH, file_full_name))
+        os.system("protoc --python_out={} --proto_path=./ --proto_path={} {}".format(PY_OUTPUT_PATH, PROTO_PATH, file_full_name))
+        os.system("protoc -o {}/{}.pb {}".format(LUA_OUTPUT_PATH, file_full_name[0:-6], file_full_name))
+        if file_full_name.find("server_only") < 0:
+            os.system("protoc --java_out={} --proto_path=./ --proto_path={} {}".format(JAVA_OUTPUT_PATH, PROTO_PATH, file_full_name))
             if os.path.exists(COCOS_PATH):
-                os.system("protoc --cpp_out={} --proto_path=./ --proto_path={} {}".format(COCOS_PATH, PROTO_PATH, file_name))
+                os.system("protoc --cpp_out={} --proto_path=./ --proto_path={} {}".format(COCOS_PATH, PROTO_PATH, file_full_name))
 
-        # full_file_name = "{}/{}".format(path, file_name)
-        with open(file_name) as f:
+        with open(file_full_name) as f:
             for line in f.readlines():
                 match_obj = re.search(".*message\s+([\w\d]+).*", line)
                 if match_obj:
@@ -108,7 +111,7 @@ class ProtoBuilder(object):
                         continue
                     # if proto_name in ProtoBuilder.proto_list:
                     #     raise Exception("proto {} duplicate define!!!!!".format(proto_name))
-                    ProtoBuilder.proto_list.append(Proto(proto_name, file_name))
+                    ProtoBuilder.proto_list.append(Proto(proto_name, file_full_name))
 
     @staticmethod
     def gen_proto_file():
@@ -138,6 +141,7 @@ class ProtoBuilder(object):
         ProtoBuilder.render_file("proto_template.cpp", OUTPUT_PATH + "/proto.cpp", template_render_obj)
         ProtoBuilder.render_file("proto_template.java", JAVA_OUTPUT_PATH + "/com/proto/ProtoBufferMsg.java", c_template_render_obj)
         ProtoBuilder.render_file("proto_template.py", PY_OUTPUT_PATH + "/proto/pb_message.py", template_render_obj)
+        ProtoBuilder.render_file("proto_template.lua", LUA_OUTPUT_PATH + "/proto/pb_message.lua", template_render_obj)
         if os.path.exists(COCOS_PATH):
             ProtoBuilder.render_file("proto_template.h", COCOS_PATH + "/proto.h", c_template_render_obj)
             ProtoBuilder.render_file("proto_template.cpp", COCOS_PATH + "/proto.cpp", c_template_render_obj)
@@ -148,6 +152,7 @@ class ProtoBuilder(object):
         result = template.render(render_obj=render_obj)
         with open(save_file, "w", encoding="utf-8") as f:
             f.write(result)
+
 
 if __name__ == "__main__":
     ProtoBuilder.make_proto()

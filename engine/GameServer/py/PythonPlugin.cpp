@@ -1,9 +1,8 @@
 
 #include "PythonPlugin.h"
 #include "PyDb.h"
-//#include "py_module/PyModule.h"
 #include "Logger.h"
-#include "py_module/PyModule.h"
+#include "PyModule.h"
 #include "PyTimer.h"
 #include "PyScene.h"
 #include "PyHttp.h"

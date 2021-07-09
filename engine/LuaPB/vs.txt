@@ -1,0 +1,1 @@
+cl /O2 /LD /Fepb.dll /I ../Depends/lua53\include /DLUA_BUILD_AS_DLL pb.c ../Depends/lua53\libs\Release\lua.lib

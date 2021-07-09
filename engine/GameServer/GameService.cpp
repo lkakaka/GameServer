@@ -1,17 +1,33 @@
 #include "GameService.h"
 #include "../Common/PyCommon.h"
+#include "py/PythonPlugin.h"
 
 
 GameService* GameService::g_gameService = NULL;
 
-GameService::GameService(std::string service_name, ServiceType serviceType, PyObject* scriptObj) :
-	service_name(service_name), m_serviceType(serviceType), m_scriptObj(scriptObj)
+GameService::GameService(std::string service_name, ServiceType serviceType) :
+	service_name(service_name), m_serviceType(serviceType), m_PyObj(NULL), m_luaObj(sol::table())
 {
+	
+}
 
+GameService::~GameService() {
+	finalizePython();
+}
+
+void GameService::initScript(const char* funcName) {
+	if (funcName == NULL || strlen(funcName) == 0) return;
+	initPython();
+	auto py_state = PyGILState_Ensure();
+	m_PyObj = callPyFunction("main", funcName, NULL);
+	PyGILState_Release(py_state);
+
+	new LuaPlugin();
+	m_luaObj = LuaPlugin::getLuaPlugin()->initLua(funcName);
 }
 
 PyObject* GameService::callPyFunc(const char* funcName, PyObject* args) {
-	auto func = PyObject_GetAttrString(m_scriptObj, funcName);
+	auto func = PyObject_GetAttrString(m_PyObj, funcName);
 	PyObject* obj = PyObject_Call(func, args, NULL);
 	if (obj == NULL) {
 		//PyErr_Print();
@@ -19,6 +35,11 @@ PyObject* GameService::callPyFunc(const char* funcName, PyObject* args) {
 	}
 	return obj;
 }
+
+//sol::protected_function_result GameService::callLuaFunc(const char* funcName, ...) {
+//	sol::function func = m_luaObj.get<sol::function>(funcName);
+//	func(std::move();
+//}
 
 void GameService::dispatchClientMsgToScript(int connId, int msgId, const char* data, int len) {
 	auto py_state = PyGILState_Ensure();
@@ -44,4 +65,11 @@ void GameService::dispatchServiceMsgToScript(ServiceAddr* srcAddr, int msgId, co
 	Py_INCREF(pArgs);
 	Py_INCREF(pyObj);
 	PyGILState_Release(py_state);
+
+	/*sol::table tbl;
+	tbl.set("service_addr", srcAddr->getName());*/
+	//tbl.set("");
+
+	sol::function func = m_luaObj.get<sol::function>("on_recv_service_msg");
+	func(m_luaObj, srcAddr->getName(), msgId, data);
 }

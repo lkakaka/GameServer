@@ -5,8 +5,8 @@
 #include "boost/asio.hpp"
 #include "Logger.h"
 #include "DBMgr.h"
-#include "PythonPlugin.h"
-#include "../Common/PyCommon.h"
+//#include "py/PythonPlugin.h"
+//#include "../Common/PyCommon.h"
 #include "../Common/ServerMacros.h"
 #include "Timer.h"
 #include "UnitTest.h"
@@ -17,7 +17,7 @@
 #include "CmdLine.h"
 #include "ServiceInfo.h"
 
-#include "lua/LuaPlugin.h"
+//#include "lua/LuaPlugin.h"
 #include "GatewayEntry.h"
 #include "ServiceCenter.h"
 #include "Network/ServiceCommEntityMgr.h"
@@ -83,19 +83,20 @@ int main(int argc, char** argv)
 	boost::asio::io_service io;
 	TimerMgr::initTimerMgr(&io);
 	
-	PyObject* scriptObj = NULL;
+	//PyObject* scriptObj = NULL;
 	std::string funcName = getServerConfigStr("script_init_func");
-	if (funcName.length() > 0) {
-		initPython();
-		auto py_state = PyGILState_Ensure();
-		scriptObj = callPyFunction("main", funcName.c_str(), NULL);
-		PyGILState_Release(py_state);
-	}
+	//if (funcName.length() > 0) {
+	//	/*initPython();
+	//	auto py_state = PyGILState_Ensure();
+	//	scriptObj = callPyFunction("main", funcName.c_str(), NULL);
+	//	PyGILState_Release(py_state);
 
-	new LuaPlugin();
-	LuaPlugin::getLuaPlugin()->initLua();
+	//	new LuaPlugin();
+	//	LuaPlugin::getLuaPlugin()->initLua(funcName.c_str());*/
+	//}
 
-	GameService::g_gameService = new GameService(serviceName, serviceType, scriptObj);
+	GameService::g_gameService = new GameService(serviceName, serviceType);
+	GameService::g_gameService->initScript(funcName.c_str());
 
 	// Initialise the http server.
 	//std::string httpServerIp = Config::getConfigStr(cfgName, "http_server_ip");
@@ -143,7 +144,6 @@ int main(int argc, char** argv)
 	boost::asio::io_service::work work(io);
 	io.run();
 
-	finalizePython();
 	Logger::logInfo("$MyServer exit!!!");
 
 	return 0;

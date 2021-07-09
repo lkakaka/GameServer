@@ -6,10 +6,10 @@
 
 //#include "GameUtil.h"
 #include "../Common/ServerExports.h"
-
+#include "Singleton.h"
 
 //typedef void (*TimerCallback)();
-#define TimerCallback std::function<void(int)>
+typedef std::function<void(int)> TimerCallback;
 
 typedef struct
 {
@@ -20,7 +20,7 @@ typedef struct
 	int triggerCnt;
 }Timer;
 
-class TimerMgr
+class TimerMgr : public Singleton<TimerMgr>
 {
 private:
 	boost::asio::io_service* m_io;
@@ -37,6 +37,6 @@ public:
 	void onTimer(const boost::system::error_code& e, long timerId);
 
 	static void initTimerMgr(boost::asio::io_service* io);
-	static TimerMgr* getTimerInstance();
+	//static TimerMgr* getTimerInstance();
 };
 

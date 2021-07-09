@@ -22,10 +22,10 @@ private:
 public:
 	LuaPlugin();
 	~LuaPlugin();
-	void initLua();
+	sol::table initLua(const char* funcName);
 	static LuaPlugin* getLuaPlugin();
 
-	bool callLuaFunc(const char* modName, const char* funcName);
+	sol::protected_function_result callLuaFunc(const char* modName, const char* funcName);
 };
 
 //

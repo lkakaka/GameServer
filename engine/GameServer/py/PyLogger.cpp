@@ -1,7 +1,7 @@
 
 #include "PyModule.h"
 #include "Logger.h"
-#include "../PythonPlugin.h"
+#include "PythonPlugin.h"
 
 static PyObject* ModuleError;
 static const char* ModuleName = "Logger";

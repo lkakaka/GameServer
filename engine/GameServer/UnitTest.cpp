@@ -1,6 +1,6 @@
 #include "UnitTest.h"
 #include "Timer.h"
-#include "PythonPlugin.h"
+#include "py/PythonPlugin.h"
 #include "../Math/MathFunction.h"
 #include "../Common/PyCommon.h"
 
@@ -42,7 +42,7 @@ void print(int timerId)
 void threadTimer()
 {
 	for (int i = 0; i < 1000; i++) {
-		TimerMgr::getTimerInstance()->addTimer(5000, 5000, 1, std::bind(print, std::placeholders::_1));
+		TimerMgr::getSingleton()->addTimer(5000, 5000, 1, std::bind(print, std::placeholders::_1));
 	}
 }
 

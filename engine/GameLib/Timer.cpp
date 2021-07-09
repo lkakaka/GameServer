@@ -4,7 +4,9 @@
 //#include "boost/asio/error.hpp"
 #include "Profile/ProfileTrack.h"
 
-static TimerMgr* g_timerMgr = NULL;
+//static TimerMgr* g_timerMgr = NULL;
+
+INIT_SINGLETON_CLASS(TimerMgr)
 
 TimerMgr::TimerMgr(boost::asio::io_service* io): m_curTimerId(1), m_io(io)
 {
@@ -98,12 +100,12 @@ void TimerMgr::removeTimer(long timerId, bool needCancel)
 	delete timer.timer;
 }
 
-TimerMgr* TimerMgr::getTimerInstance()
-{
-	return g_timerMgr;
-}
+//TimerMgr* TimerMgr::getTimerInstance()
+//{
+//	return g_timerMgr;
+//}
 
 void TimerMgr::initTimerMgr(boost::asio::io_service* io) 
 {
-	g_timerMgr = new TimerMgr(io);
+	new TimerMgr(io);
 }

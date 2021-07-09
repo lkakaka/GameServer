@@ -46,7 +46,7 @@ static PyObject* pyAddTimer(PyObject* self, PyObject* args)
 
 	std::shared_ptr<_CallbackHander> callbackHander(new _CallbackHander(callback));
 
-	long timerId = TimerMgr::getTimerInstance()->addTimer(firstInterval, interval, loopCnt, [callbackHander](int timerId){
+	long timerId = TimerMgr::getSingleton()->addTimer(firstInterval, interval, loopCnt, [callbackHander](int timerId){
 		auto py_state = PyGILState_Ensure();
 		{
 			Logger::logInfo("$execute py timer:%d", timerId);
@@ -71,7 +71,7 @@ static PyObject* pyRemoveTimer(PyObject* self, PyObject* args)
 		Py_RETURN_FALSE;
 	}
 	Logger::logInfo("$remove py timer:%d", timerId);
-	TimerMgr::getTimerInstance()->removeTimer(timerId, true);
+	TimerMgr::getSingleton()->removeTimer(timerId, true);
 	Py_RETURN_TRUE;
 }
 
