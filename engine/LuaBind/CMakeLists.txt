@@ -7,8 +7,9 @@ gnu_setting(false)
 gnu_cxx_flag("-fPIC")
 open_vs_cplus17() # sol¿âÐèÒªc++17
 
-include_directories(${SOL_ROOT} ${LOG4CPP_ROOT}/include ${LUA_ROOT}/include ${GAMELIB_ROOT} ${Boost_INCLUDE_DIRS})
-link_directories(${LOG4CPP_ROOT} ${LUA_ROOT}/libs ${GAMELIB_ROOT} ${Boost_LIBRARY_DIRS})
+include_directories(${SOL_ROOT} ${LOG4CPP_ROOT}/include ${LUA_ROOT}/include ${GAMELIB_ROOT} ${Boost_INCLUDE_DIRS} ${SCENE_ROOT} ${PROTO_ROOT} ${PROTOBUFF_ROOT}/include
+${DBPLUGIN_ROOT} ${DBPLUGIN_ROOT}/include ${REDIS_ROOT}/include ${MYSQL_ROOT}/include)
+link_directories(${LOG4CPP_ROOT} ${LUA_ROOT}/libs ${GAMELIB_ROOT} ${Boost_LIBRARY_DIRS} ${SCENE_ROOT} ${DBPLUGIN_ROOT})
 
 file(GLOB_RECURSE CURRENT_HEADERS *.h *.hpp)
 file(GLOB_RECURSE CURRENT_SRC *.cpp *.cc *.c)
@@ -17,7 +18,7 @@ set(all_files ${CURRENT_HEADERS} ${CURRENT_SRC})
 source_group_by_dir(all_files)
 
 add_library(LuaBind ${CURRENT_HEADERS} ${CURRENT_SRC})
-target_link_libraries(LuaBind log4cpp GameLib)
+target_link_libraries(LuaBind log4cpp GameLib SceneServer DBPlugin)
 if(WIN32)
 	target_link_libraries(LuaBind lua)
 else()

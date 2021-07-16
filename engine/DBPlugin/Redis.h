@@ -32,7 +32,7 @@ private:
 	redisContext* m_redisContext;
 public:
 
-	Redis(std::string ip, int port);
+	Redis(const char* ip, int port);
 	void parseReply(redisReply* reply);
 	std::shared_ptr<RedisReply> execRedisCmd(const char* format, ...);
 };

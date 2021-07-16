@@ -1,57 +1,82 @@
 require("base.object")
 require("util.logger")
-
--- local pb = require("pb") -- 载入 pb.dll
-
--- -- assert(pb.loadfile "E:\\project\\MyServer\\script\\lua\\pb\\common.pb") -- 载入刚才编译的pb文件
--- assert(pb.loadfile("..\\script\\lua\\pb\\common.pb")) -- 载入刚才编译的pb文件
--- assert(pb.loadfile("..\\script\\lua\\pb\\login.pb")) -- 载入刚才编译的pb文件
+require("util.rpc")
+require("base.service_type")
 
 clsServiceBase = clsObject:Inherit("clsServiceBase")
 
 function clsServiceBase:__init__()
-    self._msg_handler = {}
+    self._serviceMsgHandler = {}
+    self._clientMsgHandler = {}
+    self._rpc_mgr = clsRpc:New(self)
+    self:regServiceMsgHandler(MSG_ID_RPC_MSG, self.onRecvRpcMsg)
+    self:regServiceMsgHandler(MSG_ID_RPC_MSG_RSP, self.onRecvRpcResp)
+    logger.logDebug("clsServiceBase:__init_")
 end
 
-function clsServiceBase:regMsgHandler(msgId, handler)
-    self._msg_hander[msgId] = handler
+function clsServiceBase:regServiceMsgHandler(msgId, handler)
+    self._serviceMsgHandler[msgId] = handler
+end
+
+function clsServiceBase:regClientMsgHandler(msgId, handler)
+    self._clientMsgHandler[msgId] = handler
+end
+
+function clsServiceBase:regRpcHandler(funcName, func)
+    self._rpc_mgr:regRpcHandler(funcName, func)
 end
 
 function clsServiceBase:on_recv_service_msg(sender, msgId, msg)
-    print(sender, msgId, msg)
-    logger.log_info("on_recv_service_msg")
+    -- print(self:GetType(), sender, msgId, msg)
+    logger.logInfo("on_recv_service_msg, sender:%s, msgId:%d", sender, msgId)
 
-    local person = { -- 我们定义一个addressbook里的 Person 消息
-        name = "Alice",
-        id = 12345,
-        phone = {
-            { number = "1301234567" },
-            { number = "87654321", type = "WORK" },
-        }
-    }
-
-    -- -- 序列化成二进制数据
-    -- local data = assert(pb.encode("tutorial.Person", person))
-
-    -- 从二进制数据解析出实际消息
-    if msgId == 18 then
-        print("decode msg")
-        local msg = assert(pb.decode("RpcMsg", msg))
-        for k, v in pairs(msg) do
-            print(k, v)
-        end
-    end
-
-    local handler = self._msg_hander[msgId]
+    local handler = self._serviceMsgHandler[msgId]
     if handler == nil then
-        logger.log_error("not found msg handler, msgId:" .. msgId)
+        logger.logError("not found service msg handler, msgId:%d", msgId)
         return
     end
 
+    local sender = parseToServiceAddr(sender)
+
     local pbMsg = decodeMsg(msgId, msg)
-    handler(sender, msgId, pbMsg)
+    handler(self, sender, msgId, pbMsg)
 end
 
-function clsServiceBase:on_recv_client_msg(sender, msgId, msg)
-    logger.log_info("on_recv_client_msg")
+function clsServiceBase:on_recv_client_msg(connId, msgId, msg)
+    logger.logInfo("on_recv_client_msg, connId:%d, msgId:%d", connId, msgId)
+    local handler = self._clientMsgHandler[msgId]
+    if handler == nil then
+        logger.logError("not found client msg handler, msgId:%d", msgId)
+        return
+    end
+    local pbMsg = decodeMsg(msgId, msg)
+    handler(self, connId, msgId, pbMsg)
+end
+
+function clsServiceBase:sendMsgToService(dstAddr, msgId, msg)
+    logger.logInfo("sendMsgToService to %s, msgId:%d", StrUtil.tableToStr(dstAddr), msgId)
+    local msgName = MSG_ID_TO_NAME[msgId]
+    local data = encodeMsg(msgId, msg)
+    -- print(dstAddr, msgId, data, string.len(data))
+    Service.sendMsgToService(dstAddr, msgId, data, string.len(data))
+end
+
+function clsServiceBase:sendMsgToClient(connId, msgId, msg)
+    logger.logInfo("sendMsgToClient to %d, msgId:%d", connId, msgId)
+    local msgName = MSG_ID_TO_NAME[msgId]
+    local data = encodeMsg(msgId, msg)
+    -- print(dstAddr, msgId, data, string.len(data))
+    Service.sendMsgToClient(connId, msgId, data, string.len(data))
+end
+
+function clsServiceBase:onRecvRpcMsg(sender, msgId, msg)
+    self._rpc_mgr:onRecvRpcMsg(sender, msg)
+end
+
+function clsServiceBase:onRecvRpcResp(sender, msgId, msg)
+    self._rpc_mgr:onRecvRpcResp(sender, msg)
+end
+
+function clsServiceBase:callRpc(dstAddr, funcName, timeout, args)
+    return self._rpc_mgr:callRpc(dstAddr, funcName, timeout, args)
 end

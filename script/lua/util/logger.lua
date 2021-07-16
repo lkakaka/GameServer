@@ -1,17 +1,22 @@
 
 logger = {}
 
-function logger.log_info(fmt, ...)
+function logger.logInfo(fmt, ...)
     local msg = string.format(fmt, ...)
     Logger.log_info("$[Lua] " .. msg)
 end
 
-function logger.log_error(fmt, ...)
+function logger.logError(fmt, ...)
     local msg = string.format(fmt, ...)
     Logger.log_error("$[Lua] " .. msg)
 end
 
-function logger.log_debug(fmt, ...)
+function logger.logDebug(fmt, ...)
     local msg = string.format(fmt, ...)
     Logger.log_debug("$[Lua] " .. msg)
+end
+
+function logger.logWarn(fmt, ...)
+    local msg = string.format(fmt, ...)
+    Logger.log_warn("$[Lua] " .. msg)
 end

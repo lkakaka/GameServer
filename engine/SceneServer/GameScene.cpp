@@ -236,7 +236,7 @@ bool GameScene::onRecvClientMsg(int connId, int msgId, char* data, int dataLen) 
 	return player->onRecvClientMsg(msgId, data, dataLen);
 }
 
-bool GameScene::loadNavMesh(char* meshFileName) {
+bool GameScene::loadNavMesh(const char* meshFileName) {
 	return m_detour->initNavMesh(meshFileName);
 }
 

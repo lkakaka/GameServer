@@ -8,16 +8,20 @@ require("util.timer")
 
 service_factory = {}
 
-str = "Hello, Lua !"
+local str = "Hello, Lua !"
 print(str)
-table = {name = "hans", id = 123456}
+local tab = {name = "hans", id = 123456}
 
-logger.log_info("$aaaa")
+logger.logInfo("$aaaa")
 
 -- timer.test()
 
 function add(x, y)
 	return x + y
+end
+
+function got_problems( error_msg )
+	return "got_problems handler: " .. error_msg
 end
 
 function service_factory.create_login_service()

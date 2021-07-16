@@ -10,54 +10,52 @@ assert(pb.loadfile("..\\script\\lua\\proto\\role.pb")) -- 载入pb文件
 assert(pb.loadfile("..\\script\\lua\\proto\\server_only/common.pb")) -- 载入pb文件
 assert(pb.loadfile("..\\script\\lua\\proto\\test.pb")) -- 载入pb文件
 
-MSG_ID = {
-	MSG_ID_ACTOR_BORN = 1,
-	MSG_ID_ACTOR_DISSOLVE = 2,
-	MSG_ID_CLIENT_DISCONNECT = 3,
-	MSG_ID_CREATE_ROLE_REQ = 4,
-	MSG_ID_CREATE_ROLE_RSP = 5,
-	MSG_ID_DISCONNECT_REQ = 6,
-	MSG_ID_DISCONNECT_RSP = 7,
-	MSG_ID_ENTER_GAME = 8,
-	MSG_ID_ENTER_GAME_RSP = 9,
-	MSG_ID_ENTER_SCENE_REQ = 10,
-	MSG_ID_ENTER_SCENE_RSP = 11,
-	MSG_ID_GM_CMD = 12,
-	MSG_ID_GM_CMD_RSP = 13,
-	MSG_ID_LOAD_ROLE_LIST_RSP = 14,
-	MSG_ID_LOGIN_REQ = 15,
-	MSG_ID_LOGIN_RSP = 16,
-	MSG_ID_MOVE_TO = 17,
-	MSG_ID_RPC_MSG = 18,
-	MSG_ID_RPC_MSG_RSP = 19,
-	MSG_ID_SWITCH_SCENE_SERVICE = 20,
-	MSG_ID_SYNC_POS = 21,
-	MSG_ID_TEST_REQ = 22,
-}
+MSG_ID_ACTOR_BORN = 1
+MSG_ID_ACTOR_DISSOLVE = 2
+MSG_ID_CLIENT_DISCONNECT = 3
+MSG_ID_CREATE_ROLE_REQ = 4
+MSG_ID_CREATE_ROLE_RSP = 5
+MSG_ID_DISCONNECT_REQ = 6
+MSG_ID_DISCONNECT_RSP = 7
+MSG_ID_ENTER_GAME = 8
+MSG_ID_ENTER_GAME_RSP = 9
+MSG_ID_ENTER_SCENE_REQ = 10
+MSG_ID_ENTER_SCENE_RSP = 11
+MSG_ID_GM_CMD = 12
+MSG_ID_GM_CMD_RSP = 13
+MSG_ID_LOAD_ROLE_LIST_RSP = 14
+MSG_ID_LOGIN_REQ = 15
+MSG_ID_LOGIN_RSP = 16
+MSG_ID_MOVE_TO = 17
+MSG_ID_RPC_MSG = 18
+MSG_ID_RPC_MSG_RSP = 19
+MSG_ID_SWITCH_SCENE_SERVICE = 20
+MSG_ID_SYNC_POS = 21
+MSG_ID_TEST_REQ = 22
 
 MSG_ID_TO_NAME = {
-	[1] = ActorBorn,
-	[2] = ActorDissolve,
-	[3] = ClientDisconnect,
-	[4] = CreateRoleReq,
-	[5] = CreateRoleRsp,
-	[6] = DisconnectReq,
-	[7] = DisconnectRsp,
-	[8] = EnterGame,
-	[9] = EnterGameRsp,
-	[10] = EnterSceneReq,
-	[11] = EnterSceneRsp,
-	[12] = GmCmd,
-	[13] = GmCmdRsp,
-	[14] = LoadRoleListRsp,
-	[15] = LoginReq,
-	[16] = LoginRsp,
-	[17] = MoveTo,
-	[18] = RpcMsg,
-	[19] = RpcMsgRsp,
-	[20] = SwitchSceneService,
-	[21] = SyncPos,
-	[22] = TestReq,
+	[1] = "ActorBorn",
+	[2] = "ActorDissolve",
+	[3] = "ClientDisconnect",
+	[4] = "CreateRoleReq",
+	[5] = "CreateRoleRsp",
+	[6] = "DisconnectReq",
+	[7] = "DisconnectRsp",
+	[8] = "EnterGame",
+	[9] = "EnterGameRsp",
+	[10] = "EnterSceneReq",
+	[11] = "EnterSceneRsp",
+	[12] = "GmCmd",
+	[13] = "GmCmdRsp",
+	[14] = "LoadRoleListRsp",
+	[15] = "LoginReq",
+	[16] = "LoginRsp",
+	[17] = "MoveTo",
+	[18] = "RpcMsg",
+	[19] = "RpcMsgRsp",
+	[20] = "SwitchSceneService",
+	[21] = "SyncPos",
+	[22] = "TestReq",
 }
 
 MSG_NAME_TO_ID = {
@@ -318,7 +316,7 @@ local encodeFunc = {
 function decodeMsg(msgId, msg)
 	local func = decodeFunc[msgId]
 	if func == nil then
-		logger.log_error("decode unkown msgId:" .. msgId)
+		logger.logError("decode unkown msgId:" .. msgId)
 		return
 	end
 	return func(msg);
@@ -327,7 +325,7 @@ end
 function encodeMsg(msgId, msg)
 	local func = encodeFunc[msgId]
 	if func == nil then
-		logger.log_error("encode unkown msgId:" .. msgId)
+		logger.logError("encode unkown msgId:" .. msgId)
 		return
 	end
 	return func(msg);

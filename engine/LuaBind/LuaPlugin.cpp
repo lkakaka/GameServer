@@ -3,6 +3,10 @@
 #include "Logger.h"
 #include "../Common/ServerMacros.h"
 #include "LuaTimer.h"
+#include "LuaService.h"
+#include "LuaSceneObj.h"
+#include "LuaRedis.h"
+#include "LuaDB.h"
 
 //#ifndef WIN32
 INIT_SINGLETON_CLASS(LuaPlugin)
@@ -64,9 +68,13 @@ sol::table LuaPlugin::initLua(const char* funcName) {
 	////lua_register(L, "foo", foo); //注册c函数到lua环境
 	//luaL_dofile(m_lua, "../script/lua/main.lua");     //执行lua脚本
 
-	m_lua->open_libraries(sol::lib::base, sol::lib::package, sol::lib::debug, sol::lib::string);
+	m_lua->open_libraries(sol::lib::base, sol::lib::package, sol::lib::debug, sol::lib::string, sol::lib::table, sol::lib::os);
 	initLoggerModule(m_lua);
 	LuaTimer::bindLuaTimer(m_lua);
+	LuaService::bindLuaService(m_lua);
+	LuaSceneObj::bindLuaSceneObj(m_lua);
+	LuaRedis::bindLuaRedis(m_lua);
+	LuaDB::bindLuaDB(m_lua);
 
 	m_lua->script("package.path = '../script/lua/?.lua;'..package.path");
 	m_lua->script("print(package.path)");
@@ -94,21 +102,22 @@ sol::table LuaPlugin::initLua(const char* funcName) {
 }
 
 sol::protected_function_result LuaPlugin::callLuaFunc(const char* modName, const char* funcName) {
-	sol::function func;
+	sol::protected_function func;
 	if (modName == NULL) {
-		func = m_lua->get<sol::function>(funcName);
+		func = m_lua->get<sol::protected_function>(funcName);
 	} else {
 		sol::table mod = m_lua->get<sol::table>(modName);
 		if (!mod.valid()) {
 			Logger::logError("$lua module not exist: %s", modName);
 			return sol::protected_function_result(NULL, -1, 0, 0, sol::call_status::runtime);
 		}
-		func = mod.get<sol::function>(funcName);
+		func = mod.get<sol::protected_function>(funcName);
 	}
 	if (!func.valid()) {
 		Logger::logError("$call lua func %s.%s invalid", modName == NULL ? "" : modName, funcName);
 		return sol::protected_function_result(NULL, -1, 0, 0, sol::call_status::runtime);
 	}
+	func.set_default_handler((*m_lua)["got_problems"]);
 	sol::protected_function_result result = func();
 	if (!result.valid()) {
 		Logger::logError("$lua result = %d", result.status());
@@ -116,6 +125,11 @@ sol::protected_function_result LuaPlugin::callLuaFunc(const char* modName, const
 			std::string s = iter->operator std::string();
 			Logger::logError("$%s", s.c_str());
 		}
+
+		sol::error err = result;
+		std::string what = err.what();
+		std::cout << what << std::endl;
+		Logger::logError("$%s", err.what());
 	}
 	return result;
 }

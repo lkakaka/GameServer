@@ -50,7 +50,7 @@ public:
 
 	bool onRecvClientMsg(int connId, int msgId, char* data, int dataLen);
 
-	bool loadNavMesh(char* meshFileName);
+	bool loadNavMesh(const char* meshFileName);
 	void findPath(float *sPos, float* ePos, std::vector<float>* path);
 };
 

@@ -14,17 +14,17 @@ struct timeval {
 
 USING_DATA_BASE;
 
-Redis::Redis(std::string ip, int port) : ip(ip), port(port)
+Redis::Redis(const char* ip, int port) : ip(ip), port(port)
 {
 	struct timeval tv = { 10, 0 };
-	m_redisContext = redisConnectWithTimeout(ip.c_str(), port, tv);
+	m_redisContext = redisConnectWithTimeout(ip, port, tv);
 	if (m_redisContext->err != 0) {
-		Logger::logError("$cannot connect redis server, ip:%s, port:%d", ip.c_str(), port);
+		Logger::logError("$cannot connect redis server, ip:%s, port:%d", ip, port);
 		THROW_EXCEPTION("connect redis failed")
 		//throw new std::exception("connect redis failed");
 		//exit(1);
 	}
-	Logger::logInfo("$connected redis server, ip:%s, port:%d", ip.c_str(), port);
+	Logger::logInfo("$connected redis server, ip:%s, port:%d", ip, port);
 	redisEnableKeepAlive(m_redisContext);
 	redisReply* reply = (redisReply*)redisCommand(m_redisContext, "hgetall test");
 	parseReply(reply);

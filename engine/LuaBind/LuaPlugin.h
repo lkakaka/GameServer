@@ -24,6 +24,7 @@ public:
 	~LuaPlugin();
 	sol::table initLua(const char* funcName);
 	static LuaPlugin* getLuaPlugin();
+	inline std::shared_ptr<sol::state> getLua() { return m_lua; }
 
 	sol::protected_function_result callLuaFunc(const char* modName, const char* funcName);
 };

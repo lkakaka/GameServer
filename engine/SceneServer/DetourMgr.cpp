@@ -15,7 +15,7 @@ SceneDetourMgr::~SceneDetourMgr()
 	dtFreeNavMeshQuery(m_query);
 }
 
-bool SceneDetourMgr::initNavMesh(char* meshFileName) 
+bool SceneDetourMgr::initNavMesh(const char* meshFileName) 
 {
 	FILE* fp = fopen(meshFileName, "rb");
 	if (!fp) {

@@ -18,8 +18,8 @@ public:
 
 	DBMgr(std::string& dbUserName, std::string& dbPassword, std::string dbUrl, int dbPort);
 
-	DBHandler* createDBHander(char* dbName);
-	DBHandler* getDBHander(char* dbName);
+	DBHandler* createDBHander(const char* dbName);
+	DBHandler* getDBHander(const char* dbName);
 };
 
 

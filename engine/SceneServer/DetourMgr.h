@@ -29,7 +29,7 @@ private:
 public:
 	SceneDetourMgr();
 	~SceneDetourMgr();
-	bool initNavMesh(char* meshFileName);
+	bool initNavMesh(const char* meshFileName);
 	void freeNaveMesh();
 
 	void findPath(float* sPos, float* ePos, std::vector<float>* path);

@@ -7,15 +7,13 @@ pb = require("pb") -- 载入 pb.dll
 assert(pb.loadfile("..\\script\\lua\\proto\\{{ file_name }}.pb")) -- 载入pb文件
 {% endfor %}
 
-MSG_ID = {
 {% for proto_obj in render_obj.proto_list %}
-	{{ proto_obj.msg_id_var }} = {{ proto_obj.msg_id }},
+{{ proto_obj.msg_id_var }} = {{ proto_obj.msg_id }}
 {% endfor %}
-}
 
 MSG_ID_TO_NAME = {
 {% for proto_obj in render_obj.proto_list %}
-	[{{ proto_obj.msg_id }}] = {{ proto_obj.proto_name }},
+	[{{ proto_obj.msg_id }}] = "{{ proto_obj.proto_name }}",
 {% endfor %}
 }
 

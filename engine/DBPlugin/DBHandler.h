@@ -59,14 +59,14 @@ private:
 	//void createTable(ReflectObject* tbl);
 	sql::Connection* getDBConnection();
 
-	void loadFromDB(Table* tbl, std::vector<Table>& result);
+	bool loadFromDB(Table* tbl, std::vector<Table>& result);
 
 	void getTableCols(const char* tableName, std::vector<TableField>& fields);
 	bool _createNewTable(Table* tbl);
 	bool _changeTable(Table* tbl, std::map<std::string, TableField>& orgFields);
 
 public:
-	DBHandler(std::string& dbUrl, int dbPort, std::string& dbUserName, std::string& dbPassword, std::string dbName);
+	DBHandler(const char* dbUrl, int dbPort, const char* dbUserName, const char* dbPassword, const char* dbName);
 	~DBHandler();
 	inline std::string getDbName();
 	void initDbTable(std::vector<ReflectObject*> tblDefs);

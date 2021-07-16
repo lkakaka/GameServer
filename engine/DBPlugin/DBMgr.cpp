@@ -21,7 +21,7 @@ DBMgr::DBMgr(std::string& dbUserName, std::string& dbPassword, std::string dbUrl
 	
 }
 
-DBHandler* DBMgr::createDBHander(char* dbName) {
+DBHandler* DBMgr::createDBHander(const char* dbName) {
 	DBMgr* dbMgr = DBMgr::getSingleton();
 	if (dbMgr == NULL) {
 		return NULL;
@@ -30,7 +30,7 @@ DBHandler* DBMgr::createDBHander(char* dbName) {
 	if (iter != dbMgr->m_dbHanders.end()) {
 		return iter->second;
 	}
-	DBHandler* dbHanler = new DBHandler(m_dbUrl, m_dbPort, m_dbUserName, m_dbPassword, dbName);
+	DBHandler* dbHanler = new DBHandler(m_dbUrl.c_str(), m_dbPort, m_dbUserName.c_str(), m_dbPassword.c_str(), dbName);
 	dbMgr->m_dbHanders.emplace(std::make_pair(dbName, dbHanler));
 	
 #ifdef WIN32
@@ -42,7 +42,7 @@ DBHandler* DBMgr::createDBHander(char* dbName) {
 	return dbHanler;
 }
 
-DBHandler* DBMgr::getDBHander(char* dbName) 
+DBHandler* DBMgr::getDBHander(const char* dbName) 
 {
 	DBMgr* dbMgr = DBMgr::getSingleton();
 	if (dbMgr == NULL) {

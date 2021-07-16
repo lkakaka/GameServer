@@ -25,7 +25,7 @@ DBHandler::~DBHandler()
 	Logger::logInfo("$db hander destory!!!");
 }
 
-DBHandler::DBHandler(std::string& dbUrl, int dbPort, std::string& dbUserName, std::string& dbPassword, std::string dbName) :
+DBHandler::DBHandler(const char* dbUrl, int dbPort, const char* dbUserName, const char* dbPassword, const char* dbName) :
 	m_dbUrl(dbUrl), m_dbPort(dbPort), m_dbUserName(dbUserName), m_dbPassword(dbPassword), m_dbName(dbName), m_dbConn(NULL)
 {
 	Connection* conn = getDBConnection();
@@ -758,7 +758,7 @@ StatementPtr DBHandler::executeSql(const char* sqlFormat, ...)
 	return NULL;
 }
 
-void DBHandler::loadFromDB(Table* tbl, std::vector<Table>& result) {
+bool DBHandler::loadFromDB(Table* tbl, std::vector<Table>& result) {
 	std::string tbName = tbl->tableName;
 	std::string colStr;
 	TableSchema* tblSchema = getTableSchema(tbl->tableName.c_str());
@@ -804,7 +804,7 @@ void DBHandler::loadFromDB(Table* tbl, std::vector<Table>& result) {
 	std::string formatSql = "SELECT * FROM %s WHERE %s";
 	StatementPtr ptr = executeSql(formatSql.c_str(), tbl->tableName.c_str(), colStr.c_str());
 	if (ptr == NULL) {
-		return;
+		return false;
 	}
 	Statement* st = ptr->getStatement();
 	sql::ResultSet* rs = st->getResultSet();
@@ -846,6 +846,7 @@ void DBHandler::loadFromDB(Table* tbl, std::vector<Table>& result) {
 		}
 		result.push_back(tblData);
 	}
+	return true;
 }
 
 bool DBHandler::insertRow(Table* tbl)
@@ -935,8 +936,7 @@ bool DBHandler::getRow(Table* tbl, std::vector<Table>& result)
 		Logger::logError("get row not found table schema, table:%s", tbl->tableName.c_str());
 		return false;
 	}
-	loadFromDB(tbl, result);
-	return true;
+	return loadFromDB(tbl, result);
 }
 
 bool DBHandler::updateRow(Table* tbl)
@@ -991,7 +991,9 @@ bool DBHandler::updateRow(Table* tbl)
 				Logger::logError("$not support field type, table:%s, field:%s, type:%d", tbl->tableName.c_str(), fieldName.c_str(), field->type);
 				return false;
 		}
-		chg_fields += ",";
+		if (!isPriKey) {
+			chg_fields += ",";
+		}
 	}
 
 	// É¾³ý×îºóµÄ¶ººÅ

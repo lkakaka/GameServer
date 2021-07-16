@@ -1,6 +1,7 @@
 #include "GameService.h"
 #include "../Common/PyCommon.h"
 #include "py/PythonPlugin.h"
+#include "Logger.h"
 
 
 GameService* GameService::g_gameService = NULL;
@@ -17,10 +18,10 @@ GameService::~GameService() {
 
 void GameService::initScript(const char* funcName) {
 	if (funcName == NULL || strlen(funcName) == 0) return;
-	initPython();
+	/*initPython();
 	auto py_state = PyGILState_Ensure();
 	m_PyObj = callPyFunction("main", funcName, NULL);
-	PyGILState_Release(py_state);
+	PyGILState_Release(py_state);*/
 
 	new LuaPlugin();
 	m_luaObj = LuaPlugin::getLuaPlugin()->initLua(funcName);
@@ -42,18 +43,28 @@ PyObject* GameService::callPyFunc(const char* funcName, PyObject* args) {
 //}
 
 void GameService::dispatchClientMsgToScript(int connId, int msgId, const char* data, int len) {
-	auto py_state = PyGILState_Ensure();
+	/*auto py_state = PyGILState_Ensure();
 	PyObject* arg = PyTuple_New(3);
 	PyTuple_SetItem(arg, 0, PyLong_FromLong(connId));
 	PyTuple_SetItem(arg, 1, PyLong_FromLong(msgId));
 	PyTuple_SetItem(arg, 2, Py_BuildValue("y#", data, len));
 	callPyFunc("on_recv_client_msg", arg);
 	Py_INCREF(arg);
-	PyGILState_Release(py_state);
+	PyGILState_Release(py_state);*/
+
+	sol::function func = m_luaObj.get<sol::function>("on_recv_client_msg");
+	sol::protected_function_result result = func(m_luaObj, connId, msgId, data);
+	if (!result.valid()) {
+		Logger::logError("$lua result = %d", result.status());
+		sol::error err = result;
+		std::string what = err.what();
+		std::cout << what << std::endl;
+		Logger::logError("$%s", err.what());
+	}
 }
 
 void GameService::dispatchServiceMsgToScript(ServiceAddr* srcAddr, int msgId, const char* data, int len) {
-	auto py_state = PyGILState_Ensure();
+	/*auto py_state = PyGILState_Ensure();
 	PyObject* arg = PyTuple_New(3);
 	PyObject* pArgs = Py_BuildValue("iii", srcAddr->getServiceGroup(), srcAddr->getServiceType(), srcAddr->getServiceId());
 	PyObject* pyObj = callPyFunc("create_service_addr", pArgs);
@@ -64,12 +75,15 @@ void GameService::dispatchServiceMsgToScript(ServiceAddr* srcAddr, int msgId, co
 	Py_INCREF(arg);
 	Py_INCREF(pArgs);
 	Py_INCREF(pyObj);
-	PyGILState_Release(py_state);
-
-	/*sol::table tbl;
-	tbl.set("service_addr", srcAddr->getName());*/
-	//tbl.set("");
+	PyGILState_Release(py_state);*/
 
 	sol::function func = m_luaObj.get<sol::function>("on_recv_service_msg");
-	func(m_luaObj, srcAddr->getName(), msgId, data);
+	sol::protected_function_result result = func(m_luaObj, srcAddr->getName(), msgId, data);
+	if (!result.valid()) {
+		Logger::logError("$lua result = %d", result.status());
+		sol::error err = result;
+		std::string what = err.what();
+		std::cout << what << std::endl;
+		Logger::logError("$%s", err.what());
+	}
 }

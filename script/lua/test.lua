@@ -1,4 +1,4 @@
-require("service.login_service")
+-- require("service.login_service")
 
 -- obj = clsLoginService:New()
 
@@ -6,14 +6,14 @@ function test(a, b)
     print(a, b)
 end
 
-a = {
+local a = {
     ["test"] = test,
 }
 
 a.test(100, 100)
 
 
-arr = {}
+local arr = {}
 arr[#arr+1] = 3
 for k,v in ipairs(arr) do
     print(k, v)
@@ -30,6 +30,11 @@ function log(fmt, ...)
 end
 
 log("hello,%d,%s", 1, "test")
+
+
+local t = {1, 2}
+local t1 = t
+print(t[0])
 
 -- a = {
 --     b = 1,
