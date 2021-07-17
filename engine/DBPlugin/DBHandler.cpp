@@ -26,7 +26,8 @@ DBHandler::~DBHandler()
 }
 
 DBHandler::DBHandler(const char* dbUrl, int dbPort, const char* dbUserName, const char* dbPassword, const char* dbName) :
-	m_dbUrl(dbUrl), m_dbPort(dbPort), m_dbUserName(dbUserName), m_dbPassword(dbPassword), m_dbName(dbName), m_dbConn(NULL)
+	m_dbUrl(dbUrl), m_dbPort(dbPort), m_dbUserName(dbUserName), m_dbPassword(dbPassword), m_dbName(dbName), m_dbConn(NULL),
+	m_isCreateDB(false)
 {
 	Connection* conn = getDBConnection();
 	Statement* st = conn->createStatement();
@@ -34,6 +35,8 @@ DBHandler::DBHandler(const char* dbUrl, int dbPort, const char* dbUserName, cons
 	sql += dbName;
 	sql::SQLString sqlStr = sql::SQLString(sql.c_str());
 	st->execute(sqlStr);
+	conn->close();
+	m_isCreateDB = true;
 	initTableSchema();
 
 	//Table tbl;
@@ -221,15 +224,16 @@ Connection* DBHandler::getDBConnection()
 	char urlBuf[32]{ 0 };
 	sprintf(urlBuf, "tcp://%s:%d", m_dbUrl.c_str(), m_dbPort);
 	std::string url = urlBuf; //"tcp://127.0.0.1:3306";
-	if (!m_dbName.empty())
+	if (m_isCreateDB && !m_dbName.empty())
 	{
 		url += "/" + m_dbName;
 	}
 	sql::SQLString sqlUrl = sql::SQLString(url.c_str());
 	sql::SQLString dbUserName = sql::SQLString(m_dbUserName.c_str());
 	sql::SQLString dbPassword = sql::SQLString(m_dbPassword.c_str());
-	m_dbConn = driver->connect(sqlUrl, dbUserName, dbPassword);
-	return m_dbConn;
+	sql::Connection* conn = driver->connect(sqlUrl, dbUserName, dbPassword);
+	if (m_isCreateDB) m_dbConn = conn;
+	return conn;
 }
 
 

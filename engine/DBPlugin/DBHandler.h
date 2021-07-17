@@ -50,6 +50,7 @@ private:
 	std::string m_dbPassword;
 	std::string m_dbName;
 	sql::Connection* m_dbConn;
+	bool m_isCreateDB;
 	char m_sqlBuf[MAX_SQL_LENGTH]{ 0 };
 
 	std::map<std::string, std::shared_ptr<TableSchema>> m_tableSchema;
