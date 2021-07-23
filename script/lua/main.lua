@@ -8,17 +8,20 @@ require("util.timer")
 
 service_factory = {}
 
-local str = "Hello, Lua !"
-print(str)
-local tab = {name = "hans", id = 123456}
+-- local str = "Hello, Lua !"
+-- print(str)
+-- local tab = {name = "hans", id = 123456}
 
-logger.logInfo("$aaaa")
+-- logger.logInfo("$aaaa")
+
+-- local ip = Config:getConfigStr("center_service_ip")
+-- print(ip)
 
 -- timer.test()
 
-function add(x, y)
-	return x + y
-end
+-- function add(x, y)
+-- 	return x + y
+-- end
 
 function got_problems( error_msg )
 	return "got_problems handler: " .. error_msg
@@ -48,7 +51,9 @@ function service_factory.create_scene_service()
 end
 
 -- for k, v in pairs(_G) do
--- 	print(type(k), k, v)
+-- 	if k == "Config" or k == "_Config" then
+-- 		print(type(k), k, v)
+-- 	end
 -- 	-- if k == "main" then
 -- 	-- 	for k1, v1 in pairs(v) do
 -- 	-- 		print(k1, v1)

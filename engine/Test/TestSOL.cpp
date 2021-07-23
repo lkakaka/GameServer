@@ -1,4 +1,4 @@
-#define TEST_SOL
+//#define TEST_SOL
 
 #ifdef TEST_SOL
 #define SOL_ALL_SAFETIES_ON 1

@@ -4,9 +4,10 @@
 #include "../Common/ServerMacros.h"
 #include "LuaTimer.h"
 #include "LuaService.h"
-#include "LuaSceneObj.h"
+#include "LuaScene.h"
 #include "LuaRedis.h"
 #include "LuaDB.h"
+#include "LuaConfig.h"
 
 //#ifndef WIN32
 INIT_SINGLETON_CLASS(LuaPlugin)
@@ -51,30 +52,15 @@ static void initLoggerModule(std::shared_ptr<sol::state> lua) {
 }
 
 
-//static 
-//
-//static void initTimerModule(std::shared_ptr<sol::state> lua) {
-//	sol::table logger = lua->create_named_table("Timer");
-//	logger["log_info"] = &Timer::logInfo;
-//	logger["log_error"] = &Logger::logError;
-//	logger["log_warn"] = &Logger::logWarning;
-//	logger["log_debug"] = &Logger::logDebug;
-//}
-
 sol::table LuaPlugin::initLua(const char* funcName) {
-	////1.创建一个state
-	//m_lua = luaL_newstate();
-	//luaL_openlibs(m_lua);            //打开lua标准库
-	////lua_register(L, "foo", foo); //注册c函数到lua环境
-	//luaL_dofile(m_lua, "../script/lua/main.lua");     //执行lua脚本
-
 	m_lua->open_libraries(sol::lib::base, sol::lib::package, sol::lib::debug, sol::lib::string, sol::lib::table, sol::lib::os);
 	initLoggerModule(m_lua);
 	LuaTimer::bindLuaTimer(m_lua);
 	LuaService::bindLuaService(m_lua);
-	LuaSceneObj::bindLuaSceneObj(m_lua);
+	LuaScene::bindLuaScene(m_lua);
 	LuaRedis::bindLuaRedis(m_lua);
 	LuaDB::bindLuaDB(m_lua);
+	LuaConfig::bindLuaConfig(m_lua);
 
 	m_lua->script("package.path = '../script/lua/?.lua;'..package.path");
 	m_lua->script("print(package.path)");
@@ -93,11 +79,6 @@ sol::table LuaPlugin::initLua(const char* funcName) {
 	sol::protected_function_result result = callLuaFunc("service_factory", funcName);
 	if (!result.valid()) THROW_EXCEPTION("create service error");
 	sol::table tbl = result.get<sol::table>(0);
-	/*sol::function func = tbl.get<sol::function>("on_recv_service_msg");
-	func(tbl, "11", 1, "msg123");
-	for (auto iter = tbl.begin(); iter != tbl.end(); iter++) {
-
-	}*/
 	return tbl;
 }
 
@@ -118,20 +99,7 @@ sol::protected_function_result LuaPlugin::callLuaFunc(const char* modName, const
 		return sol::protected_function_result(NULL, -1, 0, 0, sol::call_status::runtime);
 	}
 	func.set_default_handler((*m_lua)["got_problems"]);
-	sol::protected_function_result result = func();
-	if (!result.valid()) {
-		Logger::logError("$lua result = %d", result.status());
-		for (auto iter = result.begin(); iter != result.end(); iter++) {
-			std::string s = iter->operator std::string();
-			Logger::logError("$%s", s.c_str());
-		}
-
-		sol::error err = result;
-		std::string what = err.what();
-		std::cout << what << std::endl;
-		Logger::logError("$%s", err.what());
-	}
-	return result;
+	return LuaPlugin::callLuaFunc(func);
 }
 
 LuaPlugin* LuaPlugin::getLuaPlugin() {

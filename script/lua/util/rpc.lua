@@ -35,7 +35,7 @@ function clsRpc:onRecvRpcMsg(sender, msg)
     end
     logger.logInfo("recv rpc %s", msg.rpc_func)
     local param = StrUtil.strToTable(msg.rpc_param)
-    local errCode, result = rpcFunc(sender, param)
+    local errCode, result = rpcFunc(self._service, sender, param)
 
     local retTable = nil
     if type(result) == "table" then

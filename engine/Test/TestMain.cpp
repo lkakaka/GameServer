@@ -5,7 +5,7 @@
 #include <map>
 #include <memory>
 
-//#define _TEST_MAIN
+#define _TEST_MAIN
 
 
 class Base {
@@ -74,6 +74,82 @@ std::vector<std::string> split(char* str, const char* delimiters) {
 	return vec;
 }
 
+
+
+class Blob {
+public:
+	Blob()
+		: data_(nullptr), size_(0) {
+		log("Blob's default constructor");
+	}
+
+	explicit Blob(size_t size)
+		: data_(new char[size]), size_(size) {
+		log("Blob's parameter constructor");
+	}
+
+	~Blob() {
+		log("Blob's destructor");
+		if (data_ != nullptr) delete[] data_;
+	}
+
+	Blob(const Blob& other) {
+		log("Blob's copy constructor");
+		data_ = new char[other.size_];
+		memcpy(data_, other.data_, other.size_);
+		size_ = other.size_;
+	}
+
+	Blob& operator=(const Blob& other) {
+		log("Blob's copy assignment operator");
+		if (this == &other) {
+			return *this;
+		}
+		delete[] data_;
+		data_ = new char[other.size_];
+		memcpy(data_, other.data_, other.size_);
+		size_ = other.size_;
+		return *this;
+	}
+
+	/*Blob(Blob&& other) {
+		log("Blob's move constructor");
+		data_ = new char[other.size_];
+		std::swap(data_, other.data_);
+		std::swap(size_, other.size_);
+	}*/
+
+	/*Blob& operator=(Blob&& other) {
+		log("Blob's move assignment operator");
+		if (this == &other) {
+			return *this;
+		} 
+		std::swap(data_, other.data_);
+		std::swap(size_, other.size_);
+	}*/
+
+	void set(size_t offset, size_t len, const void* src) {
+		len = std::min(len, size_ - offset);
+		memcpy(data_ + offset, src, len);
+	}
+
+private:
+	char* data_;
+	size_t size_;
+
+	void log(const char* msg) {
+		std::cout << "[" << this << "] " << msg << std::endl;
+	}
+};
+
+
+Blob createBlob(const char* str) {
+	size_t len = strlen(str);
+	Blob blob(len);
+	blob.set(0, len, str);
+	return blob;
+}
+
 #ifdef _TEST_MAIN
 
 int main() {
@@ -125,6 +201,12 @@ int main() {
 	////test_func(v);
 
 	////std::vector<A> v1 = v;
+
+	Blob blob;
+
+	std::cout << "Start assigning value..." << std::endl;
+	blob = createBlob("A very very very long string representing serialized data");
+	std::cout << "End assigning value" << std::endl;
 
 	return 1;
 }

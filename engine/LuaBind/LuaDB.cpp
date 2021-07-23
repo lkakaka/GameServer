@@ -35,29 +35,31 @@ sol::object LuaDB::executeSql(const char* sql, sol::this_state s) {
 			sql::ResultSet* rs = st->getResultSet();
 			sql::ResultSetMetaData* metaData = rs->getMetaData();
 			int colCount = metaData->getColumnCount();
-			sol::table fieldTuple = sol::table::create_with(s.lua_state());
-			for (int i = 1; i <= colCount; i++) {
-				//std::string fieldName = metaData->getColumnLabel(i).c_str();
-				/*const char* name = metaData->getColumnLabel(i).c_str();*/
+			//sol::table fieldTuple = sol::table::create_with(s.lua_state());
+			//for (int i = 1; i <= colCount; i++) {
+			//	//std::string fieldName = metaData->getColumnLabel(i).c_str();
+			//	/*const char* name = metaData->getColumnLabel(i).c_str();*/
 
-				//sol::object obj = sol::make_object(lua, metaData->getColumnLabel(i).c_str());
-				fieldTuple[i] = sol::make_object(lua, metaData->getColumnLabel(i).c_str());
-				//fieldTuple[i] = metaData->getColumnLabel(i);
-			}
-			result.add(fieldTuple);
+			//	//sol::object obj = sol::make_object(lua, metaData->getColumnLabel(i).c_str());
+			//	fieldTuple[i] = sol::make_object(lua, metaData->getColumnLabel(i).c_str());
+			//	//fieldTuple[i] = metaData->getColumnLabel(i);
+			//}
+			//result.add(fieldTuple);
 
 			while (rs->next()) {
 				sol::table dataTuple = sol::table::create_with(s.lua_state());
 				for (int i = 1; i <= colCount; i++) {
+					sol::object colName = sol::make_object(lua, metaData->getColumnLabel(i).c_str());
+
 					int colType = metaData->getColumnType(i);
 					if (colType >= sql::DataType::BIT && colType <= sql::DataType::BIGINT) {
-						dataTuple[i] = sol::make_object(lua, rs->getInt(i));
+						dataTuple[colName] = sol::make_object(lua, rs->getInt(i));
 					}
 					else if (colType >= sql::DataType::REAL && colType <= sql::DataType::NUMERIC) {
-						dataTuple[i] = sol::make_object(lua, rs->getDouble(i));
+						dataTuple[colName] = sol::make_object(lua, rs->getDouble(i));
 					}
 					else {
-						dataTuple[i] = sol::make_object(lua, rs->getString(i).c_str());
+						dataTuple[colName] = sol::make_object(lua, rs->getString(i).c_str());
 					}
 				}
 				result.add(dataTuple);
@@ -278,8 +280,8 @@ void LuaDB::luaTableToTable(sol::table luaTbl, Table* tbl) {
 	const char* tableName = tableNameObj.as<const char*>();
 	tbl->tableName = tableName;
 
-	sol::table colTuple = luaTbl["columns"];
-	for (auto& kv : colTuple) {
+	sol::table row = luaTbl["row"];
+	for (auto& kv : row) {
 		const char* fieldName = kv.first.as<const char*>();
 		sol::object valObj = kv.second;
 		DataBase::TableField* fieldDesc = m_dbHandler->getTableField(tbl->tableName.c_str(), fieldName);

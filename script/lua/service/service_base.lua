@@ -2,16 +2,27 @@ require("base.object")
 require("util.logger")
 require("util.rpc")
 require("base.service_type")
+require("base.db_proxy")
+require("base.id_mgr")
 
 clsServiceBase = clsObject:Inherit("clsServiceBase")
 
 function clsServiceBase:__init__()
     self._serviceMsgHandler = {}
     self._clientMsgHandler = {}
+    self.db_proxy = clsDBProxy:New(self)
     self._rpc_mgr = clsRpc:New(self)
+    self:_init_id_mgr()
     self:regServiceMsgHandler(MSG_ID_RPC_MSG, self.onRecvRpcMsg)
     self:regServiceMsgHandler(MSG_ID_RPC_MSG_RSP, self.onRecvRpcResp)
     logger.logDebug("clsServiceBase:__init_")
+end
+
+function clsServiceBase:_init_id_mgr()
+    local redis_ip = Config:getConfigStr("id_redis_ip")
+    local redis_port = Config:getConfigInt("id_redis_port")
+    if redis_ip == "" and redis_port <= 0 then return end
+    IDMgr.connect_redis(redis_ip, redis_port)
 end
 
 function clsServiceBase:regServiceMsgHandler(msgId, handler)

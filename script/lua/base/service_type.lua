@@ -14,7 +14,7 @@ LOCAL_SERVICE_LOGIN = { serviceGroup = 101, serviceType = SERVICE_TYPE_LOGIN, se
 LOCAL_SERVICE_GATEWAY = { serviceGroup = 101, serviceType = SERVICE_TYPE_GATEWAY, serviceId = 0 }
 
 function parseToServiceAddr(str)
-    arr = StrUtil.split(str, ".")
+    local arr = StrUtil.split(str, ".")
     -- print(arr[1], arr[2], arr[3])
     return { serviceGroup = tonumber(arr[1]), serviceType = tonumber(arr[2]), serviceId = tonumber(arr[3]) }
 end

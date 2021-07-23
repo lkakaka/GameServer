@@ -32,9 +32,18 @@ end
 log("hello,%d,%s", 1, "test")
 
 
-local t = {1, 2}
+local t = {}
 local t1 = t
-print(t[0])
+local a,b = next(t)
+print("next", b)
+
+local s = "1.3"
+print(tonumber(100))
+
+local t1 = {{3, 2}, {4, 3}}
+for k,v in ipairs(t1) do
+    print(k, v)
+end
 
 -- a = {
 --     b = 1,

@@ -98,7 +98,7 @@ int ServiceMessageHandler::handleServiceMessage(ServiceAddr* srcAddr, char* data
 }
 
 void ServiceMessageHandler::onRecvMessage(ServiceAddr* srcAddr, char* data, int dataLen) {
-	int msgId = 0;
+	//int msgId = 0;
 	if (srcAddr->getServiceType() == SERVICE_TYPE_GATEWAY) 
 	{
 		handleGatewayMessage(srcAddr, data, dataLen);
@@ -107,5 +107,5 @@ void ServiceMessageHandler::onRecvMessage(ServiceAddr* srcAddr, char* data, int 
 		handleServiceMessage(srcAddr, data, dataLen);
 	}
 
-	Logger::logDebug("$recv msg, sender:%s,  msgId:%d", srcAddr->getName(), msgId);
+	//Logger::logDebug("$recv msg, sender:%s,  msgId:%d", srcAddr->getName(), msgId);
 }

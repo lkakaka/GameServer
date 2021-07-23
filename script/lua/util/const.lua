@@ -17,3 +17,11 @@ ErrorCode = {
     ITEM_NOT_ENOUGH = -20101,
     BAG_SPACE_NOT_ENOUGH = -20102,
 }
+
+GlobalVar = {
+    MAX_ROLE_NUM = 6,
+}
+
+RedisKey = {
+    ID_ALLOCATOR = "_id_allocator",
+}

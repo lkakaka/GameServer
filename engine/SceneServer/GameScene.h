@@ -8,6 +8,14 @@
 #include "DetourMgr.h"
 #include "Vector.h"
 
+typedef void (*CallSceneScripFunc)(void* gameScene, int scriptEvent, ...);
+
+enum SceneScriptEvent {
+	AFTER_ACTOR_ENTER = 1,
+	AFTER_ACTOR_LEAVE = 2,
+	AFTER_ACTOR_MOVE = 3,
+};
+
 class GameScene
 {
 private:
@@ -21,6 +29,8 @@ private:
 
 	std::shared_ptr<SceneDetourMgr> m_detour;
 
+	CallSceneScripFunc m_callScriptFunc;
+
 	void onPlayerEnter(GamePlayer* gamePlayer, std::set<int>& neighbours);
 	void onNpcEnter(GameNpc* gameNpc, std::set<int>& neighbours);
 
@@ -30,10 +40,15 @@ private:
 	void _syncThreadFunc();
 public:
 	AOIMgr m_AOIMgr;
+	int m_scriptObjId;
+	int m_luaRef;
 
 	inline int getSceneUid() { return m_sceneUid; }
 	inline int getSceneId() { return m_sceneId; }
 	GameScene(int sceneId, int sceneUid, void* scriptObj);
+
+	inline void setCallScriptFunc(CallSceneScripFunc func) { m_callScriptFunc = func; }
+	inline void* getScriptObject() { return m_scriptObj; }
 
 	void onDestory();
 	GamePlayer* createPlayer(int connId, int roleId, const char* name, int x, int y);
@@ -53,4 +68,5 @@ public:
 	bool loadNavMesh(const char* meshFileName);
 	void findPath(float *sPos, float* ePos, std::vector<float>* path);
 };
+
 

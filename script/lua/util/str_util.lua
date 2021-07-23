@@ -59,6 +59,15 @@ function StrUtil.split(str, reps)
     return lst
 end
 
+function StrUtil.parseToIntArray(str, reps)
+    reps = reps or ","
+    local lst = StrUtil.split(str, reps)
+    for i,v in ipairs(lst) do
+        lst[i] = tonumber(v)
+    end
+    return lst
+end
+
 
 -- local tb = {
 --     1,

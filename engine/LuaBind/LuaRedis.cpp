@@ -36,8 +36,13 @@ static sol::object parseRedisReply(redisReply* reply, sol::this_state s) {
 			//return PyFloat_FromString(PyUnicode_FromStringAndSize(reply->str, reply->len));
 		case REDIS_REPLY_STRING:
 		case REDIS_REPLY_ERROR:
-		case REDIS_REPLY_STATUS:
-			return sol::make_object(lua, reply->str);
+		case REDIS_REPLY_STATUS: {
+			sol::object obj = sol::make_object(lua, reply->str);
+			if (obj == sol::nil) {
+				printf("error");
+			}
+			return obj;
+		}
 			//return PyUnicode_FromStringAndSize(reply->str, reply->len);
 		case REDIS_REPLY_ARRAY:
 		case REDIS_REPLY_MAP:
@@ -47,13 +52,13 @@ static sol::object parseRedisReply(redisReply* reply, sol::this_state s) {
 			sol::table tbl = sol::table::create_with(s.lua_state());
 			for (int i = 0; i < reply->elements; i++) {
 				redisReply* subReply = reply->element[i];
-				tbl[i] = parseRedisReply(subReply, s);
+				tbl[i+1] = parseRedisReply(subReply, s);
 				//PyTuple_SetItem(array, i, parseRedisReply(subReply));
 			}
 			return tbl;
 		}
 	}
-	Logger::logError("not support redis reply type %d", reply->type);
+	Logger::logError("$not support redis reply type %d", reply->type);
 	return sol::nil;
 }
 
