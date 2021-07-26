@@ -6,10 +6,7 @@
 # find_package(Boost REQUIRED)
 # find_package(PythonLibs REQUIRED)
 
-add_definitions(-DOPEN_PROFILE_TRACK)
-if (WIN32)
-	add_definitions(-DLUA_BUILD_AS_DLL)
-endif (WIN32)
+add_definitions(-DOPEN_PROFILE_TRACK -DLUA_BUILD_AS_DLL)
 
 gnu_setting(false)
 open_vs_cplus17()
@@ -57,7 +54,8 @@ if(WIN32)
 	target_link_libraries(GameServer libzmq-v142-mt-4_3_3)
 else()
 	target_link_libraries(GameServer protobuf)
-	target_link_libraries(GameServer zmq liblua.a dl)
+	#target_link_libraries(GameServer zmq liblua.a dl)
+	target_link_libraries(GameServer zmq liblua)
 endif()
 
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_OUT_PATH})

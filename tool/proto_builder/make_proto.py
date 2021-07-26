@@ -94,13 +94,13 @@ class ProtoBuilder(object):
         file_full_name = "{}/{}".format(path, file_name)
         # file_name = PROTO_PATH + "/" + file_name
         print("make proto file: " + file_full_name)
-        os.system("protoc --cpp_out={} --proto_path=./ --proto_path={} {}".format(OUTPUT_PATH, PROTO_PATH, file_full_name))
-        os.system("protoc --python_out={} --proto_path=./ --proto_path={} {}".format(PY_OUTPUT_PATH, PROTO_PATH, file_full_name))
-        os.system("protoc -o {}/{}.pb {}".format(LUA_OUTPUT_PATH, file_full_name[0:-6], file_full_name))
+        os.system("./protoc --cpp_out={} --proto_path=./ --proto_path={} {}".format(OUTPUT_PATH, PROTO_PATH, file_full_name))
+        os.system("./protoc --python_out={} --proto_path=./ --proto_path={} {}".format(PY_OUTPUT_PATH, PROTO_PATH, file_full_name))
+        os.system("./protoc -o {}/{}.pb {}".format(LUA_OUTPUT_PATH, file_full_name[0:-6], file_full_name))
         if file_full_name.find("server_only") < 0:
-            os.system("protoc --java_out={} --proto_path=./ --proto_path={} {}".format(JAVA_OUTPUT_PATH, PROTO_PATH, file_full_name))
+            os.system("./protoc --java_out={} --proto_path=./ --proto_path={} {}".format(JAVA_OUTPUT_PATH, PROTO_PATH, file_full_name))
             if os.path.exists(COCOS_PATH):
-                os.system("protoc --cpp_out={} --proto_path=./ --proto_path={} {}".format(COCOS_PATH, PROTO_PATH, file_full_name))
+                os.system("./protoc --cpp_out={} --proto_path=./ --proto_path={} {}".format(COCOS_PATH, PROTO_PATH, file_full_name))
 
         with open(file_full_name) as f:
             for line in f.readlines():

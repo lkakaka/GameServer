@@ -52,8 +52,11 @@ void GameService::dispatchClientMsgToScript(int connId, int msgId, const char* d
 	Py_INCREF(arg);
 	PyGILState_Release(py_state);*/
 
+	char* buff = new char[len+1] {0};
+	memcpy(buff, data, len);
 	sol::function func = m_luaObj.get<sol::function>("on_recv_client_msg");
-	sol::protected_function_result result = func(m_luaObj, connId, msgId, data);
+	sol::protected_function_result result = func(m_luaObj, connId, msgId, buff);
+	delete[] buff;
 	if (!result.valid()) {
 		Logger::logError("$lua result = %d", result.status());
 		sol::error err = result;
@@ -77,8 +80,11 @@ void GameService::dispatchServiceMsgToScript(ServiceAddr* srcAddr, int msgId, co
 	Py_INCREF(pyObj);
 	PyGILState_Release(py_state);*/
 
+	char* buff = new char[len+1] {0};
+	memcpy(buff, data, len);
 	sol::function func = m_luaObj.get<sol::function>("on_recv_service_msg");
-	sol::protected_function_result result = func(m_luaObj, srcAddr->getName(), msgId, data);
+	sol::protected_function_result result = func(m_luaObj, srcAddr->getName(), msgId, buff);
+	delete[] buff;
 	if (!result.valid()) {
 		Logger::logError("$lua result = %d", result.status());
 		sol::error err = result;

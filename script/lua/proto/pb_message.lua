@@ -3,12 +3,12 @@
 require("util.logger")
 pb = require("pb") -- 载入 pb.dll
 
-assert(pb.loadfile("..\\script\\lua\\proto\\scene.pb")) -- 载入pb文件
-assert(pb.loadfile("..\\script\\lua\\proto\\server_only/login_srv.pb")) -- 载入pb文件
-assert(pb.loadfile("..\\script\\lua\\proto\\login.pb")) -- 载入pb文件
-assert(pb.loadfile("..\\script\\lua\\proto\\role.pb")) -- 载入pb文件
-assert(pb.loadfile("..\\script\\lua\\proto\\server_only/common.pb")) -- 载入pb文件
-assert(pb.loadfile("..\\script\\lua\\proto\\test.pb")) -- 载入pb文件
+assert(pb.loadfile("../script/lua/proto/scene.pb")) -- 载入pb文件
+assert(pb.loadfile("../script/lua/proto/server_only/login_srv.pb")) -- 载入pb文件
+assert(pb.loadfile("../script/lua/proto/login.pb")) -- 载入pb文件
+assert(pb.loadfile("../script/lua/proto/role.pb")) -- 载入pb文件
+assert(pb.loadfile("../script/lua/proto/server_only/common.pb")) -- 载入pb文件
+assert(pb.loadfile("../script/lua/proto/test.pb")) -- 载入pb文件
 
 MSG_ID_ACTOR_BORN = 1
 MSG_ID_ACTOR_DISSOLVE = 2

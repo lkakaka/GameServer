@@ -66,6 +66,8 @@ int ServiceMessageHandler::handleGatewayMessage(ServiceAddr* srcAddr, char* data
 	int msgId = buffer.readInt();
 	char* msgData = (char*)buffer.data();
 	int msgLen = buffer.size();
+	Logger::logDebug("$recv msg, sender:%s,  msgId:%d, msgLen:%d", srcAddr->getName(), msgId, msgLen);
+	
 	if (handleEngineGatewayMsg(connId, msgId, msgData, msgLen)) return msgId;
 
 	if (isClientMsg) {
@@ -91,6 +93,7 @@ int ServiceMessageHandler::handleServiceMessage(ServiceAddr* srcAddr, char* data
 	int msgId = buffer.readInt();
 	char* msgData = (char*)buffer.data();
 	int msgLen = buffer.size();
+	Logger::logDebug("$recv msg, sender:%s,  msgId:%d, msgLen:%d", srcAddr->getName(), msgId, msgLen);
 	if (handleEngineServiceMsg(msgId, msgData, msgLen)) return msgId;
 
 	GameService::g_gameService->dispatchServiceMsgToScript(srcAddr, msgId, msgData, msgLen);
@@ -98,7 +101,6 @@ int ServiceMessageHandler::handleServiceMessage(ServiceAddr* srcAddr, char* data
 }
 
 void ServiceMessageHandler::onRecvMessage(ServiceAddr* srcAddr, char* data, int dataLen) {
-	//int msgId = 0;
 	if (srcAddr->getServiceType() == SERVICE_TYPE_GATEWAY) 
 	{
 		handleGatewayMessage(srcAddr, data, dataLen);
@@ -107,5 +109,4 @@ void ServiceMessageHandler::onRecvMessage(ServiceAddr* srcAddr, char* data, int 
 		handleServiceMessage(srcAddr, data, dataLen);
 	}
 
-	//Logger::logDebug("$recv msg, sender:%s,  msgId:%d", srcAddr->getName(), msgId);
 }

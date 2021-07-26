@@ -4,7 +4,7 @@ require("util.logger")
 pb = require("pb") -- 载入 pb.dll
 
 {% for file_name in render_obj.proto_files %}
-assert(pb.loadfile("..\\script\\lua\\proto\\{{ file_name }}.pb")) -- 载入pb文件
+assert(pb.loadfile("../script/lua/proto/{{ file_name }}.pb")) -- 载入pb文件
 {% endfor %}
 
 {% for proto_obj in render_obj.proto_list %}
@@ -52,7 +52,7 @@ local encodeFunc = {
 function decodeMsg(msgId, msg)
 	local func = decodeFunc[msgId]
 	if func == nil then
-		logger.log_error("decode unkown msgId:" .. msgId)
+		logger.logError("decode unkown msgId:" .. msgId)
 		return
 	end
 	return func(msg);
@@ -61,7 +61,7 @@ end
 function encodeMsg(msgId, msg)
 	local func = encodeFunc[msgId]
 	if func == nil then
-		logger.log_error("encode unkown msgId:" .. msgId)
+		logger.logError("encode unkown msgId:" .. msgId)
 		return
 	end
 	return func(msg);

@@ -64,7 +64,7 @@ DBHandler::DBHandler(const char* dbUrl, int dbPort, const char* dbUserName, cons
 		//mysqlx::string pwd(to_utf16(dbPassword));
 		//std::copy(dbPassword.begin(), dbPassword.end(), std::back_inserter(pwd));
 	
-		mysqlx::SessionSettings settings("localhost", 33060, dbUserName, dbPassword.c_str());
+		mysqlx::SessionSettings settings("localhost", 33060, dbUserName, dbPassword);
 
 		/*settings.set(mysqlx::SessionOption::USER, dbUserName);
 		settings.set(mysqlx::SessionOption::PWD, dbPassword);*/

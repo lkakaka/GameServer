@@ -10,6 +10,7 @@ extern "C" {
 
 #include "Singleton.h"
 #include "../Common/ServerExports.h"
+#include "Logger.h"
 
 #include "sol/sol.hpp"
 
