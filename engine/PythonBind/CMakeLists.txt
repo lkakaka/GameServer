@@ -18,4 +18,7 @@ source_group_by_dir(all_files)
 
 add_library(PythonBind ${CURRENT_HEADERS} ${CURRENT_SRC})
 target_link_libraries(PythonBind log4cpp GameLib SceneServer DBPlugin HttpServer)
+if (NOT WIN32)
+target_link_libraries(PythonBind python3.8)
+endif()
 SET(LIBRARY_OUTPUT_PATH ${PROJECT_OUT_PATH})
