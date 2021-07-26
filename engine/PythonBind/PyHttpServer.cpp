@@ -3,6 +3,7 @@
 #include "connection.hpp"
 #include "PyHttpUtil.h"
 //#include "server.hpp"
+#include "PyHttp.h"
 
 static PyTypeObject PyHttpServer_Type;
 
@@ -18,6 +19,7 @@ static PyObject* PyHttpServer_New(struct _typeobject* tobj, PyObject* args, PyOb
 	char port[8]{0};
 	sprintf(port, "%d", httpServerPort);
 	http::server::server* serv = new http::server::server("0.0.0.0", port, "", scriptObj);
+	serv->setCallHttpScripFunc(onRecvHttpReq);
 	PyObject* obj = PyType_GenericNew(tobj, args, obj2);
 	((PyHttpServer*)obj)->http_server = serv;
 	

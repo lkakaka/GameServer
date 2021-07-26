@@ -6,7 +6,7 @@
 #include "Timer.h"
 #include <functional>
 #include "Profile/ProfileTrack.h"
-#include "../Common/PyCommon.h"
+#include "PyCommon.h"
 
 static PyObject* ModuleError;
 static const char* ModuleName = "Timer";

@@ -28,13 +28,13 @@ public:
   request_handler& operator=(const request_handler&) = delete;
 
   /// Construct with a directory containing files to be served.
-  explicit request_handler(const std::string& doc_root, void* script_obj);
+  explicit request_handler(const std::string& doc_root, void* server);
 
   /// Handle a request and produce a reply.
   reply_ptr handle_request(int conn_id, const request& req);
 
 private:
-   void* script_obj;
+   void* m_server;
   /// The directory containing the files to be served.
   std::string doc_root_;
 

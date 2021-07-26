@@ -56,7 +56,7 @@ PyMODINIT_FUNC PyInit_Test(void)
 	return module;
 }
 
-void initPython()
+void PythonPlugin::initPython()
 {	
 	PyImport_AppendInittab("Test", PyInit_Test);  // python3
 
@@ -93,7 +93,7 @@ void initPython()
 }
 
 
-void finalizePython()
+void PythonPlugin::finalizePython()
 {
 	Py_Finalize();
 }

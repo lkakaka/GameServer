@@ -6,8 +6,8 @@ add_definitions(-DSERVER_EXPORT -DOPEN_PROFILE_TRACK)
 
 gnu_setting(false)
 
-include_directories(${LOG4CPP_ROOT}/include ${PYTHON_ROOT}/include ${Boost_INCLUDE_DIRS} ${PROTOBUFF_ROOT}/include ${PROTO_ROOT} ${GAMELIB_ROOT} ${ZMQ_ROOT}/include)
-link_directories(${LOG4CPP_ROOT} ${PYTHON_ROOT}/libs ${Boost_LIBRARY_DIRS} ${PROTOBUFF_ROOT}/libs ${GAMELIB_ROOT} ${ZMQ_ROOT}/libs ${LUA_ROOT}/libs)
+include_directories(${LOG4CPP_ROOT}/include ${Boost_INCLUDE_DIRS} ${PROTOBUFF_ROOT}/include ${PROTO_ROOT} ${GAMELIB_ROOT} ${ZMQ_ROOT}/include)
+link_directories(${LOG4CPP_ROOT} ${Boost_LIBRARY_DIRS} ${PROTOBUFF_ROOT}/libs ${GAMELIB_ROOT} ${ZMQ_ROOT}/libs)
 
 file(GLOB_RECURSE CURRENT_HEADERS *.h *.hpp)
 file(GLOB_RECURSE CURRENT_SRC *.cpp *cc)

@@ -50,7 +50,7 @@ class MsgHandler(object):
         print("$player recv test req, role_id:{}, msg:{}", self.player.role_id, msg)
         rsp_msg = Message.create_msg_by_id(Message.MSG_ID_TEST_REQ)
         rsp_msg.id = 10
-        rsp_msg.msg = "welcome to game world, {0}, scene_id:{1}, scene_uid:{2}".format(self.player.name,
+        rsp_msg.msg = "[Python]welcome to game world, {0}, scene_id:{1}, scene_uid:{2}".format(self.player.name,
                                                                                        game_scene.scene_id,
                                                                                        game_scene.scene_uid)
         self.player.send_msg_to_client(rsp_msg)

@@ -1,6 +1,6 @@
 #include "GameService.h"
-#include "../Common/PyCommon.h"
-#include "py/PythonPlugin.h"
+#include "PyCommon.h"
+#include "PythonPlugin.h"
 #include "Logger.h"
 
 
@@ -13,18 +13,20 @@ GameService::GameService(std::string service_name, ServiceType serviceType) :
 }
 
 GameService::~GameService() {
-	finalizePython();
+	
 }
 
 void GameService::initScript(const char* funcName) {
 	if (funcName == NULL || strlen(funcName) == 0) return;
-	/*initPython();
+#ifdef USE_PYTHON_SCRIPT
+	PythonPlugin::initPython();
 	auto py_state = PyGILState_Ensure();
 	m_PyObj = callPyFunction("main", funcName, NULL);
-	PyGILState_Release(py_state);*/
-
+	PyGILState_Release(py_state);
+#else
 	new LuaPlugin();
 	m_luaObj = LuaPlugin::getLuaPlugin()->initLua(funcName);
+#endif // USE_PYTHON_SCRIPT	
 }
 
 PyObject* GameService::callPyFunc(const char* funcName, PyObject* args) {
@@ -43,16 +45,17 @@ PyObject* GameService::callPyFunc(const char* funcName, PyObject* args) {
 //}
 
 void GameService::dispatchClientMsgToScript(int connId, int msgId, const char* data, int len) {
-	/*auto py_state = PyGILState_Ensure();
+#ifdef USE_PYTHON_SCRIPT
+	auto py_state = PyGILState_Ensure();
 	PyObject* arg = PyTuple_New(3);
 	PyTuple_SetItem(arg, 0, PyLong_FromLong(connId));
 	PyTuple_SetItem(arg, 1, PyLong_FromLong(msgId));
 	PyTuple_SetItem(arg, 2, Py_BuildValue("y#", data, len));
 	callPyFunc("on_recv_client_msg", arg);
 	Py_INCREF(arg);
-	PyGILState_Release(py_state);*/
-
-	char* buff = new char[len+1] {0};
+	PyGILState_Release(py_state);
+#else
+	char* buff = new char[len + 1]{ 0 };
 	memcpy(buff, data, len);
 	sol::function func = m_luaObj.get<sol::function>("on_recv_client_msg");
 	sol::protected_function_result result = func(m_luaObj, connId, msgId, buff);
@@ -64,10 +67,15 @@ void GameService::dispatchClientMsgToScript(int connId, int msgId, const char* d
 		std::cout << what << std::endl;
 		Logger::logError("$%s", err.what());
 	}
+
+#endif // USE_PYTHON_SCRIPT
+
+	
 }
 
 void GameService::dispatchServiceMsgToScript(ServiceAddr* srcAddr, int msgId, const char* data, int len) {
-	/*auto py_state = PyGILState_Ensure();
+#ifdef USE_PYTHON_SCRIPT
+	auto py_state = PyGILState_Ensure();
 	PyObject* arg = PyTuple_New(3);
 	PyObject* pArgs = Py_BuildValue("iii", srcAddr->getServiceGroup(), srcAddr->getServiceType(), srcAddr->getServiceId());
 	PyObject* pyObj = callPyFunc("create_service_addr", pArgs);
@@ -78,8 +86,8 @@ void GameService::dispatchServiceMsgToScript(ServiceAddr* srcAddr, int msgId, co
 	Py_INCREF(arg);
 	Py_INCREF(pArgs);
 	Py_INCREF(pyObj);
-	PyGILState_Release(py_state);*/
-
+	PyGILState_Release(py_state);
+#else
 	char* buff = new char[len+1] {0};
 	memcpy(buff, data, len);
 	sol::function func = m_luaObj.get<sol::function>("on_recv_service_msg");
@@ -92,4 +100,5 @@ void GameService::dispatchServiceMsgToScript(ServiceAddr* srcAddr, int msgId, co
 		std::cout << what << std::endl;
 		Logger::logError("$%s", err.what());
 	}
+#endif // USE_PYTHON_SCRIPT
 }

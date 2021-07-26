@@ -38,7 +38,7 @@ function clsServiceBase:regRpcHandler(funcName, func)
 end
 
 function clsServiceBase:on_recv_service_msg(sender, msgId, msg)
-    print(self:GetType(), sender, msgId, msg, #msg, pb.tohex(msg))
+    -- print(self:GetType(), sender, msgId, msg, #msg, pb.tohex(msg))
     logger.logInfo("on_recv_service_msg, sender:%s, msgId:%d", sender, msgId)
 
     local handler = self._serviceMsgHandler[msgId]
@@ -55,7 +55,7 @@ end
 
 function clsServiceBase:on_recv_client_msg(connId, msgId, msg)
 	--if msgId == 15 then msg = string.sub(msg, 1, 6) end
-    print("on_recv_client_msg, connId:%d, msgId:%d", connId, msgId, msg, #msg, pb.tohex(msg))
+    -- print("on_recv_client_msg, connId:%d, msgId:%d", connId, msgId, msg, #msg, pb.tohex(msg))
     logger.logInfo("on_recv_client_msg, connId:%d, msgId:%d", connId, msgId)
     local handler = self._clientMsgHandler[msgId]
     if handler == nil then

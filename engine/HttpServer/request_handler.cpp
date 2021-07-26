@@ -15,13 +15,14 @@
 #include "mime_types.hpp"
 #include "reply.hpp"
 #include "request.hpp"
-#include "PyHttp.h"
+//#include "PyHttp.h"
+#include "server.hpp"
 
 namespace http {
 namespace server {
 
-request_handler::request_handler(const std::string& doc_root, void* script_obj)
-  : doc_root_(doc_root), script_obj(script_obj)
+request_handler::request_handler(const std::string& doc_root, void* server)
+  : doc_root_(doc_root), m_server(server)
 {
 }
 
@@ -81,8 +82,10 @@ reply_ptr request_handler::handle_request(int conn_id, const request& req)
  // rep.headers[1].value = mime_types::extension_to_type(extension);
 
   //onRecvHttpReq(conn_id, req);
-  if (script_obj != NULL) {
-      return onRecvHttpReq(script_obj, conn_id, req);
+  CallHttpScripFunc func = ((server*)m_server)->getCallHttpScripFunc();
+  if (func != NULL) {
+      //return onRecvHttpReq(script_obj, conn_id, req);
+      return func(m_server, conn_id, req);
   }
   else {
       return reply::stock_reply(reply::unauthorized);

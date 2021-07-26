@@ -10,7 +10,7 @@ link_directories(${LOG4CPP_ROOT} ${Boost_LIBRARY_DIRS} ${PYTHON_ROOT}/libs ${LOG
 
 file(GLOB_RECURSE CURRENT_HEADERS *.h *.hpp)
 file(GLOB_RECURSE CURRENT_SRC *.cpp *cc)
-add_library(HttpServer SHARED ${CURRENT_HEADERS} ${CURRENT_SRC} ${COMMON_SRC})
+add_library(HttpServer ${CURRENT_HEADERS} ${CURRENT_SRC} ${COMMON_SRC})
 #add_executable(HttpServer ${CURRENT_HEADERS} ${CURRENT_SRC})
 target_link_libraries(HttpServer log4cpp)
 SET(LIBRARY_OUTPUT_PATH ${PROJECT_OUT_PATH})

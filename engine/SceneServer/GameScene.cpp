@@ -1,7 +1,7 @@
 #include "GameScene.h"
 #include "Logger.h"
-#include "PyScene.h"
-#include "../Common/PyCommon.h"
+//#include "PyScene.h"
+//#include "../Common/PyCommon.h"
 #include "SceneMgr.h"
 #include "TimeUtil.h"
 

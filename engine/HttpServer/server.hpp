@@ -17,6 +17,10 @@
 #include "connection_manager.hpp"
 #include "request_handler.hpp"
 #include "../Common/ServerExports.h"
+#include "request.hpp"
+#include "reply.hpp"
+
+typedef http::server::reply_ptr(*CallHttpScripFunc)(void* server, int conn_id, const http::server::request& req);
 
 namespace http {
 namespace server {
@@ -38,12 +42,17 @@ public:
 
   inline connection_manager* get_connection_mgr() { return &connection_manager_; }
 
+  inline void setCallHttpScripFunc(CallHttpScripFunc func) { m_scripFunc = func; }
+  inline CallHttpScripFunc getCallHttpScripFunc() { return m_scripFunc; }
+  inline void* getScriptObj() { return script_obj; }
+
   ~server() {
       printf("server destory!!!!!!!\n");
   }
 
 private:
     void* script_obj;
+    CallHttpScripFunc m_scripFunc;
   /// Perform an asynchronous accept operation.
   void do_accept();
 

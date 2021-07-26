@@ -21,8 +21,9 @@ server::server(const std::string& address, const std::string& port,
     signals_(io_context_),
     acceptor_(io_context_),
     connection_manager_(),
-    request_handler_(doc_root, script_obj),
-    script_obj(script_obj)
+    request_handler_(doc_root, this),
+    script_obj(script_obj),
+    m_scripFunc(NULL)
 {
   // Register to handle the signals that indicate when the server should exit.
   // It is safe to register for the same signal multiple times in a program,

@@ -43,7 +43,7 @@ function clsMsgHandler:_on_recv_test_req(msg_id, msg)
     print("player recv test req, role_id:%d, msg:%s", self.player.role_id, msg)
     local rsp_msg = {}
     rsp_msg.id = 10
-    rsp_msg.msg = string.format("welcome to game world, %s, scene_id:%d, scene_uid:%d", self.player.name,
+    rsp_msg.msg = string.format("[lua]welcome to game world, %s, scene_id:%d, scene_uid:%d", self.player.name,
                                                                                 game_scene.scene_id,
                                                                                 game_scene.scene_uid)
     self.player:send_msg_to_client(MSG_ID_TEST_REQ, rsp_msg)

@@ -1,8 +1,8 @@
 #include "UnitTest.h"
 #include "Timer.h"
-#include "py/PythonPlugin.h"
+#include "PythonPlugin.h"
 #include "../Math/MathFunction.h"
-#include "../Common/PyCommon.h"
+#include "PyCommon.h"
 
 #define TEST_TIMER_TREAD 0
 #define TEST_PYTHON_TREAD 0
@@ -25,12 +25,15 @@
 #pragma comment(lib, "MathFunction.lib")
 
 void pyThreadFunc()
-{
+{	
+#ifdef USE_PYTHON_SCRIPT
+
 	Logger::logInfo("$[UnitTest]Thread Start");
 	auto py_state = PyGILState_Ensure();
 	callPyFunction("main", "thread_test", NULL);
 	PyGILState_Release(py_state);
 	Logger::logInfo("$[UnitTest]Thread End");
+#endif // USE_PYTHON_SCRIPT
 }
 
 void print(int timerId)

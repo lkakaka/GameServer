@@ -1,12 +1,14 @@
 #include "PyHttp.h"
-#include "../Common/PyCommon.h"
+#include "PyCommon.h"
 #include "Logger.h"
 #include "PyHttpServer.hpp"
 #include "PyHttpUtil.h"
+#include "server.hpp"
 
-reply_ptr onRecvHttpReq(void* script_obj, int conn_id, const request& req) {
+reply_ptr onRecvHttpReq(void* server, int conn_id, const request& req) {
+	http::server::server* _server = (http::server::server*)server;
 	auto py_state = PyGILState_Ensure();
-	PyObject* scriptObj = (PyObject*)script_obj;
+	PyObject* scriptObj = (PyObject*)_server->getScriptObj();
 	PyObject* pModule = PyImport_ImportModule("http_util.http_req");//这里是要调用的文件名
 	if (pModule == NULL)
 	{

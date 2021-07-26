@@ -1,6 +1,81 @@
 #include "PySceneObj.h"
 #include "Logger.h"
 #include "SceneMgr.h"
+#include "PyCommon.h"
+
+
+static void callSceneScripFunc(void* ptr, int scriptEvent, ...) {
+	//Logger::logDebug("$callSceneScripFunc, %d", scriptEvent);
+	va_list args;
+	va_start(args, scriptEvent);
+	GameScene* gameScene = (GameScene*)ptr;
+	PyObject* scriptObj = (PyObject*)gameScene->getScriptObject();
+
+	switch (scriptEvent) {
+		case SceneScriptEvent::AFTER_ACTOR_ENTER: {
+			int actorId = va_arg(args, int);
+			std::set<int> enterActors = va_arg(args, std::set<int>);
+			auto py_state = PyGILState_Ensure();
+			PyObject* arg = PyTuple_New(2);
+			PyObject* actors = PyTuple_New(enterActors.size());
+			int i = 0;
+			for (int actorId : enterActors) {
+				PyTuple_SetItem(actors, i++, PyLong_FromLong(actorId));
+			}
+			PyTuple_SetItem(arg, 0, PyLong_FromLong(actorId));
+			PyTuple_SetItem(arg, 1, actors);
+			callPyObjFunc(scriptObj, "after_actor_enter", arg);
+			PyGILState_Release(py_state);
+			break;
+		}
+		case SceneScriptEvent::AFTER_ACTOR_LEAVE: {
+			int actorId = va_arg(args, int);
+			std::set<int> leaveActors = va_arg(args, std::set<int>);
+			auto py_state = PyGILState_Ensure();
+			PyObject* arg = PyTuple_New(2);
+			PyObject* actors = PyTuple_New(leaveActors.size());
+			int i = 0;
+			for (int actorId : leaveActors) {
+				PyTuple_SetItem(actors, i++, PyLong_FromLong(actorId));
+			}
+			PyTuple_SetItem(arg, 0, PyLong_FromLong(actorId));
+			PyTuple_SetItem(arg, 1, actors);
+			callPyObjFunc(scriptObj, "after_actor_leave", arg);
+			PyGILState_Release(py_state);
+			break;
+		}
+		case SceneScriptEvent::AFTER_ACTOR_MOVE: {
+			int actorId = va_arg(args, int);
+			std::set<int> enterActors = va_arg(args, std::set<int>);
+			std::set<int> leaveActors = va_arg(args, std::set<int>);
+			auto py_state = PyGILState_Ensure();
+			PyObject* arg = PyTuple_New(3);
+			PyObject* enterTuple = PyTuple_New(enterActors.size());
+			PyObject* leaveTuple = PyTuple_New(leaveActors.size());
+			int i = 0;
+			for (int actorId : enterActors) {
+				PyTuple_SetItem(enterTuple, i++, PyLong_FromLong(actorId));
+			}
+
+			i = 0;
+			for (int actorId : leaveActors) {
+				PyTuple_SetItem(leaveTuple, i++, PyLong_FromLong(actorId));
+			}
+
+			PyTuple_SetItem(arg, 0, PyLong_FromLong(actorId));
+			PyTuple_SetItem(arg, 1, enterTuple);
+			PyTuple_SetItem(arg, 2, leaveTuple);
+			callPyObjFunc(scriptObj, "after_actor_move", arg);
+			PyGILState_Release(py_state);
+			break;
+		}
+		default:
+			Logger::logError("$not impl call script func%d", scriptEvent);
+			break;
+		}
+	va_end(args);
+}
+
 
 static PyObject* PySceneObj_New(struct _typeobject* tobj, PyObject* args, PyObject* obj2) {
 	int sceneId;
@@ -15,6 +90,7 @@ static PyObject* PySceneObj_New(struct _typeobject* tobj, PyObject* args, PyObje
 		Logger::logError("$create scene obj failed, db handler exist, sceneId:%d", sceneId);
 		Py_RETURN_NONE;
 	}
+	gameScene->setCallScriptFunc(callSceneScripFunc);
 	PyObject* obj = PyType_GenericNew(tobj, args, obj2);
 	((PySceneObj*)obj)->gameScene = gameScene;
 	((PySceneObj*)obj)->scene_uid = PyLong_FromLong(gameScene->getSceneUid());
