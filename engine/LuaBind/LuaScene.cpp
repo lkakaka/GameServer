@@ -8,13 +8,14 @@
 #include "LuaPlugin.h"
 #include "LuaRegistryObj.h"
 
-static void callSceneScripFunc(void* ptr, int scriptEvent, ...) {
+static void callSceneScripFunc(void* ptr, ...) {
 	//Logger::logDebug("$callSceneScripFunc, %d", scriptEvent);
 	va_list args;
-	va_start(args, scriptEvent);
+	va_start(args, ptr);
+	int scriptEvent = va_arg(args, int);
 	GameScene* gameScene = (GameScene*)ptr;
 	std::shared_ptr<sol::state> luaPtr = LuaPlugin::getSingleton()->getLua();
-	sol::table sceneScriptObj = luaPtr->registry()[gameScene->m_luaRef];
+	sol::table sceneScriptObj = luaPtr->registry()[gameScene->getLuaRef()];
 
 	switch (scriptEvent) {
 		case SceneScriptEvent::AFTER_ACTOR_ENTER: {
@@ -66,11 +67,9 @@ static void callSceneScripFunc(void* ptr, int scriptEvent, ...) {
 
 sol::object LuaScene::createScene(int sceneId, sol::table script, sol::this_state s) {
 	sol::state_view lua(s);
-	GameScene* gameScene = SceneMgr::getSceneMgr()->createScene(sceneId, &script);
+	GameScene* gameScene = SceneMgr::getSceneMgr()->createScene(sceneId);
 	std::vector<int> regInfo = LuaRegistryObj::addRegistryObj(script);
-	gameScene->m_scriptObjId = regInfo[0];
-	gameScene->m_luaRef = regInfo[1];
-	gameScene->setCallScriptFunc(callSceneScripFunc);
+	gameScene->bindLuaScriptObject(regInfo[0], regInfo[1], callSceneScripFunc);
 	return sol::make_object(lua, *gameScene);
 }
 
@@ -80,7 +79,7 @@ static void destroyScene(int sceneUid, sol::this_state s) {
 		Logger::logError("$destory scene error, not found scene, scene_uid:%d", sceneUid);
 		return;
 	}
-	LuaRegistryObj::removeRegistryObj(gameScene->m_scriptObjId);
+	LuaRegistryObj::removeRegistryObj(gameScene->getLuaObjId());
 	SceneMgr::getSceneMgr()->destroyScene(sceneUid);
 }
 
@@ -109,9 +108,10 @@ void LuaScene::bindLuaScene(std::shared_ptr<sol::state> lua) {
 	sceneMgr["createScene"] = &LuaScene::createScene;
 	sceneMgr["destroyScene"] = &destroyScene;
 
-	sol::usertype<GameScene> gameScene_type = lua->new_usertype<GameScene>("GameScene",
-		// 3 constructors
-		sol::constructors<GameScene(int, int, void*)>());
+	//sol::usertype<GameScene> gameScene_type = lua->new_usertype<GameScene>("GameScene",
+	//	// 3 constructors
+	//	sol::constructors<GameScene(int, int)>());
+	sol::usertype<GameScene> gameScene_type = lua->new_usertype<GameScene>("GameScene");
 
 	// typical member function that returns a variable
 	gameScene_type["loadNavMesh"] = &GameScene::loadNavMesh;

@@ -23,14 +23,14 @@ int SceneMgr::allocSceneUid() {
 	return (m_serviceId << 20) + m_maxSceneUid++;
 }
 
-GameScene* SceneMgr::createScene(int sceneId, void* scriptObj)
+GameScene* SceneMgr::createScene(int sceneId)
 {
 	int sceneUid = allocSceneUid();
 	if (m_scenes.find(sceneUid) != m_scenes.end()) {
 		Logger::logError("$alloc scene failed, scene uid(%d) exist", sceneUid);
 		return NULL;
 	}
-	GameScene* gameScene = new GameScene(sceneId, sceneUid, scriptObj);
+	GameScene* gameScene = new GameScene(sceneId, sceneUid);
 	m_scenes.emplace(std::make_pair(sceneUid, gameScene));
 	gameScene->onCreate();
 	Logger::logInfo("$create scene, scene_uid:%d, sceneId:%d", sceneUid, sceneId);

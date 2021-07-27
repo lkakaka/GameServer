@@ -6,6 +6,6 @@
 using namespace http::server;
 
 SERVER_EXPORT_API void initHttpModule();
-reply_ptr onRecvHttpReq(void* script_obj, int conn_id, const request& req);
+reply_ptr onRecvHttpReq(void* server, int conn_id, const http::server::request& req);
 
 

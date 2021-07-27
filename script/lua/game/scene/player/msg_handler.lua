@@ -9,10 +9,7 @@ function clsMsgHandler:__init__(player)
 end
 
 function clsMsgHandler:on_recv_client_msg(msg_id, msg)
-    for k, v in pairs(clsMsgHandler._c_cmd) do
-        print(k, v)
-    end
-    print("clsMsgHandler:on_recv_client_msg", type(msg_id), clsMsgHandler._c_cmd[msg_id])
+    -- print("clsMsgHandler:on_recv_client_msg", type(msg_id), clsMsgHandler._c_cmd[msg_id])
     local func = clsMsgHandler._c_cmd[msg_id]
     if func == nil then
         logger.logError("player on_recv_client_msg error, not found cmd func, msgId:%d", msg_id)
@@ -22,8 +19,13 @@ function clsMsgHandler:on_recv_client_msg(msg_id, msg)
 end
 
 function clsMsgHandler:_on_recv_disconnect(msg_id, msg)
-    logger.logError("player disconnect, role_id:%d,reason:%s", self.player.role_id, msg.reason)
+    logger.logInfo("player disconnect, role_id:%d", self.player.role_id)
     self.player.game_scene:tick_player(self.player.role_id, "client req disconnect")
+end
+
+function clsMsgHandler:_on_recv_client_disconnect(msg_id, msg)
+    logger.logError("player disconnect, role_id:%d,reason:%s", self.player.role_id, msg.reason)
+    self.player.game_scene:tick_player(self.player.role_id, msg.reason)
 end
 
 function clsMsgHandler:_on_recv_gm_cmd(msg_id, msg)
@@ -31,7 +33,7 @@ function clsMsgHandler:_on_recv_gm_cmd(msg_id, msg)
     param.player = self.player
     param.args = msg.args
     local result = self.player.game_scene.service.gm_handler:handle_gm_cmd(msg.cmd, param)
-    logger.logInfo("exe gm cmd:{}, args:%s, result:\n%s", msg.cmd, msg.args, result)
+    logger.logInfo("exe gm cmd:%s, args:%s, result:\n%s", msg.cmd, msg.args, result)
     local rsp_msg = {}
     rsp_msg.cmd = msg.cmd
     rsp_msg.msg = result or ""
@@ -70,6 +72,7 @@ function clsMsgHandler:_on_recv_test_req(msg_id, msg)
 end
 
 clsMsgHandler._c_cmd = {
+    [MSG_ID_CLIENT_DISCONNECT] = clsMsgHandler._on_recv_client_disconnect,
     [MSG_ID_DISCONNECT_REQ] = clsMsgHandler._on_recv_disconnect,
     [MSG_ID_GM_CMD] = clsMsgHandler._on_recv_gm_cmd,
     [MSG_ID_TEST_REQ] = clsMsgHandler._on_recv_test_req,

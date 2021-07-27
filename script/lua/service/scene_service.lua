@@ -39,7 +39,7 @@ function clsSceneService:initRpcHandler()
 end
 
 function clsSceneService:initServiceMsgHandler()
-    self:regServiceMsgHandler(MSG_ID_CLIENT_DISCONNECT, self.onClientDisconnect)
+    -- self:regServiceMsgHandler(MSG_ID_CLIENT_DISCONNECT, self.onClientDisconnect)
 end
 
 function clsSceneService:onRegSceneResp(result, scene_info)
@@ -95,17 +95,17 @@ function clsSceneService:rpcEnterScene(sender, param)
     scene:prepare_enter_scene(conn_id, role_id)
 end
 
-function clsSceneService:onClientDisconnect(sender, msgId, msg)
-    local game_scene = self:get_player_scene(msg.conn_id)
-    if game_scene == nil then
-        logger.logError("_on_recv_disconnect error, not found scene, conn_id:%d", msg.conn_id)
-        return
-    end
-    local player = game_scene:get_player_by_conn_id(msg.conn_id)
-    if player == nil then
-        logger.logError("_on_recv_disconnect error, player not in scene, conn_id:%d", msg.conn_id)
-        return
-    end
-    game_scene:remove_player(player.role_id, msg.reason)
-    player:on_leave_game()
-end
+-- function clsSceneService:onClientDisconnect(sender, msgId, msg)
+--     local game_scene = self:get_player_scene(msg.conn_id)
+--     if game_scene == nil then
+--         logger.logError("_on_recv_disconnect error, not found scene, conn_id:%d", msg.conn_id)
+--         return
+--     end
+--     local player = game_scene:get_player_by_conn_id(msg.conn_id)
+--     if player == nil then
+--         logger.logError("_on_recv_disconnect error, player not in scene, conn_id:%d", msg.conn_id)
+--         return
+--     end
+--     game_scene:remove_player(player.role_id, msg.reason)
+--     player:on_leave_game()
+-- end

@@ -5,6 +5,7 @@ require("service.scene_service")
 require("util.logger")
 require("proto.pb_message")
 require("util.timer")
+require("base.cmd_line")
 
 service_factory = {}
 

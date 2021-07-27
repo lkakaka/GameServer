@@ -19,6 +19,7 @@
 #include "../Common/ServerExports.h"
 #include "request.hpp"
 #include "reply.hpp"
+#include "IScriptRegister.h"
 
 typedef http::server::reply_ptr(*CallHttpScripFunc)(void* server, int conn_id, const http::server::request& req);
 
@@ -26,7 +27,7 @@ namespace http {
 namespace server {
 
 /// The top-level class of the HTTP server.
-class SERVER_EXPORT_API server
+class SERVER_EXPORT_API server : public IScriptRegister
 {
 public:
   server(const server&) = delete;
@@ -35,7 +36,7 @@ public:
   /// Construct the server to listen on the specified TCP address and port, and
   /// serve up files from the given directory.
   explicit server(const std::string& address, const std::string& port,
-      const std::string& doc_root, void* script_obj);
+      const std::string& doc_root);
 
   /// Run the server's io_context loop.
   void run();
@@ -44,14 +45,12 @@ public:
 
   inline void setCallHttpScripFunc(CallHttpScripFunc func) { m_scripFunc = func; }
   inline CallHttpScripFunc getCallHttpScripFunc() { return m_scripFunc; }
-  inline void* getScriptObj() { return script_obj; }
 
   ~server() {
       printf("server destory!!!!!!!\n");
   }
 
 private:
-    void* script_obj;
     CallHttpScripFunc m_scripFunc;
   /// Perform an asynchronous accept operation.
   void do_accept();

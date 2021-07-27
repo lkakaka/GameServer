@@ -4,10 +4,11 @@
 #include "PyCommon.h"
 
 
-static void callSceneScripFunc(void* ptr, int scriptEvent, ...) {
+static void callSceneScripFunc(void* ptr, ...) {
 	//Logger::logDebug("$callSceneScripFunc, %d", scriptEvent);
 	va_list args;
-	va_start(args, scriptEvent);
+	va_start(args, ptr);
+	int scriptEvent = va_arg(args, int);
 	GameScene* gameScene = (GameScene*)ptr;
 	PyObject* scriptObj = (PyObject*)gameScene->getScriptObject();
 
@@ -85,12 +86,12 @@ static PyObject* PySceneObj_New(struct _typeobject* tobj, PyObject* args, PyObje
 		Logger::logError("$create scene obj failed, arg error");
 		Py_RETURN_NONE;
 	}
-	GameScene* gameScene = SceneMgr::getSceneMgr()->createScene(sceneId, scriptObj);
+	GameScene* gameScene = SceneMgr::getSceneMgr()->createScene(sceneId);
 	if (gameScene == NULL) {
 		Logger::logError("$create scene obj failed, db handler exist, sceneId:%d", sceneId);
 		Py_RETURN_NONE;
 	}
-	gameScene->setCallScriptFunc(callSceneScripFunc);
+	gameScene->bindPyScriptObject(scriptObj, callSceneScripFunc);
 	PyObject* obj = PyType_GenericNew(tobj, args, obj2);
 	((PySceneObj*)obj)->gameScene = gameScene;
 	((PySceneObj*)obj)->scene_uid = PyLong_FromLong(gameScene->getSceneUid());

@@ -6,8 +6,8 @@
 #include "TimeUtil.h"
 
 
-GameScene::GameScene(int sceneId, int sceneUid, void* scriptObj) : m_maxActorId(0), m_sceneId(sceneId), m_sceneUid(sceneUid),
-m_scriptObj(scriptObj), m_detour(new SceneDetourMgr()), m_scriptObjId(0), m_luaRef(0), m_callScriptFunc(NULL)
+GameScene::GameScene(int sceneId, int sceneUid) : m_maxActorId(0), m_sceneId(sceneId), m_sceneUid(sceneUid),
+ m_detour(new SceneDetourMgr())
 {
 
 }
@@ -73,20 +73,9 @@ void GameScene::onActorEnter(int actorId) {
 	if (!neighbours.empty()) {
 		onEnterSight(actor, neighbours);
 
-		/*auto py_state = PyGILState_Ensure();
-		PyObject* arg = PyTuple_New(2);
-		PyObject* actors = PyTuple_New(neighbours.size());
-		int i = 0;
-		for (int actorId : neighbours) {
-			PyTuple_SetItem(actors, i++, PyLong_FromLong(actorId));
-		}
-		PyTuple_SetItem(arg, 0, PyLong_FromLong(actor->getActorId()));
-		PyTuple_SetItem(arg, 1, actors);
-		callPyObjFunc((PyObject*)m_scriptObj, "after_actor_enter", arg);
-		PyGILState_Release(py_state);*/
-
-		if (m_callScriptFunc != NULL) {
-			m_callScriptFunc(this, SceneScriptEvent::AFTER_ACTOR_ENTER, actor->getActorId(), neighbours);
+		CallScripFunc func = getCallScriptFunc();
+		if (func != NULL) {
+			func(this, SceneScriptEvent::AFTER_ACTOR_ENTER, actor->getActorId(), neighbours);
 		}
 	}
 
@@ -132,20 +121,9 @@ void GameScene::onActorLeave(GameActor* gameActor) {
 	if (!neighbours.empty()) {
 		onLeaveSight(gameActor, neighbours);
 
-		/*auto py_state = PyGILState_Ensure();
-		PyObject* arg = PyTuple_New(2);
-		PyObject* actors = PyTuple_New(neighbours.size());
-		int i = 0;
-		for (int actorId : neighbours) {
-			PyTuple_SetItem(actors, i++, PyLong_FromLong(actorId));
-		}
-		PyTuple_SetItem(arg, 0, PyLong_FromLong(gameActor->getActorId()));
-		PyTuple_SetItem(arg, 1, actors);
-		callPyObjFunc((PyObject*)m_scriptObj, "after_actor_leave", arg);
-		PyGILState_Release(py_state);*/
-
-		if (m_callScriptFunc != NULL) {
-			m_callScriptFunc(this, SceneScriptEvent::AFTER_ACTOR_LEAVE, gameActor->getActorId(), neighbours);
+		CallScripFunc func = getCallScriptFunc();
+		if (func != NULL) {
+			func(this, SceneScriptEvent::AFTER_ACTOR_LEAVE, gameActor->getActorId(), neighbours);
 		}
 	}
 }
@@ -159,28 +137,9 @@ void GameScene::onActorMove(GameActor* gameActor) {
 	onEnterSight(gameActor, enterIds);
 	onLeaveSight(gameActor, leaveIds);
 
-	/*auto py_state = PyGILState_Ensure();
-	PyObject* arg = PyTuple_New(3);
-	PyObject* enterTuple = PyTuple_New(enterIds.size());
-	PyObject* leaveTuple = PyTuple_New(leaveIds.size());
-	int i = 0;
-	for (int actorId : enterIds) {
-		PyTuple_SetItem(enterTuple, i++, PyLong_FromLong(actorId));
-	}
-
-	i = 0;
-	for (int actorId : leaveIds) {
-		PyTuple_SetItem(leaveTuple, i++, PyLong_FromLong(actorId));
-	}
-
-	PyTuple_SetItem(arg, 0, PyLong_FromLong(gameActor->getActorId()));
-	PyTuple_SetItem(arg, 1, enterTuple);
-	PyTuple_SetItem(arg, 2, leaveTuple);
-	callPyObjFunc((PyObject*)m_scriptObj, "after_actor_move", arg);
-	PyGILState_Release(py_state);*/
-
-	if (m_callScriptFunc != NULL) {
-		m_callScriptFunc(this, SceneScriptEvent::AFTER_ACTOR_MOVE, gameActor->getActorId(), enterIds, leaveIds);
+	CallScripFunc func = getCallScriptFunc();
+	if (func != NULL) {
+		func(this, SceneScriptEvent::AFTER_ACTOR_MOVE, gameActor->getActorId(), enterIds, leaveIds);
 	}
 }
 

@@ -85,26 +85,6 @@ sol::table LuaPlugin::initLua(const char* funcName) {
 	return tbl;
 }
 
-sol::protected_function_result LuaPlugin::callLuaFunc(const char* modName, const char* funcName) {
-	sol::protected_function func;
-	if (modName == NULL) {
-		func = m_lua->get<sol::protected_function>(funcName);
-	} else {
-		sol::table mod = m_lua->get<sol::table>(modName);
-		if (!mod.valid()) {
-			Logger::logError("$lua module not exist: %s", modName);
-			return sol::protected_function_result(NULL, -1, 0, 0, sol::call_status::runtime);
-		}
-		func = mod.get<sol::protected_function>(funcName);
-	}
-	if (!func.valid()) {
-		Logger::logError("$call lua func %s.%s invalid", modName == NULL ? "" : modName, funcName);
-		return sol::protected_function_result(NULL, -1, 0, 0, sol::call_status::runtime);
-	}
-	func.set_default_handler((*m_lua)["got_problems"]);
-	return LuaPlugin::callLuaFunc(func);
-}
-
 LuaPlugin* LuaPlugin::getLuaPlugin() {
 	return LuaPlugin::getSingleton();
 }

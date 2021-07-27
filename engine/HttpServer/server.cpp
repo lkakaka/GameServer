@@ -16,13 +16,12 @@ namespace http {
 namespace server {
 
 server::server(const std::string& address, const std::string& port,
-    const std::string& doc_root, void* script_obj)
+    const std::string& doc_root)
   : io_context_(1),
     signals_(io_context_),
     acceptor_(io_context_),
     connection_manager_(),
     request_handler_(doc_root, this),
-    script_obj(script_obj),
     m_scripFunc(NULL)
 {
   // Register to handle the signals that indicate when the server should exit.

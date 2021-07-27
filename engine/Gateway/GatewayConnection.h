@@ -27,5 +27,6 @@ public:
 	void sendMsgToClient(int msgId, char* data, int dataLen);
 
 	void setSceneServiceId(int sceneServiceId);
+	inline int getSceneServiceId() { return m_sceneServiceId; };
 };
 

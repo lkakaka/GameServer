@@ -5,10 +5,10 @@
 #include "PyHttpUtil.h"
 #include "server.hpp"
 
-reply_ptr onRecvHttpReq(void* server, int conn_id, const request& req) {
+reply_ptr onRecvHttpReq(void* server, int conn_id, const http::server::request& req) {
 	http::server::server* _server = (http::server::server*)server;
 	auto py_state = PyGILState_Ensure();
-	PyObject* scriptObj = (PyObject*)_server->getScriptObj();
+	PyObject* scriptObj = (PyObject*)_server->getScriptObject();
 	PyObject* pModule = PyImport_ImportModule("http_util.http_req");//这里是要调用的文件名
 	if (pModule == NULL)
 	{
@@ -31,11 +31,11 @@ reply_ptr onRecvHttpReq(void* server, int conn_id, const request& req) {
 	PyObject_SetAttrString(http_req, "uri", PyUnicode_FromString(req.uri.c_str()));
 	PyObject_SetAttrString(http_req, "headers", headers);
 
-	PyObject* args = PyTuple_New(2);
-	PyTuple_SetItem(args, 0, PyLong_FromLong(conn_id));
-	PyTuple_SetItem(args, 1, http_req);
+	PyObject* param = PyTuple_New(2);
+	PyTuple_SetItem(param, 0, PyLong_FromLong(conn_id));
+	PyTuple_SetItem(param, 1, http_req);
 	//PyObject* pFunc = PyObject_GetAttrString(pModule, "on_recv_http_req");//这里是要调用的函数名
-	PyObject* resp = callPyObjFunc(scriptObj, "on_recv_http_req", args);
+	PyObject* resp = callPyObjFunc(scriptObj, "on_recv_http_req", param);
 
 	reply_ptr rep = NULL;
 	if (resp != NULL && resp != Py_None) {
@@ -48,7 +48,7 @@ reply_ptr onRecvHttpReq(void* server, int conn_id, const request& req) {
 
 
 static PyObject* ModuleError;
-static char* ModuleName = "Http";
+static const char* ModuleName = "Http";
 
 static PyObject* createHttpServer(PyObject* self, PyObject* args)
 {

@@ -5,8 +5,8 @@ add_definitions(-DSERVER_EXPORT -DOPEN_PROFILE_TRACK)
 
 gnu_setting(false)
 
-include_directories(${LOG4CPP_ROOT}/include ${Boost_INCLUDE_DIRS} ${PYTHON_ROOT}/include ${LOG4CPP_ROOT})
-link_directories(${LOG4CPP_ROOT} ${Boost_LIBRARY_DIRS} ${PYTHON_ROOT}/libs ${LOG4CPP_ROOT})
+include_directories(${LOG4CPP_ROOT}/include ${Boost_INCLUDE_DIRS} ${LOG4CPP_ROOT} ${GAMELIB_ROOT})
+link_directories(${LOG4CPP_ROOT} ${Boost_LIBRARY_DIRS} ${LOG4CPP_ROOT})
 
 file(GLOB_RECURSE CURRENT_HEADERS *.h *.hpp)
 file(GLOB_RECURSE CURRENT_SRC *.cpp *cc)

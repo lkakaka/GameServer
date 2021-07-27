@@ -1,5 +1,6 @@
 #include "GatewayNet.h"
 #include "GatewayConnection.h"
+#include "proto.h"
 
 INIT_SINGLETON_CLASS(GatewayNet)
 
@@ -14,5 +15,11 @@ ServerConnection* GatewayNet::onAccept(std::shared_ptr<tcp::socket> sock) {
 }
 
 void GatewayNet::onCloseConnection(ServerConnection* conn, const char* reason) {
-
+	GatewayConnection* gatewayConn = (GatewayConnection*)conn;
+	ClientDisconnect msg;
+	msg.set_conn_id(conn->getConnID());
+	msg.set_reason(reason);
+	std::string msgData;
+	msg.SerializeToString(&msgData);
+	gatewayConn->dispatchClientMsg(MSG_ID_CLIENT_DISCONNECT, msgData.length(), msgData.c_str());
 }

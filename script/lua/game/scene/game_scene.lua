@@ -113,20 +113,20 @@ function clsGameScene:add_player(game_player)
 end
 
 function clsGameScene:remove_player(role_id, reason)
-    local player = self.get_player_by_role_id(role_id)
+    local player = self:get_player_by_role_id(role_id)
     if player == nil then return end
     -- # self.scene_obj.removePlayer()
-    self._engineObj.removeActor(player.actor_id)
+    self._engineObj:removeActor(player.actor_id)
     self._mic_player:removeElem(player)
     self._actors[player.actor_id] = nil
     self.service:on_remove_player(player.conn_id)
     player:on_leave_scene()
 
-    logger.logInfo("remove player, role_id:%d, reason:%d", role_id, reason)
+    logger.logInfo("remove player, role_id:%d, reason:%s", role_id, reason)
 end
 
 function clsGameScene:tick_player(role_id, reason)
-    local player = self.get_player_by_role_id(role_id)
+    local player = self:get_player_by_role_id(role_id)
     if player == nil then return end
     self:remove_player(role_id, reason)
     player:on_leave_game()
