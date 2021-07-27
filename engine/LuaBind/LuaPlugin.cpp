@@ -64,21 +64,14 @@ sol::table LuaPlugin::initLua(const char* funcName) {
 
 	m_lua->script("package.path = '../script/lua/?.lua;'..package.path");
 	m_lua->script("package.cpath = '../bin/?.so;'..package.cpath");
-	//m_lua->script("package.path = '../script/lua/?.lua;'..package.path");
 	m_lua->script("print(package.path)");
 	m_lua->script("print(_VERSION)");
 	//m_lua->set_panic(panicFunc);
 	//m_lua->set_exception_handler(exceptionHandler);
 
-	/*sol::protected_function_result result = m_lua->script_file("main.lua");
-	if (!result.valid()) {
-		Logger::logError("$lua result = %d", result.status());
-		for (auto iter = result.begin(); iter != result.end(); iter++) {
-			std::string s = iter->operator std::string();
-			Logger::logError("$%s", s.c_str());
-		}
-	}*/
-	sol::object obj = m_lua->require_file("main", "../script/lua/main.lua");
+	//m_lua->require_file("main", "../script/lua/main.lua");
+	m_lua->script_file("../script/lua/main.lua");
+	sol::function::set_default_handler(((*m_lua)["got_problems"]));
 	sol::protected_function_result result = callLuaFunc("service_factory", funcName);
 	if (!result.valid()) THROW_EXCEPTION("create service error");
 	sol::table tbl = result.get<sol::table>(0);

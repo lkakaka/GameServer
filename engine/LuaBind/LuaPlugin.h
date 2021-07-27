@@ -45,7 +45,8 @@ public:
 			Logger::logError("$call lua func %s.%s invalid", modName == NULL ? "" : modName, funcName);
 			return sol::protected_function_result(NULL, -1, 0, 0, sol::call_status::runtime);
 		}
-		func.set_default_handler((*m_lua)["got_problems"]);
+		//func.set_default_handler(((*m_lua)["got_problems"]));
+		//func.set_default_handler(sol::make_object(m_lua->lua_state(), &sol::default_traceback_error_handler));
 		return LuaPlugin::callLuaFunc(func, std::forward<Args>(args)...);
 	}
 
@@ -54,14 +55,12 @@ public:
 		sol::protected_function_result result = func(std::forward<Args>(args)...);
 		if (!result.valid()) {
 			Logger::logError("$lua result = %d", result.status());
-			for (auto iter = result.begin(); iter != result.end(); iter++) {
+			/*for (auto iter = result1.begin(); iter != result1.end(); iter++) {
 				std::string s = iter->operator std::string();
 				Logger::logError("$%s", s.c_str());
-			}
+			}*/
 
 			sol::error err = result;
-			std::string what = err.what();
-			std::cout << what << std::endl;
 			Logger::logError("$%s", err.what());
 		}
 		return result;

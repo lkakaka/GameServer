@@ -51,7 +51,7 @@ function clsSceneService:onRegSceneResp(result, scene_info)
 end
 
 function clsSceneService:remove_scene(scene_uid)
-    scene = self._scenes[scene_uid]
+    local scene = self._scenes[scene_uid]
     if scene ~= nil then
         scene.on_destroy()
     end

@@ -23,6 +23,9 @@ end
 function log(fmt, ...)
     local s = string.format(fmt, ...)
     print(s)
+    local msg = debug.traceback(nil, 2)
+    print(type(msg))
+    print(msg)
     -- local arg={...}
     -- for k, v in ipairs(arg) do
     --     string.format(fmt, unpack(arg) )

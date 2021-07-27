@@ -24,8 +24,9 @@ service_factory = {}
 -- 	return x + y
 -- end
 
-function got_problems( error_msg )
-	return "got_problems handler: " .. error_msg
+function got_problems(error_msg)
+	-- print(debug.traceback())
+	return error_msg .. "\n" .. debug.traceback(nil, 2)
 end
 
 function service_factory.create_login_service()

@@ -39,11 +39,6 @@ PyObject* GameService::callPyFunc(const char* funcName, PyObject* args) {
 	return obj;
 }
 
-//sol::protected_function_result GameService::callLuaFunc(const char* funcName, ...) {
-//	sol::function func = m_luaObj.get<sol::function>(funcName);
-//	func(std::move();
-//}
-
 void GameService::dispatchClientMsgToScript(int connId, int msgId, const char* data, int len) {
 #ifdef USE_PYTHON_SCRIPT
 	auto py_state = PyGILState_Ensure();
@@ -58,15 +53,8 @@ void GameService::dispatchClientMsgToScript(int connId, int msgId, const char* d
 	char* buff = new char[len + 1]{ 0 };
 	memcpy(buff, data, len);
 	sol::function func = m_luaObj.get<sol::function>("on_recv_client_msg");
-	sol::protected_function_result result = func(m_luaObj, connId, msgId, buff);
+	LuaPlugin::callLuaFunc(func, m_luaObj, connId, msgId, buff);
 	delete[] buff;
-	if (!result.valid()) {
-		Logger::logError("$lua result = %d", result.status());
-		sol::error err = result;
-		std::string what = err.what();
-		std::cout << what << std::endl;
-		Logger::logError("$%s", err.what());
-	}
 
 #endif // USE_PYTHON_SCRIPT
 
@@ -91,14 +79,7 @@ void GameService::dispatchServiceMsgToScript(ServiceAddr* srcAddr, int msgId, co
 	char* buff = new char[len+1] {0};
 	memcpy(buff, data, len);
 	sol::function func = m_luaObj.get<sol::function>("on_recv_service_msg");
-	sol::protected_function_result result = func(m_luaObj, srcAddr->getName(), msgId, buff);
+	LuaPlugin::callLuaFunc(func, m_luaObj, srcAddr->getName(), msgId, buff);
 	delete[] buff;
-	if (!result.valid()) {
-		Logger::logError("$lua result = %d", result.status());
-		sol::error err = result;
-		std::string what = err.what();
-		std::cout << what << std::endl;
-		Logger::logError("$%s", err.what());
-	}
 #endif // USE_PYTHON_SCRIPT
 }
