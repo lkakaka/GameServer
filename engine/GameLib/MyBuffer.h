@@ -18,7 +18,7 @@ public:
 	MyBuffer();
 	MyBuffer(const char* data, int len);
 
-	inline int size() { return buffer.size() - cur_pos; }
+	inline size_t size() { return buffer.size() - cur_pos; }
 	inline unsigned char* data() { return buffer.data() + cur_pos; }
 	void remove(int len);
 

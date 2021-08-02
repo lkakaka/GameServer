@@ -23,6 +23,7 @@ function clsSceneCtrlService:initRpcHandlder()
     self:regRpcHandler("Player_LeaveGame", self.rpcPlayerLeaveGame)
     self:regRpcHandler("Player_SwitchScene", self.rpcPlayerSwitchScene)
     self:regRpcHandler("Player_EnterScene", self.rpcPlayerEnterScene)
+    self:regRpcHandler("Player_SwitchSceneReq", self.rpcPlayerSwitchSceneReq)
 end
 
 function clsSceneCtrlService:rpc_RegScene(sender, param)
@@ -57,6 +58,18 @@ end
 function clsSceneCtrlService:rpcPlayerLeaveGame(sender, param)
     self._player_mgr:remove_player(param.role_id)
     logger.logInfo("player leave game, role_id:%d", param.role_id)
+end
+
+function clsSceneCtrlService:rpcPlayerSwitchSceneReq(sender, param)
+    local role_id = param.role_id
+    local scene_id = param.scene_id
+    local scene = self._scene_mgr:get_min_player_scene(scene_id)
+    if scene == nil then
+        logger.logInfo("player switch scene req failed, not found scene, scene_id:%d, role_id:%d", scene_id, role_id)
+        return ErrorCode.NOT_FOUND_SCENE, -1
+    end
+    logger.logInfo("player switch scene req, role_id:%d, scene_id:%d, scene_uid:%d", role_id, scene_id, scene.scene_uid)
+    return ErrorCode.OK, scene.scene_uid
 end
 
 function clsSceneCtrlService:rpcPlayerSwitchScene(sender, param)

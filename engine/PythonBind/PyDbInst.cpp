@@ -60,14 +60,14 @@ static PyObject* executeSql(PyObject* self, PyObject* args)
 
 	StatementPtr ptr = dbHandler->executeSql(sql);
 	if (ptr == NULL) Py_RETURN_NONE;
-	sql::Statement* st = ptr->getStatement();
+	//sql::Statement* st = ptr->getStatement();
 	bool isResultSet = ptr->isResultSet();
 
 	PyObject* result = PyList_New(0);
 	/*Logger::logInfo("$execute sql return!!");*/
 	while (true) {
 		if (isResultSet) {
-			sql::ResultSet* rs = st->getResultSet();
+			sql::ResultSet* rs = ptr->getResultSet();
 			sql::ResultSetMetaData* metaData = rs->getMetaData();
 			int colCount = metaData->getColumnCount();
 			PyObject* fieldTuple = PyTuple_New(colCount);
@@ -96,7 +96,7 @@ static PyObject* executeSql(PyObject* self, PyObject* args)
 			}
 		}
 		else {
-			int64_t updateCount = st->getUpdateCount();
+			int64_t updateCount = ptr->getUpdateCount();
 			if (updateCount < 0) {
 				break;
 			}
@@ -108,7 +108,7 @@ static PyObject* executeSql(PyObject* self, PyObject* args)
 			PyList_Append(result, dataTuple);
 		}
 
-		isResultSet = st->getMoreResults();
+		isResultSet = ptr->getMoreResults();
 	}
 
 	return result;
@@ -146,7 +146,7 @@ static bool _initTable(DBHandler* dbHandler, PyObject* tblObj) {
 		case TableField::FieldType::TYPE_DOUBLE:
 		{
 			if (defaultObj != Py_None) {
-				long defVal = PyFloat_AsDouble(defaultObj);
+				double defVal = PyFloat_AsDouble(defaultObj);
 				field->defaut_val = defVal;
 			}
 			break;

@@ -31,7 +31,7 @@ function clsSceneService:createScene(scene_id)
     self._scenes[gameScene.scene_uid] = gameScene
     local scene_info = { scene_id = gameScene.scene_id, scene_uid = gameScene.scene_uid }
     local future = self:callRpc(LOCAL_SERVICE_SCENE_CTRL, "RegScene", 10, scene_info)
-    future:regCallback(function(result) self:onRegSceneResp(result, scene_info) end)
+    future:regCallback(function(err_code, result) self:onRegSceneResp(err_code, scene_info) end)
 end
 
 function clsSceneService:initRpcHandler()
@@ -42,11 +42,11 @@ function clsSceneService:initServiceMsgHandler()
     -- self:regServiceMsgHandler(MSG_ID_CLIENT_DISCONNECT, self.onClientDisconnect)
 end
 
-function clsSceneService:onRegSceneResp(result, scene_info)
-    if result.errCode == ErrorCode.OK then
+function clsSceneService:onRegSceneResp(err_code, scene_info)
+    if err_code == ErrorCode.OK then
         logger.logInfo("reg scene sucess, scene_id:%d, scene_uid:%d", scene_info.scene_id, scene_info.scene_uid)
     else
-        logger.logError("reg scene failed, errCode:%d, scene_id:%d, scene_uid:%d", result.errCode, scene_info.scene_id, scene_info.scene_uid)
+        logger.logError("reg scene failed, errCode:%d, scene_id:%d, scene_uid:%d", err_code, scene_info.scene_id, scene_info.scene_uid)
     end
 end
 

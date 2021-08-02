@@ -25,9 +25,8 @@ end
 
 function clsFuture:onTimeout()
     print("clsFuture:onTimeout", #self.callback)
-    local result = { errCode = ErrorCode.TIME_OUT }
-    for i, cb in ipairs(self.callback) do
-        cb(result)
+    for _, cb in ipairs(self.callback) do
+        cb(ErrorCode.TIME_OUT, nil)
     end
     self.timerId = -1
     self.rpc:removeFuture(self.rpcId)
@@ -38,12 +37,9 @@ function clsFuture:regCallback(callback)
 end
 
 function clsFuture:onRecvResp(msg)
-    local result = StrUtil.strToTable(msg.rpc_data)
-    if result["errCode"] == nil then
-        result.errCode = ErrorCode.OK
-    end
-    for i, cb in ipairs(self.callback) do
-        cb(result)
+    local res = StrUtil.strToTable(msg.rpc_data)
+    for _, cb in ipairs(self.callback) do
+        cb(res.errCode, res.result)
     end
     self.rpc:removeFuture(self.rpcId)
 end

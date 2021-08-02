@@ -9,6 +9,7 @@
 #include "Redis.h"
 #include "DataBase.h"
 #include "DBTable.h"
+#include "Logger.h"
 
 #ifndef USE_MYSQLX
 #ifndef WIN32
@@ -25,16 +26,42 @@ class _Statement
 private:
 	sql::Statement* m_st;
 	bool m_isResultSet;
+	std::vector<sql::ResultSet*> m_rs;
 public:
 	_Statement(sql::Statement* st, bool isResultSet) : m_st(st), m_isResultSet(isResultSet){
 		//printf("statement constructor\n");
 	}
 	~_Statement() {
-		//printf("statement free\n");
-		if (m_st != NULL) m_st->close();
+		if (m_st != NULL) {
+			try {
+				for (sql::ResultSet* rs : m_rs) {
+					rs->close();
+					delete rs;
+				}
+				m_rs.clear();
+				//printf("statement free\n");
+				m_st->close();
+			}
+			catch (std::exception e) {
+				Logger::logError("statement free\n, %s", e.what());
+			}
+		}
 	}
-	inline sql::Statement* getStatement() { return m_st; }
+	//inline sql::Statement* getStatement() { return m_st; }
 	inline bool isResultSet() { return m_isResultSet; }
+	sql::ResultSet* getResultSet(){ 
+		sql::ResultSet * rs = m_st->getResultSet();
+		m_rs.push_back(rs);
+		return rs;
+	}
+
+	inline bool getMoreResults() {
+		return m_st->getMoreResults();
+	}
+
+	inline uint64_t getUpdateCount() {
+		return m_st->getUpdateCount();
+	}
 };
 
 typedef std::shared_ptr<_Statement> StatementPtr;

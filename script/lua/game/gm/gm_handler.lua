@@ -15,7 +15,7 @@ end
 --     args = nil,
 -- }
 function clsGMHandler:handle_gm_cmd(cmd, param)
-    local func = GMHandler._gm_cmd.get_cmd_func(cmd)
+    local func = clsGMHandler._gm_cmd[cmd]
     if func == nil then
         logger.logError("not found gm handler func, cmd:%s", cmd)
         return "not define cmd"

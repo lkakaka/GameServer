@@ -1,6 +1,6 @@
 require("base.object")
 require("util.logger")
-require("util.rpc")
+require("base.rpc")
 require("base.service_type")
 require("base.db_proxy")
 require("base.id_mgr")

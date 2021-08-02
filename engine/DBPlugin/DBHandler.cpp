@@ -96,12 +96,12 @@ DBHandler::DBHandler(const char* dbUrl, int dbPort, const char* dbUserName, cons
 void DBHandler::initTableSchema() {
 	m_tableSchema.clear();
 	Connection* conn = getDBConnection();
+	std::vector<std::string> vecTables;
 	char* sql = "select TABLE_NAME from information_schema.tables where table_schema = '%s' and table_type = 'BASE TABLE'";
 	StatementPtr ptr = executeSql(sql, m_dbName.c_str());
-	Statement* st = ptr->getStatement();
+	//Statement* st = ptr->getStatement();
 
-	sql::ResultSet* rs = st->getResultSet();
-	std::vector<std::string> vecTables;
+	sql::ResultSet* rs = ptr->getResultSet();
 	while (rs->next()) {
 		vecTables.push_back(rs->getString(1).c_str());
 	}
@@ -110,10 +110,10 @@ void DBHandler::initTableSchema() {
 		std::shared_ptr<TableSchema> ptrTable = std::make_shared<TableSchema>();
 		m_tableSchema.emplace(*iter, ptrTable);
 		// ÕÒÖ÷¼ü
-		sql = "select column_name from information_schema.key_column_usage where constraint_schema = '%s' and table_name = '%s' and constraint_name='PRIMARY'";
-		ptr = executeSql(sql, m_dbName.c_str(), iter->c_str());
-		st = ptr->getStatement();
-		sql::ResultSet* rs = st->getResultSet();
+		const char* sql = "select column_name from information_schema.key_column_usage where constraint_schema = '%s' and table_name = '%s' and constraint_name='PRIMARY'";
+		StatementPtr ptr = executeSql(sql, m_dbName.c_str(), iter->c_str());
+		//Statement* st = ptr->getStatement();
+		sql::ResultSet* rs = ptr->getResultSet();
 		if (!rs->next()) {
 			Logger::logError("$not primary key, table:%s", iter->c_str());
 			exit(1);
@@ -153,10 +153,10 @@ void DBHandler::initTableSchema() {
 }
 
 void DBHandler::getTableCols(const char* tableName, std::vector<TableField>& fields) {
-	char* sql = "select column_name, data_type, column_default, character_maximum_length from information_schema.columns where table_schema = '%s' and table_name = '%s'";
+	const char* sql = "select column_name, data_type, column_default, character_maximum_length from information_schema.columns where table_schema = '%s' and table_name = '%s'";
 	StatementPtr ptr = executeSql(sql, m_dbName.c_str(), tableName);
-	Statement* st = ptr->getStatement();
-	ResultSet* rs = st->getResultSet();
+	//Statement* st = ptr->getStatement();
+	ResultSet* rs = ptr->getResultSet();
 	while (rs->next()) {
 		TableField field;
 		field.fieldName = rs->getString(1).c_str();
@@ -251,8 +251,8 @@ bool DBHandler::initTable(Table* tbl)
 
 	char* sql = "select TABLE_NAME from information_schema.tables where table_schema='%s' and table_name='%s'";
 	StatementPtr ptr = executeSql(sql, m_dbName.c_str(), tbName.c_str());
-	Statement* st = ptr->getStatement();
-	ResultSet* rs = st->getResultSet();
+	//Statement* st = ptr->getStatement();
+	ResultSet* rs = ptr->getResultSet();
 	if (rs->next()) { // ±í´æÔÚ
 		std::vector<TableField> fields;
 		getTableCols(tbName.c_str(), fields);
@@ -271,8 +271,8 @@ bool DBHandler::initTable(Table* tbl)
 		"FROM information_schema.statistics a "
 		"GROUP BY a.TABLE_SCHEMA, a.TABLE_NAME, a.index_name) as b where b.TABLE_NAME = '%s' and b.TABLE_SCHEMA = '%s' and b.index_name LIKE 'Index_%%'";
 	ptr = executeSql(sql, tbName.c_str(), m_dbName.c_str());
-	st = ptr->getStatement();
-	rs = st->getResultSet();
+	//st = ptr->getStatement();
+	rs = ptr->getResultSet();
 	std::set<std::string> indexs;
 	while (rs->next()) {
 		std::string indexName = rs->getString("index_name").c_str();
@@ -351,7 +351,7 @@ bool getColTypeStr(TableField* field, char* str, int len) {
 bool DBHandler::_createNewTable(Table* tbl) {
 	std::string tbName = tbl->tableName;
 	std::string colStr;
-	int colNum = tbl->colNames.size();
+	size_t colNum = tbl->colNames.size();
 	for (int col = 0; col < colNum; col++) {
 		std::string colName = tbl->colNames[col];
 		TableField* field = tbl->getField(colName.c_str());
@@ -527,19 +527,20 @@ void DBHandler::insertOne(ReflectObject tbl)
 	for (auto iter = fieldMap.begin(); iter != fieldMap.end(); iter++) {
 		Field field = iter->second;
 		sql += field.name + ",";
-		char buff[32]{ 0 };
 		switch (field.type)
 		{
-		case TYPE_INT:
-			sprintf(buff, "%d,", tbl.getInt(field.name));
-			val += buff;
-			break;
-		case TYPE_STRING:
-			val = val + "\"" + tbl.getString(field.name) + "\",";
-			break;
-		default:
-			Logger::logError("insert table %s failed, unsupport db field type: %s", tbl.getTypeName().c_str(), field.type);
-			return;
+			case TYPE_INT: {
+				char buff[32]{ 0 };
+				sprintf(buff, "%d,", tbl.getInt(field.name));
+				val += buff;
+				break;
+			}
+			case TYPE_STRING:
+				val = val + "\"" + tbl.getString(field.name) + "\",";
+				break;
+			default:
+				Logger::logError("insert table %s failed, unsupport db field type: %s", tbl.getTypeName().c_str(), field.type);
+				return;
 		}
 	}
 	sql.pop_back();
@@ -778,15 +779,15 @@ bool DBHandler::loadFromDB(Table* tbl, std::vector<Table>& result) {
 			case TableField::FieldType::TYPE_INT:
 			case TableField::FieldType::TYPE_BIGINT:
 			{
-				char buf[64]{ 0 };
-				snprintf(buf, 64, "%ld", field->lval);
+				char buf[128]{ 0 };
+				snprintf(buf, 127, "%I64d", field->lval);
 				colStr += buf;
 				break;
 			}
 			case TableField::FieldType::TYPE_DOUBLE:
 			{
-				char buf[64]{ 0 };
-				snprintf(buf, 64, "%lf", field->lval);
+				char buf[128]{ 0 };
+				snprintf(buf, 127, "%lf", field->dval);
 				colStr += buf;
 				break;
 			}
@@ -810,8 +811,8 @@ bool DBHandler::loadFromDB(Table* tbl, std::vector<Table>& result) {
 	if (ptr == NULL) {
 		return false;
 	}
-	Statement* st = ptr->getStatement();
-	sql::ResultSet* rs = st->getResultSet();
+	//Statement* st = ptr->getStatement();
+	sql::ResultSet* rs = ptr->getResultSet();
 	sql::ResultSetMetaData* metaData = rs->getMetaData();
 	int colCount = metaData->getColumnCount();
 
@@ -829,7 +830,7 @@ bool DBHandler::loadFromDB(Table* tbl, std::vector<Table>& result) {
 			if (colType >= sql::DataType::BIT && colType <= sql::DataType::BIGINT) {
 				int64_t val = rs->getInt64(i);
 				char buf[64];
-				snprintf(buf, 64, "%ld", val);
+				snprintf(buf, 64, "%I64d", val);
 				mpColVals.emplace(colName, buf);
 				tbField->lval = val;
 			}
@@ -912,7 +913,7 @@ bool DBHandler::insertRow(Table* tbl)
 	char* sql = "INSERT INTO %s(%s) VALUES(%s)";
 	StatementPtr ptr = executeSql(sql, tbl->tableName.c_str(), fields.c_str(), vals.c_str());
 	if (ptr == NULL) return false;
-	int updateCount = ptr->getStatement()->getUpdateCount();
+	uint64_t updateCount = ptr->getUpdateCount();
 	if (updateCount <= 0) {
 		Logger::logError("$exe insert sql failed, sql:%s, fields:%s, vals:%s", sql, fields.c_str(), vals.c_str());
 		return false;
@@ -920,8 +921,8 @@ bool DBHandler::insertRow(Table* tbl)
 
 	if (!isSetPriKey) {
 		ptr = executeSql("SELECT last_insert_id()");
-		Statement* st = ptr->getStatement();
-		ResultSet* rs = st->getResultSet();
+		//Statement* st = ptr->getStatement();
+		ResultSet* rs = ptr->getResultSet();
 		if (rs->next()) {
 			tbl->priKeyVal = rs->getInt64(1);
 		} else {
@@ -1077,7 +1078,7 @@ bool DBHandler::replaceRow(Table* tbl)
 
 std::string formatSqlConditions(Table* tbl) {
 	std::string formatStr;
-	int size = tbl->fields.size();
+	size_t size = tbl->fields.size();
 	int count = 0;
 	for (auto iter = tbl->fields.begin(); iter != tbl->fields.end(); iter++) {
 		count++;

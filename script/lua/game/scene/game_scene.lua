@@ -38,9 +38,9 @@ function clsGameScene:prepare_enter_scene(conn_id, role_id)
     local tbls = self:_add_load_tb(role_id)
     local future = self.service.db_proxy:loadMulti(tbls)
 
-    local function on_load_role(result)
+    local function on_load_role(err_code, result)
         print("on_load_role", StrUtil.tableToStr(result))
-        self:on_load_player(result.errCode, conn_id, role_id, result)
+        self:on_load_player(err_code, conn_id, role_id, result)
     end
 
     future:regCallback(on_load_role)

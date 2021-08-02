@@ -24,7 +24,7 @@ void LuaDB::bindLuaDB(std::shared_ptr<sol::state> lua) {
 sol::object LuaDB::executeSql(const char* sql, sol::this_state s) {
 	StatementPtr ptr = m_dbHandler->executeSql(sql);
 	if (ptr == NULL) sol::nil;
-	sql::Statement* st = ptr->getStatement();
+	//sql::Statement* st = ptr->getStatement();
 	bool isResultSet = ptr->isResultSet();
 
 	sol::state_view lua(s);
@@ -32,7 +32,7 @@ sol::object LuaDB::executeSql(const char* sql, sol::this_state s) {
 	/*Logger::logInfo("$execute sql return!!");*/
 	while (true) {
 		if (isResultSet) {
-			sql::ResultSet* rs = st->getResultSet();
+			sql::ResultSet* rs = ptr->getResultSet();
 			sql::ResultSetMetaData* metaData = rs->getMetaData();
 			int colCount = metaData->getColumnCount();
 			//sol::table fieldTuple = sol::table::create_with(s.lua_state());
@@ -66,7 +66,7 @@ sol::object LuaDB::executeSql(const char* sql, sol::this_state s) {
 			}
 		}
 		else {
-			int64_t updateCount = st->getUpdateCount();
+			int64_t updateCount = ptr->getUpdateCount();
 			if (updateCount < 0) {
 				break;
 			}
@@ -79,7 +79,7 @@ sol::object LuaDB::executeSql(const char* sql, sol::this_state s) {
 			result.add(dataTuple);
 		}
 
-		isResultSet = st->getMoreResults();
+		isResultSet = ptr->getMoreResults();
 	}
 
 	return result;

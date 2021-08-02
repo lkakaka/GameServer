@@ -11,7 +11,7 @@ struct TableField
 {
 public:
 	std::string fieldName;
-	long lval;
+	int64_t lval;
 	double dval;
 	std::string sval;
 	std::string defaut_val;
@@ -47,7 +47,7 @@ class Table
 public:
 	std::string tableName;
 	std::string priKeyName;
-	long priKeyVal;
+	int64_t priKeyVal;
 	bool isAutoIncr;  // 主键是否自增
 	std::map<std::string, std::shared_ptr<TableField>> fields;
 	std::vector<std::string> colNames;
@@ -57,8 +57,8 @@ public:
 	Table():priKeyVal(0), isAutoIncr(false){}
 
 	std::string redisKey() { 
-		char buf[64];
-		snprintf(buf, 64, "%ld", priKeyVal);
+		char buf[128]{0};
+		snprintf(buf, 127, "%I64d", priKeyVal);
 		return tableName + ":" + buf;
 	}
 
@@ -73,10 +73,10 @@ public:
 		return iter->second.get();
 	}
 
-	static std::string redisKey(const char* tableName, long keyVal) {
+	static std::string redisKey(const char* tableName, int64_t keyVal) {
 		std::string redis_key = tableName;
-		char buf[64];
-		snprintf(buf, 64, "%ld", keyVal);
+		char buf[128];
+		snprintf(buf, 127, "%I64d", keyVal);
 		return redis_key + ":" + buf;
 	}
 };

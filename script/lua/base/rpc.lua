@@ -1,7 +1,7 @@
 require("base.object")
 require("util.logger")
 require("proto.pb_message")
-require("util.future")
+require("base.future")
 require("util.str_util")
 
 clsRpc = clsObject:Inherit("clsRpc")
@@ -37,17 +37,9 @@ function clsRpc:onRecvRpcMsg(sender, msg)
     local param = StrUtil.strToTable(msg.rpc_param)
     local errCode, result = rpcFunc(self._service, sender, param)
 
-    local retTable = nil
-    if type(result) == "table" then
-        retTable = result
-        retTable["errCode"] = errCode
-    else
-        retTable = { errCode = errCode, result}
-    end
-
     local resp = {
         rpc_id = msg.rpc_id,
-        rpc_data = StrUtil.tableToStr(retTable),
+        rpc_data = StrUtil.tableToStr({ errCode = errCode, result = result}),
     }
     self._service:sendMsgToService(sender, MSG_ID_RPC_MSG_RSP, resp)
 end

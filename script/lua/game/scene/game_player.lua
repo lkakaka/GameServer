@@ -87,9 +87,9 @@ function clsGamePlayer:try_switch_scene(scene_id)
     end
     local role_id = self.role_id
 
-    function _on_finish(error_code, scene_uid)
-        if error_code ~= ErrorCode.OK then
-            logger.logError("switch scene failed, role_id:%d, scene_id:%d, err:%d", role_id, scene_id, error_code)
+    local function _on_finish(err_code, scene_uid)
+        if err_code ~= ErrorCode.OK then
+            logger.logError("switch scene failed, role_id:%d, scene_id:%d, err:%d", role_id, scene_id, err_code)
             return
         end
         self:switch_scene(scene_uid)

@@ -37,7 +37,7 @@ static void signalHandler( int signum )
 	Logger::logInfo("$stop server!!!!");
 	io.stop();
  
-    // ¿¿¿¿¿
+    // ¿¿¿¿?
     //     // ¿¿¿¿ 
           
     //exit(signum);  

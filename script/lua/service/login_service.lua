@@ -37,9 +37,9 @@ function clsLoginService:loginReq(conn_id, msg_id, msg)
 end
 
 function clsLoginService:_load_role_list(conn_id, account)
-    local function on_load_role_list(tbl)
-        print("on_load_role_list---", tbl.errCode, StrUtil.tableToStr(tbl))
-        self:_on_load_role_list(account, tbl.errCode, tbl)
+    local function on_load_role_list(err_code, tbl)
+        print("on_load_role_list---", err_code, StrUtil.tableToStr(tbl))
+        self:_on_load_role_list(account, err_code, tbl)
     end
 
     local future = self.db_proxy:load("player", {account=account})
@@ -85,8 +85,8 @@ function clsLoginService:enterGameReq(conn_id, msg_id, msg)
         return
     end
 
-    local function on_load_role(result)
-        self:_on_load_role(conn_id, result.errCode, result)
+    local function on_load_role(err_code, tbl)
+        self:_on_load_role(conn_id, err_code, tbl)
     end
 
     local future = self.db_proxy:load("player", {role_id=msg.role_id})
@@ -111,9 +111,9 @@ function clsLoginService:_on_load_role(conn_id, err_code, tbl)
 
     local row = tbl.rows[1]
 
-    local function _on_query_login_scene(result)
-        if result.errCode ~= ErrorCode.OK then
-            self:_send_enter_game_rsp(conn_id, result.errCode)
+    local function _on_query_login_scene(err_code, result)
+        if err_code ~= ErrorCode.OK then
+            self:_send_enter_game_rsp(conn_id, err_code)
             return
         end
         self:_send_enter_game_rsp(conn_id, ErrorCode.OK, row)
