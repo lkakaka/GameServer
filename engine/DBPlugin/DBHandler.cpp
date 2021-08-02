@@ -35,7 +35,10 @@ DBHandler::DBHandler(const char* dbUrl, int dbPort, const char* dbUserName, cons
 	sql += dbName;
 	sql::SQLString sqlStr = sql::SQLString(sql.c_str());
 	st->execute(sqlStr);
+	st->close();
+	delete st;
 	conn->close();
+	delete conn;
 	m_isCreateDB = true;
 	initTableSchema();
 
@@ -219,6 +222,8 @@ Connection* DBHandler::getDBConnection()
 			return m_dbConn;
 		}
 		m_dbConn->close();
+		delete m_dbConn;
+		m_dbConn = NULL;
 	}
 	Driver* driver = get_driver_instance();
 	char urlBuf[32]{ 0 };
@@ -547,14 +552,15 @@ void DBHandler::insertOne(ReflectObject tbl)
 	val.pop_back();
 
 	sql += ")" + val + ")";
-	sql::SQLString sqlStr = sql::SQLString(sql.c_str());
+	//sql::SQLString sqlStr = sql::SQLString(sql.c_str());
 	Connection* conn = getDBConnection();
 	if (conn == NULL) {
 		Logger::logError("$exec sql failed, conn is null, sql: %s", sql.c_str());
 		return;
 	}
-	Statement* st = conn->createStatement();
-	st->execute(sqlStr);
+	/*Statement* st = conn->createStatement();
+	st->execute(sqlStr);*/
+	executeSql(sql.c_str());
 }
 
 void DBHandler::select(ReflectObject tbl)
@@ -597,8 +603,11 @@ void DBHandler::select(ReflectObject tbl)
 		Logger::logError("$exec sql failed, conn is null, sql: %s", sql.c_str());
 		return;
 	}
-	Statement* st = conn->createStatement();
-	ResultSet* result = st->executeQuery(sqlStr);
+	/*Statement* st = conn->createStatement();
+	ResultSet* result = st->executeQuery(sqlStr);*/
+
+	StatementPtr ptr = executeSql(sql.c_str());
+	ResultSet* result = ptr->getResultSet();
 
 	/*ResultSetMetaData* metaData = result->getMetaData();
 	for (int i = 1; i <= metaData->getColumnCount(); i++) {
@@ -680,14 +689,15 @@ void DBHandler::update(ReflectObject src, ReflectObject dst)
 	}
 
 	sql += " SET " + val + " WHERE " + conditions;
-	sql::SQLString sqlStr = sql::SQLString(sql.c_str());
+	//sql::SQLString sqlStr = sql::SQLString(sql.c_str());
 	Connection* conn = getDBConnection();
 	if (conn == NULL) {
 		Logger::logError("$exec sql failed, conn is null, sql: %s", sql.c_str());
 		return;
 	}
-	Statement* st = conn->createStatement();
-	st->execute(sqlStr);
+	/*Statement* st = conn->createStatement();
+	st->execute(sqlStr);*/
+	executeSql(sql.c_str());
 }
 
 void DBHandler::del(ReflectObject tbl)
@@ -726,14 +736,15 @@ void DBHandler::del(ReflectObject tbl)
 	}
 
 	sql += " WHERE " + conditions;
-	sql::SQLString sqlStr = sql::SQLString(sql.c_str());
+	//sql::SQLString sqlStr = sql::SQLString(sql.c_str());
 	Connection* conn = getDBConnection();
 	if (conn == NULL) {
 		Logger::logError("$exec sql failed, conn is null, sql: %s", sql.c_str());
 		return;
 	}
-	Statement* st = conn->createStatement();
-	st->execute(sqlStr);
+	/*Statement* st = conn->createStatement();
+	st->execute(sqlStr);*/
+	executeSql(sql.c_str());
 }
 
 StatementPtr DBHandler::executeSql(const char* sqlFormat, ...)
@@ -759,6 +770,8 @@ StatementPtr DBHandler::executeSql(const char* sqlFormat, ...)
 	}
 	catch (std::exception& e) {
 		Logger::logError("$execute sql failed, sql:%s, ex: %s", m_sqlBuf, e.what());
+		st->close();
+		delete st;
 	}
 	return NULL;
 }
@@ -780,7 +793,7 @@ bool DBHandler::loadFromDB(Table* tbl, std::vector<Table>& result) {
 			case TableField::FieldType::TYPE_BIGINT:
 			{
 				char buf[128]{ 0 };
-				snprintf(buf, 127, "%I64d", field->lval);
+				snprintf(buf, 128, "%I64d", field->lval);
 				colStr += buf;
 				break;
 			}

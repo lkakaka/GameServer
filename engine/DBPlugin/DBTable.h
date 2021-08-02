@@ -58,7 +58,7 @@ public:
 
 	std::string redisKey() { 
 		char buf[128]{0};
-		snprintf(buf, 127, "%I64d", priKeyVal);
+		snprintf(buf, 128, "%I64d", priKeyVal);
 		return tableName + ":" + buf;
 	}
 
@@ -76,7 +76,7 @@ public:
 	static std::string redisKey(const char* tableName, int64_t keyVal) {
 		std::string redis_key = tableName;
 		char buf[128];
-		snprintf(buf, 127, "%I64d", keyVal);
+		snprintf(buf, 128, "%I64d", keyVal);
 		return redis_key + ":" + buf;
 	}
 };

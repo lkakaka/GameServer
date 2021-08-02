@@ -30,6 +30,8 @@ void DBPlugin::initDBPlugin(std::string dbDir)
 		sql::SQLString sqlStr = sql::SQLString(sql.c_str());
 		//sql::SQLString sqlStr = sql;
 		st->execute(sqlStr);
+		st->close();
+		delete st;
 
 		/*Statement* stmt = conn->createStatement();
 		stmt->executeQuery("SELECT * FROM bd_pred_dut");*/

@@ -41,6 +41,7 @@ public:
 				m_rs.clear();
 				//printf("statement free\n");
 				m_st->close();
+				delete m_st;
 			}
 			catch (std::exception e) {
 				Logger::logError("statement free\n, %s", e.what());
