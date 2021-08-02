@@ -4,6 +4,7 @@ require("util.logger")
 require("game.scene.game_player")
 require("util.multi_index_container")
 require("base.service_type")
+require("data.cfg_scene")
 
 clsGameScene = clsObject:Inherit("clsGameScene")
 
@@ -17,7 +18,9 @@ function clsGameScene:__init__(service, scene_id)
     self._actors = {}
     self._mic_player = clsMultIndexContainer:New({clsGamePlayer.index_roleId, clsGamePlayer.index_connId})
 
-    local navMeshName = "../res/" .. "all_tiles_navmesh.bin"
+    local cfg_scene = CfgScene.find(scene_id)
+    local navMeshName = "../res/" .. cfg_scene.nav_name
+    -- local navMeshName = "../res/" .. "all_tiles_navmesh.bin"
     -- print(type(self._engineObj))
     self._engineObj:loadNavMesh(navMeshName)
     -- print("game scene c++ obj", self._engineObj)

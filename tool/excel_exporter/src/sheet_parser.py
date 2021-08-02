@@ -145,3 +145,9 @@ class SheetParser(object):
         tb_name = "cfg_{0}".format(self.sheet.name.lower())
         with open("../../../script/python/game/data/{0}.py".format(tb_name), "w", encoding="utf-8") as f:
             f.write(result)
+
+        template = env.get_template("template.lua")
+        result = template.render(**render_ctx)
+        tb_name = "cfg_{0}".format(self.sheet.name.lower())
+        with open("../../../script/lua/data/{0}.lua".format(tb_name), "w", encoding="utf-8") as f:
+            f.write(result)
