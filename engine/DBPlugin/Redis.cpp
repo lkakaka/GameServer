@@ -28,6 +28,7 @@ Redis::Redis(const char* ip, int port) : ip(ip), port(port)
 	redisEnableKeepAlive(m_redisContext);
 	redisReply* reply = (redisReply*)redisCommand(m_redisContext, "hgetall test");
 	parseReply(reply);
+	freeReplyObject(reply);
 }
 
 void Redis::parseReply(redisReply* reply) {

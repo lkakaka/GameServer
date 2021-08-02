@@ -5,13 +5,6 @@ require("util.table_util")
 
 clsGMHandler = clsObject:Inherit("clsGMHandler")
 
-clsGMHandler._gm_cmd = {
-    ["add_item"] = clsGMHandler._gm_add_item,
-    ["dump_item"] = clsGMHandler._gm_dump_item,
-    ["hotfix"] = clsGMHandler._gm_hotfix,
-    ["goto_scene"] = clsGMHandler._gm_goto_scene,
-}
-
 function clsGMHandler:__init__(service)
     self.service = service
 end
@@ -65,3 +58,9 @@ function clsGMHandler:_gm_goto_scene(param)
     return "ok"
 end
 
+clsGMHandler._gm_cmd = {
+    ["add_item"] = clsGMHandler._gm_add_item,
+    ["dump_item"] = clsGMHandler._gm_dump_item,
+    ["hotfix"] = clsGMHandler._gm_hotfix,
+    ["goto_scene"] = clsGMHandler._gm_goto_scene,
+}

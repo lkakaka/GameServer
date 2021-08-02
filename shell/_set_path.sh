@@ -14,6 +14,7 @@ VERSION=$VERSION_DEBUG
 if [ "$VERSION" == "$VERSION_RELEASE" ];then
 GAME_SERVER=../bin/GameServer
 else
+export ASAN_OPTIONS=halt_on_error=0:use_sigaltstack=0:detect_leaks=1:malloc_context_size=15:log_path=../log/asan.log
 GAME_SERVER=../bin/GameServer_d
 fi
 

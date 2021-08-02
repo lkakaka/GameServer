@@ -27,7 +27,21 @@ using namespace std;
 std::string getServerConfigStr(const char* key);
 static int getServerConfigInt(const char* key);
 static void initServiceCommEntity(boost::asio::io_service* io);
+	
+static boost::asio::io_service io;
 
+
+static void signalHandler( int signum )
+{
+    std::cout << "Interrupt signal (" << signum << ") received.\n";
+	Logger::logInfo("$stop server!!!!");
+	io.stop();
+ 
+    // ¿¿¿¿¿
+    //     // ¿¿¿¿ 
+          
+    //exit(signum);  
+}
 
 int main(int argc, char** argv)
 {
@@ -65,6 +79,9 @@ int main(int argc, char** argv)
 		printf("$service id error, serviceName: %s", serviceName.c_str());
 		return 0;
 	}
+	
+	//boost::asio::io_service io;
+	signal(SIGTERM, signalHandler);
 
 	ServiceInfo* serviceInfo = new ServiceInfo(serverId, serviceType, serviceId);
 
@@ -80,7 +97,6 @@ int main(int argc, char** argv)
 		Logger::logInfo("$db config, url: %s, port:%d", dbUrl.c_str(), dbPort);
 	}
 
-	boost::asio::io_service io;
 	TimerMgr::initTimerMgr(&io);
 	
 	//PyObject* scriptObj = NULL;
