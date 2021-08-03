@@ -56,12 +56,12 @@ void ServerConnection::_read()
 			Logger::logDebug("$receive data, len=%d", bytes_transferred);
 			m_recvBuffer.writeString(m_readBuf.data(), bytes_transferred);
 			parseMessage();
-			checkRecvBufferSize();
 		} else {
 			Logger::logInfo("$receive data len is 0");
 		}
 
 		if (!m_isClosed) {
+			checkRecvBufferSize();
 			this->_read();
 		}
 	});

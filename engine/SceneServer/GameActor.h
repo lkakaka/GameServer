@@ -41,6 +41,8 @@ public:
 	GameActor(ActorType actorType, int actorId, void* gameScene, GridChgFunc posChgFunc);
 	GameActor(ActorType actorType, int actorId, int x, int y, void* gameScene, GridChgFunc posChgFunc);
 
+	virtual ~GameActor() {}
+
 	inline int getActorId() { return m_actorId; }
 
 	inline void setMoveSpeed(int speed) { m_moveSpeed = speed; }

@@ -54,6 +54,9 @@ end
 
 function clsGMHandler:_gm_goto_scene(param)
     local scene_id = tonumber(param.args)
+    if scene_id == nil then
+        return "error arg"
+    end
     param.player:try_switch_scene(scene_id)
     return "ok"
 end
