@@ -51,8 +51,8 @@ function clsMsgHandler:_on_recv_test_req(msg_id, msg)
     self.player:send_msg_to_client(MSG_ID_TEST_REQ, rsp_msg)
     self.player:send_msg_to_service(LOCAL_SERVICE_DB, MSG_ID_TEST_REQ, msg)
 
-    local function on_load_cb(tbl)
-        print("on_load_cb----", tbl)
+    local function on_load_cb(err_code, tbl)
+        print("on_load_cb----------", err_code, tbl)
     end
 
     local future = game_scene.service.db_proxy:load("player", {role_id=1})

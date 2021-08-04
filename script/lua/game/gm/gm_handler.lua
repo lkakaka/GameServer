@@ -2,6 +2,7 @@ require("base.object")
 require("util.logger")
 require("util.str_util")
 require("util.table_util")
+require("base.hotfix")
 
 clsGMHandler = clsObject:Inherit("clsGMHandler")
 
@@ -40,8 +41,7 @@ end
 
 function clsGMHandler:_gm_hotfix(param)
     if param.args == nil then
-        -- import hotfix.hotfix
-        -- hotfix.hotfix.start_hotfix()
+        Hotfix.hotfix()
         return "ok"
     end
     local arg_list = StrUtil.split(param.args, ",")

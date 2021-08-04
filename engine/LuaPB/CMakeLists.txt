@@ -18,7 +18,7 @@ source_group_by_dir(all_files)
 
 add_library(pb SHARED ${CURRENT_HEADERS} ${CURRENT_SRC})
 if(WIN32)
-	target_link_libraries(pb lua)
+	target_link_libraries(pb liblua)
 else()
 	#target_link_libraries(pb liblua.a dl)
 	target_link_libraries(pb liblua)

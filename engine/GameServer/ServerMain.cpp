@@ -85,7 +85,9 @@ int main(int argc, char** argv)
 
 	ServiceInfo* serviceInfo = new ServiceInfo(serverId, serviceType, serviceId);
 
-	Logger::initLog(serviceName.c_str());
+	std::string logFileName = serviceName;
+	if (serviceId > 0) logFileName += "_" + std::to_string(serviceId);
+	Logger::initLog(logFileName.c_str());
 	Logger::logInfo("$dfas,%%n");
 
 	std::string dbUrl = getServerConfigStr("db_url");

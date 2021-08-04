@@ -52,6 +52,10 @@ function service_factory.create_scene_service()
 	return scene_service
 end
 
+-- for k, v in pairs(package.loaded) do
+-- 	print(k, v)
+-- end
+
 -- for k, v in pairs(_G) do
 -- 	if k == "Config" or k == "_Config" then
 -- 		print(type(k), k, v)

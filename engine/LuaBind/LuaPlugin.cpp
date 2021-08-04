@@ -8,6 +8,7 @@
 #include "LuaRedis.h"
 #include "LuaDB.h"
 #include "LuaConfig.h"
+#include "LuaCrypt.h"
 
 //#ifndef WIN32
 INIT_SINGLETON_CLASS(LuaPlugin)
@@ -53,7 +54,8 @@ static void initLoggerModule(std::shared_ptr<sol::state> lua) {
 
 
 sol::table LuaPlugin::initLua(const char* funcName) {
-	m_lua->open_libraries(sol::lib::base, sol::lib::package, sol::lib::debug, sol::lib::string, sol::lib::table, sol::lib::os);
+	m_lua->open_libraries(sol::lib::base, sol::lib::package, sol::lib::coroutine, sol::lib::string, sol::lib::os, sol::lib::math, 
+		sol::lib::table, sol::lib::debug, sol::lib::bit32, sol::lib::io, sol::lib::lfs);
 	initLoggerModule(m_lua);
 	LuaTimer::bindLuaTimer(m_lua);
 	LuaService::bindLuaService(m_lua);
@@ -61,6 +63,7 @@ sol::table LuaPlugin::initLua(const char* funcName) {
 	LuaRedis::bindLuaRedis(m_lua);
 	LuaDB::bindLuaDB(m_lua);
 	LuaConfig::bindLuaConfig(m_lua);
+	LuaCrypt::bindLuaCrypt(m_lua);
 
 	m_lua->script("package.path = '../script/lua/?.lua;'..package.path");
 	m_lua->script("package.cpath = '../bin/?.so;'..package.cpath");

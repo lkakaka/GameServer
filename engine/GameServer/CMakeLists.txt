@@ -51,7 +51,7 @@ add_executable(GameServer ${CURRENT_HEADERS} ${CURRENT_SRC} ${COMMON_SRC} ${PY_S
 add_dependencies(GameServer DBPlugin)
 target_link_libraries(GameServer MathFunction log4cpp DBPlugin GameLib SceneServer HttpServer Gateway hiredis ServiceCenter LuaBind PythonBind)
 if(WIN32)
-	target_link_libraries(GameServer debug libprotobufd optimized libprotobuf lua)
+	target_link_libraries(GameServer debug libprotobufd optimized libprotobuf liblua)
 	target_link_libraries(GameServer libzmq-v142-mt-4_3_3)
 else()
 	target_link_libraries(GameServer protobuf)

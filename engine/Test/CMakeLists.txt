@@ -12,7 +12,7 @@ include_directories(${Boost_INCLUDE_DIRS} ${SOL_ROOT} ${LUA_ROOT}/include)
 
 add_executable(Test ${CURRENT_HEADERS} ${CURRENT_SRC})
 if(WIN32)
-	target_link_libraries(Test lua)
+	target_link_libraries(Test liblua)
 else()
 	#target_link_libraries(Test liblua.a dl)
 	target_link_libraries(Test liblua)

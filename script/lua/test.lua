@@ -23,9 +23,9 @@ end
 function log(fmt, ...)
     local s = string.format(fmt, ...)
     print(s)
-    local msg = debug.traceback(nil, 2)
-    print(type(msg))
-    print(msg)
+    -- local msg = debug.traceback(nil, 2)
+    -- print(type(msg))
+    -- print(msg)
     -- local arg={...}
     -- for k, v in ipairs(arg) do
     --     string.format(fmt, unpack(arg) )
@@ -42,6 +42,10 @@ print("next", b)
 
 local s = "1.3"
 print(tonumber(100))
+
+if string.match( s, "%.3$") then
+    print("matched")
+end
 
 local t1 = {{3, 2}, {4, 3}}
 for k,v in ipairs(t1) do

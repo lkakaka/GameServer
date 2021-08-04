@@ -7187,6 +7187,8 @@ namespace sol {
 		jit,
 		// library for handling utf8: new to Lua
 		utf8,
+		// lfs, add by liuj
+		lfs,
 		// do not use
 		count
 	};
@@ -25227,6 +25229,10 @@ namespace sol {
 						luaL_requiref(L, "jit", luaopen_jit, 0);
 						lua_pop(L, 1);
 #endif // LuaJIT Only
+						break;
+					case lib::lfs:
+						luaL_requiref(L, "lfs", luaopen_lfs, 1);
+						lua_pop(L, 1);
 						break;
 					case lib::count:
 					default:
