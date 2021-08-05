@@ -26,6 +26,7 @@ end
 
 function clsDBService:rpcLoad(sender, tbl)
     local result = self.db_hander:load(tbl)
+    
     return ErrorCode.OK, result
 end
 

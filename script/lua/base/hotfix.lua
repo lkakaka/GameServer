@@ -34,6 +34,7 @@ function Hotfix.hotfix()
 end
 
 function Hotfix.hotfix_mod(mod_name, md5)
+    if package.loaded[mod_name] == nil then return end
     package.loaded[mod_name] = nil
     require(mod_name)
     if md5 == nil then
@@ -41,7 +42,7 @@ function Hotfix.hotfix_mod(mod_name, md5)
         md5 = FileUtil.calc_file_md5(file_name)
     end
     Hotfix.file_md5[mod_name] = md5
-    logger.logInfo("hotfix %s", mod_name)
+    logger.logInfo("*******hotfix %s", mod_name)
 end
 
 function Hotfix.init()

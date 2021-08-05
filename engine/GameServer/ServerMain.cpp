@@ -5,8 +5,6 @@
 #include "boost/asio.hpp"
 #include "Logger.h"
 #include "DBMgr.h"
-//#include "py/PythonPlugin.h"
-//#include "../Common/PyCommon.h"
 #include "../Common/ServerMacros.h"
 #include "Timer.h"
 #include "UnitTest.h"
@@ -17,7 +15,6 @@
 #include "CmdLine.h"
 #include "ServiceInfo.h"
 
-//#include "lua/LuaPlugin.h"
 #include "GatewayEntry.h"
 #include "ServiceCenter.h"
 #include "Network/ServiceCommEntityMgr.h"
@@ -31,16 +28,11 @@ static void initServiceCommEntity(boost::asio::io_service* io);
 static boost::asio::io_service io;
 
 
-static void signalHandler( int signum )
+static void signalHandler(int signum)
 {
     std::cout << "Interrupt signal (" << signum << ") received.\n";
 	Logger::logInfo("$stop server!!!!");
 	io.stop();
- 
-    // 真真?
-    //     // 真真 
-          
-    //exit(signum);  
 }
 
 int main(int argc, char** argv)
@@ -101,18 +93,7 @@ int main(int argc, char** argv)
 
 	TimerMgr::initTimerMgr(&io);
 	
-	//PyObject* scriptObj = NULL;
 	std::string funcName = getServerConfigStr("script_init_func");
-	//if (funcName.length() > 0) {
-	//	/*initPython();
-	//	auto py_state = PyGILState_Ensure();
-	//	scriptObj = callPyFunction("main", funcName.c_str(), NULL);
-	//	PyGILState_Release(py_state);
-
-	//	new LuaPlugin();
-	//	LuaPlugin::getLuaPlugin()->initLua(funcName.c_str());*/
-	//}
-
 	GameService::g_gameService = new GameService(serviceName, serviceType);
 	GameService::g_gameService->initScript(funcName.c_str());
 

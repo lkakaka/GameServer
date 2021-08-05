@@ -4,6 +4,8 @@ require("base.rpc")
 require("base.service_type")
 require("base.db_proxy")
 require("base.id_mgr")
+require("util.const")
+require("base.hotfix")
 
 clsServiceBase = clsObject:Inherit("clsServiceBase")
 
@@ -15,6 +17,7 @@ function clsServiceBase:__init__()
     self:_init_id_mgr()
     self:regServiceMsgHandler(MSG_ID_RPC_MSG, self.onRecvRpcMsg)
     self:regServiceMsgHandler(MSG_ID_RPC_MSG_RSP, self.onRecvRpcResp)
+    self:regRpcHandler("RpcHotfix", self.rpcHotfix)
     logger.logDebug("clsServiceBase:__init_")
 end
 
@@ -92,4 +95,9 @@ end
 
 function clsServiceBase:callRpc(dstAddr, funcName, timeout, args)
     return self._rpc_mgr:callRpc(dstAddr, funcName, timeout, args)
+end
+
+function clsServiceBase:rpcHotfix(sender, param)
+    Hotfix.hotfix()
+    return ErrorCode.OK
 end

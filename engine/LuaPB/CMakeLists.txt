@@ -17,10 +17,6 @@ set(all_files ${CURRENT_HEADERS} ${CURRENT_SRC})
 source_group_by_dir(all_files)
 
 add_library(pb SHARED ${CURRENT_HEADERS} ${CURRENT_SRC})
-if(WIN32)
-	target_link_libraries(pb liblua)
-else()
-	#target_link_libraries(pb liblua.a dl)
-	target_link_libraries(pb liblua)
-endif()
+target_link_libraries(pb liblua)
+
 SET(LIBRARY_OUTPUT_PATH ${PROJECT_OUT_PATH})

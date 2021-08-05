@@ -40,15 +40,15 @@ function clsGMHandler:_gm_dump_item(param)
 end
 
 function clsGMHandler:_gm_hotfix(param)
-    if param.args == nil then
+    if param.args == nil or param.args == "" then
         Hotfix.hotfix()
         return "ok"
     end
     local arg_list = StrUtil.split(param.args, ",")
-    local service_group = tonumber(arg_list[0])
-    local service_type = tonumber(arg_list[1])
-    local service_id = tonumber(arg_list[2])
-    self.service:rpcCall({serviceGroup=service_group, serviceType=service_type, serviceId=service_id}, "HotFix", -1)
+    local service_group = tonumber(arg_list[1])
+    local service_type = tonumber(arg_list[2])
+    local service_id = tonumber(arg_list[3])
+    self.service:callRpc({serviceGroup=service_group, serviceType=service_type, serviceId=service_id}, "RpcHotfix", -1)
     return "ok"
 end
 
