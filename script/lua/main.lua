@@ -6,6 +6,7 @@ require("util.logger")
 require("proto.pb_message")
 require("util.timer")
 require("base.cmd_line")
+require("base.mem")
 
 service_factory = {}
 
@@ -51,6 +52,8 @@ function service_factory.create_scene_service()
 	scene_service = clsSceneService:New()
 	return scene_service
 end
+
+-- timer.addTimer(300, -1, Mem.gc())
 
 -- for k, v in pairs(package.loaded) do
 -- 	print(k, v)

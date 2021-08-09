@@ -14,10 +14,11 @@ function clsServiceBase:__init__()
     self._clientMsgHandler = {}
     self.db_proxy = clsDBProxy:New(self)
     self._rpc_mgr = clsRpc:New(self)
+    self.gm_handler = clsGMHandler:New(self)
     self:_init_id_mgr()
     self:regServiceMsgHandler(MSG_ID_RPC_MSG, self.onRecvRpcMsg)
     self:regServiceMsgHandler(MSG_ID_RPC_MSG_RSP, self.onRecvRpcResp)
-    self:regRpcHandler("RpcHotfix", self.rpcHotfix)
+    self:regRpcHandler("RpcGMCmd", self.rpcGMCmd)
     logger.logDebug("clsServiceBase:__init_")
 end
 
@@ -97,7 +98,7 @@ function clsServiceBase:callRpc(dstAddr, funcName, timeout, args)
     return self._rpc_mgr:callRpc(dstAddr, funcName, timeout, args)
 end
 
-function clsServiceBase:rpcHotfix(sender, param)
-    Hotfix.hotfix()
-    return ErrorCode.OK
+function clsServiceBase:rpcGMCmd(sender, param)
+    local err_code, result = self.gm_handler:handle_gm_cmd(param.cmd, param.params or {})
+    return err_code, result
 end

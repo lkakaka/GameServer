@@ -14,7 +14,7 @@ public:
 	long long a;
 	/*virtual void test1() {};
 	virtual void test2() {};*/
-	~Base() { printf("~Base\n"); };
+	virtual ~Base() { printf("~Base\n"); };
 };
 
 class Base1 {
@@ -28,8 +28,14 @@ public:
 
 class Drive : public Base {
 public:
+	~Drive() { printf("~Drive\n"); }
 	void test() { printf("Drive::test\n"); };
 	void test1() { printf("Drive::test1\n"); };
+};
+
+class Drive1 : public Drive {
+public:
+	~Drive1(){ printf("~Drive1\n"); }
 };
 
 class A {
@@ -202,11 +208,14 @@ int main() {
 
 	////std::vector<A> v1 = v;
 
-	Blob blob;
+	/*Blob blob;
 
 	std::cout << "Start assigning value..." << std::endl;
 	blob = createBlob("A very very very long string representing serialized data");
-	std::cout << "End assigning value" << std::endl;
+	std::cout << "End assigning value" << std::endl;*/
+
+	Drive1* d1 = new Drive1();
+	delete d1;
 
 	return 1;
 }

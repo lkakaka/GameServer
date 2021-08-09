@@ -32,12 +32,11 @@ function clsMsgHandler:_on_recv_gm_cmd(msg_id, msg)
     local param = {}
     param.player = self.player
     param.args = msg.args
-    local result = self.player.game_scene.service.gm_handler:handle_gm_cmd(msg.cmd, param)
+    local err_code, result = self.player.game_scene.service.gm_handler:handle_gm_cmd(msg.cmd, param)
     logger.logInfo("exe gm cmd:%s, args:%s, result:\n%s", msg.cmd, msg.args, result)
-    local rsp_msg = {}
-    rsp_msg.cmd = msg.cmd
-    rsp_msg.msg = result or ""
-    self.player:send_msg_to_client(MSG_ID_GM_CMD_RSP, rsp_msg)
+    if err_code == ErrorCode.OK then
+        self.player:sendGMCmdRsp(msg.cmd, result)
+    end
 end
 
 function clsMsgHandler:_on_recv_test_req(msg_id, msg)

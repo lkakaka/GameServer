@@ -21,40 +21,41 @@ void LuaRedis::bindLuaRedis(std::shared_ptr<sol::state> lua) {
 static sol::object parseRedisReply(redisReply* reply, sol::this_state s) {
 	sol::state_view lua(s);
 	switch (reply->type) {
-		case REDIS_REPLY_INTEGER:
-			return sol::make_object(lua, reply->integer);
+	case REDIS_REPLY_INTEGER: {
+		sol::object obj = sol::object(lua, sol::in_place_t(), reply->integer); //sol::make_object(lua, reply->integer);
+		int rr = obj.registry_index();
+		return obj;
+	}
 		case REDIS_REPLY_DOUBLE:
-			return sol::make_object(lua, reply->dval);
+			return sol::object(lua, sol::in_place_t(), reply->dval); //sol::make_object(lua, reply->dval);
 		case REDIS_REPLY_NIL:
 			return sol::nil;
 		case REDIS_REPLY_BOOL:
-			return sol::make_object(lua, reply->integer);
+			return sol::object(lua, sol::in_place_t(), reply->integer); //sol::make_object(lua, reply->integer);
 		case REDIS_REPLY_ATTR:
 		case REDIS_REPLY_PUSH:
 		case REDIS_REPLY_BIGNUM:
-			return sol::make_object(lua, reply->str);
-			//return PyFloat_FromString(PyUnicode_FromStringAndSize(reply->str, reply->len));
+			return sol::object(lua, sol::in_place_t(), reply->str); //sol::make_object(lua, reply->str);
 		case REDIS_REPLY_STRING:
 		case REDIS_REPLY_ERROR:
 		case REDIS_REPLY_STATUS: {
-			sol::object obj = sol::make_object(lua, reply->str);
+			sol::object obj = sol::object(lua, sol::in_place_t(), reply->str); //sol::make_object(lua, reply->str);
 			if (obj == sol::nil) {
 				printf("error");
 			}
 			return obj;
 		}
-			//return PyUnicode_FromStringAndSize(reply->str, reply->len);
 		case REDIS_REPLY_ARRAY:
 		case REDIS_REPLY_MAP:
 		case REDIS_REPLY_SET:
 		{
-			//PyObject* array = PyTuple_New(reply->elements);
 			sol::table tbl = sol::table::create_with(s.lua_state());
 			for (int i = 0; i < reply->elements; i++) {
 				redisReply* subReply = reply->element[i];
 				tbl[i+1] = parseRedisReply(subReply, s);
-				//PyTuple_SetItem(array, i, parseRedisReply(subReply));
 			}
+			//tbl.abandon();
+			int ref = tbl.registry_index();
 			return tbl;
 		}
 	}

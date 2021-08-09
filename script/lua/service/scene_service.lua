@@ -13,7 +13,6 @@ function clsSceneService:__init__()
     self._player_to_scene = {}
     self:initRpcHandler()
     self:initServiceMsgHandler()
-    self.gm_handler = clsGMHandler:New(self)
     timer.addTimer(3, 1, function(timerId) self:initScene() end)
     logger.logInfo("clsSceneService:__init__")
 end

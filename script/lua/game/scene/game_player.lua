@@ -110,3 +110,10 @@ end
 function clsGamePlayer:leave_scene(reason)
     self.game_scene:remove_player(self.role_id, reason)
 end
+
+function clsGamePlayer:sendGMCmdRsp(cmd, result)
+    local rsp_msg = {}
+    rsp_msg.cmd = cmd
+    rsp_msg.msg = result or ""
+    self:send_msg_to_client(MSG_ID_GM_CMD_RSP, rsp_msg)
+end
