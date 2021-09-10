@@ -4,6 +4,7 @@
 #include <string.h>
 #include <map>
 #include <memory>
+#include "Test.h"
 
 #define _TEST_MAIN
 
@@ -156,9 +157,19 @@ Blob createBlob(const char* str) {
 	return blob;
 }
 
+class Empty {
+public:
+	int a;
+	std::vector<int> b;
+};
+
 #ifdef _TEST_MAIN
 
 int main() {
+
+	Drive d;
+	Base* b = &d;
+	b->test();
 
 	/*std::map<std::string, std::vector<std::string>> m;
 	auto pair = m.try_emplace("a", std::vector<std::string>());
@@ -214,8 +225,18 @@ int main() {
 	blob = createBlob("A very very very long string representing serialized data");
 	std::cout << "End assigning value" << std::endl;*/
 
-	Drive1* d1 = new Drive1();
-	delete d1;
+	/*Drive1* d1 = new Drive1();
+	delete d1;*/
+
+	//testBoostMultiIndex();
+	//testOperateNew();
+
+	//testSOL();
+	Empty e;
+	printf("ptr1=%I64d\n", &e.b);
+	e.b.assign(1000, 1);
+	printf("ptr2=%I64d\n", &e.b);
+	printf("size=%d", sizeof(e.b));
 
 	return 1;
 }

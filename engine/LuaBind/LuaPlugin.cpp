@@ -46,7 +46,7 @@ int exceptionHandler(lua_State*, sol::optional<const std::exception&> e, sol::st
 
 static void initLoggerModule(std::shared_ptr<sol::state> lua) {
 	sol::table logger = lua->create_named_table("Logger");
-	logger["log_info"] = &Logger::logInfo;
+	logger["log_info"] = [](std::string s) {Logger::logInfo(s.c_str()); };//&Logger::logInfo;
 	logger["log_error"] = &Logger::logError;
 	logger["log_warn"] = &Logger::logWarning;
 	logger["log_debug"] = &Logger::logDebug;

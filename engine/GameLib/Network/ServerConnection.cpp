@@ -7,7 +7,7 @@ USE_NS_GAME_NET
 #define READ_BUFF_SIZE 1024
 
 ServerConnection::ServerConnection(int connID, std::shared_ptr<tcp::socket> socket, ConnCloseCallback closeCallback) :
-	m_isClosed(false), m_isSending(false),
+	m_isClosed(false), m_waitClosed(false), m_isSending(false),
 	m_connID(connID),
 	m_socket(socket),
 	m_closeCallback(closeCallback)
@@ -60,8 +60,14 @@ void ServerConnection::_read()
 			Logger::logInfo("$receive data len is 0");
 		}
 
+		checkRecvBufferSize();
+
+		if (m_waitClosed) {
+			close(m_waitCloseReason.c_str());
+			return;
+		}
+
 		if (!m_isClosed) {
-			checkRecvBufferSize();
 			this->_read();
 		}
 	});
@@ -74,7 +80,7 @@ void ServerConnection::checkRecvBufferSize() {
 	}
 
 	if (size >= SERVER_RECV_MAX_BUFF_SIZE) {
-		close("cache too much data");
+		setWaitClose("cache too much data");
 	}
 }
 
@@ -111,6 +117,11 @@ void ServerConnection::_send() {
 			_send();
 		}
 		});*/
+}
+
+void ServerConnection::setWaitClose(const char* reason) { 
+	m_waitCloseReason = reason;  
+	m_waitClosed = true; 
 }
 
 void ServerConnection::close(const char* reason) {

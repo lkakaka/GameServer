@@ -19,6 +19,8 @@ private:
 	std::vector<char> m_readBuf;
 	std::vector<char> m_sendBuf;
 	bool m_isClosed;
+	bool m_waitClosed;
+	std::string m_waitCloseReason;
 	bool m_isSending;
 	ConnCloseCallback m_closeCallback;
 
@@ -32,6 +34,7 @@ protected:
 	
 	// 子类处理, 并返回处理的数据长度
 	virtual void parseMessage() = 0;
+	void setWaitClose(const char* reason);
 	void close(const char* reason);
 
 public:

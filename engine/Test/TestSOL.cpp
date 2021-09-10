@@ -1,4 +1,4 @@
-//#define TEST_SOL
+#define TEST_SOL
 
 #ifdef TEST_SOL
 #define SOL_ALL_SAFETIES_ON 1
@@ -12,6 +12,9 @@ extern "C" {
 #include <sol/sol.hpp>
 
 #include <iostream>
+#include <thread>
+#include <vector>
+#include <random>
 
 struct two_things {
 	int a;
@@ -55,30 +58,44 @@ int sol_lua_push(lua_State* L, const two_things& things) {
 	return amount;
 }
 
-int main() {
-	std::cout << "=== customization ===" << std::endl;
-	std::cout << std::boolalpha;
+//int main() {
+//	std::cout << "=== customization ===" << std::endl;
+//	std::cout << std::boolalpha;
+//
+//	sol::state lua;
+//	lua.open_libraries(sol::lib::base);
+//	// Create a pass-through style of function
+//	lua.script("function f ( a, b ) print(a, b) return a, b end");
+//
+//	// get the function out of Lua
+//	sol::function f = lua["f"];
+//
+//	two_things things = f(two_things{ 24, false });
+//	assert(things.a == 24);
+//	assert(things.b == false);
+//	// things.a == 24
+//	// things.b == true
+//
+//	std::cout << "things.a: " << things.a << std::endl;
+//	std::cout << "things.b: " << things.b << std::endl;
+//	std::cout << std::endl;
+//
+//	return 0;
+//}
 
+void testSOL() {
 	sol::state lua;
-	lua.open_libraries(sol::lib::base);
-	// Create a pass-through style of function
-	lua.script("function f ( a, b ) print(a, b) return a, b end");
-
-	// get the function out of Lua
-	sol::function f = lua["f"];
-
-	two_things things = f(two_things{ 24, false });
-	assert(things.a == 24);
-	assert(things.b == false);
-	// things.a == 24
-	// things.b == true
-
-	std::cout << "things.a: " << things.a << std::endl;
-	std::cout << "things.b: " << things.b << std::endl;
-	std::cout << std::endl;
-
-	return 0;
+	lua["test"] = [](std::string s) { printf(s.c_str()); };
+	while (true)
+	{
+		lua.script("test('hello world hello world!!\\n')");
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
+		lua.collect_gc();
+	}
 }
+
+
+
 
 //
 //int main() {

@@ -30,7 +30,7 @@ void GatewayConnection::parsePacket()
 		int packetLen = m_recvBuffer.getInt();
 		if (packetLen < 8 || packetLen > MAX_CLIENT_PACKET_LEN) {
 			Logger::logInfo("$packet len(%d) error", packetLen);
-			close("packet format error");
+			setWaitClose("packet format error");
 			return;
 		}
 		// 当前数据长度小于协议包长度
@@ -58,7 +58,7 @@ void GatewayConnection::dispatchClientMsg(int msgId, int msgLen, const char* msg
 	} else {
 		if (m_sceneServiceId < 0) {
 			Logger::logError("$player not in scene, connId:%d, msgId:%d", getConnID(), msgId);
-			close("player not in scene");
+			setWaitClose("player not in scene");
 			return;
 		}
 		ServiceAddr addr(ServiceInfo::getSingleton()->getServiceGroup(), ServiceType::SERVICE_TYPE_SCENE, m_sceneServiceId);
