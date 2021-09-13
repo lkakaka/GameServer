@@ -54,3 +54,11 @@ message DisconnectRsp {
 	string reason = 1;
 }
 
+message StartKcp {
+	int32 kcp_id = 1;
+}
+
+message SendUdpPort {
+	int32 udp_port = 1;
+}
+

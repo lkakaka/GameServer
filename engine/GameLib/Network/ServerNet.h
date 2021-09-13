@@ -28,6 +28,7 @@ protected:
 
 public:
 	ServerNetwork(boost::asio::io_service* io);
+	inline boost::asio::io_service* getIOService() { return m_ioService; }
 	void start(int port);
 	ServerConnection* getConnection(int connId);
 	void removeConnection(int connId, const char* reason);

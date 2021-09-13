@@ -4,6 +4,7 @@ public interface NetworkEventHandler {
     void onConnected();
     void onDisConnected();
     void onRecv(byte[] data, int count);
+    void onKCPRecv(byte[] data, int count);
     void onSend();
     void onClose();
 }

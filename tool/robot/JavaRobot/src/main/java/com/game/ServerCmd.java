@@ -69,6 +69,21 @@ public class ServerCmd extends CmdDispatch {
         Util.logInfo("recv enter game rsp, err_code:%s", errCode);
     }
 
+    @CmdAnnotation(serverCmd = ProtoBufferMsg.MSG_ID_START_KCP)
+    private void onRecvStartKCP(Object param) {
+        Login.StartKcp rsp = (Login.StartKcp) param;
+        Util.logInfo("recv start kcp, %d", rsp.getKcpId());
+
+        if(m_robot.startKCP(rsp.getKcpId())) {
+            int udpPort = m_robot.getUdpPort();
+            Login.SendUdpPort msg = ProtoBufferMsg.createSendUdpPortBuilder().setUdpPort(udpPort).build();
+            m_robot.sendProto(ProtoBufferMsg.MSG_ID_SEND_UDP_PORT, msg);
+            Util.logInfo("send udp port: %d", udpPort);
+        } else {
+            Util.logInfo("start kcp failed, %d", rsp.getKcpId());
+        }
+    }
+
     @CmdAnnotation(serverCmd = ProtoBufferMsg.MSG_ID_ACTOR_BORN)
     private void onRecvActorBorn(Object param) {
         Scene.ActorBorn rsp = (Scene.ActorBorn) param;

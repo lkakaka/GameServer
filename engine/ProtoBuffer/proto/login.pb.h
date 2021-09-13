@@ -47,7 +47,7 @@ struct TableStruct_proto_2flogin_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[10]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[12]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -81,6 +81,12 @@ extern LoginReqDefaultTypeInternal _LoginReq_default_instance_;
 class LoginRsp;
 class LoginRspDefaultTypeInternal;
 extern LoginRspDefaultTypeInternal _LoginRsp_default_instance_;
+class SendUdpPort;
+class SendUdpPortDefaultTypeInternal;
+extern SendUdpPortDefaultTypeInternal _SendUdpPort_default_instance_;
+class StartKcp;
+class StartKcpDefaultTypeInternal;
+extern StartKcpDefaultTypeInternal _StartKcp_default_instance_;
 class _RoleInfo;
 class _RoleInfoDefaultTypeInternal;
 extern _RoleInfoDefaultTypeInternal __RoleInfo_default_instance_;
@@ -94,6 +100,8 @@ template<> ::EnterGameRsp* Arena::CreateMaybeMessage<::EnterGameRsp>(Arena*);
 template<> ::LoadRoleListRsp* Arena::CreateMaybeMessage<::LoadRoleListRsp>(Arena*);
 template<> ::LoginReq* Arena::CreateMaybeMessage<::LoginReq>(Arena*);
 template<> ::LoginRsp* Arena::CreateMaybeMessage<::LoginRsp>(Arena*);
+template<> ::SendUdpPort* Arena::CreateMaybeMessage<::SendUdpPort>(Arena*);
+template<> ::StartKcp* Arena::CreateMaybeMessage<::StartKcp>(Arena*);
 template<> ::_RoleInfo* Arena::CreateMaybeMessage<::_RoleInfo>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 
@@ -1521,6 +1529,268 @@ class DisconnectRsp :
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_proto_2flogin_2eproto;
 };
+// -------------------------------------------------------------------
+
+class StartKcp :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:StartKcp) */ {
+ public:
+  StartKcp();
+  virtual ~StartKcp();
+
+  StartKcp(const StartKcp& from);
+  StartKcp(StartKcp&& from) noexcept
+    : StartKcp() {
+    *this = ::std::move(from);
+  }
+
+  inline StartKcp& operator=(const StartKcp& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline StartKcp& operator=(StartKcp&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const StartKcp& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const StartKcp* internal_default_instance() {
+    return reinterpret_cast<const StartKcp*>(
+               &_StartKcp_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    10;
+
+  friend void swap(StartKcp& a, StartKcp& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(StartKcp* other) {
+    if (other == this) return;
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline StartKcp* New() const final {
+    return CreateMaybeMessage<StartKcp>(nullptr);
+  }
+
+  StartKcp* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<StartKcp>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const StartKcp& from);
+  void MergeFrom(const StartKcp& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  #else
+  bool MergePartialFromCodedStream(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* InternalSerializeWithCachedSizesToArray(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(StartKcp* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "StartKcp";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_proto_2flogin_2eproto);
+    return ::descriptor_table_proto_2flogin_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kKcpIdFieldNumber = 1,
+  };
+  // int32 kcp_id = 1;
+  void clear_kcp_id();
+  ::PROTOBUF_NAMESPACE_ID::int32 kcp_id() const;
+  void set_kcp_id(::PROTOBUF_NAMESPACE_ID::int32 value);
+
+  // @@protoc_insertion_point(class_scope:StartKcp)
+ private:
+  class _Internal;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::int32 kcp_id_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_proto_2flogin_2eproto;
+};
+// -------------------------------------------------------------------
+
+class SendUdpPort :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:SendUdpPort) */ {
+ public:
+  SendUdpPort();
+  virtual ~SendUdpPort();
+
+  SendUdpPort(const SendUdpPort& from);
+  SendUdpPort(SendUdpPort&& from) noexcept
+    : SendUdpPort() {
+    *this = ::std::move(from);
+  }
+
+  inline SendUdpPort& operator=(const SendUdpPort& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline SendUdpPort& operator=(SendUdpPort&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const SendUdpPort& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const SendUdpPort* internal_default_instance() {
+    return reinterpret_cast<const SendUdpPort*>(
+               &_SendUdpPort_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    11;
+
+  friend void swap(SendUdpPort& a, SendUdpPort& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(SendUdpPort* other) {
+    if (other == this) return;
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline SendUdpPort* New() const final {
+    return CreateMaybeMessage<SendUdpPort>(nullptr);
+  }
+
+  SendUdpPort* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<SendUdpPort>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const SendUdpPort& from);
+  void MergeFrom(const SendUdpPort& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  #else
+  bool MergePartialFromCodedStream(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* InternalSerializeWithCachedSizesToArray(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(SendUdpPort* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "SendUdpPort";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_proto_2flogin_2eproto);
+    return ::descriptor_table_proto_2flogin_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kUdpPortFieldNumber = 1,
+  };
+  // int32 udp_port = 1;
+  void clear_udp_port();
+  ::PROTOBUF_NAMESPACE_ID::int32 udp_port() const;
+  void set_udp_port(::PROTOBUF_NAMESPACE_ID::int32 value);
+
+  // @@protoc_insertion_point(class_scope:SendUdpPort)
+ private:
+  class _Internal;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::int32 udp_port_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_proto_2flogin_2eproto;
+};
 // ===================================================================
 
 
@@ -2206,9 +2476,49 @@ inline void DisconnectRsp::set_allocated_reason(std::string* reason) {
   // @@protoc_insertion_point(field_set_allocated:DisconnectRsp.reason)
 }
 
+// -------------------------------------------------------------------
+
+// StartKcp
+
+// int32 kcp_id = 1;
+inline void StartKcp::clear_kcp_id() {
+  kcp_id_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 StartKcp::kcp_id() const {
+  // @@protoc_insertion_point(field_get:StartKcp.kcp_id)
+  return kcp_id_;
+}
+inline void StartKcp::set_kcp_id(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  kcp_id_ = value;
+  // @@protoc_insertion_point(field_set:StartKcp.kcp_id)
+}
+
+// -------------------------------------------------------------------
+
+// SendUdpPort
+
+// int32 udp_port = 1;
+inline void SendUdpPort::clear_udp_port() {
+  udp_port_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SendUdpPort::udp_port() const {
+  // @@protoc_insertion_point(field_get:SendUdpPort.udp_port)
+  return udp_port_;
+}
+inline void SendUdpPort::set_udp_port(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  udp_port_ = value;
+  // @@protoc_insertion_point(field_set:SendUdpPort.udp_port)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

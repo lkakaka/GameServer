@@ -19,8 +19,10 @@ public class ProtoBufferMsg {
 	public static final int MSG_ID_LOGIN_REQ = 15;
 	public static final int MSG_ID_LOGIN_RSP = 16;
 	public static final int MSG_ID_MOVE_TO = 17;
-	public static final int MSG_ID_SYNC_POS = 21;
-	public static final int MSG_ID_TEST_REQ = 22;
+	public static final int MSG_ID_SEND_UDP_PORT = 20;
+	public static final int MSG_ID_START_KCP = 21;
+	public static final int MSG_ID_SYNC_POS = 23;
+	public static final int MSG_ID_TEST_REQ = 24;
 
 	public static Object createMsgById(int msgId, byte[] dat) {
 		try {
@@ -58,6 +60,10 @@ public class ProtoBufferMsg {
 					return Login.LoginRsp.parseFrom(dat);
 				case MSG_ID_MOVE_TO:
 					return Role.MoveTo.parseFrom(dat);
+				case MSG_ID_SEND_UDP_PORT:
+					return Login.SendUdpPort.parseFrom(dat);
+				case MSG_ID_START_KCP:
+					return Login.StartKcp.parseFrom(dat);
 				case MSG_ID_SYNC_POS:
 					return Scene.SyncPos.parseFrom(dat);
 				case MSG_ID_TEST_REQ:
@@ -103,6 +109,10 @@ public class ProtoBufferMsg {
 				return Login.LoginRsp.newBuilder();
 			case MSG_ID_MOVE_TO:
 				return Role.MoveTo.newBuilder();
+			case MSG_ID_SEND_UDP_PORT:
+				return Login.SendUdpPort.newBuilder();
+			case MSG_ID_START_KCP:
+				return Login.StartKcp.newBuilder();
 			case MSG_ID_SYNC_POS:
 				return Scene.SyncPos.newBuilder();
 			case MSG_ID_TEST_REQ:
@@ -173,6 +183,14 @@ public class ProtoBufferMsg {
 	
 	public static Role.MoveTo.Builder createMoveToBuilder() {
 		return Role.MoveTo.newBuilder();
+	}
+	
+	public static Login.SendUdpPort.Builder createSendUdpPortBuilder() {
+		return Login.SendUdpPort.newBuilder();
+	}
+	
+	public static Login.StartKcp.Builder createStartKcpBuilder() {
+		return Login.StartKcp.newBuilder();
 	}
 	
 	public static Scene.SyncPos.Builder createSyncPosBuilder() {

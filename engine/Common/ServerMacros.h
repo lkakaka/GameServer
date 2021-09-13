@@ -19,3 +19,7 @@
 #endif //(WIN32)
 
 #define THROW_EXCEPTION(msg) {std::logic_error ex(msg); throw std::exception(ex);}
+
+typedef unsigned char send_type;
+#define SEND_TYPE_TCP 0
+#define SEND_TYPE_KCP 1

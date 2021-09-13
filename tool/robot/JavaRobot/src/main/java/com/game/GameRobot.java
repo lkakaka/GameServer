@@ -4,8 +4,6 @@ import com.network.Network;
 import com.network.NetworkEventHandler;
 import com.proto.Login;
 import com.proto.ProtoBufferMsg;
-import com.proto.Test;
-import com.util.Util;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -13,12 +11,17 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 
 public class GameRobot {
+    private static final int TYPE_TCP = 0;
+    private static final int TYPE_KCP = 1;
+
     private Network m_network;
-    private String serverIP;
-    private int serverPort;
-    private int userId;
-    private String account;
+    private String m_serverIP;
+    private int m_serverPort;
+    private int m_serverUdpPort;
+    private int m_userId;
+    private String m_account;
     private ByteArrayOutputStream m_buffer = new ByteArrayOutputStream();
+    private ByteArrayOutputStream m_kcpBuffer = new ByteArrayOutputStream();
     private ServerCmd m_robotCmd;
 
     GameRobot() {
@@ -26,7 +29,7 @@ public class GameRobot {
     }
 
     public void init() {
-        m_network = new Network(serverIP, serverPort);
+        m_network = new Network(m_serverIP, m_serverPort, m_serverUdpPort);
         m_network.connect();
         m_network.registerEventHandler(new NetworkEventHandler() {
             @Override
@@ -36,7 +39,7 @@ public class GameRobot {
 
             @Override
             public void onDisConnected() {
-                RobotMgr.getInstance().removeRobot(account);
+                RobotMgr.getInstance().removeRobot(m_account);
             }
 
             @Override
@@ -47,8 +50,19 @@ public class GameRobot {
                     e.printStackTrace();
                 }
                 while (true) {
-                    if(!parseData())
-                        break;
+                    if(!parseData(TYPE_TCP, m_buffer)) break;
+                }
+            }
+
+            @Override
+            public void onKCPRecv(byte[] data, int count) {
+                try {
+                    m_kcpBuffer.write(data, 0, count);
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+                while (true) {
+                    if(!parseData(TYPE_KCP, m_kcpBuffer)) break;
                 }
             }
 
@@ -76,26 +90,26 @@ public class GameRobot {
         m_network.close();
     }
 
-    private boolean parseData() {
-        if (m_buffer.size() < 8) {
+    private boolean parseData(int type, ByteArrayOutputStream stream) {
+        if (stream.size() < 8) {
             return false;
         }
 
-        byte[] allBytes = m_buffer.toByteArray();
+        byte[] allBytes = stream.toByteArray();
         ByteArrayInputStream buffer = new ByteArrayInputStream(allBytes);
         DataInputStream dataInputStream = new DataInputStream(buffer);
         try {
             int iPacketLen = dataInputStream.readInt();
-            if (m_buffer.size() < iPacketLen) {
+            if (stream.size() < iPacketLen) {
                 return false;
             }
             int iMsgId = dataInputStream.readInt();
             int iMsgLen = iPacketLen - 8;
             byte[] dat = new byte[iMsgLen];
             dataInputStream.read(dat,0, iMsgLen);
-            onMsg(iMsgId, dat);
-            m_buffer.reset();
-            m_buffer.write(allBytes, iPacketLen, allBytes.length - iPacketLen);
+            onMsg(type, iMsgId, dat);
+            stream.reset();
+            stream.write(allBytes, iPacketLen, allBytes.length - iPacketLen);
             return true;
         }catch (Exception e) {
             e.printStackTrace();
@@ -103,8 +117,9 @@ public class GameRobot {
         return false;
     }
 
-    private void onMsg(int iMsgId, byte[] dat) {
-        System.out.println("recv msg: " + iMsgId);
+    private void onMsg(int type, int iMsgId, byte[] dat) {
+        String srcType = type == TYPE_KCP ? "KCP" : "TCP";
+        System.out.println(String.format("recv msg[%s]: %d", srcType, iMsgId));
         Object param = ProtoBufferMsg.createMsgById(iMsgId, dat);
         m_robotCmd.onRecvServerCmd(iMsgId, param);
     }
@@ -137,27 +152,36 @@ public class GameRobot {
         }
     }
 
-    public void setServerIP(String m_serverIP) {
-        this.serverIP = m_serverIP;
+    public void setServerIP(String serverIP) {
+        this.m_serverIP = serverIP;
     }
 
-    public void setServerPort(int m_serverPort) {
-        this.serverPort = m_serverPort;
+    public void setServerPort(int serverPort, int serverUdpPort) {
+        this.m_serverPort = serverPort;
+        this.m_serverUdpPort = serverUdpPort;
     }
 
     public int getUserId() {
-        return userId;
+        return m_userId;
     }
 
     public void setUserId(int userId) {
-        this.userId = userId;
+        this.m_userId = userId;
     }
 
     public String getAccount() {
-        return account;
+        return m_account;
     }
 
     public void setAccount(String account) {
-        this.account = account;
+        this.m_account = account;
+    }
+
+    public boolean startKCP(int kcpId) {
+        return m_network.startKcp(kcpId);
+    }
+
+    public int getUdpPort() {
+        return m_network.getUdpPort();
     }
 }

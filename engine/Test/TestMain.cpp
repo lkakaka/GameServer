@@ -238,6 +238,8 @@ int main() {
 	printf("ptr2=%I64d\n", &e.b);
 	printf("size=%d", sizeof(e.b));
 
+	testBindFunction();
+
 	return 1;
 }
 

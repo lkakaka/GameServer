@@ -119,6 +119,10 @@ function clsLoginService:_on_load_role(conn_id, err_code, tbl)
         self:_send_enter_game_rsp(conn_id, ErrorCode.OK, row)
         self._conn_dict[conn_id] = nil
         self._account_dict[account] = nil
+
+        local msg = {}
+        msg.kcp_id = conn_id;
+        self:sendMsgToClient(conn_id, MSG_ID_START_KCP, msg)
     end
 
     local future = self:callRpc(LOCAL_SERVICE_SCENE_CTRL, "Player_EnterGame", 30, {conn_id=conn_id, role_id=row.role_id})

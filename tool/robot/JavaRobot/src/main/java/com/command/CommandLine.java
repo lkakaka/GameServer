@@ -42,10 +42,10 @@ public class CommandLine {
             }
         });
         t.start();
-        try {
-            t.join();
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            t.join();
+//        }catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 }

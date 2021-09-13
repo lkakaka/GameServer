@@ -6,6 +6,9 @@
 
 #define ERROR_CONFIG_INT -0x0FFFFFFF
 
+#define GET_CONFG_INT(key) Config::getSingleton()->getConfigInt(key)
+#define GET_CONFG_STR(key) Config::getSingleton()->getConfigStr(key)
+
 class Config : public Singleton<Config>
 {
 private:

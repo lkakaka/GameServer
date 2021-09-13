@@ -86,6 +86,14 @@ function clsServiceBase:sendMsgToClient(connId, msgId, msg)
     Service.sendMsgToClient(connId, msgId, data, string.len(data))
 end
 
+function clsServiceBase:sendMsgToClientKCP(connId, msgId, msg)
+    logger.logInfo("sendMsgToClientKCP to %d, msgId:%d", connId, msgId)
+    local msgName = MSG_ID_TO_NAME[msgId]
+    local data = encodeMsg(msgId, msg)
+    -- print(dstAddr, msgId, data, string.len(data))
+    Service.sendMsgToClientKCP(connId, msgId, data, string.len(data))
+end
+
 function clsServiceBase:onRecvRpcMsg(sender, msgId, msg)
     self._rpc_mgr:onRecvRpcMsg(sender, msg)
 end

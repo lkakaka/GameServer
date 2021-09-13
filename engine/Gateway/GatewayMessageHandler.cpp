@@ -3,6 +3,7 @@
 #include "Logger.h"
 #include "GatewayNet.h"
 #include "GatewayConnection.h"
+#include "../Common/ServerMacros.h"
 
 INIT_SINGLETON_CLASS(GatewayMessageHandler)
 
@@ -22,17 +23,17 @@ void handMsg_SwitchSceneService(int msgId, int connId, char* data, int dataLen) 
 }
 
 // 消息默认处理发给客户端
-void handMsg_Default(int msgId, int connId, char* data, int dataLen) {
+void handMsg_Default(int msgId, int connId, send_type type, char* data, int dataLen) {
 	GatewayConnection* conn = (GatewayConnection*)GatewayNet::getSingleton()->getConnection(connId);
 	if (conn == NULL) {
 		Logger::logError("$send msg fail, connId(%d) is not exist, msgId:%d", connId, msgId);
 		return;
 	}
-	conn->sendMsgToClient(msgId, data, dataLen);
+	conn->sendMsgToClient(type, msgId, data, dataLen);
 	Logger::logInfo("$send msg to client, msgId:%d, connId:%d", msgId, connId);
 }
 
-void handMsg(int msgId, int connId, char* data, int dataLen) {
+void handMsg(int msgId, int connId, send_type type, char* data, int dataLen) {
 	switch (msgId)
 	{
 		case MSG_ID_CLIENT_DISCONNECT:
@@ -42,23 +43,24 @@ void handMsg(int msgId, int connId, char* data, int dataLen) {
 			handMsg_SwitchSceneService(msgId, connId, data, dataLen);
 			break;
 		default:
-			handMsg_Default(msgId, connId, data, dataLen);
+			handMsg_Default(msgId, connId, type, data, dataLen);
 			break;
 	}
 }
 
 void GatewayMessageHandler::onRecvMessage(ServiceAddr* sender, char* data, int dataLen) {
 	MyBuffer buffer(data, dataLen);
-	if (dataLen < 8) {
+	if (dataLen < 9) {
 		/*int connId = -1;
 		if (dataLen >= 4) connId = buffer.readInt();*/
-		Logger::logError("$recv %s msg format error, data len(%d) < 8", sender->getName(), dataLen);
+		Logger::logError("$recv %s msg format error, data len(%d) < 9", sender->getName(), dataLen);
 		return;
 	}
 	int msgId = buffer.readInt();
 	int connId = buffer.readInt();
+	send_type sendType = buffer.readByte();
 	
 	Logger::logInfo("$recv msg, sender:%s, msgId:%d, connId:%d", sender->getName(), msgId, connId);
 	// 网关处理的消息
-	handMsg(msgId, connId, &data[8], dataLen - 8);
+	handMsg(msgId, connId, sendType, &data[9], dataLen - 9);
 }

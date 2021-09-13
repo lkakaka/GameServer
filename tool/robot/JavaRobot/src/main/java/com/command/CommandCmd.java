@@ -8,23 +8,40 @@ import com.proto.Test;
 import com.util.RC4;
 
 import javax.crypto.Cipher;
+import java.net.*;
 import java.nio.charset.Charset;
 
-public class CommandCmd extends CmdDispatch {
-    public String cmd;
-    public String[] params;
+class CommandCmd extends CmdDispatch {
+    private String cmd;
+    private String[] params;
+
+    private DatagramSocket m_ds;
+    private InetSocketAddress m_address;
 
     CommandCmd(String cmdStr) {
         super("inputCmd");
         parseCmdStr(cmdStr);
+
+        try {
+            m_ds = new DatagramSocket();
+            m_address = new InetSocketAddress("127.0.0.1", 7777);
+//            InetAddress addr = m_address.getAddress();
+//            if (addr instanceof Inet4Address) {
+//                System.out.println("ipv4");
+//            } else if (addr instanceof Inet6Address) {
+//                System.out.println("ipv6");
+//            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public boolean parseCmdStr(String strCmd) {
+    private void parseCmdStr(String strCmd) {
         strCmd = strCmd.trim();
         String[] cmdInfo = strCmd.split(" ");
         if (cmdInfo.length < 1) {
             System.out.println("input cmd fromat error:" + strCmd);
-            return false;
+            return;
         }
 
         cmd = cmdInfo[0].trim();
@@ -33,10 +50,9 @@ public class CommandCmd extends CmdDispatch {
         } else {
             params = null;
         }
-        return true;
     }
 
-    public void extcute() {
+    void extcute() {
         if (cmd == null) {
             System.out.println("input cmd extcute error, cmd is null");
             return;
@@ -74,6 +90,22 @@ public class CommandCmd extends CmdDispatch {
         System.out.println("removeRobot successful, account:" + account);
     }
 
+    @CmdAnnotation(inputCmd = "use")
+    private void useRobot() {
+        if (params == null || params.length < 1) {
+            System.out.println("removeRobot error, params: " + params);
+            return;
+        }
+
+        String account = params[0];
+        GameRobot robot = RobotMgr.getInstance().setUseRobot(account);
+        if (robot != null) {
+            System.out.println("use robot successful, account:" + account);
+        } else {
+            System.out.println("robot not exist, account:" + account);
+        }
+    }
+
     @CmdAnnotation(inputCmd = "gm")
     private void gmCmd() {
         if (params == null || params.length < 1) {
@@ -91,7 +123,7 @@ public class CommandCmd extends CmdDispatch {
         Role.GmCmd.Builder builder = Role.GmCmd.newBuilder();
         builder.setCmd(gmCmd).setArgs(sb.toString());
 
-        GameRobot robot = RobotMgr.getInstance().getOneRobot();
+        GameRobot robot = RobotMgr.getInstance().getCurOrRandRobot();
         robot.sendProto(ProtoBufferMsg.MSG_ID_GM_CMD, builder.build());
         System.out.println("gmCmd successful, account:" + robot.getAccount());
     }
@@ -117,7 +149,7 @@ public class CommandCmd extends CmdDispatch {
     private void test() {
         Test.TestReq.Builder builder = Test.TestReq.newBuilder();
         builder.setId(10).setMsg("hello");
-        GameRobot robot = RobotMgr.getInstance().getOneRobot();
+        GameRobot robot = RobotMgr.getInstance().getCurOrRandRobot();
         robot.sendProto(ProtoBufferMsg.MSG_ID_TEST_REQ, builder.build());
     }
 
@@ -135,5 +167,29 @@ public class CommandCmd extends CmdDispatch {
 //        byte[] decodeBytes = rc4.decrypt(cipherText);
         String decodeText = new String(decodeBytes);
         System.out.println(decodeText);
+    }
+
+    @CmdAnnotation(inputCmd = "udp")
+    private void sendUdp() {
+//        GameRobot robot = RobotMgr.getInstance().getOneRobot();
+//        robot.sendUdpData("hello".getBytes());
+        try {
+
+            String s = (params == null || params.length == 0) ? "hello" : params[0];
+//            for (int i = 0; i < 5000; i++) {
+//                s += "a";
+//            }
+            byte[] msg = s.getBytes();
+            DatagramPacket dp = new DatagramPacket(msg, msg.length, m_address);
+            m_ds.send(dp);
+//            m_ds.send(dp);
+
+//            byte[] recvBuffer = new byte[2048];
+//            DatagramPacket recvDp = new DatagramPacket(recvBuffer, recvBuffer.length, m_address);
+//            m_ds.receive(recvDp);
+//            ds.send(dp);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

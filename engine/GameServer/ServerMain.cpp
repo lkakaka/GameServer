@@ -21,8 +21,6 @@
 
 using namespace std;
 
-std::string getServerConfigStr(const char* key);
-static int getServerConfigInt(const char* key);
 static void initServiceCommEntity(boost::asio::io_service* io);
 	
 static boost::asio::io_service io;
@@ -48,13 +46,13 @@ int main(int argc, char** argv)
 	}
 	Config* config = new Config(cfgName);
 
-	int serverId = getServerConfigInt("server_id");
+	int serverId = GET_CONFG_INT("server_id");
 	if (serverId <= 0) {
 		printf("$not config server id, config file: %s", cfgName);
 		return 0;
 	}
 
-	std::string serviceName = getServerConfigStr("service_name");
+	std::string serviceName = GET_CONFG_STR("service_name");
 	if (serviceName.length() == 0) {
 		printf("$not config service name, file name: %s", cfgName);
 		return 0;
@@ -66,13 +64,12 @@ int main(int argc, char** argv)
 		return 0;
 	}
 
-	int serviceId = getServerConfigInt("service_id");
+	int serviceId = GET_CONFG_INT("service_id");
 	if (serviceId < 0) {
 		printf("$service id error, serviceName: %s", serviceName.c_str());
 		return 0;
 	}
 	
-	//boost::asio::io_service io;
 	signal(SIGTERM, signalHandler);
 
 	ServiceInfo* serviceInfo = new ServiceInfo(serverId, serviceType, serviceId);
@@ -82,18 +79,18 @@ int main(int argc, char** argv)
 	Logger::initLog(logFileName.c_str());
 	Logger::logInfo("$dfas,%%n");
 
-	std::string dbUrl = getServerConfigStr("db_url");
+	std::string dbUrl = GET_CONFG_STR("db_url");
 	if (dbUrl.length() > 0) {
-		std::string dbUserName = getServerConfigStr("db_username");
-		std::string dbPassword = getServerConfigStr("db_password");
-		int dbPort = getServerConfigInt("db_port");
+		std::string dbUserName = GET_CONFG_STR("db_username");
+		std::string dbPassword = GET_CONFG_STR("db_password");
+		int dbPort = GET_CONFG_INT("db_port");
 		new DBMgr(dbUserName, dbPassword, dbUrl, dbPort);
 		Logger::logInfo("$db config, url: %s, port:%d", dbUrl.c_str(), dbPort);
 	}
 
 	TimerMgr::initTimerMgr(&io);
 	
-	std::string funcName = getServerConfigStr("script_init_func");
+	std::string funcName = GET_CONFG_STR("script_init_func");
 	GameService::g_gameService = new GameService(serviceName, serviceType);
 	GameService::g_gameService->initScript(funcName.c_str());
 
@@ -148,45 +145,28 @@ int main(int argc, char** argv)
 	return 0;
 }
 
-
-std::string getServerConfigStr(const char* key) {
-	return Config::getSingleton()->getConfigStr(key);
-}
-
-int getServerConfigInt(const char* key) {
-	return Config::getSingleton()->getConfigInt(key);
-}
-
 void initServiceCommEntity(boost::asio::io_service* io) {
-	std::string centerServiceIp = getServerConfigStr("center_service_ip");
+	std::string centerServiceIp = GET_CONFG_STR("center_service_ip");
 	if (centerServiceIp.length() == 0) {
 		Logger::logError("$not config center service ip, file name: %s", Config::getSingleton()->getConfigFileName());
 		THROW_EXCEPTION("not config center service ip");
 	}
 
-	int centerServicePort = getServerConfigInt("center_service_port");
+	int centerServicePort = GET_CONFG_INT("center_service_port");
 	if (centerServicePort <= 0) {
 		Logger::logError("$not config center service port, file name: %s", Config::getSingleton()->getConfigFileName());
 		THROW_EXCEPTION("not config center service port");
 	}
 
-	//ServiceAddr* addr = GameService::g_gameService->getServiceAddr();
-	int serviceGroup = ServiceInfo::getSingleton()->getServiceGroup();
-	int serviceType = ServiceInfo::getSingleton()->getServiceType();
-	int serviceId = ServiceInfo::getSingleton()->getServiceId();
-	ServiceAddr addr(serviceGroup, serviceType, serviceId);
-
+	ServiceAddr commAddr(SERVICE_GROUP, SERVICE_TYPE, SERVICE_ID);
 	CommEntityMgr* commEntityMgr = new CommEntityMgr();
-	IServiceCommEntity* commEntity = commEntityMgr->createCommEntity(io, addr, centerServiceIp.c_str(), centerServicePort);
+	IServiceCommEntity* commEntity = commEntityMgr->createCommEntity(io, commAddr, centerServiceIp.c_str(), centerServicePort);
 
-	if (serviceType == SERVICE_TYPE_GATEWAY) {
-		int port = getServerConfigInt("port");
-		initGateway(io, port);
-	}
-	else {
+	if (SERVICE_TYPE == SERVICE_TYPE_GATEWAY) {
+		initGateway(io);
+	} else {
 		ServiceMessageHandler* messageHandler = new ServiceMessageHandler();
 		commEntity->setMessageHandler(messageHandler);
-		//commEntity->setRecvCallback(std::bind(&ServiceMessageHandler::onRecvMessage, messageHandler, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 	}
 	commEntity->start();
 }

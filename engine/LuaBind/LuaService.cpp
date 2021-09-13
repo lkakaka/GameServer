@@ -4,11 +4,13 @@
 #include "ServiceType.h"
 #include "Network/ServiceCommEntityMgr.h"
 #include "ServiceInfo.h"
+#include "../Common/ServerMacros.h"
 
 void LuaService::bindLuaService(std::shared_ptr<sol::state> lua) {
-	sol::table timer = lua->create_named_table("Service");
-	timer["sendMsgToService"] = &LuaService::sendMsgToService;
-	timer["sendMsgToClient"] = &LuaService::sendMsgToClient;
+	sol::table service = lua->create_named_table("Service");
+	service["sendMsgToService"] = &LuaService::sendMsgToService;
+	service["sendMsgToClient"] = &LuaService::sendMsgToClient;
+	service["sendMsgToClientKCP"] = &LuaService::sendMsgToClientKCP;
 }
 
 bool LuaService::sendMsgToService(sol::table dstAddr, int msgId, const char* msg, int msgLen) {
@@ -29,8 +31,11 @@ bool LuaService::sendMsgToService(sol::table dstAddr, int msgId, const char* msg
 
 	MyBuffer buffer;
 	buffer.writeInt(msgId);
-	// 发往gateway的消息都需要一个connId
-	if (serviceType == SERVICE_TYPE_GATEWAY) buffer.writeInt(-1);
+	if (serviceType == SERVICE_TYPE_GATEWAY) {
+		// 补齐数据格式, 发往gateway的消息都需要一个connId
+		buffer.writeInt(-1);
+		buffer.writeByte(SEND_TYPE_TCP);
+	}
 	buffer.writeString(msg, msgLen);
 	CommEntityMgr::getSingleton()->getCommEntity()->sendToService(&addr, (char*)buffer.data(), buffer.size());
 
@@ -42,6 +47,18 @@ bool LuaService::sendMsgToClient(int connId, int msgId, const char* msg, int msg
 	MyBuffer buffer;
 	buffer.writeInt(msgId);
 	buffer.writeInt(connId);
+	buffer.writeByte(SEND_TYPE_TCP);
+	buffer.writeString(msg, msgLen);
+	ServiceAddr addr(ServiceInfo::getSingleton()->getServiceGroup(), ServiceType::SERVICE_TYPE_GATEWAY, 0);
+	CommEntityMgr::getSingleton()->getCommEntity()->sendToService(&addr, (char*)buffer.data(), buffer.size());
+	return true;
+}
+
+bool LuaService::sendMsgToClientKCP(int connId, int msgId, const char* msg, int msgLen) {
+	MyBuffer buffer;
+	buffer.writeInt(msgId);
+	buffer.writeInt(connId);
+	buffer.writeByte(SEND_TYPE_KCP);
 	buffer.writeString(msg, msgLen);
 	ServiceAddr addr(ServiceInfo::getSingleton()->getServiceGroup(), ServiceType::SERVICE_TYPE_GATEWAY, 0);
 	CommEntityMgr::getSingleton()->getCommEntity()->sendToService(&addr, (char*)buffer.data(), buffer.size());

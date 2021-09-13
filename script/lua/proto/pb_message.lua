@@ -29,9 +29,11 @@ MSG_ID_LOGIN_RSP = 16
 MSG_ID_MOVE_TO = 17
 MSG_ID_RPC_MSG = 18
 MSG_ID_RPC_MSG_RSP = 19
-MSG_ID_SWITCH_SCENE_SERVICE = 20
-MSG_ID_SYNC_POS = 21
-MSG_ID_TEST_REQ = 22
+MSG_ID_SEND_UDP_PORT = 20
+MSG_ID_START_KCP = 21
+MSG_ID_SWITCH_SCENE_SERVICE = 22
+MSG_ID_SYNC_POS = 23
+MSG_ID_TEST_REQ = 24
 
 MSG_ID_TO_NAME = {
 	[1] = "ActorBorn",
@@ -53,9 +55,11 @@ MSG_ID_TO_NAME = {
 	[17] = "MoveTo",
 	[18] = "RpcMsg",
 	[19] = "RpcMsgRsp",
-	[20] = "SwitchSceneService",
-	[21] = "SyncPos",
-	[22] = "TestReq",
+	[20] = "SendUdpPort",
+	[21] = "StartKcp",
+	[22] = "SwitchSceneService",
+	[23] = "SyncPos",
+	[24] = "TestReq",
 }
 
 MSG_NAME_TO_ID = {
@@ -78,9 +82,11 @@ MSG_NAME_TO_ID = {
 	MoveTo = 17,
 	RpcMsg = 18,
 	RpcMsgRsp = 19,
-	SwitchSceneService = 20,
-	SyncPos = 21,
-	TestReq = 22,
+	SendUdpPort = 20,
+	StartKcp = 21,
+	SwitchSceneService = 22,
+	SyncPos = 23,
+	TestReq = 24,
 }
 
 local function decodeActorBorn(msg)
@@ -159,6 +165,14 @@ local function decodeRpcMsgRsp(msg)
 	return pb.decode("RpcMsgRsp", msg)
 end
 
+local function decodeSendUdpPort(msg)
+	return pb.decode("SendUdpPort", msg)
+end
+
+local function decodeStartKcp(msg)
+	return pb.decode("StartKcp", msg)
+end
+
 local function decodeSwitchSceneService(msg)
 	return pb.decode("SwitchSceneService", msg)
 end
@@ -193,9 +207,11 @@ local decodeFunc = {
 	[17] = decodeMoveTo,
 	[18] = decodeRpcMsg,
 	[19] = decodeRpcMsgRsp,
-	[20] = decodeSwitchSceneService,
-	[21] = decodeSyncPos,
-	[22] = decodeTestReq,
+	[20] = decodeSendUdpPort,
+	[21] = decodeStartKcp,
+	[22] = decodeSwitchSceneService,
+	[23] = decodeSyncPos,
+	[24] = decodeTestReq,
 }
 
 local function encodeActorBorn(msg)
@@ -274,6 +290,14 @@ local function encodeRpcMsgRsp(msg)
 	return pb.encode("RpcMsgRsp", msg)
 end
 
+local function encodeSendUdpPort(msg)
+	return pb.encode("SendUdpPort", msg)
+end
+
+local function encodeStartKcp(msg)
+	return pb.encode("StartKcp", msg)
+end
+
 local function encodeSwitchSceneService(msg)
 	return pb.encode("SwitchSceneService", msg)
 end
@@ -308,9 +332,11 @@ local encodeFunc = {
 	[17] = encodeMoveTo,
 	[18] = encodeRpcMsg,
 	[19] = encodeRpcMsgRsp,
-	[20] = encodeSwitchSceneService,
-	[21] = encodeSyncPos,
-	[22] = encodeTestReq,
+	[20] = encodeSendUdpPort,
+	[21] = encodeStartKcp,
+	[22] = encodeSwitchSceneService,
+	[23] = encodeSyncPos,
+	[24] = encodeTestReq,
 }
 
 function decodeMsg(msgId, msg)

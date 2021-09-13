@@ -6,7 +6,7 @@ USE_NS_GAME_NET
 
 ServerNetwork::ServerNetwork(boost::asio::io_service* io) : m_acceptor(NULL), m_ioService(io)
 {
-
+	
 }
 
 void ServerNetwork::start(int port) {
@@ -52,9 +52,10 @@ void ServerNetwork::acceptHandler(std::shared_ptr<tcp::socket> sock, boost::syst
 			m_conns.emplace(std::make_pair(conn->getConnID(), conn));
 			conn->startRead();
 			try {
-				std::string clientIp = sock->remote_endpoint().address().to_string();
+				std::string remoteIP = sock->remote_endpoint().address().to_string();
+				conn->setRemoteIp(remoteIP);
 				unsigned short clientPort = sock->remote_endpoint().port();
-				Logger::logInfo("$client connected, ip:%s, port:%d", clientIp.c_str(), clientPort);
+				Logger::logInfo("$client connected, ip:%s, port:%d", remoteIP.c_str(), clientPort);
 			}
 			catch (std::exception e) {
 				Logger::logInfo("$client connected, cannot get remote addr , e:%s", e.what());

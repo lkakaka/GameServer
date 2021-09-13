@@ -30,7 +30,7 @@ void MyBuffer::moveCurrentPos(int offset) {
 
 unsigned char MyBuffer::getByte(int offset) {
 	if (buffer.size() < cur_pos + offset + 1) THROW_EXCEPTION("mybuffer read int error");
-	unsigned char val = (unsigned char)buffer[0];
+	unsigned char val = (unsigned char)buffer[cur_pos];
 	return val;
 }
 

@@ -41,6 +41,10 @@ function clsGamePlayer:send_msg_to_client(msgId, msg)
     self.game_scene.service:sendMsgToClient(self.conn_id, msgId, msg)
 end
 
+function clsGamePlayer:send_msg_to_client_kcp(msgId, msg)
+    self.game_scene.service:sendMsgToClientKCP(self.conn_id, msgId, msg)
+end
+
 function clsGamePlayer:send_msg_to_service(dst_srv, msgId, msg)
     self.game_scene.service:sendMsgToService(dst_srv, msgId, msg)
 end

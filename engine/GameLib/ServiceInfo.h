@@ -3,6 +3,10 @@
 #include "Singleton.h"
 #include "ServiceType.h"
 
+#define SERVICE_GROUP ServiceInfo::getSingleton()->getServiceGroup()
+#define SERVICE_TYPE ServiceInfo::getSingleton()->getServiceType()
+#define SERVICE_ID ServiceInfo::getSingleton()->getServiceId()
+
 class ServiceInfo : public Singleton<ServiceInfo> {
 private:
 	int serviceGroup;
