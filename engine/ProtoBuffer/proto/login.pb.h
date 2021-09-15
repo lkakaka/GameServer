@@ -47,7 +47,7 @@ struct TableStruct_proto_2flogin_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[12]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[11]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -81,9 +81,6 @@ extern LoginReqDefaultTypeInternal _LoginReq_default_instance_;
 class LoginRsp;
 class LoginRspDefaultTypeInternal;
 extern LoginRspDefaultTypeInternal _LoginRsp_default_instance_;
-class SendUdpPort;
-class SendUdpPortDefaultTypeInternal;
-extern SendUdpPortDefaultTypeInternal _SendUdpPort_default_instance_;
 class StartKcp;
 class StartKcpDefaultTypeInternal;
 extern StartKcpDefaultTypeInternal _StartKcp_default_instance_;
@@ -100,7 +97,6 @@ template<> ::EnterGameRsp* Arena::CreateMaybeMessage<::EnterGameRsp>(Arena*);
 template<> ::LoadRoleListRsp* Arena::CreateMaybeMessage<::LoadRoleListRsp>(Arena*);
 template<> ::LoginReq* Arena::CreateMaybeMessage<::LoginReq>(Arena*);
 template<> ::LoginRsp* Arena::CreateMaybeMessage<::LoginRsp>(Arena*);
-template<> ::SendUdpPort* Arena::CreateMaybeMessage<::SendUdpPort>(Arena*);
 template<> ::StartKcp* Arena::CreateMaybeMessage<::StartKcp>(Arena*);
 template<> ::_RoleInfo* Arena::CreateMaybeMessage<::_RoleInfo>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
@@ -1644,8 +1640,20 @@ class StartKcp :
   // accessors -------------------------------------------------------
 
   enum : int {
+    kTokenFieldNumber = 2,
     kKcpIdFieldNumber = 1,
   };
+  // string token = 2;
+  void clear_token();
+  const std::string& token() const;
+  void set_token(const std::string& value);
+  void set_token(std::string&& value);
+  void set_token(const char* value);
+  void set_token(const char* value, size_t size);
+  std::string* mutable_token();
+  std::string* release_token();
+  void set_allocated_token(std::string* token);
+
   // int32 kcp_id = 1;
   void clear_kcp_id();
   ::PROTOBUF_NAMESPACE_ID::int32 kcp_id() const;
@@ -1656,138 +1664,8 @@ class StartKcp :
   class _Internal;
 
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr token_;
   ::PROTOBUF_NAMESPACE_ID::int32 kcp_id_;
-  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  friend struct ::TableStruct_proto_2flogin_2eproto;
-};
-// -------------------------------------------------------------------
-
-class SendUdpPort :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:SendUdpPort) */ {
- public:
-  SendUdpPort();
-  virtual ~SendUdpPort();
-
-  SendUdpPort(const SendUdpPort& from);
-  SendUdpPort(SendUdpPort&& from) noexcept
-    : SendUdpPort() {
-    *this = ::std::move(from);
-  }
-
-  inline SendUdpPort& operator=(const SendUdpPort& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline SendUdpPort& operator=(SendUdpPort&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
-      if (this != &from) InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return GetMetadataStatic().descriptor;
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return GetMetadataStatic().reflection;
-  }
-  static const SendUdpPort& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const SendUdpPort* internal_default_instance() {
-    return reinterpret_cast<const SendUdpPort*>(
-               &_SendUdpPort_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    11;
-
-  friend void swap(SendUdpPort& a, SendUdpPort& b) {
-    a.Swap(&b);
-  }
-  inline void Swap(SendUdpPort* other) {
-    if (other == this) return;
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline SendUdpPort* New() const final {
-    return CreateMaybeMessage<SendUdpPort>(nullptr);
-  }
-
-  SendUdpPort* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
-    return CreateMaybeMessage<SendUdpPort>(arena);
-  }
-  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
-  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
-  void CopyFrom(const SendUdpPort& from);
-  void MergeFrom(const SendUdpPort& from);
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  #else
-  bool MergePartialFromCodedStream(
-      ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) final;
-  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-  void SerializeWithCachedSizes(
-      ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const final;
-  ::PROTOBUF_NAMESPACE_ID::uint8* InternalSerializeWithCachedSizesToArray(
-      ::PROTOBUF_NAMESPACE_ID::uint8* target) const final;
-  int GetCachedSize() const final { return _cached_size_.Get(); }
-
-  private:
-  inline void SharedCtor();
-  inline void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(SendUdpPort* other);
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
-  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "SendUdpPort";
-  }
-  private:
-  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
-    return nullptr;
-  }
-  inline void* MaybeArenaPtr() const {
-    return nullptr;
-  }
-  public:
-
-  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-  private:
-  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
-    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_proto_2flogin_2eproto);
-    return ::descriptor_table_proto_2flogin_2eproto.file_level_metadata[kIndexInFileMessages];
-  }
-
-  public:
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  enum : int {
-    kUdpPortFieldNumber = 1,
-  };
-  // int32 udp_port = 1;
-  void clear_udp_port();
-  ::PROTOBUF_NAMESPACE_ID::int32 udp_port() const;
-  void set_udp_port(::PROTOBUF_NAMESPACE_ID::int32 value);
-
-  // @@protoc_insertion_point(class_scope:SendUdpPort)
- private:
-  class _Internal;
-
-  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
-  ::PROTOBUF_NAMESPACE_ID::int32 udp_port_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_proto_2flogin_2eproto;
 };
@@ -2494,29 +2372,60 @@ inline void StartKcp::set_kcp_id(::PROTOBUF_NAMESPACE_ID::int32 value) {
   // @@protoc_insertion_point(field_set:StartKcp.kcp_id)
 }
 
-// -------------------------------------------------------------------
-
-// SendUdpPort
-
-// int32 udp_port = 1;
-inline void SendUdpPort::clear_udp_port() {
-  udp_port_ = 0;
+// string token = 2;
+inline void StartKcp::clear_token() {
+  token_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
-inline ::PROTOBUF_NAMESPACE_ID::int32 SendUdpPort::udp_port() const {
-  // @@protoc_insertion_point(field_get:SendUdpPort.udp_port)
-  return udp_port_;
+inline const std::string& StartKcp::token() const {
+  // @@protoc_insertion_point(field_get:StartKcp.token)
+  return token_.GetNoArena();
 }
-inline void SendUdpPort::set_udp_port(::PROTOBUF_NAMESPACE_ID::int32 value) {
+inline void StartKcp::set_token(const std::string& value) {
   
-  udp_port_ = value;
-  // @@protoc_insertion_point(field_set:SendUdpPort.udp_port)
+  token_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:StartKcp.token)
+}
+inline void StartKcp::set_token(std::string&& value) {
+  
+  token_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:StartKcp.token)
+}
+inline void StartKcp::set_token(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  
+  token_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:StartKcp.token)
+}
+inline void StartKcp::set_token(const char* value, size_t size) {
+  
+  token_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:StartKcp.token)
+}
+inline std::string* StartKcp::mutable_token() {
+  
+  // @@protoc_insertion_point(field_mutable:StartKcp.token)
+  return token_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* StartKcp::release_token() {
+  // @@protoc_insertion_point(field_release:StartKcp.token)
+  
+  return token_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void StartKcp::set_allocated_token(std::string* token) {
+  if (token != nullptr) {
+    
+  } else {
+    
+  }
+  token_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), token);
+  // @@protoc_insertion_point(field_set_allocated:StartKcp.token)
 }
 
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
-// -------------------------------------------------------------------
-
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

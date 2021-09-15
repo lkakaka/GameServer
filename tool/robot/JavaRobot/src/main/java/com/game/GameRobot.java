@@ -129,6 +129,11 @@ public class GameRobot {
         System.out.println("send data len:" + len);
     }
 
+    public void sendUdpData(byte[] data) {
+        m_network.sendUdpData(data);
+        System.out.println("send UDP data len:" + data.length);
+    }
+
     public void sendProto(int iMsgId, com.google.protobuf.GeneratedMessageV3 msg) {
 //        int size = msg.getSerializedSize();
 //        System.out.println(size);
@@ -177,8 +182,8 @@ public class GameRobot {
         this.m_account = account;
     }
 
-    public boolean startKCP(int kcpId) {
-        return m_network.startKcp(kcpId);
+    public boolean startKCP(int kcpId, String token) {
+        return m_network.startKcp(kcpId, token);
     }
 
     public int getUdpPort() {

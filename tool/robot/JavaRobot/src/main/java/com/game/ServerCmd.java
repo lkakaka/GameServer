@@ -74,11 +74,11 @@ public class ServerCmd extends CmdDispatch {
         Login.StartKcp rsp = (Login.StartKcp) param;
         Util.logInfo("recv start kcp, %d", rsp.getKcpId());
 
-        if(m_robot.startKCP(rsp.getKcpId())) {
+        if(m_robot.startKCP(rsp.getKcpId(), rsp.getToken())) {
             int udpPort = m_robot.getUdpPort();
-            Login.SendUdpPort msg = ProtoBufferMsg.createSendUdpPortBuilder().setUdpPort(udpPort).build();
-            m_robot.sendProto(ProtoBufferMsg.MSG_ID_SEND_UDP_PORT, msg);
-            Util.logInfo("send udp port: %d", udpPort);
+//            Login.SendUdpPort msg = ProtoBufferMsg.createSendUdpPortBuilder().setUdpPort(udpPort).build();
+//            m_robot.sendProto(ProtoBufferMsg.MSG_ID_SEND_UDP_PORT, msg);
+            Util.logInfo("start kcp success: %d", udpPort);
         } else {
             Util.logInfo("start kcp failed, %d", rsp.getKcpId());
         }

@@ -6,6 +6,9 @@ import java.util.zip.Inflater;
 public class Util {
     private static final char[] s_arrHexChar = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
+    public static final int LITTLE_ENDIAN = 1;
+    public static final int BIG_ENDIAN = 2;
+
     public static byte[] intToByteArray(int num) {
         byte[] arr = new byte[4];
         for (int i = 0; i < 4; i++) {
@@ -23,6 +26,20 @@ public class Util {
     public static void copyByteArray(byte[] src, byte[] dst, int dst_offset) {
         for (int i = 0; i < src.length; i++) {
             dst[dst_offset + i] = src[i];
+        }
+    }
+
+    public static void writeInt(byte[] buff, int offset, int n, int endianType) {
+        if (endianType == LITTLE_ENDIAN) {
+            buff[offset] = (byte) (n & 0xFF);
+            buff[offset + 1] = (byte) ((n >>> 8) & 0xFF);
+            buff[offset + 2] = (byte) ((n >>> 16) & 0xFF);
+            buff[offset + 3] = (byte) ((n >>> 24) & 0xFF);
+        } else {
+            buff[offset] = (byte) ((n >>> 24) & 0xFF);
+            buff[offset + 1] = (byte) ((n >>> 16) & 0xFF);
+            buff[offset + 2] = (byte) ((n >>> 8) & 0xFF);
+            buff[offset + 3] = (byte) (n & 0xFF);
         }
     }
 

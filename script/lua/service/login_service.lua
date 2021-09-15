@@ -4,6 +4,9 @@ require("base.service_type")
 require("proto.pb_message")
 require("util.logger")
 require("util.const")
+require("util.crypt")
+require("os")
+require("math")
 
 clsLoginService = clsServiceBase:Inherit("clsLoginService")
 
@@ -119,10 +122,7 @@ function clsLoginService:_on_load_role(conn_id, err_code, tbl)
         self:_send_enter_game_rsp(conn_id, ErrorCode.OK, row)
         self._conn_dict[conn_id] = nil
         self._account_dict[account] = nil
-
-        local msg = {}
-        msg.kcp_id = conn_id;
-        self:sendMsgToClient(conn_id, MSG_ID_START_KCP, msg)
+        self:_send_kcp_start_info(conn_id)
     end
 
     local future = self:callRpc(LOCAL_SERVICE_SCENE_CTRL, "Player_EnterGame", 30, {conn_id=conn_id, role_id=row.role_id})
@@ -130,6 +130,15 @@ function clsLoginService:_on_load_role(conn_id, err_code, tbl)
     logger.logInfo("send enter scene req to scene ctrl, conn_id:%d, account:%s", conn_id, account)
 end
 
+
+function clsLoginService:_send_kcp_start_info(conn_id)
+    local rand_num = math.random(1, 10000)
+    local str_token = TokenPrefix.KCP .. tostring(conn_id) .. tostring(os.time()) .. tostring(rand_num)
+    local msg = {}
+    msg.kcp_id = conn_id;
+    msg.token = Crypt.md5(str_token)
+    self:sendMsgToClient(conn_id, MSG_ID_START_KCP, msg)
+end
 
 function clsLoginService:_send_enter_game_rsp(conn_id, err_code, tbl_player)
     local msg = {}

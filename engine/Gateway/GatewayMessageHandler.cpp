@@ -18,9 +18,26 @@ void handMsg_SwitchSceneService(int msgId, int connId, char* data, int dataLen) 
 	std::shared_ptr<google::protobuf::Message> msg = createMessage(msgId, data, dataLen);
 	SwitchSceneService* recvMsg = (SwitchSceneService*)msg.get();
 	GatewayConnection* conn = (GatewayConnection*)GatewayNet::getSingleton()->getConnection(recvMsg->conn_id());
-	if (conn == NULL) Logger::logError("$SwitchSceneService not found conn:%d", recvMsg->conn_id());
+	if (conn == NULL) {
+		Logger::logError("$SwitchSceneService not found conn:%d", recvMsg->conn_id());
+		return;
+	}
 	conn->setSceneServiceId(recvMsg->scene_service_id());
 }
+
+void handMsg_StartKCP(send_type type, int msgId, int connId, char* data, int dataLen) {
+	std::shared_ptr<google::protobuf::Message> msg = createMessage(msgId, data, dataLen);
+	StartKcp* recvMsg = (StartKcp*)msg.get();
+	GatewayConnection* conn = (GatewayConnection*)GatewayNet::getSingleton()->getConnection(connId);
+	if (conn == NULL) {
+		Logger::logError("$StartKCP not found conn:%d", connId);
+		return;
+	}
+	conn->enableKCP(const_cast<std::string&>(recvMsg->token()));
+	conn->sendMsgToClient(type, msgId, data, dataLen);
+	Logger::logInfo("$send msg to client, msgId:%d, connId:%d", msgId, connId);
+}
+
 
 // 消息默认处理发给客户端
 void handMsg_Default(int msgId, int connId, send_type type, char* data, int dataLen) {
@@ -41,6 +58,9 @@ void handMsg(int msgId, int connId, send_type type, char* data, int dataLen) {
 			break;
 		case MSG_ID_SWITCH_SCENE_SERVICE:
 			handMsg_SwitchSceneService(msgId, connId, data, dataLen);
+			break;
+		case MSG_ID_START_KCP:
+			handMsg_StartKCP(type, msgId, connId, data, dataLen);
 			break;
 		default:
 			handMsg_Default(msgId, connId, type, data, dataLen);

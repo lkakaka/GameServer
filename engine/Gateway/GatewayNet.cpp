@@ -29,10 +29,11 @@ void GatewayNet::onCloseConnection(ServerConnection* conn, const char* reason) {
 void GatewayNet::startUdp(int udpPort) {
 	try {
 		udp::endpoint ep(udp::v4(), udpPort);
+		//udp::endpoint ep1(boost::asio::ip::address::from_string("127.0.0.1"), udpPort);
 		m_udp.reset(new udp::socket(*getIOService(), ep));
+		/*m_udp->open(ep1.protocol());*/
 		m_udp->set_option(boost::asio::ip::udp::socket::reuse_address(true));
-		//m_udp->open(ep.protocol());
-		//m_udp->bind(udp::endpoint(udp::v4(), udpPort));
+		//m_udp->bind(ep1);
 	}
 	catch (std::exception& e) {
 		Logger::logError("$%s, port:%d", e.what(), udpPort);
@@ -44,8 +45,7 @@ void GatewayNet::startUdp(int udpPort) {
 
 void GatewayNet::recvUdpMsg() {
 	auto buf = boost::asio::buffer(m_udpReadBuf, m_udpReadBuf.size());
-	udp::endpoint remotePoint;
-	m_udp->async_receive_from(buf, remotePoint, [buf, &remotePoint, this](const boost::system::error_code& error, size_t bytes_transferred) {
+	m_udp->async_receive_from(buf, m_remotePoint, [buf, this](const boost::system::error_code& error, size_t bytes_transferred) {
 		if (error)
 		{
 			const std::string err_str = error.message();
@@ -58,32 +58,31 @@ void GatewayNet::recvUdpMsg() {
 			/*if (remotePoint.address().is_v6()) {
 				Logger::logDebug("$ipv6");
 			}*/
-			std::string clientIp = remotePoint.address().to_string();
-			unsigned short clientPort = remotePoint.port();
-			Logger::logDebug("$receive udp data from ip:%s, port:%d, len=%d", clientIp.c_str(), clientPort, bytes_transferred);
+			std::string remoteIp = m_remotePoint.address().to_string();
+			unsigned short remotePort = m_remotePoint.port();
+			Logger::logDebug("$receive udp data from ip:%s, port:%d, len=%d", remoteIp.c_str(), remotePort, bytes_transferred);
+			handleUdpMsg(remoteIp, remotePort, bytes_transferred);
 
-			handleUdpMsg(bytes_transferred);
+			//try {
+			//	char* s = "nihao";
+			//	auto sbuf = boost::asio::buffer(buf, bytes_transferred);
+			//	m_udp->send_to(sbuf, udp::endpoint(boost::asio::ip::address_v4::from_string(remoteIp.c_str()), remotePort));
+			//	//m_udp->send_to(sbuf, remotePoint);
+			//}
+			//catch (std::exception& e) {
+			//	Logger::logError("$%s", e.what());
+			//	//throw(e);
+			//}
 		}
 		else {
 			Logger::logInfo("$receive udp data len is 0");
 		}
 
-		//try {
-		//	char* s = "nihao";
-		//	auto sbuf = boost::asio::buffer(buf, bytes_transferred);
-		//	m_udp->send_to(sbuf, udp::endpoint(boost::asio::ip::address_v4::from_string("127.0.0.1"), 8888));
-		//	//m_udp->send_to(sbuf, remotePoint);
-		//}
-		//catch (std::exception& e) {
-		//	Logger::logError("$%s", e.what());
-		//	//throw(e);
-		//}
-
 		recvUdpMsg();
 	});
 }
 
-void GatewayNet::handleUdpMsg(int len) {
+void GatewayNet::handleUdpMsg(std::string& remoteIP, int remotePort, int len) {
 	if (len <= 4) return;
 	// KCP»á»°ID
 	int connId = *((unsigned int*)m_udpReadBuf.data());
@@ -92,5 +91,20 @@ void GatewayNet::handleUdpMsg(int len) {
 		Logger::logError("$udp msg, not found connection: %d", connId);
 		return;
 	}
-	conn->onRecvKCPMsg(m_udpReadBuf.data(), len);
+	if (!conn->isKCPStarted()) {
+		std::string token;
+		std::copy(m_udpReadBuf.begin() + 4, m_udpReadBuf.begin() + len, std::back_inserter(token));
+		if (conn->isKcpTokenValid(token)) { 
+			conn->setClientUdpAddr(remoteIP, remotePort);
+			conn->startKCP();
+		} else {
+			Logger::logError("$kcp token invalid: %d", connId);
+		}
+	} else {
+		conn->onRecvKCPMsg(m_udpReadBuf.data(), len);
+	}
+}
+
+udp::socket* GatewayNet::getUpdSocket() {
+	return m_udp.get();
 }

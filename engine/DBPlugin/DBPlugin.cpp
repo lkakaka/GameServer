@@ -63,7 +63,7 @@ void DBPlugin::initDBPlugin(std::string dbDir)
 
 		std::cout << std::endl;
 	}
-	catch (std::exception e) {
+	catch (std::exception& e) {
 		Logger::logError("$sql error %s", e.what());
 	}
 

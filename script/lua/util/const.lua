@@ -26,3 +26,7 @@ GlobalVar = {
 RedisKey = {
     ID_ALLOCATOR = "_id_allocator",
 }
+
+TokenPrefix = {
+    KCP = "KCPToken_$gs20210915@",
+}

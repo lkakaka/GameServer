@@ -34,7 +34,7 @@ static void closeInvalidSocket(std::shared_ptr<tcp::socket> sock) {
 	try {
 		sock->shutdown(sock->shutdown_both);
 	}
-	catch (std::exception e) {
+	catch (std::exception& e) {
 		Logger::logError("$invalid socket shutdown error, %s", e.what());
 	}
 	Logger::logInfo("$close invalid socket!!!");
@@ -53,11 +53,11 @@ void ServerNetwork::acceptHandler(std::shared_ptr<tcp::socket> sock, boost::syst
 			conn->startRead();
 			try {
 				std::string remoteIP = sock->remote_endpoint().address().to_string();
-				conn->setRemoteIp(remoteIP);
+				conn->setClientIp(remoteIP);
 				unsigned short clientPort = sock->remote_endpoint().port();
 				Logger::logInfo("$client connected, ip:%s, port:%d", remoteIP.c_str(), clientPort);
 			}
-			catch (std::exception e) {
+			catch (std::exception& e) {
 				Logger::logInfo("$client connected, cannot get remote addr , e:%s", e.what());
 			}
 		} else { 

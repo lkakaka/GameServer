@@ -24,7 +24,7 @@ class CommandCmd extends CmdDispatch {
 
         try {
             m_ds = new DatagramSocket();
-            m_address = new InetSocketAddress("127.0.0.1", 7777);
+            m_address = new InetSocketAddress("111.229.80.201", 7777);
 //            InetAddress addr = m_address.getAddress();
 //            if (addr instanceof Inet4Address) {
 //                System.out.println("ipv4");
@@ -169,16 +169,17 @@ class CommandCmd extends CmdDispatch {
         System.out.println(decodeText);
     }
 
+    @CmdAnnotation(inputCmd = "rudp")
+    private void sendRobotUdp() {
+        GameRobot robot = RobotMgr.getInstance().getCurOrRandRobot();
+        String msg = "World";
+        robot.sendUdpData(msg.getBytes());
+    }
+
     @CmdAnnotation(inputCmd = "udp")
     private void sendUdp() {
-//        GameRobot robot = RobotMgr.getInstance().getOneRobot();
-//        robot.sendUdpData("hello".getBytes());
         try {
-
             String s = (params == null || params.length == 0) ? "hello" : params[0];
-//            for (int i = 0; i < 5000; i++) {
-//                s += "a";
-//            }
             byte[] msg = s.getBytes();
             DatagramPacket dp = new DatagramPacket(msg, msg.length, m_address);
             m_ds.send(dp);

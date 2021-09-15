@@ -9,10 +9,14 @@
 #include "GatewayNet.h"
 #include "proto.h"
 
+
+#define KCP_TOKEN_VALID_TIME 30000 // 毫秒
+
 using boost::asio::ip::udp;
 
 GatewayConnection::GatewayConnection(int connID, std::shared_ptr<tcp::socket> socket, ConnCloseCallback closeCallback) :
-	ServerConnection(connID, socket, closeCallback), m_kcp(NULL), m_remoteUdpPort(0), m_kcpTimerId(0)
+	ServerConnection(connID, socket, closeCallback), m_kcp(NULL), m_clientUdpPort(0),
+	m_kcpTimerId(0), m_kcpEnabled(false), m_kcpTokenTs(0)
 {
 	
 }
@@ -52,19 +56,35 @@ void GatewayConnection::stopKCP() {
 // user指针为 kcp对象创建时传入的值，用于区别多个 KCP对象
 int GatewayConnection::udp_output(const char* buf, int len, ikcpcb * kcp, void* user)
 {
-	Logger::logInfo("$recv udp data, len:%d", len);
+	Logger::logInfo("$kcp output, len:%d", len);
 	GatewayConnection* gcPtr = (GatewayConnection*)user;
 	try {
 		boost::asio::io_service* io = GatewayNet::getSingleton()->getIOService();
 		//udp::endpoint ep(udp::v4(), 9999);
-		udp::socket udp_sock(*io);
-		udp_sock.open(boost::asio::ip::udp::v4());
+		/*udp::socket udp_sock(*io);
+		udp_sock.open(boost::asio::ip::udp::v4());*/
+		udp::socket* udp_sock = GatewayNet::getSingleton()->getUpdSocket();
 		auto sbuf = boost::asio::buffer(buf, len);
-		udp_sock.send_to(sbuf, udp::endpoint(boost::asio::ip::address_v4::from_string(gcPtr->m_remoteIP), gcPtr->getRemoteUdpPort()));
+		const char* ip = gcPtr->getClientUdpIP();
+		int port = gcPtr->getClientUdpPort();
+		udp_sock->send_to(sbuf, udp::endpoint(boost::asio::ip::address_v4::from_string(ip), port));
+		Logger::logInfo("$send kcp data, ip:%s, port:%d", ip, port);
 	} catch (std::exception& e) {
 		Logger::logError("$udp data send error, %s", e.what());
 	}
 	return 1;
+}
+
+void GatewayConnection::enableKCP(std::string& token) { 
+	m_kcpEnabled = true;
+	m_kcpToken = token;
+	m_kcpTokenTs = TimeUtil::getCurrentTime() + KCP_TOKEN_VALID_TIME;
+}
+
+bool GatewayConnection::isKcpTokenValid(std::string& token) {
+	if (!m_kcpEnabled) return false;
+	if (TimeUtil::getCurrentTime() >= m_kcpTokenTs) return false;
+	return m_kcpToken.compare(token.c_str()) == 0;
 }
 
 void GatewayConnection::onRecvKCPMsg(char* buff, int len) {
@@ -117,13 +137,14 @@ void GatewayConnection::dispatchClientMsg(int msgId, int msgLen, const char* msg
 			CommEntityMgr::getSingleton()->getCommEntity()->sendToService(&addr, (char*)buffer.data(), buffer.size());
 			break;
 		}
-		case MSG_ID_SEND_UDP_PORT: {
-			std::shared_ptr<google::protobuf::Message> ptr = createMessage(msgId, const_cast<char*>(msgData), msgLen);
-			SendUdpPort* msg = (SendUdpPort*)ptr.get();
-			this->m_remoteUdpPort = msg->udp_port();
-			startKCP();
-			break;
-		}
+		//case MSG_ID_SEND_UDP_PORT: {
+		//	std::shared_ptr<google::protobuf::Message> ptr = createMessage(msgId, const_cast<char*>(msgData), msgLen);
+		//	SendUdpPort* msg = (SendUdpPort*)ptr.get();
+		//	// TODO: 这里可能有问题，由于客户端在NAT环境中，因此UDP端口并不一定是客户端实际绑定的端口，而是NAT转换后的端口
+		//	this->m_remoteUdpPort = msg->udp_port();
+		//	startKCP();
+		//	break;
+		//}
 		default: {
 			if (m_sceneServiceId < 0) {
 				Logger::logError("$player not in scene, connId:%d, msgId:%d", getConnID(), msgId);

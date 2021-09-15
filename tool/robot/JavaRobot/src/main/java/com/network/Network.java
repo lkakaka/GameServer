@@ -2,8 +2,11 @@ package com.network;
 
 //import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 
+import com.util.Util;
+
 import java.io.ByteArrayOutputStream;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -152,7 +155,7 @@ public class Network {
             } else {
                 System.out.println("event hander is null");
             }
-            System.out.println("read len=" + total_len);
+            System.out.println(String.format("read len: %d, total_len:%d", len, total_len));
         } catch (IOException e) {
             System.out.println("read error, e: " + e.getMessage());
             return false;
@@ -176,8 +179,8 @@ public class Network {
         }
     }
 
-    public boolean startKcp(int connId) {
-        if (!startUdp()) return false;
+    public boolean startKcp(int connId, String token) {
+        if (!startUdp(connId, token)) return false;
 
         m_kcp = new KCP(connId) {
             @Override
@@ -191,8 +194,8 @@ public class Network {
         return true;
     }
 
-    private boolean startUdp() {
-        int iUdpPort = 30000;
+    private boolean startUdp(int connId, String token) {
+        int iUdpPort = 10000;
         while (iUdpPort < 65535) {
             try {
                 m_ds = new DatagramSocket(iUdpPort);
@@ -202,10 +205,22 @@ public class Network {
             }
         }
         if (m_ds == null) return false;
-        m_udpPort = iUdpPort;
-        Thread t = new Thread(() -> _startUdp());
-        t.start();
-        return true;
+        System.out.println(String.format("start udp, connId:%d, token:%s", connId, token));
+        // 必须先发一个UDP包给服务端，然后才能收到数据(和NAT有关, 建立NAT映射关系)
+        try {
+            byte[] buff = new byte[token.length() + 4];
+            Util.writeInt(buff, 0, connId, Util.LITTLE_ENDIAN);
+            byte[] tokens = token.getBytes();
+            System.arraycopy(tokens, 0, buff, 4, tokens.length);
+            sendUdpData(buff);
+            m_udpPort = iUdpPort;
+            Thread t = new Thread(() -> _startUdp());
+            t.start();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     private void _startUdp() {
@@ -227,6 +242,7 @@ public class Network {
             m_kcp.Input(data);
             int recvLen = m_kcp.Recv(m_kcpBuffer);
             System.out.println("kcp recv data:" + recvLen);
+            if (recvLen < 0) return;
             if (m_eventHandler != null) {
                 m_eventHandler.onKCPRecv(m_kcpBuffer, recvLen);
             } else {
@@ -243,6 +259,16 @@ public class Network {
 
     public void registerEventHandler(NetworkEventHandler eventHandler) {
         m_eventHandler = eventHandler;
+    }
+
+    public void sendUdpData(byte[] msg) {
+        try {
+            InetSocketAddress address = new InetSocketAddress(m_serverIP, m_serverUdpPort);
+            DatagramPacket dp = new DatagramPacket(msg, msg.length, address);
+            m_ds.send(dp);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
 

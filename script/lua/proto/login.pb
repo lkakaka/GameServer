@@ -1,5 +1,5 @@
 
-“
+ÿ
 proto/login.proto"O
 LoginReq
 account (	Raccount
@@ -31,9 +31,8 @@
 ._RoleInfoRroleInfo"
 DisconnectReq"'
 DisconnectRsp
-reason (	Rreason"!
+reason (	Rreason"7
 StartKcp
-kcp_id (RkcpId"(
-SendUdpPort
-udp_port (RudpPortB
+kcp_id (RkcpId
+token (	RtokenB
 	com.protoBLoginbproto3

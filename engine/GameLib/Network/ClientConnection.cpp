@@ -22,7 +22,7 @@ bool ClientConnection::connect() {
 		m_socket->connect(target);
 		m_isConnected = true;
 	}
-	catch (std::exception e) {
+	catch (std::exception& e) {
 		Logger::logError("$connect failed, %s", e.what());
 		return false;
 	}

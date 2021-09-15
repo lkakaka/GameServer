@@ -45,8 +45,6 @@ std::shared_ptr<google::protobuf::Message> CreateMsgById(int msgId)
 		return std::shared_ptr<google::protobuf::Message>(new RpcMsg());
 		case MSG_ID_RPC_MSG_RSP:
 		return std::shared_ptr<google::protobuf::Message>(new RpcMsgRsp());
-		case MSG_ID_SEND_UDP_PORT:
-		return std::shared_ptr<google::protobuf::Message>(new SendUdpPort());
 		case MSG_ID_START_KCP:
 		return std::shared_ptr<google::protobuf::Message>(new StartKcp());
 		case MSG_ID_SWITCH_SCENE_SERVICE:

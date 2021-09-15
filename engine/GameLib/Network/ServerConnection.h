@@ -23,6 +23,7 @@ private:
 	std::string m_waitCloseReason;
 	bool m_isSending;
 	ConnCloseCallback m_closeCallback;
+	std::string m_clientIp;
 
 private:
 	void _send();
@@ -31,7 +32,6 @@ private:
 	
 protected:
 	MyBuffer m_recvBuffer; // 接受到未处理的数据
-	std::string m_remoteIP;
 	
 	// 子类处理, 并返回处理的数据长度
 	virtual void parseMessage() = 0;
@@ -44,7 +44,8 @@ public:
 
 	std::shared_ptr<tcp::socket> getSocket();
 	int getConnID() const;
-	inline void setRemoteIp(std::string& ip) { m_remoteIP = ip; }
+	inline const char* getClientIp() const { return m_clientIp.c_str(); }
+	inline void setClientIp(std::string& ip) { m_clientIp = ip; }
 
 	inline void startRead() { _read(); }
 	void send(const char* data, int len);
