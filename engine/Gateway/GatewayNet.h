@@ -25,6 +25,10 @@ private:
 	std::shared_ptr<udp::socket> m_udp;
 	std::vector<char> m_udpReadBuf;
 	udp::endpoint m_remotePoint;
+
+	void handleUdpVerify(const char* data, int len, std::string& remoteIP, int remotePort);
+	void handleKCPCtrlMsg(const char* data, int len);
+
 protected:
 	ServerConnection* onAccept(std::shared_ptr<tcp::socket> socket);
 	void recvUdpMsg();

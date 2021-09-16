@@ -23,6 +23,10 @@ import java.util.concurrent.*;
 
 public class Network {
 
+    public static final byte UDP_MSG_TYPE_VERIFY = 1;    // UDP验证
+    public static final byte UDP_MSG_TYPE_KEEP_ALIVE = 2;    // UDP保活(心跳包)
+    public static final byte UDP_MSG_TYPE_KCP = 3;    // KCP控制消息
+
     private SocketChannel m_sc = null;
     private String m_serverIP;
     private int m_serverPort;
@@ -130,10 +134,12 @@ public class Network {
             throw new RuntimeException("not set server udp port");
         }
         try {
-            DatagramSocket ds = new DatagramSocket();
-            InetSocketAddress address = new InetSocketAddress(m_serverIP, m_serverUdpPort);
-            DatagramPacket dp = new DatagramPacket(bytes, len, address);
-            ds.send(dp);
+            sendUdpData(UDP_MSG_TYPE_KCP, bytes, len);
+
+//            DatagramSocket ds = new DatagramSocket();
+//            InetSocketAddress address = new InetSocketAddress(m_serverIP, m_serverUdpPort);
+//            DatagramPacket dp = new DatagramPacket(bytes, len, address);
+//            ds.send(dp);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -189,8 +195,9 @@ public class Network {
                 sendKCPData(bytes, size);
             }
         };
-        ScheduledThreadPoolExecutor tpe = new ScheduledThreadPoolExecutor(1);
+        ScheduledThreadPoolExecutor tpe = new ScheduledThreadPoolExecutor(2);
         tpe.scheduleAtFixedRate(() -> m_kcp.Update(System.currentTimeMillis()), 0, 10, TimeUnit.MILLISECONDS);
+        tpe.scheduleAtFixedRate(() -> sendUdpHeart(), 0, 60, TimeUnit.SECONDS);
         return true;
     }
 
@@ -208,10 +215,11 @@ public class Network {
         System.out.println(String.format("start udp, connId:%d, token:%s", connId, token));
         // 必须先发一个UDP包给服务端，然后才能收到数据(和NAT有关, 建立NAT映射关系)
         try {
-            byte[] buff = new byte[token.length() + 4];
-            Util.writeInt(buff, 0, connId, Util.LITTLE_ENDIAN);
+            byte[] buff = new byte[token.length() + 5];
+            buff[0] = UDP_MSG_TYPE_VERIFY;
+            Util.writeInt(buff, 1, connId, Util.LITTLE_ENDIAN);
             byte[] tokens = token.getBytes();
-            System.arraycopy(tokens, 0, buff, 4, tokens.length);
+            System.arraycopy(tokens, 0, buff, 5, tokens.length);
             sendUdpData(buff);
             m_udpPort = iUdpPort;
             Thread t = new Thread(() -> _startUdp());
@@ -269,6 +277,18 @@ public class Network {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void sendUdpData(byte msgType, byte[] msg, int len) {
+        byte[] data = new byte[len + 1];
+        data[0] = msgType;
+        if (len > 0) System.arraycopy(msg, 0, data, 1, len);
+        sendUdpData(data);
+    }
+
+    private void sendUdpHeart() {
+        sendUdpData(UDP_MSG_TYPE_KEEP_ALIVE, new byte[0], 0);
+        System.out.println("send udp heart");
     }
 }
 

@@ -87,9 +87,9 @@ bool GatewayConnection::isKcpTokenValid(std::string& token) {
 	return m_kcpToken.compare(token.c_str()) == 0;
 }
 
-void GatewayConnection::onRecvKCPMsg(char* buff, int len) {
+void GatewayConnection::onRecvKCPMsg(const char* data, int len) {
 	if (m_kcp == NULL) return;
-	ikcp_input(m_kcp, buff, len);
+	ikcp_input(m_kcp, data, len);
 }
 
 void GatewayConnection::parseMessage() {

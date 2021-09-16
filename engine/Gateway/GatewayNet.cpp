@@ -6,6 +6,11 @@ INIT_SINGLETON_CLASS(GatewayNet)
 
 #define UDP_BUFF_SIZE 2048
 
+// UDP消息类型
+#define UDP_MSG_TYPE_VERIFY		1	// UDP验证
+#define UDP_MSG_TYPE_KEEP_ALIVE 2	// UDP保活(心跳包)
+#define UDP_MSG_TYPE_KCP		3	// KCP控制消息
+
 GatewayNet::GatewayNet(boost::asio::io_service* io) : ServerNetwork(io), m_udp(NULL)
 {
 }
@@ -83,26 +88,59 @@ void GatewayNet::recvUdpMsg() {
 }
 
 void GatewayNet::handleUdpMsg(std::string& remoteIP, int remotePort, int len) {
+
+	unsigned char msgType = *m_udpReadBuf.data();
+	const char* data = m_udpReadBuf.data() + 1;
+	len -= 1;
+	switch (msgType) {
+		case UDP_MSG_TYPE_VERIFY:
+			handleUdpVerify(data, len, remoteIP, remotePort);
+			break;
+		case UDP_MSG_TYPE_KEEP_ALIVE:
+			// 心跳包
+			break;
+		case UDP_MSG_TYPE_KCP:
+			handleKCPCtrlMsg(data, len);
+			break;
+		default:
+			Logger::logError("$recv invalid udp msg");
+	}
+}
+
+
+void GatewayNet::handleUdpVerify(const char* data, int len, std::string& remoteIP, int remotePort) {
 	if (len <= 4) return;
+
 	// KCP会话ID
-	int connId = *((unsigned int*)m_udpReadBuf.data());
+	int connId = *((unsigned int*)data);
 	GatewayConnection* conn = (GatewayConnection*)getConnection(connId);
 	if (conn == NULL) {
-		Logger::logError("$udp msg, not found connection: %d", connId);
+		Logger::logError("$udp verify, not found connection: %d", connId);
 		return;
 	}
-	if (!conn->isKCPStarted()) {
-		std::string token;
-		std::copy(m_udpReadBuf.begin() + 4, m_udpReadBuf.begin() + len, std::back_inserter(token));
-		if (conn->isKcpTokenValid(token)) { 
-			conn->setClientUdpAddr(remoteIP, remotePort);
-			conn->startKCP();
-		} else {
-			Logger::logError("$kcp token invalid: %d", connId);
-		}
-	} else {
-		conn->onRecvKCPMsg(m_udpReadBuf.data(), len);
+
+	std::string token;
+	std::copy(data + 4, data + len, std::back_inserter(token));
+	if (!conn->isKcpTokenValid(token)) {
+		Logger::logError("$kcp token invalid: %d", connId);
+		return;
 	}
+	conn->setClientUdpAddr(remoteIP, remotePort);
+	conn->startKCP();
+}
+
+void GatewayNet::handleKCPCtrlMsg(const char* data, int len) {
+	if (len <= 4) return;
+
+	// KCP会话ID
+	int connId = *((unsigned int*)data);
+	GatewayConnection* conn = (GatewayConnection*)getConnection(connId);
+	if (conn == NULL) {
+		Logger::logError("$kcp ctrl msg, not found connection: %d", connId);
+		return;
+	}
+
+	conn->onRecvKCPMsg(data, len);
 }
 
 udp::socket* GatewayNet::getUpdSocket() {

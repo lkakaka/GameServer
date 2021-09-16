@@ -44,7 +44,7 @@ public:
 	inline void setClientUdpAddr(std::string& ip, int port) { m_clientUdpIP = ip; m_clientUdpPort = port; }
 	inline const char* getClientUdpIP() const { return m_clientUdpIP.c_str(); }
 	inline int getClientUdpPort() const { return m_clientUdpPort; }
-	void onRecvKCPMsg(char* buff, int len);
+	void onRecvKCPMsg(const char* buff, int len);
 	void enableKCP(std::string& token);
 	bool isKcpTokenValid(std::string& token);
 	inline bool isKCPStarted() { return m_kcp != NULL; }
