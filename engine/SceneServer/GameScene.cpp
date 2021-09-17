@@ -6,7 +6,7 @@
 #include "TimeUtil.h"
 
 
-GameScene::GameScene(int sceneId, int sceneUid) : m_maxActorId(0), m_sceneId(sceneId), m_sceneUid(sceneUid),
+GameScene::GameScene(int sceneId, int sceneUid) : m_sceneId(sceneId), m_sceneUid(sceneUid), m_maxActorId(0),
  m_detour(new SceneDetourMgr())
 {
 
@@ -34,7 +34,7 @@ void GameScene::onCreate()
 
 void GameScene::_syncThreadFunc() {
 	while (true) {
-		int64_t ts = TimeUtil::getCurrentTime();
+		int64_t ts = TimeUtil::nowMillSec();
 		for (auto iter = m_actors.begin(); iter != m_actors.end(); iter++) {
 			GameActor* gameActor = iter->second;
 			if (gameActor == NULL || !gameActor->isMoving()) continue;
@@ -46,18 +46,28 @@ void GameScene::_syncThreadFunc() {
 
 void GameScene::onDestory()
 {
+	m_syncThread.reset();
 	LOG_INFO("destory scene, sceneId:%d, sceneUid:%d", m_sceneId, m_sceneUid);
 }
 
-GamePlayer* GameScene::createPlayer(int connId, int roleId, const char* name, int x, int y)
+GamePlayer* GameScene::createPlayer(int connId, int roleId, const char* name, int x, int y, int moveSpeed)
 {
 	int actorId = m_maxActorId++;
-	GamePlayer* gamePlayer = new GamePlayer(connId, actorId, roleId, name, x, y, this, std::bind(&GameScene::onActorGridChg, this, std::placeholders::_1, std::placeholders::_2));
+	GamePlayer* gamePlayer = new GamePlayer(connId, actorId, roleId, name, x, y, moveSpeed, this, std::bind(&GameScene::onActorGridChg, this, std::placeholders::_1, std::placeholders::_2));
 	m_actors.emplace(std::make_pair(actorId, gamePlayer));
 	m_players.emplace(std::make_pair(connId, gamePlayer));
 	SceneMgr::getSceneMgr()->addPlayer(connId, m_sceneUid);
 	LOG_INFO("create player, sceneId:%d, sceneUid:%d, actorId:%d", m_sceneId, m_sceneUid, actorId);
 	return gamePlayer;
+}
+
+GameNpc* GameScene::createNpc(int npcId, int x, int y, int moveSpeed)
+{
+	int actorId = m_maxActorId++;
+	GameNpc* gameNpc = new GameNpc(actorId, npcId, x, y, moveSpeed, this, std::bind(&GameScene::onActorGridChg, this, std::placeholders::_1, std::placeholders::_2));
+	m_actors.emplace(std::make_pair(actorId, gameNpc));
+	LOG_INFO("create npc, sceneId:%d, sceneUid:%d, actorId:%d", m_sceneId, m_sceneUid, actorId);
+	return gameNpc;
 }
 
 void GameScene::onActorEnter(int actorId) {
@@ -79,9 +89,9 @@ void GameScene::onActorEnter(int actorId) {
 		}
 	}
 
-	if (actor->getActorType() == ActorType::PLYAER) {
+	if (actor->isPlayer()) {
 		onPlayerEnter((GamePlayer*)actor, neighbours);
-	} else if(actor->getActorType() == ActorType::NPC) {
+	} else if(actor->isNpc()) {
 		onNpcEnter((GameNpc*)actor, neighbours);
 	} else {
 		LOG_ERROR("on actor enter error, unkown actor type:%d", actor->getActorType());
@@ -173,7 +183,7 @@ void GameScene::removeActor(int actorId) {
 	GameActor* gameActor = iter->second;
 	onActorLeave(gameActor);
 
-	if (gameActor->getActorType() == ActorType::PLYAER) {
+	if (gameActor->isPlayer()) {
 		int connId = ((GamePlayer*)gameActor)->getConnId();
 		SceneMgr::getSceneMgr()->removePlayer(connId);
 		m_players.erase(connId);
@@ -192,7 +202,7 @@ void GameScene::onActorGridChg(int actorId, Grid* grid) {
 	}
 
 	onActorMove(actor);
-	LOG_DEBUG("$actor grid chg!!!");
+	LOG_DEBUG("actor grid chg!!!");
 }
 
 void GameScene::onActorPosChg(int actorId, Position& pos) {

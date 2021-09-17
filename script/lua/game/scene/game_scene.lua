@@ -2,6 +2,7 @@
 require("base.object")
 require("util.logger")
 require("game.scene.game_player")
+require("game.scene.game_npc")
 require("util.multi_index_container")
 require("base.service_type")
 require("data.cfg_scene")
@@ -26,13 +27,6 @@ function clsGameScene:__init__(service, scene_id)
     -- print("game scene c++ obj", self._engineObj)
     logger.logInfo("create scene, scene_id=%d, scene_uid=%d", self.scene_id, self.scene_uid)
 end
-
--- function clsGameScene:createPlayer(connId, roleId, name, x, y)
---     local engineObj = self._engineObj:createPlayer(connId, roleId, name, x, y)
---     local player = clsPlayer:New(self, engineObj, roleId, name)
---     print(type(player))
--- end
-
 
 function clsGameScene:prepare_enter_scene(conn_id, role_id)
     local tbls = self:_add_load_tb(role_id)
@@ -61,25 +55,10 @@ function clsGameScene:_add_load_tb(role_id)
 end
 
 function clsGameScene:on_load_player(err_code, conn_id, role_id, tbls)
-    -- # conn_id = msg.conn_id
-    -- # role_id = msg.role_info.role_id
-    -- # name = msg.role_info.role_name
-
     if err_code ~= ErrorCode.OK then
         logger.logError("load player data error, role_id:%d, conn_id:%d", role_id, conn_id)
         return
     end
-
-    -- local sorted_tbls = {}
-    -- for tbl_name, tbl in pairs(tbls) do
-    --     tb_name = tbl["__tb_name"]
-    --     tbl_obj = game.util.db_util.create_tbl_obj(tb_name)
-    --     tbl_obj.assign(tbl)
-    --     if tb_name not in sorted_tbls:
-    --         sorted_tbls[tb_name] = [tbl_obj,]
-    --     else:
-    --         sorted_tbls[tb_name].append(tbl_obj)
-    -- end
 
     local game_player = self:create_player(conn_id, role_id, tbls)
     self:add_player(game_player)
@@ -104,6 +83,13 @@ function clsGameScene:create_player(conn_id, role_id, tbls)
     local game_player = clsGamePlayer:New(self, player_obj, role_id, tb_player.role_name)
     game_player:init_player_data(tbls)
     return game_player
+end
+
+function clsGameScene:create_npc(npc_id, x, y)
+    local npc_obj = self._engineObj:createNpc(npc_id, x, y, 0)
+    local game_npc = clsGameNpc:New(self, npc_obj)
+    logger.logInfo("create npc, npc_id:%d, scene_id:%d", npc_id, self.scene_id)
+    return game_npc
 end
 
 function clsGameScene:add_player(game_player)

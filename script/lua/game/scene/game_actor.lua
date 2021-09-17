@@ -3,8 +3,9 @@ require("util.logger")
 
 clsGameActor = clsObject:Inherit("clsGameActor")
 
-function clsGameActor:__init__(actor_id)
+function clsGameActor:__init__(game_scene, actor_id)
     self.actor_id = actor_id
+    self.game_scene = game_scene
 end
 
 function clsGameActor:is_player()

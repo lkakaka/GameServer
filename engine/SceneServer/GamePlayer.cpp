@@ -3,11 +3,11 @@
 #include "Network/ServiceCommEntityMgr.h"
 #include "ServiceType.h"
 #include "ServiceInfo.h"
+#include "Logger.h"
+#include "../Common/ServerMacros.h"
 
-//ZmqInst* Singleton<ZmqInst>::_singleon;
-
-GamePlayer::GamePlayer(int connId, int actorId, int roleId, std::string name, int x, int y, void* gameScene, GridChgFunc gridChgFunc): 
-	GameActor(ActorType::PLYAER, actorId, x, y, gameScene, gridChgFunc),
+GamePlayer::GamePlayer(int connId, int actorId, int roleId, std::string name, int x, int y, int moveSpeed, void* gameScene, GridChgFunc gridChgFunc):
+	GameActor(ActorType::PLYAER, actorId, x, y, moveSpeed, gameScene, gridChgFunc),
 	m_connId(connId), m_roleId(roleId), m_name(name), m_scriptObj(NULL)
 {
 }
@@ -22,6 +22,7 @@ void GamePlayer::sendToClient(int msgId, const char* msg, int msgLen) {
 	MyBuffer buffer;
 	buffer.writeInt(msgId);
 	buffer.writeInt(m_connId);
+	buffer.writeByte(SEND_TYPE_TCP);
 	buffer.writeString(msg, msgLen);
 	ServiceAddr addr(ServiceInfo::getSingleton()->getServiceGroup(), ServiceType::SERVICE_TYPE_GATEWAY, 0);
 	CommEntityMgr::getSingleton()->getCommEntity()->sendToService(&addr, (char*)buffer.data(), buffer.size());

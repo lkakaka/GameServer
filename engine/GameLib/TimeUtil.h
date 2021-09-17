@@ -5,6 +5,7 @@
 class SERVER_EXPORT_API TimeUtil
 {
 public:
-	static int64_t getCurrentTime();
+	static int64_t nowSec();
+	static int64_t nowMillSec();
 };
 

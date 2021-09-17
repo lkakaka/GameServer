@@ -42,7 +42,8 @@ public:
 	GameScene(int sceneId, int sceneUid);
 
 	void onDestory();
-	GamePlayer* createPlayer(int connId, int roleId, const char* name, int x, int y);
+	GamePlayer* createPlayer(int connId, int roleId, const char* name, int x, int y, int moveSpeed);
+	GameNpc* createNpc(int npcId, int x, int y, int moveSpeed);
 	void onActorEnter(int actorId);
 	void onActorLeave(GameActor* gameActor);
 	void onActorMove(GameActor* gameActor);

@@ -111,6 +111,27 @@ function clsGMHandler:_gm_mem_gc(param)
     return ErrorCode.GM_CMD_RSP_DELAY, "ok"
 end
 
+function clsGMHandler:_gm_create_npc(param)
+    if param.args == nil or param.args == "" then
+        return ErrorCode.ILLEGAL_PARAM, "error arg"
+    end
+    local arg_list = StrUtil.split(param.args, ",")
+    local npc_id = tonumber(arg_list[1])
+    local x, y = param.player.engineObj.x, param.player.engineObj.y
+    print("---------", x, y)
+    if arg_list[2] ~= nil and arg_list[3] ~= nil then
+        x = tonumber(arg_list[2])
+        y = tonumber(arg_list[3])
+    end
+
+    if x == nil or y == nil then
+        return ErrorCode.ILLEGAL_PARAM, "pos invalid"
+    end
+
+    param.player.game_scene:create_npc(npc_id, x, y)
+    return ErrorCode.OK, "ok"
+end
+
 clsGMHandler._gm_cmd = {
     ["mem_usage"] = clsGMHandler._gm_mem_usage,
     ["mem_gc"] = clsGMHandler._gm_mem_gc,
@@ -118,4 +139,5 @@ clsGMHandler._gm_cmd = {
     ["dump_item"] = clsGMHandler._gm_dump_item,
     ["hotfix"] = clsGMHandler._gm_hotfix,
     ["goto_scene"] = clsGMHandler._gm_goto_scene,
+    ["cnpc"] = clsGMHandler._gm_create_npc,
 }

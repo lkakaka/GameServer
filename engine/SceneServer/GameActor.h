@@ -24,22 +24,20 @@ class GameActor
 {
 protected:
 	int m_actorId;
-	int m_moveSpeed; 
 	ActorType m_actorType;
-	GridChgFunc m_gridChgFunc;
-
+	int m_moveSpeed;
 	void* m_gameScene;
-
 	std::set<int> m_sightActors; // 视野中的角色
-
 	Position m_pos; // 当前位置
 	Grid m_grid; // 所处格子
 	std::vector<Position> m_tgtPosList;  // 移动的目标位置
 	int64_t m_lastMoveTime;	// 上次计算移动的时间戳(更新位置是使用)
+
+	GridChgFunc m_gridChgFunc;
 public:
 
 	GameActor(ActorType actorType, int actorId, void* gameScene, GridChgFunc posChgFunc);
-	GameActor(ActorType actorType, int actorId, int x, int y, void* gameScene, GridChgFunc posChgFunc);
+	GameActor(ActorType actorType, int actorId, int x, int y, int moveSpeed, void* gameScene, GridChgFunc posChgFunc);
 
 	virtual ~GameActor() {}
 

@@ -9,13 +9,12 @@ clsGamePlayer = clsGameActor:Inherit("clsGamePlayer")
 clsGamePlayer.index_roleId = "role_id"
 clsGamePlayer.index_connId = "conn_id"
 
-function clsGamePlayer:__init__(gameScene, engineObj, role_id, name)
-    Super(clsGamePlayer).__init__(self, engineObj:getActorId())
-    self.game_scene = gameScene
-    self.engineObj = engineObj
+function clsGamePlayer:__init__(game_scene, engine_obj, role_id, name)
+    Super(clsGamePlayer).__init__(self, game_scene, engine_obj:getActorId())
+    self.engineObj = engine_obj
     self.role_id = role_id
     self.name = name
-    self.conn_id = engineObj:getConnId()
+    self.conn_id = engine_obj:getConnId()
     self:_init_mgr()
 end
 
@@ -38,7 +37,9 @@ function clsGamePlayer:is_player()
 end
 
 function clsGamePlayer:send_msg_to_client(msgId, msg)
-    self.game_scene.service:sendMsgToClient(self.conn_id, msgId, msg)
+    -- self.game_scene.service:sendMsgToClient(self.conn_id, msgId, msg)
+    local data = encodeMsg(msgId, msg)
+    self.engineObj:sendToClient(msgId, data, string.len(data))
 end
 
 function clsGamePlayer:send_msg_to_client_kcp(msgId, msg)

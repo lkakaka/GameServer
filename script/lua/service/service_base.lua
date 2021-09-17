@@ -72,7 +72,7 @@ end
 
 function clsServiceBase:sendMsgToService(dstAddr, msgId, msg)
     logger.logInfo("sendMsgToService to %s, msgId:%d", StrUtil.tableToStr(dstAddr), msgId)
-    local msgName = MSG_ID_TO_NAME[msgId]
+    -- local msgName = MSG_ID_TO_NAME[msgId]
     local data = encodeMsg(msgId, msg)
     -- print(dstAddr, msgId, data, string.len(data))
     Service.sendMsgToService(dstAddr, msgId, data, string.len(data))
@@ -80,7 +80,7 @@ end
 
 function clsServiceBase:sendMsgToClient(connId, msgId, msg)
     logger.logInfo("sendMsgToClient to %d, msgId:%d", connId, msgId)
-    local msgName = MSG_ID_TO_NAME[msgId]
+    -- local msgName = MSG_ID_TO_NAME[msgId]
     local data = encodeMsg(msgId, msg)
     -- print(dstAddr, msgId, data, string.len(data))
     Service.sendMsgToClient(connId, msgId, data, string.len(data))
@@ -88,7 +88,7 @@ end
 
 function clsServiceBase:sendMsgToClientKCP(connId, msgId, msg)
     logger.logInfo("sendMsgToClientKCP to %d, msgId:%d", connId, msgId)
-    local msgName = MSG_ID_TO_NAME[msgId]
+    -- local msgName = MSG_ID_TO_NAME[msgId]
     local data = encodeMsg(msgId, msg)
     -- print(dstAddr, msgId, data, string.len(data))
     Service.sendMsgToClientKCP(connId, msgId, data, string.len(data))

@@ -34,7 +34,7 @@ void GatewayConnection::startKCP() {
 	m_kcpTimerId = TimerMgr::getSingleton()->addTimer(0, 10, -1, [this](int timerId) {
 		// 以一定频率调用 ikcp_update来更新 kcp状态，并且传入当前时钟（毫秒单位）
 		// 如 10ms调用一次，或用 ikcp_check确定下次调用 update的时间不必每次调用
-		ikcp_update(m_kcp, TimeUtil::getCurrentTime());
+		ikcp_update(m_kcp, TimeUtil::nowMillSec());
 	});
 	LOG_INFO("start kcp, connId:%d", connId);
 }
@@ -74,12 +74,12 @@ int GatewayConnection::udp_output(const char* buf, int len, ikcpcb * kcp, void* 
 void GatewayConnection::enableKCP(std::string& token) { 
 	m_kcpEnabled = true;
 	m_kcpToken = token;
-	m_kcpTokenTs = TimeUtil::getCurrentTime() + KCP_TOKEN_VALID_TIME;
+	m_kcpTokenTs = TimeUtil::nowMillSec() + KCP_TOKEN_VALID_TIME;
 }
 
 bool GatewayConnection::isKcpTokenValid(std::string& token) {
 	if (!m_kcpEnabled) return false;
-	if (TimeUtil::getCurrentTime() >= m_kcpTokenTs) return false;
+	if (TimeUtil::nowMillSec() >= m_kcpTokenTs) return false;
 	return m_kcpToken.compare(token.c_str()) == 0;
 }
 

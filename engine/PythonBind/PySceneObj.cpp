@@ -117,8 +117,7 @@ static PyObject* createPlayer(PyObject* self, PyObject* args)
 		Py_RETURN_NONE;
 	}
 	GameScene* gameScene = ((PySceneObj*)self)->gameScene;
-	GamePlayer* gamePlayer = gameScene->createPlayer(connId, roleId, name, x, y);
-	gamePlayer->setMoveSpeed(move_speed);
+	GamePlayer* gamePlayer = gameScene->createPlayer(connId, roleId, name, x, y, move_speed);
 	//return PyLong_FromSize_t((long long)gamePlayer);
 	PyObject* tuple = PyTuple_New(2);
 	PyTuple_SetItem(tuple, 0, PyLong_FromLong(gameScene->getSceneUid()));

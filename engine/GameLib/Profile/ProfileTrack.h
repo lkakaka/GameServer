@@ -17,12 +17,12 @@
 
 class ProfileTrack
 {
-	long m_startTime;
+	int64_t m_startTime;
 	std::string m_name;
 	int m_trackTime;
 public:
 	ProfileTrack(const char* name);
-	ProfileTrack(const char* name, int trackTime);
+	ProfileTrack(const char* name, int64_t trackTime);
 	~ProfileTrack();
 };
 

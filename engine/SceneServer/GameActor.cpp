@@ -7,15 +7,17 @@
 
 
 GameActor::GameActor(ActorType actorType, int actorId, void* gameScene, GridChgFunc gridChgFunc) :
-	m_actorType(actorType), m_actorId(actorId), m_pos(Position(0, 0)), m_grid(Grid(0, 0)), m_moveSpeed(0), m_lastMoveTime(0),
-	m_gridChgFunc(gridChgFunc), m_gameScene(gameScene)
+	m_actorId(actorId), m_actorType(actorType), m_moveSpeed(0), m_gameScene(gameScene), 
+	m_pos(Position(0, 0)), m_grid(Grid(0, 0)), m_lastMoveTime(0),
+	m_gridChgFunc(gridChgFunc) 
 {
 	
 }
 
-GameActor::GameActor(ActorType actorType, int actorId, int x, int y, void* gameScene, GridChgFunc posChgFunc) :
-	m_actorType(actorType), m_actorId(actorId), m_pos(Position(x, y)), m_grid(Grid(x / GRID_X_SIZE, y / GRID_Y_SIZE)), m_moveSpeed(0), m_lastMoveTime(0),
-	m_gridChgFunc(posChgFunc), m_gameScene(gameScene)
+GameActor::GameActor(ActorType actorType, int actorId, int x, int y, int moveSpeed, void* gameScene, GridChgFunc posChgFunc) :
+	m_actorId(actorId), m_actorType(actorType), m_moveSpeed(moveSpeed), m_gameScene(gameScene),
+	m_pos(Position(x, y)), m_grid(Grid(x / GRID_X_SIZE, y / GRID_Y_SIZE)), m_lastMoveTime(0),
+	m_gridChgFunc(posChgFunc)
 {
 
 }
@@ -74,7 +76,7 @@ void GameActor::setPos(float x, float y, bool isTemp) {
 }
 
 void GameActor::setTgtPosList(std::vector<Position> tgtPosList) {
-	int64_t ts = TimeUtil::getCurrentTime();
+	int64_t ts = TimeUtil::nowMillSec();
 	if (!m_tgtPosList.empty()) {
 		updatePos(ts);
 	}

@@ -120,6 +120,7 @@ void LuaScene::bindLuaScene(std::shared_ptr<sol::state> lua) {
 	gameScene_type["getSceneUid"] = &GameScene::getSceneUid;
 
 	gameScene_type["createPlayer"] = &GameScene::createPlayer;
+	gameScene_type["createNpc"] = &GameScene::createNpc;
 	gameScene_type["removeActor"] = &GameScene::removeActor;
 	gameScene_type["onActorEnter"] = &GameScene::onActorEnter;
 
@@ -127,8 +128,13 @@ void LuaScene::bindLuaScene(std::shared_ptr<sol::state> lua) {
 	gamePlayer_type["setScriptObj"] = &GamePlayer::setScriptObj;
 	gamePlayer_type["getConnId"] = &GamePlayer::getConnId;
 	gamePlayer_type["getActorId"] = &GameActor::getActorId;
-	void(GamePlayer::*sendToClient)(int, const char*, int) = &GamePlayer::sendToClient;
-	gamePlayer_type["sendToClient"] = sendToClient;
+	//void(GamePlayer::*sendToClient)(int, const char*, int) = &GamePlayer::sendToClient;
+	gamePlayer_type["sendToClient"] = sol::resolve<void(int, const char*, int)>(&GamePlayer::sendToClient);   //sendToClient;
+	gamePlayer_type["x"] = sol::property(&GamePlayer::getX);
+	gamePlayer_type["y"] = sol::property(&GamePlayer::getY);
+
+	sol::usertype<GameNpc> gameNpc_type = lua->new_usertype<GameNpc>("GameNpc");
+	gameNpc_type["getActorId"] = &GameActor::getActorId;
 	
 	// gets or set the value using member variable syntax
 	//gameScene_type["hp"] = sol::property(&player::get_hp, &player::set_hp);
