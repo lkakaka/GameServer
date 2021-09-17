@@ -22,7 +22,7 @@ USING_DATA_BASE;
 
 DBHandler::~DBHandler()
 {
-	Logger::logInfo("$db hander destory!!!");
+	LOG_INFO("db hander destory!!!");
 }
 
 DBHandler::DBHandler(const char* dbUrl, int dbPort, const char* dbUserName, const char* dbPassword, const char* dbName) :
@@ -118,7 +118,7 @@ void DBHandler::initTableSchema() {
 		//Statement* st = ptr->getStatement();
 		sql::ResultSet* rs = ptr->getResultSet();
 		if (!rs->next()) {
-			Logger::logError("$not primary key, table:%s", iter->c_str());
+			LOG_ERROR("not primary key, table:%s", iter->c_str());
 			exit(1);
 		}
 
@@ -182,7 +182,7 @@ void DBHandler::getTableCols(const char* tableName, std::vector<TableField>& fie
 			field.type = TableField::FieldType::TYPE_TEXT;
 		}
 		else {
-			Logger::logError("$unkown col type:%s, table:%s", type, tableName);
+			LOG_ERROR("unkown col type:%s, table:%s", type, tableName);
 		}
 		field.defaut_val = defaultVal;
 		fields.emplace_back(field);
@@ -192,12 +192,12 @@ void DBHandler::getTableCols(const char* tableName, std::vector<TableField>& fie
 TableField* DBHandler::getTableField(const char* tableName, const char* fieldName) const {
 	auto iter = m_tableSchema.find(tableName);
 	if (iter == m_tableSchema.end()) {
-		Logger::logError("$not found table:%s", tableName);
+		LOG_ERROR("not found table:%s", tableName);
 		return NULL; 
 	}
 	auto fieldIter = iter->second->fields.find(fieldName);
 	if (fieldIter == iter->second->fields.end()) {
-		Logger::logError("$not found table's field, table:%s, field:%s", tableName, fieldName);
+		LOG_ERROR("not found table's field, table:%s, field:%s", tableName, fieldName);
 		return NULL;
 	}
 
@@ -207,7 +207,7 @@ TableField* DBHandler::getTableField(const char* tableName, const char* fieldNam
 TableSchema* DBHandler::getTableSchema(const char* tableName) const {
 	auto iter = m_tableSchema.find(tableName);
 	if (iter == m_tableSchema.end()) {
-		Logger::logError("$not found table schema:%s", tableName);
+		LOG_ERROR("not found table schema:%s", tableName);
 		return NULL;
 	}
 	return iter->second.get();
@@ -306,7 +306,7 @@ bool DBHandler::initTable(Table* tbl)
 		char* sql = "CREATE %s INDEX %s ON %s(%s)";
 		StatementPtr ptr = executeSql(sql, iter->isUnique ? "UNIQUE" : "", indexName.c_str(), tbName.c_str(), colVals.c_str());
 		if (ptr == NULL) {
-			Logger::logError("$creat index failed, table:%s, cols:%s", tbName.c_str(), colVals.c_str());
+			LOG_ERROR("creat index failed, table:%s, cols:%s", tbName.c_str(), colVals.c_str());
 			return false;
 		}
 	}
@@ -316,7 +316,7 @@ bool DBHandler::initTable(Table* tbl)
 		char* sql = "DROP INDEX %s ON %s";
 		StatementPtr ptr = executeSql(sql, indexName.c_str(), tbName.c_str());
 		if (ptr == NULL) {
-			Logger::logError("$drop index failed, table:%s, index:%s", tbName.c_str(), indexName.c_str());
+			LOG_ERROR("drop index failed, table:%s, index:%s", tbName.c_str(), indexName.c_str());
 			return false;
 		}
 	}
@@ -347,7 +347,7 @@ bool getColTypeStr(TableField* field, char* str, int len) {
 			return true;
 		default:
 		{
-			Logger::logError("$not support table col type %d", field->type);
+			LOG_ERROR("not support table col type %d", field->type);
 			return false;
 		}
 	}
@@ -381,7 +381,7 @@ bool DBHandler::_createNewTable(Table* tbl) {
 	char* sql = "CREATE TABLE %s(%s)";
 	StatementPtr ptr = executeSql(sql, tbName.c_str(), colStr.c_str());
 	if (ptr == NULL) {
-		Logger::logError("$creat table %s failed", tbName.c_str());
+		LOG_ERROR("creat table %s failed", tbName.c_str());
 		return false;
 	}
 
@@ -401,7 +401,7 @@ bool DBHandler::_changeTable(Table* tbl, std::map<std::string, TableField>& orgF
 		std::string colStr;
 		if (field->isDel) { // É¾³ý×Ö¶Î
 			if (orgFields.find(field->fieldName) == orgFields.end()) {
-				Logger::logWarning("$delete column %s in table %s not found", field->fieldName.c_str(), tbName.c_str());
+				LOG_WARN("delete column %s in table %s not found", field->fieldName.c_str(), tbName.c_str());
 				continue;
 			}
 			colStr = "DROP " + colName;
@@ -422,7 +422,7 @@ bool DBHandler::_changeTable(Table* tbl, std::map<std::string, TableField>& orgF
 				auto iter = orgFields.find(field->oldName);
 				if (iter == orgFields.end()) { // Î´ÕÒµ½Ô­×Ö¶Î
 					if (orgFields.find(field->fieldName) == orgFields.end()) {
-						Logger::logError("$change column error, not found %s in table %s", field->oldName.c_str(), tbName.c_str());
+						LOG_ERROR("change column error, not found %s in table %s", field->oldName.c_str(), tbName.c_str());
 						return false;
 					}
 					continue;
@@ -461,10 +461,10 @@ bool DBHandler::_changeTable(Table* tbl, std::map<std::string, TableField>& orgF
 	char* sql = "ALTER TABLE %s %s";
 	StatementPtr ptr = executeSql(sql, tbName.c_str(), chgColStr.c_str());
 	if (ptr == NULL) {
-		Logger::logError("$alter table %s failed", tbName.c_str());
+		LOG_ERROR("alter table %s failed", tbName.c_str());
 		return false;
 	}
-	Logger::logInfo("$alter table %s, %s", tbName.c_str(), chgColStr.c_str());
+	LOG_INFO("alter table %s, %s", tbName.c_str(), chgColStr.c_str());
 	return true;
 }
 
@@ -480,7 +480,7 @@ void DBHandler::initDbTable(std::vector<ReflectObject*> tblDefs)
 //	std::string sql = "CREATE TABLE IF NOT EXISTS " + tbl->getTypeName() + "(";
 //	std::map<std::string, Field> fieldMap = tbl->getFieldMap();
 //	if (fieldMap.size() == 0) {
-//		Logger::logError("$create table %s failed, not define any field ", tbl->getTypeName().c_str());
+//		LOG_ERROR("create table %s failed, not define any field ", tbl->getTypeName().c_str());
 //		return;
 //	}
 //	for (auto iter = fieldMap.begin(); iter != fieldMap.end(); iter++) {
@@ -495,7 +495,7 @@ void DBHandler::initDbTable(std::vector<ReflectObject*> tblDefs)
 //			filedStr += " VARCHAR(128),";
 //			break;
 //		default:
-//			Logger::logError("$create table %s failed, unsupport db field type: %s", tbl->getTypeName().c_str(), field.type);
+//			LOG_ERROR("create table %s failed, unsupport db field type: %s", tbl->getTypeName().c_str(), field.type);
 //			return;
 //		}
 //		sql += filedStr;
@@ -505,7 +505,7 @@ void DBHandler::initDbTable(std::vector<ReflectObject*> tblDefs)
 //	sql::SQLString sqlStr = sql::SQLString(sql.c_str());
 //	Connection* conn = getDBConnection();
 //	if (conn == NULL) {
-//		Logger::logError("$exec sql failed, conn is null, sql: %s", sql.c_str());
+//		LOG_ERROR("exec sql failed, conn is null, sql: %s", sql.c_str());
 //		return;
 //	}
 //	Statement* st = conn->createStatement();
@@ -513,7 +513,7 @@ void DBHandler::initDbTable(std::vector<ReflectObject*> tblDefs)
 //		st->execute(sqlStr);
 //	}
 //	catch (std::exception e) {
-//		Logger::logError("$exec sql failed, sql: %s, e: %s", sql.c_str(), e.what());
+//		LOG_ERROR("exec sql failed, sql: %s, e: %s", sql.c_str(), e.what());
 //	}
 //}
 //
@@ -544,7 +544,7 @@ void DBHandler::insertOne(ReflectObject tbl)
 				val = val + "\"" + tbl.getString(field.name) + "\",";
 				break;
 			default:
-				Logger::logError("insert table %s failed, unsupport db field type: %s", tbl.getTypeName().c_str(), field.type);
+				LOG_ERROR("insert table %s failed, unsupport db field type: %s", tbl.getTypeName().c_str(), field.type);
 				return;
 		}
 	}
@@ -555,7 +555,7 @@ void DBHandler::insertOne(ReflectObject tbl)
 	//sql::SQLString sqlStr = sql::SQLString(sql.c_str());
 	Connection* conn = getDBConnection();
 	if (conn == NULL) {
-		Logger::logError("$exec sql failed, conn is null, sql: %s", sql.c_str());
+		LOG_ERROR("exec sql failed, conn is null, sql: %s", sql.c_str());
 		return;
 	}
 	/*Statement* st = conn->createStatement();
@@ -588,7 +588,7 @@ void DBHandler::select(ReflectObject tbl)
 			conditions += "\"" + tbl.getString(field.name) + "\"";
 			break;
 		default:
-			Logger::logError("insert table %s failed, unsupport db field type: %s", tbl.getTypeName().c_str(), field.type);
+			LOG_ERROR("insert table %s failed, unsupport db field type: %s", tbl.getTypeName().c_str(), field.type);
 			return;
 		}
 	}
@@ -600,7 +600,7 @@ void DBHandler::select(ReflectObject tbl)
 	sql::SQLString sqlStr = sql::SQLString(sql.c_str());
 	Connection* conn = getDBConnection();
 	if (conn == NULL) {
-		Logger::logError("$exec sql failed, conn is null, sql: %s", sql.c_str());
+		LOG_ERROR("exec sql failed, conn is null, sql: %s", sql.c_str());
 		return;
 	}
 	/*Statement* st = conn->createStatement();
@@ -629,7 +629,7 @@ void DBHandler::select(ReflectObject tbl)
 				val1 = result->getString(field1.name);
 				break;
 			default:
-				Logger::logError("insert table %s failed, unsupport db field type: %s", tbl.getTypeName().c_str(), field1.type);
+				LOG_ERROR("insert table %s failed, unsupport db field type: %s", tbl.getTypeName().c_str(), field1.type);
 				return;
 			}
 		}
@@ -660,7 +660,7 @@ void DBHandler::update(ReflectObject src, ReflectObject dst)
 				conditions += "\"" + src.getString(field.name) + "\"";
 				break;
 			default:
-				Logger::logError("update table %s failed, unsupport db field type: %s", src.getTypeName().c_str(), field.type);
+				LOG_ERROR("update table %s failed, unsupport db field type: %s", src.getTypeName().c_str(), field.type);
 				return;
 			}
 		}
@@ -682,7 +682,7 @@ void DBHandler::update(ReflectObject src, ReflectObject dst)
 				conditions += "\"" + dst.getString(field.name) + "\"";
 				break;
 			default:
-				Logger::logError("update table %s failed, unsupport db field type: %s", dst.getTypeName().c_str(), field.type);
+				LOG_ERROR("update table %s failed, unsupport db field type: %s", dst.getTypeName().c_str(), field.type);
 				return;
 			}
 		}
@@ -692,7 +692,7 @@ void DBHandler::update(ReflectObject src, ReflectObject dst)
 	//sql::SQLString sqlStr = sql::SQLString(sql.c_str());
 	Connection* conn = getDBConnection();
 	if (conn == NULL) {
-		Logger::logError("$exec sql failed, conn is null, sql: %s", sql.c_str());
+		LOG_ERROR("exec sql failed, conn is null, sql: %s", sql.c_str());
 		return;
 	}
 	/*Statement* st = conn->createStatement();
@@ -725,13 +725,13 @@ void DBHandler::del(ReflectObject tbl)
 			conditions += "\"" + tbl.getString(field.name) + "\"";
 			break;
 		default:
-			Logger::logError("insert table %s failed, unsupport db field type: %s", tbl.getTypeName().c_str(), field.type);
+			LOG_ERROR("insert table %s failed, unsupport db field type: %s", tbl.getTypeName().c_str(), field.type);
 			return;
 		}
 	}
 
 	if (conditions == "") {
-		Logger::logError("del table %s failed, not assign condition", tbl.getTypeName().c_str());
+		LOG_ERROR("del table %s failed, not assign condition", tbl.getTypeName().c_str());
 		return;
 	}
 
@@ -739,7 +739,7 @@ void DBHandler::del(ReflectObject tbl)
 	//sql::SQLString sqlStr = sql::SQLString(sql.c_str());
 	Connection* conn = getDBConnection();
 	if (conn == NULL) {
-		Logger::logError("$exec sql failed, conn is null, sql: %s", sql.c_str());
+		LOG_ERROR("exec sql failed, conn is null, sql: %s", sql.c_str());
 		return;
 	}
 	/*Statement* st = conn->createStatement();
@@ -753,23 +753,23 @@ StatementPtr DBHandler::executeSql(const char* sqlFormat, ...)
 	va_start(va, sqlFormat);
 	int n = vsnprintf(m_sqlBuf, MAX_SQL_LENGTH, sqlFormat, va);
 	if (n >= MAX_SQL_LENGTH) {
-		Logger::logError("$sql length exceed %d, sql: %s", MAX_SQL_LENGTH, m_sqlBuf);
+		LOG_ERROR("sql length exceed %d, sql: %s", MAX_SQL_LENGTH, m_sqlBuf);
 	}
 	va_end(va);
 	Connection* conn = getDBConnection();
 	if (conn == NULL) {
-		Logger::logError("$exec sql failed, conn is null, sql: %s", m_sqlBuf);
+		LOG_ERROR("exec sql failed, conn is null, sql: %s", m_sqlBuf);
 		return NULL;
 	}
 	Statement* st = conn->createStatement();
 	sql::SQLString sqlStr = sql::SQLString(m_sqlBuf);
 	try {
 		bool isResultSet = st->execute(sqlStr);
-		Logger::logInfo("$exec sql success, sql: %s", m_sqlBuf);
+		LOG_INFO("exec sql success, sql: %s", m_sqlBuf);
 		return MAKE_STATEMENT_PTR(st, isResultSet);
 	}
 	catch (std::exception& e) {
-		Logger::logError("$execute sql failed, sql:%s, ex: %s", m_sqlBuf, e.what());
+		LOG_ERROR("execute sql failed, sql:%s, ex: %s", m_sqlBuf, e.what());
 		st->close();
 		delete st;
 	}
@@ -812,7 +812,7 @@ bool DBHandler::loadFromDB(Table* tbl, std::vector<Table>& result) {
 			}
 			default:
 			{
-				Logger::logError("$not support field type:%d, table:%s, col:%s", tbField->type, tbName.c_str(), field->fieldName.c_str());
+				LOG_ERROR("not support field type:%d, table:%s, col:%s", tbField->type, tbName.c_str(), field->fieldName.c_str());
 				break;
 			}
 		}
@@ -911,7 +911,7 @@ bool DBHandler::insertRow(Table* tbl)
 				break;
 			}
 			default:
-				Logger::logError("$not support field type, table:%s, field:%s, type:%d", tbl->tableName.c_str(), fieldName.c_str(), tbField->type);
+				LOG_ERROR("not support field type, table:%s, field:%s, type:%d", tbl->tableName.c_str(), fieldName.c_str(), tbField->type);
 				return false;
 		}
 		vals += ",";
@@ -928,7 +928,7 @@ bool DBHandler::insertRow(Table* tbl)
 	if (ptr == NULL) return false;
 	uint64_t updateCount = ptr->getUpdateCount();
 	if (updateCount <= 0) {
-		Logger::logError("$exe insert sql failed, sql:%s, fields:%s, vals:%s", sql, fields.c_str(), vals.c_str());
+		LOG_ERROR("exe insert sql failed, sql:%s, fields:%s, vals:%s", sql, fields.c_str(), vals.c_str());
 		return false;
 	}
 
@@ -939,7 +939,7 @@ bool DBHandler::insertRow(Table* tbl)
 		if (rs->next()) {
 			tbl->priKeyVal = rs->getInt64(1);
 		} else {
-			Logger::logError("$exe insert sql error, not found laster insert id, sql:%s, fields:%s, vals:%s", sql, fields.c_str(), vals.c_str());
+			LOG_ERROR("exe insert sql error, not found laster insert id, sql:%s, fields:%s, vals:%s", sql, fields.c_str(), vals.c_str());
 		}
 	}
 
@@ -951,7 +951,7 @@ bool DBHandler::getRow(Table* tbl, std::vector<Table>& result)
 	//if (!checkRedisExistAndLoad(tableName, keyVal)) return NULL;
 	TableSchema* tableSchema = getTableSchema(tbl->tableName.c_str());
 	if (tableSchema == NULL) {
-		Logger::logError("get row not found table schema, table:%s", tbl->tableName.c_str());
+		LOG_ERROR("get row not found table schema, table:%s", tbl->tableName.c_str());
 		return false;
 	}
 	return loadFromDB(tbl, result);
@@ -1006,7 +1006,7 @@ bool DBHandler::updateRow(Table* tbl)
 				break;
 			}
 			default:
-				Logger::logError("$not support field type, table:%s, field:%s, type:%d", tbl->tableName.c_str(), fieldName.c_str(), field->type);
+				LOG_ERROR("not support field type, table:%s, field:%s, type:%d", tbl->tableName.c_str(), fieldName.c_str(), field->type);
 				return false;
 		}
 		if (!isPriKey) {
@@ -1023,7 +1023,7 @@ bool DBHandler::updateRow(Table* tbl)
 	char* sql = "UPDATE %s SET %s WHERE %s";
 	StatementPtr ptr = executeSql(sql, tbl->tableName.c_str(), chg_fields.c_str(), conditions.c_str());
 	if (ptr == NULL) {
-		Logger::logError("$exe update sql failed, sql:%s, fields:%s, conditions:%s", sql, chg_fields.c_str(), conditions.c_str());
+		LOG_ERROR("exe update sql failed, sql:%s, fields:%s, conditions:%s", sql, chg_fields.c_str(), conditions.c_str());
 		return false;
 	}
 	return true;
@@ -1067,7 +1067,7 @@ bool DBHandler::replaceRow(Table* tbl)
 				break;
 			}
 			default:
-				Logger::logError("$not support field type, table:%s, field:%s, type:%d", tbl->tableName.c_str(), fieldName.c_str(), tbField->type);
+				LOG_ERROR("not support field type, table:%s, field:%s, type:%d", tbl->tableName.c_str(), fieldName.c_str(), tbField->type);
 				return false;
 		}
 		vals += ",";
@@ -1082,7 +1082,7 @@ bool DBHandler::replaceRow(Table* tbl)
 	char* sql = "REPLACE INTO %s(%s) VALUES(%s)";
 	StatementPtr ptr = executeSql(sql, tbl->tableName.c_str(), fields.c_str(), vals.c_str());
 	if (ptr == NULL) {
-		Logger::logError("$exe replace sql failed, sql:%s, fields:%s, vals:%s", sql, fields.c_str(), vals.c_str());
+		LOG_ERROR("exe replace sql failed, sql:%s, fields:%s, vals:%s", sql, fields.c_str(), vals.c_str());
 		return false;
 	}
 
@@ -1121,7 +1121,7 @@ std::string formatSqlConditions(Table* tbl) {
 				break;
 			}
 			default:
-				Logger::logError("$not support field type, table:%s, field:%s, type:%d", tbl->tableName.c_str(), fieldName.c_str(), field->type);
+				LOG_ERROR("not support field type, table:%s, field:%s, type:%d", tbl->tableName.c_str(), fieldName.c_str(), field->type);
 				break;
 		}
 
@@ -1133,7 +1133,7 @@ std::string formatSqlConditions(Table* tbl) {
 bool DBHandler::deleteRow(Table* tbl)
 {
 	if (tbl->fields.empty()) {
-		Logger::logError("$delete row not set conditions");
+		LOG_ERROR("delete row not set conditions");
 		return false;
 	}
 	std::string cond = formatSqlConditions(tbl);

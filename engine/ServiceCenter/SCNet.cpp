@@ -26,7 +26,7 @@ void SCNet::onCloseConnection(ServerConnection* conn, const char* reason)
 
 void SCNet::addServiceConnection(const char* serviceAddr, SCConnection* conn) {
 	if (m_serviceConns.find(serviceAddr) != m_serviceConns.end()) {
-		Logger::logError("$service connection exist!!, %s", serviceAddr);
+		LOG_ERROR("service connection exist!!, %s", serviceAddr);
 		return;
 	}
 	m_serviceConns.emplace(serviceAddr, conn->shared_from_this());

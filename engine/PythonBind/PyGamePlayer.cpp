@@ -8,7 +8,7 @@ static PyObject* PyPlayer_New(struct _typeobject* tobj, PyObject* args, PyObject
 	PyObject* scriptObj;
 	if (!PyArg_ParseTuple(args, "OO", &tuple, &scriptObj)) {
 		//PyErr_SetString(ModuleError, "create scene obj failed");
-		Logger::logError("$new py player failed, arg error");
+		LOG_ERROR("new py player failed, arg error");
 		Py_RETURN_NONE;
 	}
 
@@ -20,18 +20,18 @@ static PyObject* PyPlayer_New(struct _typeobject* tobj, PyObject* args, PyObject
 
 	GameScene* gameScene = SceneMgr::getSceneMgr()->getScene(sceneUid);
 	if (gameScene == NULL) {
-		Logger::logError("$new py player failed, not found scene, sceneUid:%d", sceneUid);
+		LOG_ERROR("new py player failed, not found scene, sceneUid:%d", sceneUid);
 		Py_RETURN_NONE;
 	}
 
 	GameActor* gameActor = gameScene->getActor(actorId);
 	if (gameActor == NULL) {
-		Logger::logError("$new py player failed, not found actor, sceneUid:%d,actorId:%d", sceneUid, actorId);
+		LOG_ERROR("new py player failed, not found actor, sceneUid:%d,actorId:%d", sceneUid, actorId);
 		Py_RETURN_NONE;
 	}
 	GamePlayer* gamePlayer = dynamic_cast<GamePlayer*>(gameActor);
 	if (gamePlayer == NULL) {
-		Logger::logError("$new py player failed, not found player, sceneUid:%d,actorId:%d", sceneUid, actorId);
+		LOG_ERROR("new py player failed, not found player, sceneUid:%d,actorId:%d", sceneUid, actorId);
 		Py_RETURN_NONE;
 	}
 	/*GamePlayer* gamePlayer = (GamePlayer*)ptr;*/

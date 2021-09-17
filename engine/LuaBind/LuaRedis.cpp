@@ -59,7 +59,7 @@ static sol::object parseRedisReply(redisReply* reply, sol::this_state s) {
 			return tbl;
 		}
 	}
-	Logger::logError("$not support redis reply type %d", reply->type);
+	LOG_ERROR("not support redis reply type %d", reply->type);
 	return sol::nil;
 }
 

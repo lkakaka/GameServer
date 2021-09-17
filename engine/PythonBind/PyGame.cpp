@@ -26,7 +26,7 @@ PyMODINIT_FUNC PyInit_Game(void)
 {
 	PyObject* moudle = PyModule_Create(&module_def);
 	if (moudle == NULL) {
-		Logger::logInfo("$init module %s failed", module_def.m_name);
+		LOG_ERROR("init module %s failed", module_def.m_name);
 		return NULL;
 	}
 

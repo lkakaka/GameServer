@@ -21,10 +21,10 @@ std::vector<std::string> Logger::m_logs;
 int Logger::initLog(const char* serverName)
 {
 	log4cpp::Category& root = log4cpp::Category::getRoot();
-	log4cpp::Category& sub = log4cpp::Category::getInstance("sub1");
+	log4cpp::Category& console = log4cpp::Category::getInstance("console");
 #ifdef _DEBUG
 	//root.setPriority(log4cpp::Priority::NOTSET);
-	sub.setPriority(log4cpp::Priority::DEBUG);
+	console.setPriority(log4cpp::Priority::DEBUG);
 #else
 	root.setPriority(log4cpp::Priority::INFO);
 	sub.setPriority(log4cpp::Priority::INFO);
@@ -37,16 +37,16 @@ int Logger::initLog(const char* serverName)
 	logFileName = logDirName + logFileName + ".log";
 	log4cpp::Appender* rootAppender = new log4cpp::DailyRollingFileAppender("MyServer", logFileName.c_str(), MAX_LOG_FILE_DAYS);
 	root.addAppender(rootAppender);
-	log4cpp::Appender* subAppender = new log4cpp::OstreamAppender("MyServer", &std::cout);
-	sub.addAppender(subAppender);
+	log4cpp::Appender* consoleAppender = new log4cpp::OstreamAppender("MyServer", &std::cout);
+	console.addAppender(consoleAppender);
 
 	log4cpp::PatternLayout* patternLayout = new log4cpp::PatternLayout();
 	patternLayout->setConversionPattern("%d{%Y-%m-%d %H:%M:%S.%l} thread_id:%t [%p] %m %n");
 	rootAppender->setLayout(patternLayout);
 
-	log4cpp::PatternLayout* subPatternLayout = new log4cpp::PatternLayout();
-	subPatternLayout->setConversionPattern("%d{%Y-%m-%d %H:%M:%S.%l} thread_id:%t [%p] %m %n");
-	subAppender->setLayout(subPatternLayout);
+	log4cpp::PatternLayout* consolePatternLayout = new log4cpp::PatternLayout();
+	consolePatternLayout->setConversionPattern("%d{%Y-%m-%d %H:%M:%S.%l} thread_id:%t [%p] %m %n");
+	consoleAppender->setLayout(consolePatternLayout);
 
 	return 1;
 }
@@ -94,17 +94,8 @@ void Logger::logDebug(const char* fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
-	char buff[FORMAT_BUFF_SIZE]{ 0 };
-	if (Logger::isPrint(fmt))
-	{
-		//formatLog(buff, &fmt[1], args);
-		log4cpp::Category& sub = log4cpp::Category::getInstance("sub1");
-		sub.debug(&fmt[1], args);
-	}else {
-		//formatLog(buff, fmt, args);
-		log4cpp::Category& root = log4cpp::Category::getRoot();
-		root.debug(fmt, args);
-	}
+	log4cpp::Category& root = log4cpp::Category::getRoot();
+	root.debug(fmt, args);
 	va_end(args);
 }
 
@@ -112,18 +103,8 @@ void Logger::logWarning(const char* fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
-	char buff[FORMAT_BUFF_SIZE]{ 0 };
-	if (Logger::isPrint(fmt))
-	{
-		//formatLog(buff, &fmt[1], args);
-		log4cpp::Category& sub = log4cpp::Category::getInstance("sub1");
-		sub.warn(&fmt[1], args);
-	}
-	else {
-		//formatLog(buff, fmt, args);
-		log4cpp::Category& root = log4cpp::Category::getRoot();
-		root.warn(fmt, args);
-	}
+	log4cpp::Category& root = log4cpp::Category::getRoot();
+	root.warn(fmt, args);
 	va_end(args);
 }
 
@@ -131,21 +112,8 @@ void Logger::logInfo(const char* fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
-	char buff[FORMAT_BUFF_SIZE]{ 0 };
-	if (Logger::isPrint(fmt))
-	{
-		//formatLog(buff, &fmt[1], args);
-		log4cpp::Category& sub = log4cpp::Category::getInstance("sub1");
-		sub.info(&fmt[1], args);
-		/*std::string s = buff;
-		sub.notice(s);*/
-	}else {
-		//formatLog(buff, fmt, args);
-		log4cpp::Category& root = log4cpp::Category::getRoot();
-		root.info(fmt, args);
-		/*std::string s = buff;
-		root.notice(s);*/
-	}
+	log4cpp::Category& root = log4cpp::Category::getRoot();
+	root.info(fmt, args);
 	va_end(args);
 }
 
@@ -153,17 +121,44 @@ void Logger::logError(const char* fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
-	char buff[FORMAT_BUFF_SIZE]{ 0 };
-	if (Logger::isPrint(fmt))
-	{
-		//formatLog(buff, &fmt[1], args);
-		log4cpp::Category& sub = log4cpp::Category::getInstance("sub1");
-		sub.error(&fmt[1], args);
-	}else {
-		//formatLog(buff, fmt, args);
-		log4cpp::Category& root = log4cpp::Category::getRoot();
-		root.error(fmt, args);
-	}
+	log4cpp::Category& root = log4cpp::Category::getRoot();
+	root.error(fmt, args);
+	va_end(args);
+}
+
+void Logger::logDebugWithConsole(const char* fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	log4cpp::Category& console = log4cpp::Category::getInstance("console");
+	console.debug(fmt, args);
+	va_end(args);
+}
+
+void Logger::logWarningWithConsole(const char* fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	log4cpp::Category& console = log4cpp::Category::getInstance("console");
+	console.warn(fmt, args);
+	va_end(args);
+}
+
+void Logger::logInfoWithConsole(const char* fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	log4cpp::Category& console = log4cpp::Category::getInstance("console");
+	console.info(fmt, args);
+	va_end(args);
+}
+
+void Logger::logErrorWithConsole(const char* fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	log4cpp::Category& console = log4cpp::Category::getInstance("console");
+	console.error(fmt, args);
 	va_end(args);
 }
 

@@ -99,7 +99,7 @@ PyMODINIT_FUNC PyInit_PyDb(void)
 {
 	g_moudle = PyModule_Create(&module_def);
 	if (g_moudle == NULL) {
-		Logger::logInfo("$init module %s failed", module_def.m_name);
+		LOG_ERROR("init module %s failed", module_def.m_name);
 		return NULL;
 	}
 

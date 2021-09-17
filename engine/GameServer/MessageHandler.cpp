@@ -28,7 +28,7 @@ bool ServiceMessageHandler::handleEngineGatewayMsg(int connId, int msgId, char* 
 	{
 		std::shared_ptr<google::protobuf::Message> msg = createMessage(msgId, data, dataLen);
 		Test* recvMsg = (Test*)msg.get();
-		Logger::logInfo("$receive test proto, id:%d, msg:%s", recvMsg->id(), recvMsg->msg().data());
+		LOG_INFO("receive test proto, id:%d, msg:%s", recvMsg->id(), recvMsg->msg().data());
 
 		Test resp_msg;
 		resp_msg.set_id(1);
@@ -40,7 +40,7 @@ bool ServiceMessageHandler::handleEngineGatewayMsg(int connId, int msgId, char* 
 	{
 		std::shared_ptr<google::protobuf::Message> msg = createMessage(msgId, data, dataLen);
 		Login* recvMsg = (Login*)msg.get();
-		Logger::logInfo("$receive login proto, account:%s, pwd:%s", recvMsg->account().c_str(), recvMsg->pwd().data());
+		LOG_INFO("receive login proto, account:%s, pwd:%s", recvMsg->account().c_str(), recvMsg->pwd().data());
 
 		LoginRsp resp_msg;
 		resp_msg.set_account(recvMsg->account());
@@ -49,7 +49,7 @@ bool ServiceMessageHandler::handleEngineGatewayMsg(int connId, int msgId, char* 
 		return true;
 	}*/
 	default:
-		/*Logger::logError("$receive unknown proto, msgId:%d", msgId);*/
+		/*LOG_ERROR("receive unknown proto, msgId:%d", msgId);*/
 		break;
 	}
 	return false;
@@ -57,7 +57,7 @@ bool ServiceMessageHandler::handleEngineGatewayMsg(int connId, int msgId, char* 
 
 int ServiceMessageHandler::handleGatewayMessage(ServiceAddr* srcAddr, char* data, int dataLen) {
 	if (dataLen < 9) {
-		Logger::logError("$recv %s msg format error, data len < 9", srcAddr->getName());
+		LOG_ERROR("recv %s msg format error, data len < 9", srcAddr->getName());
 		return 0;
 	}
 	MyBuffer buffer(data, dataLen);
@@ -66,7 +66,7 @@ int ServiceMessageHandler::handleGatewayMessage(ServiceAddr* srcAddr, char* data
 	int msgId = buffer.readInt();
 	char* msgData = (char*)buffer.data();
 	int msgLen = buffer.size();
-	Logger::logDebug("$recv msg, sender:%s,  msgId:%d, msgLen:%d", srcAddr->getName(), msgId, msgLen);
+	LOG_DEBUG("recv msg, sender:%s,  msgId:%d, msgLen:%d", srcAddr->getName(), msgId, msgLen);
 	
 	if (handleEngineGatewayMsg(connId, msgId, msgData, msgLen)) return msgId;
 
@@ -86,14 +86,14 @@ bool ServiceMessageHandler::handleEngineServiceMsg(int msgId, char* data, int da
 
 int ServiceMessageHandler::handleServiceMessage(ServiceAddr* srcAddr, char* data, int dataLen) {
 	if (dataLen <= 4) {
-		Logger::logError("$recv %s msg format error, data len <= 4", srcAddr->getName());
+		LOG_ERROR("recv %s msg format error, data len <= 4", srcAddr->getName());
 		return 0;
 	}
 	MyBuffer buffer(data, dataLen);
 	int msgId = buffer.readInt();
 	char* msgData = (char*)buffer.data();
 	int msgLen = buffer.size();
-	Logger::logDebug("$recv msg, sender:%s,  msgId:%d, msgLen:%d", srcAddr->getName(), msgId, msgLen);
+	LOG_DEBUG("recv msg, sender:%s,  msgId:%d, msgLen:%d", srcAddr->getName(), msgId, msgLen);
 	if (handleEngineServiceMsg(msgId, msgData, msgLen)) return msgId;
 
 	GameService::g_gameService->dispatchServiceMsgToScript(srcAddr, msgId, msgData, msgLen);

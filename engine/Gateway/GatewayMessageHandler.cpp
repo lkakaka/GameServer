@@ -11,7 +11,7 @@ void handMsg_ClientDisconnect(int msgId, int connId, char* data, int dataLen) {
 	std::shared_ptr<google::protobuf::Message> msg = createMessage(msgId, data, dataLen);
 	ClientDisconnect* recvMsg = (ClientDisconnect*)msg.get();
 	GatewayNet::getSingleton()->removeConnection(recvMsg->conn_id(), recvMsg->reason().c_str());
-	Logger::logInfo("recv client disconnect msg, connId:%d", connId);
+	LOG_INFO("recv client disconnect msg, connId:%d", connId);
 }
 
 void handMsg_SwitchSceneService(int msgId, int connId, char* data, int dataLen) {
@@ -19,7 +19,7 @@ void handMsg_SwitchSceneService(int msgId, int connId, char* data, int dataLen) 
 	SwitchSceneService* recvMsg = (SwitchSceneService*)msg.get();
 	GatewayConnection* conn = (GatewayConnection*)GatewayNet::getSingleton()->getConnection(recvMsg->conn_id());
 	if (conn == NULL) {
-		Logger::logError("$SwitchSceneService not found conn:%d", recvMsg->conn_id());
+		LOG_ERROR("SwitchSceneService not found conn:%d", recvMsg->conn_id());
 		return;
 	}
 	conn->setSceneServiceId(recvMsg->scene_service_id());
@@ -30,12 +30,12 @@ void handMsg_StartKCP(send_type type, int msgId, int connId, char* data, int dat
 	StartKcp* recvMsg = (StartKcp*)msg.get();
 	GatewayConnection* conn = (GatewayConnection*)GatewayNet::getSingleton()->getConnection(connId);
 	if (conn == NULL) {
-		Logger::logError("$StartKCP not found conn:%d", connId);
+		LOG_ERROR("StartKCP not found conn:%d", connId);
 		return;
 	}
 	conn->enableKCP(const_cast<std::string&>(recvMsg->token()));
 	conn->sendMsgToClient(type, msgId, data, dataLen);
-	Logger::logInfo("$send msg to client, msgId:%d, connId:%d", msgId, connId);
+	LOG_INFO("send msg to client, msgId:%d, connId:%d", msgId, connId);
 }
 
 
@@ -43,11 +43,11 @@ void handMsg_StartKCP(send_type type, int msgId, int connId, char* data, int dat
 void handMsg_Default(int msgId, int connId, send_type type, char* data, int dataLen) {
 	GatewayConnection* conn = (GatewayConnection*)GatewayNet::getSingleton()->getConnection(connId);
 	if (conn == NULL) {
-		Logger::logError("$send msg fail, connId(%d) is not exist, msgId:%d", connId, msgId);
+		LOG_ERROR("send msg fail, connId(%d) is not exist, msgId:%d", connId, msgId);
 		return;
 	}
 	conn->sendMsgToClient(type, msgId, data, dataLen);
-	Logger::logInfo("$send msg to client, msgId:%d, connId:%d", msgId, connId);
+	LOG_INFO("send msg to client, msgId:%d, connId:%d", msgId, connId);
 }
 
 void handMsg(int msgId, int connId, send_type type, char* data, int dataLen) {
@@ -73,14 +73,14 @@ void GatewayMessageHandler::onRecvMessage(ServiceAddr* sender, char* data, int d
 	if (dataLen < 9) {
 		/*int connId = -1;
 		if (dataLen >= 4) connId = buffer.readInt();*/
-		Logger::logError("$recv %s msg format error, data len(%d) < 9", sender->getName(), dataLen);
+		LOG_ERROR("recv %s msg format error, data len(%d) < 9", sender->getName(), dataLen);
 		return;
 	}
 	int msgId = buffer.readInt();
 	int connId = buffer.readInt();
 	send_type sendType = buffer.readByte();
 	
-	Logger::logInfo("$recv msg, sender:%s, msgId:%d, connId:%d", sender->getName(), msgId, connId);
+	LOG_INFO("recv msg, sender:%s, msgId:%d, connId:%d", sender->getName(), msgId, connId);
 	// 网关处理的消息
 	handMsg(msgId, connId, sendType, &data[9], dataLen - 9);
 }

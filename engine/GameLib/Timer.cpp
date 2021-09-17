@@ -18,11 +18,11 @@ long TimerMgr::allocTimerId()
 }
 
 void  TimerMgr::onTimer(const boost::system::error_code& e, long timerId) {
-	//Logger::logInfo("$onTimer------%d", e.value());
+	//LOG_INFO("onTimer------%d", e.value());
 	if (e.value() == 0) {
 		auto iter = m_timerMap.find(timerId);
 		if (iter == m_timerMap.end()) {
-			Logger::logError("$onTimer error, not found timer");
+			LOG_ERROR("onTimer error, not found timer");
 			return;
 		}
 		Timer* timer = &iter->second;
@@ -46,7 +46,7 @@ void  TimerMgr::onTimer(const boost::system::error_code& e, long timerId) {
 	else {
 		removeTimer(timerId, false);
 		if (e.value() != boost::asio::error::operation_aborted) {
-			Logger::logInfo("$onTimer error:%d", e.value());
+			LOG_ERROR("onTimer error:%d", e.value());
 		}
 	}
 }
@@ -65,7 +65,7 @@ long TimerMgr::addTimer(int firstInterval, int interval, int loopCnt, TimerCallb
 	long timerId = allocTimerId();
 	if (m_timerMap.find(timerId) != m_timerMap.end()) {
 		delete t;
-		Logger::logInfo("$addTimer error, timer id repeated, timerId:%d", timerId);
+		LOG_ERROR("addTimer error, timer id repeated, timerId:%d", timerId);
 		return -1;
 	}
 	m_timerMap.insert(std::make_pair(timerId, timer));
@@ -88,7 +88,7 @@ void TimerMgr::removeTimer(long timerId, bool needCancel)
 			return;
 		}
 
-		Logger::logInfo("$remove timer:%d", timerId);
+		LOG_INFO("remove timer:%d", timerId);
 
 		timer = iter->second;
 		m_timerMap.erase(timerId);

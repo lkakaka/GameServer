@@ -5,6 +5,7 @@
 #include <map>
 #include <memory>
 #include "Test.h"
+#include "Logger.h"
 
 #define _TEST_MAIN
 
@@ -135,10 +136,10 @@ public:
 		std::swap(size_, other.size_);
 	}*/
 
-	void set(size_t offset, size_t len, const void* src) {
+	/*void set(size_t offset, size_t len, const void* src) {
 		len = std::min(len, size_ - offset);
 		memcpy(data_ + offset, src, len);
-	}
+	}*/
 
 private:
 	char* data_;
@@ -153,7 +154,7 @@ private:
 Blob createBlob(const char* str) {
 	size_t len = strlen(str);
 	Blob blob(len);
-	blob.set(0, len, str);
+	//blob.set(0, len, str);
 	return blob;
 }
 
@@ -166,6 +167,8 @@ public:
 #ifdef _TEST_MAIN
 
 int main() {
+
+	Logger::initLog("test");
 
 	Drive d;
 	Base* b = &d;
@@ -232,6 +235,9 @@ int main() {
 	//testOperateNew();
 
 	//testSOL();
+
+	LOG_DEBUG("test");
+
 	Empty e;
 	printf("ptr1=%I64d\n", &e.b);
 	e.b.assign(1000, 1);

@@ -5,7 +5,7 @@
 
 
 static void callSceneScripFunc(void* ptr, ...) {
-	//Logger::logDebug("$callSceneScripFunc, %d", scriptEvent);
+	//LOG_DEBUG("callSceneScripFunc, %d", scriptEvent);
 	va_list args;
 	va_start(args, ptr);
 	int scriptEvent = va_arg(args, int);
@@ -71,7 +71,7 @@ static void callSceneScripFunc(void* ptr, ...) {
 			break;
 		}
 		default:
-			Logger::logError("$not impl call script func%d", scriptEvent);
+			LOG_ERROR("not impl call script func%d", scriptEvent);
 			break;
 		}
 	va_end(args);
@@ -83,12 +83,12 @@ static PyObject* PySceneObj_New(struct _typeobject* tobj, PyObject* args, PyObje
 	PyObject* scriptObj;
 	if (!PyArg_ParseTuple(args, "iO", &sceneId, &scriptObj)) {
 		//PyErr_SetString(ModuleError, "create scene obj failed");
-		Logger::logError("$create scene obj failed, arg error");
+		LOG_ERROR("create scene obj failed, arg error");
 		Py_RETURN_NONE;
 	}
 	GameScene* gameScene = SceneMgr::getSceneMgr()->createScene(sceneId);
 	if (gameScene == NULL) {
-		Logger::logError("$create scene obj failed, db handler exist, sceneId:%d", sceneId);
+		LOG_ERROR("create scene obj failed, db handler exist, sceneId:%d", sceneId);
 		Py_RETURN_NONE;
 	}
 	gameScene->bindPyScriptObject(scriptObj, callSceneScripFunc);
@@ -113,7 +113,7 @@ static PyObject* createPlayer(PyObject* self, PyObject* args)
 	PyObject* scriptObj;
 	if (!PyArg_ParseTuple(args, "iisiii", &connId, &roleId, &name, &x, &y, &move_speed)) {
 		//PyErr_SetString(ModuleError, "create scene obj failed");
-		Logger::logError("$create player failed, arg error");
+		LOG_ERROR("create player failed, arg error");
 		Py_RETURN_NONE;
 	}
 	GameScene* gameScene = ((PySceneObj*)self)->gameScene;
@@ -130,7 +130,7 @@ static PyObject* removeActor(PyObject* self, PyObject* args)
 {
 	int actorId;
 	if (!PyArg_ParseTuple(args, "i", &actorId)) {
-		Logger::logError("$remove actor failed, arg error");
+		LOG_ERROR("remove actor failed, arg error");
 		Py_RETURN_FALSE;
 	}
 	GameScene* gameScene = ((PySceneObj*)self)->gameScene;
@@ -142,7 +142,7 @@ static PyObject* onPlayerEnter(PyObject* self, PyObject* args)
 {
 	int actorId;
 	if (!PyArg_ParseTuple(args, "i", &actorId)) {
-		Logger::logError("$on player enter failed, arg error");
+		LOG_ERROR("on player enter failed, arg error");
 		Py_RETURN_FALSE;
 	}
 	GameScene* gameScene = ((PySceneObj*)self)->gameScene;
@@ -153,7 +153,7 @@ static PyObject* onPlayerEnter(PyObject* self, PyObject* args)
 static PyObject* loadNavMesh(PyObject* self, PyObject* args) {
 	char* meshFileName;
 	if (!PyArg_ParseTuple(args, "s", &meshFileName)) {
-		Logger::logError("$loadNavMesh failed, arg error");
+		LOG_ERROR("loadNavMesh failed, arg error");
 		Py_RETURN_FALSE;
 	}
 
@@ -171,11 +171,11 @@ static PyObject* loadNavMesh(PyObject* self, PyObject* args) {
 static PyObject* findPath(PyObject* self, PyObject* args) {
 	PyObject* spos, *epos;
 	if (!PyArg_ParseTuple(args, "OO", &spos, &epos)) {
-		Logger::logError("$find path, arg error");
+		LOG_ERROR("find path, arg error");
 		Py_RETURN_NONE;
 	}
 	if (!PyTuple_Check(spos) || !PyTuple_Check(epos)) {
-		Logger::logError("$find path, pos format error!!");
+		LOG_ERROR("find path, pos format error!!");
 		Py_RETURN_NONE;
 	}
 	float startX = PyFloat_AsDouble(PyTuple_GetItem(spos, 0));

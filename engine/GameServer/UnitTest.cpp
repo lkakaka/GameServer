@@ -28,17 +28,17 @@ void pyThreadFunc()
 {	
 #ifdef USE_PYTHON_SCRIPT
 
-	Logger::logInfo("$[UnitTest]Thread Start");
+	LOG_INFO("[UnitTest]Thread Start");
 	auto py_state = PyGILState_Ensure();
 	callPyFunction("main", "thread_test", NULL);
 	PyGILState_Release(py_state);
-	Logger::logInfo("$[UnitTest]Thread End");
+	LOG_INFO("[UnitTest]Thread End");
 #endif // USE_PYTHON_SCRIPT
 }
 
 void print(int timerId)
 {
-	Logger::logInfo("$[UnitTest]Timer trigger, timerId:%d", timerId);
+	LOG_INFO("[UnitTest]Timer trigger, timerId:%d", timerId);
 
 }
 
@@ -70,11 +70,11 @@ static void testDbPlugin() {
 #if TEST_DB_PLUGIN
 	DBMgr* dbMgr = DBMgr::getDBMgrInstance();
 	if (dbMgr == NULL) {
-		Logger::logError("$[UnitTest]DBMgr test failed, dbMgr Instance is NULL");
+		LOG_ERROR("[UnitTest]DBMgr test failed, dbMgr Instance is NULL");
 		return;
 	}
 	dbMgr->createDBHander("test2");
-	Logger::logInfo("$[UnitTest]DB test success!!!");
+	LOG_INFO("[UnitTest]DB test success!!!");
 #endif
 }
 

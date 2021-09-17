@@ -8,12 +8,12 @@ static PyObject* PyDbInst_New(struct _typeobject* tobj,
 	char* dbName = NULL;
 	if (!PyArg_ParseTuple(args, "s", &dbName)) {
 		//PyErr_SetString(ModuleError, "create db inst failed");
-		Logger::logInfo("$create db inst failed, arg error");
+		LOG_ERROR("create db inst failed, arg error");
 		return NULL;
 	}
 	DBHandler* dbHandler = DBMgr::getSingleton()->createDBHander(dbName);
 	if (dbHandler == NULL) {
-		Logger::logInfo("$create db inst failed, db handler exist, dbName:%s", dbName);
+		LOG_ERROR("create db inst failed, db handler exist, dbName:%s", dbName);
 		return NULL;
 	}
 	//printf("PyDbInst_New, %s\n", dbName);
@@ -48,13 +48,13 @@ static PyObject* executeSql(PyObject* self, PyObject* args)
 {
 	char* sql = NULL;
 	if (!PyArg_ParseTuple(args, "s", &sql)) {
-		Logger::logError("$execute sql failed, args is error!!");
+		LOG_ERROR("execute sql failed, args is error!!");
 		Py_RETURN_NONE;
 	}
 	DBHandler* dbHandler = ((PyDbObject*)self)->db_inst;
 	if (dbHandler == NULL)
 	{
-		Logger::logError("$execute sql failed, db hander is null!!");
+		LOG_ERROR("execute sql failed, db hander is null!!");
 		Py_RETURN_NONE;
 	}
 
@@ -64,7 +64,7 @@ static PyObject* executeSql(PyObject* self, PyObject* args)
 	bool isResultSet = ptr->isResultSet();
 
 	PyObject* result = PyList_New(0);
-	/*Logger::logInfo("$execute sql return!!");*/
+	/*LOG_INFO("execute sql return!!");*/
 	while (true) {
 		if (isResultSet) {
 			sql::ResultSet* rs = ptr->getResultSet();
@@ -175,13 +175,13 @@ static bool _initTable(DBHandler* dbHandler, PyObject* tblObj) {
 			break;
 		}
 		default:
-			Logger::logError("$not support table col type %ld, table:%s", type, tbName);
+			LOG_ERROR("not support table col type %ld, table:%s", type, tbName);
 			return false;
 		}
 		PyObject* keyObj = PyObject_GetAttrString(colObj, "key");
 		if (keyObj != Py_None && PyLong_AsLong(keyObj) == 1) {
 			if (hasKey) {
-				Logger::logError("$creat table %s failed, has set primary key", tbName);
+				LOG_ERROR("creat table %s failed, has set primary key", tbName);
 				return false;
 			}
 			tbl.priKeyName = colName;
@@ -196,7 +196,7 @@ static bool _initTable(DBHandler* dbHandler, PyObject* tblObj) {
 	}
 
 	if (!hasKey) {
-		Logger::logError("$creat table %s failed, not set primary key", tbName);
+		LOG_ERROR("creat table %s failed, not set primary key", tbName);
 		return false;
 	}
 
@@ -244,25 +244,25 @@ static PyObject* initTable(PyObject* self, PyObject* args)
 	//	//char* fieldName = PyBytes_AsString(val);
 	//	val = PyDict_GetItemString(fieldInfo, "filedType");
 	//	int fieldType = PyLong_AsLong(val);
-	//	Logger::logInfo("$init table %s, field:%s, fieldType:%d", tbName, fieldName, fieldType);
+	//	LOG_INFO("init table %s, field:%s, fieldType:%d", tbName, fieldName, fieldType);
 	//}
 	//Py_RETURN_TRUE;
 
 	PyObject* tblTuple;
 	if (!PyArg_ParseTuple(args, "O", &tblTuple)) {
-		Logger::logError("$init table failed!!");
+		LOG_ERROR("init table failed!!");
 		Py_RETURN_FALSE;
 	}
 
 	DBHandler* dbHandler = ((PyDbObject*)self)->db_inst;
 	if (dbHandler == NULL)
 	{
-		Logger::logError("$init tables failed, db hander is null!");
+		LOG_ERROR("init tables failed, db hander is null!");
 		Py_RETURN_FALSE;
 	}
 
 	if (!PyObject_TypeCheck(tblTuple, &PyTuple_Type)) {
-		Logger::logError("$init table failed, args format error");
+		LOG_ERROR("init table failed, args format error");
 		Py_RETURN_FALSE;
 	}
 
@@ -271,7 +271,7 @@ static PyObject* initTable(PyObject* self, PyObject* args)
 		PyObject* tbObj = PyTuple_GetItem(tblTuple, i);
 		if (!_initTable(dbHandler, tbObj)) {
 			const char* tbName = PyUnicode_AsUTF8(PyObject_GetAttrString(tbObj, "tb_name"));
-			Logger::logError("$table %s init failed", tbName);
+			LOG_ERROR("table %s init failed", tbName);
 			Py_RETURN_FALSE;
 		}
 	}
@@ -283,13 +283,13 @@ static PyObject* insertRow(PyObject* self, PyObject* args)
 {
 	PyObject* obj;
 	if (!PyArg_ParseTuple(args, "O", &obj)) {
-		Logger::logError("$insert row failed, args is error!!");
+		LOG_ERROR("insert row failed, args is error!!");
 		Py_RETURN_NONE;
 	}
 	DBHandler* dbHandler = ((PyDbObject*)self)->db_inst;
 	if (dbHandler == NULL)
 	{
-		Logger::logError("$insert row failed, db hander is null!!");
+		LOG_ERROR("insert row failed, db hander is null!!");
 		Py_RETURN_NONE;
 	}
 
@@ -337,7 +337,7 @@ static PyObject* insertRow(PyObject* self, PyObject* args)
 		}
 		default:
 		{
-			Logger::logError("$not support field type, table:%s, field:%s", tableName, fieldName);
+			LOG_ERROR("not support field type, table:%s, field:%s", tableName, fieldName);
 			Py_RETURN_NONE;
 		}
 		}
@@ -390,7 +390,7 @@ static void PyTableToTable(PyObject* pyTbl, Table* tbl) {
 				break;
 			}
 			default:
-				Logger::logError("$not support table col type %ld, table:%s", type, tbl->tableName.c_str());
+				LOG_ERROR("not support table col type %ld, table:%s", type, tbl->tableName.c_str());
 			}
 			tbl->addField(tbField);
 		}
@@ -442,7 +442,7 @@ static PyObject* TableToPyTable(Table* tbl) {
 			break;
 		}
 		default:
-			Logger::logError("$not support table col type %ld, table:%s", type, tbl->tableName.c_str());
+			LOG_ERROR("not support table col type %ld, table:%s", type, tbl->tableName.c_str());
 		}
 	}
 	return tblObj;
@@ -452,13 +452,13 @@ static PyObject* getRow(PyObject* self, PyObject* args)
 {
 	PyObject* tblObj;
 	if (!PyArg_ParseTuple(args, "O", &tblObj)) {
-		Logger::logError("$get row failed, args is error!!");
+		LOG_ERROR("get row failed, args is error!!");
 		Py_RETURN_NONE;
 	}
 	DBHandler* dbHandler = ((PyDbObject*)self)->db_inst;
 	if (dbHandler == NULL)
 	{
-		Logger::logError("$get row failed, db hander is null!!");
+		LOG_ERROR("get row failed, db hander is null!!");
 		Py_RETURN_NONE;
 	}
 
@@ -482,13 +482,13 @@ static PyObject* updateRow(PyObject* self, PyObject* args)
 {
 	PyObject* obj;
 	if (!PyArg_ParseTuple(args, "O", &obj)) {
-		Logger::logError("$update row failed, args is error!!");
+		LOG_ERROR("update row failed, args is error!!");
 		Py_RETURN_NONE;
 	}
 	DBHandler* dbHandler = ((PyDbObject*)self)->db_inst;
 	if (dbHandler == NULL)
 	{
-		Logger::logError("$update row failed, db hander is null!!");
+		LOG_ERROR("update row failed, db hander is null!!");
 		Py_RETURN_NONE;
 	}
 
@@ -539,7 +539,7 @@ static PyObject* updateRow(PyObject* self, PyObject* args)
 			}
 			default:
 			{
-				Logger::logError("$not support field type, table:%s, field:%s", tableName, fieldName);
+				LOG_ERROR("not support field type, table:%s, field:%s", tableName, fieldName);
 				Py_RETURN_NONE;
 			}
 		}
@@ -557,13 +557,13 @@ static PyObject* replaceRows(PyObject* self, PyObject* args)
 {
 	PyObject* obj;
 	if (!PyArg_ParseTuple(args, "O", &obj)) {
-		Logger::logError("$replace row failed, args is error!!");
+		LOG_ERROR("replace row failed, args is error!!");
 		Py_RETURN_NONE;
 	}
 	DBHandler* dbHandler = ((PyDbObject*)self)->db_inst;
 	if (dbHandler == NULL)
 	{
-		Logger::logError("$replace row failed, db hander is null!!");
+		LOG_ERROR("replace row failed, db hander is null!!");
 		Py_RETURN_NONE;
 	}
 
@@ -585,13 +585,13 @@ static PyObject* deleteRow(PyObject* self, PyObject* args)
 {
 	PyObject* obj;
 	if (!PyArg_ParseTuple(args, "O", &obj)) {
-		Logger::logError("$delete row failed, args is error!!");
+		LOG_ERROR("delete row failed, args is error!!");
 		Py_RETURN_FALSE;
 	}
 	DBHandler* dbHandler = ((PyDbObject*)self)->db_inst;
 	if (dbHandler == NULL)
 	{
-		Logger::logError("$delete row failed, db hander is null!!");
+		LOG_ERROR("delete row failed, db hander is null!!");
 		Py_RETURN_FALSE;
 	}
 

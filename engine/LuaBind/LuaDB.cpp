@@ -29,7 +29,7 @@ sol::object LuaDB::executeSql(const char* sql, sol::this_state s) {
 
 	sol::state_view lua(s);
 	sol::table result = sol::table::create_with(s.lua_state());
-	/*Logger::logInfo("$execute sql return!!");*/
+	/*LOG_INFO("execute sql return!!");*/
 	while (true) {
 		if (isResultSet) {
 			sql::ResultSet* rs = ptr->getResultSet();
@@ -153,13 +153,13 @@ static bool _initTable(DBHandler* dbHandler, sol::table tblObj) {
 			break;
 		}
 		default:
-			Logger::logError("$not support table col type %ld, table:%s", type, tbName);
+			LOG_ERROR("not support table col type %ld, table:%s", type, tbName);
 			return false;
 		}
 		sol::object keyObj = colObj["key"];
 		if (keyObj != sol::nil && keyObj.as<bool>()) {
 			if (hasKey) {
-				Logger::logError("$creat table %s failed, has set primary key", tbName);
+				LOG_ERROR("creat table %s failed, has set primary key", tbName);
 				return false;
 			}
 			tbl.priKeyName = colName;
@@ -174,7 +174,7 @@ static bool _initTable(DBHandler* dbHandler, sol::table tblObj) {
 	}
 
 	if (!hasKey) {
-		Logger::logError("$creat table %s failed, not set primary key", tbName);
+		LOG_ERROR("creat table %s failed, not set primary key", tbName);
 		return false;
 	}
 
@@ -206,7 +206,7 @@ sol::object LuaDB::initTable(sol::table tblDefs, sol::this_state s) {
 		if (!_initTable(m_dbHandler, tbObj)) {
 			sol::object tbName = tbObj["tb_name"];
 			const char* strName = tbName.as<const char*>();
-			Logger::logError("$table %s init failed", strName);
+			LOG_ERROR("table %s init failed", strName);
 			return sol::make_object(lua, false);
 		}
 	}
@@ -260,7 +260,7 @@ sol::object LuaDB::insertRow(sol::table obj, sol::this_state s) {
 		}
 		default:
 		{
-			Logger::logError("$not support field type, table:%s, field:%s", tableName, fieldName);
+			LOG_ERROR("not support field type, table:%s, field:%s", tableName, fieldName);
 			return sol::nil;
 		}
 		}
@@ -287,7 +287,7 @@ void LuaDB::luaTableToTable(sol::table luaTbl, Table* tbl) {
 		DataBase::TableField* fieldDesc = m_dbHandler->getTableField(tbl->tableName.c_str(), fieldName);
 		if (fieldDesc == NULL) {
 			// todo:ÈÝ´í
-			Logger::logError("$not found table field, table:%s, field:%s", tableName, fieldName);
+			LOG_ERROR("not found table field, table:%s, field:%s", tableName, fieldName);
 			continue;
 		}
 
@@ -314,7 +314,7 @@ void LuaDB::luaTableToTable(sol::table luaTbl, Table* tbl) {
 				break;
 			}
 			default:
-				Logger::logError("$not support table col type %ld, table:%s", tbField->type, tbl->tableName.c_str());
+				LOG_ERROR("not support table col type %ld, table:%s", tbField->type, tbl->tableName.c_str());
 		}
 		tbl->addField(tbField);
 	}
@@ -348,7 +348,7 @@ sol::table LuaDB::tableToLuaTable(Table* tbl, sol::this_state s) {
 				break;
 			}
 			default:
-				Logger::logError("$not support table col type %ld, table:%s", type, tbl->tableName.c_str());
+				LOG_ERROR("not support table col type %ld, table:%s", type, tbl->tableName.c_str());
 		}
 	}
 	return tblObj;

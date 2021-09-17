@@ -12,7 +12,7 @@ static PyObject* PyHttpServer_New(struct _typeobject* tobj, PyObject* args, PyOb
 	PyObject* scriptObj;
 	if (!PyArg_ParseTuple(args, "iO", &httpServerPort, &scriptObj)) {
 		//PyErr_SetString(ModuleError, "create scene obj failed");
-		Logger::logError("$create http server failed, arg error");
+		LOG_ERROR("create http server failed, arg error");
 		Py_RETURN_NONE;
 	}
 
@@ -28,7 +28,7 @@ static PyObject* PyHttpServer_New(struct _typeobject* tobj, PyObject* args, PyOb
 	http_thread.reset(new std::thread([serv] { serv->run(); }));
 	((PyHttpServer*)obj)->http_thread = http_thread;
 	//new std::thread([&serv] { serv->run(); });
-	Logger::logInfo("$create http server, port:%d", httpServerPort);
+	LOG_INFO("create http server, port:%d", httpServerPort);
 	return obj;
 }
 
@@ -45,13 +45,13 @@ static PyObject* sendHttpResp(PyObject* self, PyObject* args)
 	PyObject* resp;
 	if (!PyArg_ParseTuple(args, "iO", &connId, &resp)) {
 		//PyErr_SetString(ModuleError, "create scene obj failed");
-		Logger::logError("$send http resp failed, arg error");
+		LOG_ERROR("send http resp failed, arg error");
 		Py_RETURN_FALSE;
 	}
 	http::server::server* http_serv = ((PyHttpServer*)self)->http_server;
 	http::server::connection_ptr conn_ptr = http_serv->get_connection_mgr()->get_connection(connId);
 	if (conn_ptr == nullptr) {
-		Logger::logError("$send http resp failed, connection has disconnect");
+		LOG_ERROR("send http resp failed, connection has disconnect");
 		Py_RETURN_FALSE;
 	}
 	conn_ptr->send_resp(getHttpReply(resp));
@@ -85,14 +85,14 @@ static void initPyHttpServer_Type()
 bool addPyHttpServer(PyObject* module) {
 	initPyHttpServer_Type();
 	if (PyType_Ready(&PyHttpServer_Type) < 0) {
-		Logger::logError("$add py http server error, ready type failed");
+		LOG_ERROR("add py http server error, ready type failed");
 		return false;
 	}
 
 	Py_INCREF(&PyHttpServer_Type);
 	if (PyModule_AddObject(module, "HttpServer", (PyObject*)&PyHttpServer_Type) < 0) {
 		Py_DECREF(&PyHttpServer_Type);
-		Logger::logError("$add py http server error, add failed");
+		LOG_ERROR("add py http server error, add failed");
 		return false;
 	}
 	return true;

@@ -16,7 +16,7 @@ public:
 		assert(_singleon == NULL);
 		_singleon = static_cast<T*>(this);
 	};
-	~Singleton(void) { 
+	virtual ~Singleton(void) { 
 		assert(_singleon);
 		if (_singleon != NULL) {
 			delete _singleon;

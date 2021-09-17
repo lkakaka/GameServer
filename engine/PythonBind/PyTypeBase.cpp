@@ -55,14 +55,14 @@ reprfunc PyTypeBase::getReprFunc() {
 bool PyTypeBase::addPyTypeObj(PyObject* module) {
 	initPyObj_Type();
 	if (PyType_Ready(&PyObj_Type) < 0) {
-		Logger::logError("$add py type obj %s error, ready type failed", obj_name);
+		LOG_ERROR("add py type obj %s error, ready type failed", obj_name);
 		return false;
 	}
 
 	Py_INCREF(&PyObj_Type);
 	if (PyModule_AddObject(module, obj_name, (PyObject*)&PyObj_Type) < 0) {
 		Py_DECREF(&PyObj_Type);
-		Logger::logError("$add py type obj %s error, add failed", obj_name);
+		LOG_ERROR("add py type obj %s error, add failed", obj_name);
 		return false;
 	}
 	return true;

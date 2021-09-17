@@ -16,7 +16,7 @@ using boost::asio::ip::tcp;
 void initServiceCenter(boost::asio::io_service* io) {
 	int port = Config::getSingleton()->getConfigInt("port");
 	if (port <= 0) {
-		Logger::logError("$not config port!!!");
+		LOG_ERROR("not config port!!!");
 		THROW_EXCEPTION("not config port");
 	}
 	new SCMessageHandler();

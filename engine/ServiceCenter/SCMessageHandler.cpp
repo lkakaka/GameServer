@@ -15,19 +15,19 @@ void SCMessageHandler::onRecvMessage(ServiceAddr* sender, char* data, int dataLe
 void SCMessageHandler::handleVerifyMsg(SCConnection* conn, ServiceAddr* sender, char* data, int len) {
 	int keyLen = strlen(SERVICE_CONN_KEY);
 	if (keyLen != len) {
-		Logger::logError("$verify msg len mismatch! len:%d,%d", len, keyLen);
+		LOG_ERROR("verify msg len mismatch! len:%d,%d", len, keyLen);
 		SCNet::getSingleton()->closeConnection(conn, "verify failed");
 		return;
 	}
 	if (std::strncmp(SERVICE_CONN_KEY, (char*)data, len) != 0) {
-		Logger::logError("$verify msg content mismatch!");
+		LOG_ERROR("verify msg content mismatch!");
 		SCNet::getSingleton()->closeConnection(conn, "verify failed");
 		return;
 	}
 	conn->setVerify(true);
 	conn->setServiceAddr(*sender);
 	SCNet::getSingleton()->addServiceConnection(sender->getName(), conn);
-	Logger::logInfo("$service %s connected!!, connId:%d", sender->getName(), conn->getConnID());
+	LOG_INFO("service %s connected!!, connId:%d", sender->getName(), conn->getConnID());
 	dispatchCacheMsg(conn);
 }
 
@@ -37,7 +37,7 @@ void sendServiceMsg(SCConnection* dstConn, MyBuffer* buffer, ServiceAddr* srcAdd
 	int msgId = -1;
 	if (size >= 20) msgId = buffer->getInt(16);
 	if (srcAddr != NULL) {
-		Logger::logInfo("$dispatch msg %s->%s, msgId:%d, len:%d ", srcAddr->getName(), dstConn->getServiceAddr()->getName(), msgId, size - 20);
+		LOG_INFO("dispatch msg %s->%s, msgId:%d, len:%d ", srcAddr->getName(), dstConn->getServiceAddr()->getName(), msgId, size - 20);
 	}
 	else {
 		int serviceGroup = buffer->getInt(0);
@@ -45,7 +45,7 @@ void sendServiceMsg(SCConnection* dstConn, MyBuffer* buffer, ServiceAddr* srcAdd
 		int serviceId = buffer->getInt(8);
 		char addr[32]{ 0 };
 		sprintf(addr, "%d.%d.%d", serviceGroup, serviceType, serviceId);
-		Logger::logInfo("$dispatch msg %s->%s, msgId:%d, len:%d ", addr, dstConn->getServiceAddr()->getName(), msgId, size - 20);
+		LOG_INFO("dispatch msg %s->%s, msgId:%d, len:%d ", addr, dstConn->getServiceAddr()->getName(), msgId, size - 20);
 	}
 	
 }
@@ -65,11 +65,11 @@ void SCMessageHandler::dispatchServiceMsg(SCConnection* conn, ServiceAddr* dst, 
 		/*dstConn->send((char*)buffer.data(), buffer.size());
 		int msgId = -1;
 		if (len >= 4) msgId = buffer.getInt(16);
-		Logger::logInfo("$dispatch msg %s->%s, msgId:%d, len:%d ", srcAddr->getName(), dst->getName(), msgId, len);*/
+		LOG_INFO("dispatch msg %s->%s, msgId:%d, len:%d ", srcAddr->getName(), dst->getName(), msgId, len);*/
 	}
 	else {
 		addMsgCache(dst, &buffer);
-		Logger::logError("$dispatch msg error, dst:%s not connected!!", dst->getName());
+		LOG_ERROR("dispatch msg error, dst:%s not connected!!", dst->getName());
 	}
 }
 
@@ -90,7 +90,7 @@ void SCMessageHandler::dispatchCacheMsg(SCConnection* conn) {
 	auto iter = msgCaches.find(dstAddr);
 	if (iter == msgCaches.end()) return;
 	std::vector<MyBuffer> msgs = iter->second;
-	Logger::logInfo("$dispatch cache msg to %s, msg count:%d", dstAddr, msgs.size());
+	LOG_INFO("dispatch cache msg to %s, msg count:%d", dstAddr, msgs.size());
 	for (auto it = msgs.begin(); it != msgs.end(); it++) {
 		sendServiceMsg(conn, &(*it), NULL);
 	}

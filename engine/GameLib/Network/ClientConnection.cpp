@@ -23,7 +23,7 @@ bool ClientConnection::connect() {
 		m_isConnected = true;
 	}
 	catch (std::exception& e) {
-		Logger::logError("$connect failed, %s", e.what());
+		LOG_ERROR("connect failed, %s", e.what());
 		return false;
 	}
 	onConnect();
@@ -49,13 +49,13 @@ void ClientConnection::_read() {
 		if (error.value())
 		{
 			const std::string err_str = error.message();
-			Logger::logError("$close connection, %s", err_str.data());
+			LOG_ERROR("close connection, %s", err_str.data());
 			disConnect();
 			return;
 		}
 		if (datLen > 0)
 		{
-			Logger::logDebug("$receive data, len:%d, %s", datLen, buf.data());
+			LOG_DEBUG("receive data, len:%d, %s", datLen, buf.data());
 			onRecvData(m_readBuff, datLen);
 		}
 		if (m_socket->is_open()) _read();
@@ -71,7 +71,7 @@ void ClientConnection::disConnect() {
 
 bool ClientConnection::send(const char* data, int len) {
 	if (m_sendBuff.size() >= SEND_BUFFER_WARNING_SIZE) {
-		Logger::logWarning("$send buffer too large, size£º%d", m_sendBuff.size());
+		LOG_WARN("send buffer too large, size£º%d", m_sendBuff.size());
 	}
 	std::copy(data, data + len, std::back_inserter(m_sendBuff));
 	_send();
@@ -85,7 +85,7 @@ void ClientConnection::_send() {
 	size_t len = m_socket->write_some(buf);
 	if (len > 0) {
 		m_sendBuff.erase(m_sendBuff.begin(), m_sendBuff.begin() + len);
-		Logger::logDebug("$send data success, len=%d", len);
+		LOG_DEBUG("send data success, len=%d", len);
 		_send();
 	}
 
@@ -98,13 +98,13 @@ void ClientConnection::_send() {
 		if (err_code)
 		{
 			const std::string err_str = err_code.message();
-			Logger::logError("$send data error, %s", err_str.data());
+			LOG_ERROR("send data error, %s", err_str.data());
 			return;
 		}
 
 		if (datLen > 0) {
 			m_sendBuff.erase(m_sendBuff.begin(), m_sendBuff.begin() + datLen);
-			Logger::logDebug("$send data, len:%d", datLen);
+			LOG_DEBUG("send data, len:%d", datLen);
 			_send();
 		}
 	});*/

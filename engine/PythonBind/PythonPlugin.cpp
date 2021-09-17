@@ -11,7 +11,7 @@ static PyObject* TestError = NULL;
 
 static PyObject* test(PyObject* self, PyObject* args) 
 {
-	Logger::logInfo("$test func");
+	LOG_INFO("test func");
 	/*PyErr_SetString(TestError, "System command failed");
 	return NULL;*/
 	PyObject* obj = PyTuple_New(2);
@@ -40,7 +40,7 @@ PyMODINIT_FUNC PyInit_Test(void)
 {
 	PyObject* module = PyModule_Create(&module_def);
 	if (module == NULL) {
-		Logger::logInfo("$init module %s failed", module_def.m_name);
+		LOG_ERROR("init module %s failed", module_def.m_name);
 		return NULL;
 	}
 

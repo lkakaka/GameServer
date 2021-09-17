@@ -45,7 +45,7 @@ void TcpCommEntity::sendToService(ServiceAddr* dstAddr, char* msg, int msgLen) {
 	buffer.writeInt(msgLen);
 	buffer.writeString(msg, msgLen);
 	send((char*)buffer.data(), buffer.size());
-	Logger::logInfo("$tcp comm send msg to service %s, len:%d!!!", dstAddr->getName(), msgLen);
+	LOG_INFO("tcp comm send msg to service %s, len:%d!!!", dstAddr->getName(), msgLen);
 }
 
 void TcpCommEntity::onConnect() {
@@ -57,5 +57,5 @@ void TcpCommEntity::onConnect() {
 	int len = strlen(SERVICE_CONN_KEY);
 	buffer.writeString(SERVICE_CONN_KEY, strlen(SERVICE_CONN_KEY));
 	send((char*)buffer.data(), buffer.size());
-	Logger::logInfo("$connected center service!!!");
+	LOG_INFO("connected center service!!!");
 }

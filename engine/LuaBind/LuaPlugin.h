@@ -36,13 +36,13 @@ public:
 		else {
 			sol::table mod = m_lua->get<sol::table>(modName);
 			if (!mod.valid()) {
-				Logger::logError("$lua module not exist: %s", modName);
+				LOG_ERROR("lua module not exist: %s", modName);
 				return sol::protected_function_result(NULL, -1, 0, 0, sol::call_status::runtime);
 			}
 			func = mod.get<sol::protected_function>(funcName);
 		}
 		if (!func.valid()) {
-			Logger::logError("$call lua func %s.%s invalid", modName == NULL ? "" : modName, funcName);
+			LOG_ERROR("call lua func %s.%s invalid", modName == NULL ? "" : modName, funcName);
 			return sol::protected_function_result(NULL, -1, 0, 0, sol::call_status::runtime);
 		}
 		//func.set_default_handler(((*m_lua)["got_problems"]));
@@ -54,14 +54,14 @@ public:
 	static sol::protected_function_result callLuaFunc(sol::protected_function func, Args&&... args) {
 		sol::protected_function_result result = func(std::forward<Args>(args)...);
 		if (!result.valid()) {
-			Logger::logError("$lua result = %d", result.status());
+			LOG_ERROR("lua result = %d", result.status());
 			/*for (auto iter = result1.begin(); iter != result1.end(); iter++) {
 				std::string s = iter->operator std::string();
-				Logger::logError("$%s", s.c_str());
+				LOG_ERROR("%s", s.c_str());
 			}*/
 
 			sol::error err = result;
-			Logger::logError("$%s", err.what());
+			LOG_ERROR("%s", err.what());
 		}
 		return result;
 	}

@@ -40,7 +40,7 @@ x_tail(std::make_shared<AOINode>(-1, 0x0fffffff, 0)), y_tail(std::make_shared<AO
 void AOIMgr::addNode(int actorId, int x, int y, std::set<int>& neighbours)
 {
 	if (m_nodes.find(actorId) != m_nodes.end()) {
-		Logger::logError("$add aoi node repeat, actorId:%d", actorId);
+		LOG_ERROR("add aoi node repeat, actorId:%d", actorId);
 		return;
 	}
 	/*std::shared_ptr<AOINode*> node(new AOINode(actorId, x, y));*/
@@ -76,7 +76,7 @@ void AOIMgr::addNode(int actorId, int x, int y, std::set<int>& neighbours)
 
 	getNeighbours(node, neighbours);
 
-	Logger::logInfo("$add aoi node, actorId:%d", actorId);
+	LOG_INFO("add aoi node, actorId:%d", actorId);
 	printf("neighbours addr=%p\n", &neighbours);
 }
 
@@ -102,7 +102,7 @@ void AOIMgr::removeNode(int actorId, std::set<int>& neighbours)
 
 	m_nodes.erase(actorId);
 	printf("remove y link\n");
-	Logger::logInfo("$remove aoi node, actorId:%d", actorId);
+	LOG_INFO("remove aoi node, actorId:%d", actorId);
 }
 
 void AOIMgr::moveNode(int actorId, int x, int y, std::set<int>& leaveIds, std::set<int>& enterIds)

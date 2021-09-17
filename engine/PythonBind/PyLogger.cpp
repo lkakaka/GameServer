@@ -14,7 +14,7 @@ static PyObject* logInfo(PyObject* self, PyObject* args)
 		Py_RETURN_FALSE;
 	}
 
-	Logger::logInfo(msg);
+	LOG_INFO(msg);
 	Py_RETURN_TRUE;
 }
 
@@ -38,7 +38,7 @@ static PyObject* logDebug(PyObject* self, PyObject* args)
 		Py_RETURN_FALSE;
 	}
 
-	Logger::logDebug(msg);
+	LOG_DEBUG(msg);
 	Py_RETURN_TRUE;
 }
 
@@ -50,7 +50,7 @@ static PyObject* logWarn(PyObject* self, PyObject* args)
 		Py_RETURN_FALSE;
 	}
 
-	Logger::logWarning(msg);
+	LOG_WARN(msg);
 	Py_RETURN_TRUE;
 }
 
@@ -84,7 +84,7 @@ PyMODINIT_FUNC PyInit_Logger(void)
 {
 	PyObject* moudle = PyModule_Create(&module_def);
 	if (moudle == NULL) {
-		Logger::logInfo("$init module %s failed", module_def.m_name);
+		LOG_ERROR("init module %s failed", module_def.m_name);
 		return NULL;
 	}
 

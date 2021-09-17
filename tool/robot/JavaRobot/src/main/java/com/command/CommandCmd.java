@@ -173,6 +173,9 @@ class CommandCmd extends CmdDispatch {
     private void sendRobotUdp() {
         GameRobot robot = RobotMgr.getInstance().getCurOrRandRobot();
         String msg = "World";
+        for (int i = 0; i < 65535; i++) {
+            msg += "a";
+        }
         robot.sendUdpData(msg.getBytes());
     }
 

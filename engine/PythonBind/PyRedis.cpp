@@ -10,7 +10,7 @@ static PyObject* PyRedisObj_New(struct _typeobject* tobj, PyObject* args, PyObje
 	int redisPort;
 	if (!PyArg_ParseTuple(args, "si", &redisIP, &redisPort)) {
 		//PyErr_SetString(ModuleError, "create redis obj failed");
-		Logger::logError("$new redis obj failed, arg error");
+		LOG_ERROR("new redis obj failed, arg error");
 		Py_RETURN_NONE;
 	}
 
@@ -57,7 +57,7 @@ static PyObject* parseRedisReply(redisReply* reply) {
 			return array;
 		}
 	}
-	Logger::logError("not support redis reply type %d", reply->type);
+	LOG_ERROR("not support redis reply type %d", reply->type);
 	Py_RETURN_NONE;
 }
 
@@ -65,7 +65,7 @@ static PyObject* parseRedisReply(redisReply* reply) {
 static PyObject* execRedisCmd(PyObject* self, PyObject* args) {
 	char* redisCmd;
 	if (!PyArg_ParseTuple(args, "s", &redisCmd)) {
-		Logger::logError("$execute redis cmd failed, arg error");
+		LOG_ERROR("execute redis cmd failed, arg error");
 		Py_RETURN_NONE;
 	}
 	Redis* redis = ((PyRedisObj*)self)->redis;
@@ -107,14 +107,14 @@ static PyMethodDef tp_methods[] = {
 //bool addPyRedisObj(PyObject* module) {
 //	initPyRedisObj_Type();
 //	if (PyType_Ready(&PyRedisObj_Type) < 0) {
-//		Logger::logError("$add py redis obj error, ready type failed");
+//		LOG_ERROR("add py redis obj error, ready type failed");
 //		return false;
 //	}
 //
 //	Py_INCREF(&PyRedisObj_Type);
 //	if (PyModule_AddObject(module, "Redis", (PyObject*)&PyRedisObj_Type) < 0) {
 //		Py_DECREF(&PyRedisObj_Type);
-//		Logger::logError("$add py redis obj error, add failed");
+//		LOG_ERROR("add py redis obj error, add failed");
 //		return false;
 //	}
 //	return true;

@@ -15,10 +15,10 @@ void ServerNetwork::start(int port) {
 		doAccept();
 	}
 	catch (std::exception& e) {
-		Logger::logError("$%s, port:%d", e.what(), port);
+		LOG_ERROR("%s, port:%d", e.what(), port);
 		throw(e);
 	}
-	Logger::logInfo("$start listen, port:%d", port);
+	LOG_INFO("start listen, port:%d", port);
 }
 
 void ServerNetwork::doAccept()
@@ -35,9 +35,9 @@ static void closeInvalidSocket(std::shared_ptr<tcp::socket> sock) {
 		sock->shutdown(sock->shutdown_both);
 	}
 	catch (std::exception& e) {
-		Logger::logError("$invalid socket shutdown error, %s", e.what());
+		LOG_ERROR("invalid socket shutdown error, %s", e.what());
 	}
-	Logger::logInfo("$close invalid socket!!!");
+	LOG_INFO("close invalid socket!!!");
 }
 
 void ServerNetwork::acceptHandler(std::shared_ptr<tcp::socket> sock, boost::system::error_code ec) {
@@ -55,10 +55,10 @@ void ServerNetwork::acceptHandler(std::shared_ptr<tcp::socket> sock, boost::syst
 				std::string remoteIP = sock->remote_endpoint().address().to_string();
 				conn->setClientIp(remoteIP);
 				unsigned short clientPort = sock->remote_endpoint().port();
-				Logger::logInfo("$client connected, ip:%s, port:%d", remoteIP.c_str(), clientPort);
+				LOG_INFO("client connected, ip:%s, port:%d", remoteIP.c_str(), clientPort);
 			}
 			catch (std::exception& e) {
-				Logger::logInfo("$client connected, cannot get remote addr , e:%s", e.what());
+				LOG_INFO("client connected, cannot get remote addr , e:%s", e.what());
 			}
 		} else { 
 			closeInvalidSocket(sock);
@@ -83,7 +83,7 @@ void ServerNetwork::closeConnection(void* conn, const char* reason)
 {
 	ServerConnection* s_conn = (ServerConnection*)conn;
 	int connId = s_conn->getConnID();
-	Logger::logInfo("$close connection(%d), reason:%s", connId, reason);
+	LOG_INFO("close connection(%d), reason:%s", connId, reason);
 	//decltype(m_conns.begin()->second) conn;
 
 	onCloseConnection(s_conn, reason);

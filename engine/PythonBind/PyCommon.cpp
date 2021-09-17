@@ -19,13 +19,13 @@ PyObject* callPyFunction(const char* module, const char* func, PyObject* arg)
 	if (pModule == NULL)
 	{
 		PyErr_Print();
-		Logger::logInfo("$call py function(%s.%s) falied, module is null", module, func);
+		LOG_ERROR("call py function(%s.%s) falied, module is null", module, func);
 		return NULL;
 	}
 	pFunc = PyObject_GetAttrString(pModule, func);//这里是要调用的函数名
 	if (pFunc == NULL) {
 		PyErr_Print();
-		Logger::logInfo("$call py function(%s.%s) falied, func not found", module, func);
+		LOG_ERROR("call py function(%s.%s) falied, func not found", module, func);
 		return NULL;
 	}
 	PyObject* result = PyEval_CallObject(pFunc, arg);//调用函数
@@ -52,7 +52,7 @@ void logPyException() {
 		PyObject* exList = PyObject_CallFunctionObjArgs(format_func, ptype, pvalue, ptraceback, NULL);
 		if (exList == NULL) {
 			PyErr_Print();
-			Logger::logError("$call traceback.format_exception failed when log py exception");
+			LOG_ERROR("call traceback.format_exception failed when log py exception");
 			return;
 		}
 		std::string fullMsg = "";

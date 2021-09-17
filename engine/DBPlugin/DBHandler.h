@@ -44,7 +44,7 @@ public:
 				delete m_st;
 			}
 			catch (std::exception e) {
-				Logger::logError("statement free\n, %s", e.what());
+				LOG_ERROR("statement free\n, %s", e.what());
 			}
 		}
 	}

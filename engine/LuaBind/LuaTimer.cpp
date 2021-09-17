@@ -11,11 +11,11 @@ long LuaTimer::addTimer(int firstInterval, int interval, int loopCnt, sol::funct
 	return TimerMgr::getSingleton()->addTimer(firstInterval, interval, loopCnt, [func](int timerId) { 
 			sol::protected_function_result result =	func(timerId);
 			if (!result.valid()) {
-				Logger::logError("$lua result = %d", result.status());
+				LOG_ERROR("lua result = %d", result.status());
 				sol::error err = result;
 				std::string what = err.what();
 				std::cout << what << std::endl;
-				Logger::logError("$%s", err.what());
+				LOG_ERROR("%s", err.what());
 			}
 		});
 }

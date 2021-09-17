@@ -14,13 +14,13 @@ void DBPlugin::initDBPlugin(std::string dbDir)
 	test.setInt("id", 1);
 	test.setString("name", "hello");
 
-	Logger::logInfo("$relect :%d, %s", test.id, test.name.c_str());
+	LOG_INFO("relect :%d, %s", test.id, test.name.c_str());
 
 	try {
 		Driver* driver = get_driver_instance();
 		Connection* m_dbConn = driver->connect("tcp://127.0.0.1:3306/test1", "root", "123456");
 		if (m_dbConn == NULL) {
-			Logger::logError("$connect mysql failed");
+			LOG_ERROR("connect mysql failed");
 			return;
 		}
 		//conn->setSchema("test1");
@@ -46,7 +46,7 @@ void DBPlugin::initDBPlugin(std::string dbDir)
 		ResultSetMetaData* metaData = res->getMetaData();
 		for (int i = 1; i <= metaData->getColumnCount(); i++) {
 			int type = metaData->getColumnType(i);
-			Logger::logInfo("$colname:%s, type:%d", metaData->getColumnName(i).c_str(), type);
+			LOG_INFO("colname:%s, type:%d", metaData->getColumnName(i).c_str(), type);
 		}
 
 		/* retrieve the data from the result set and display on stdout */
@@ -64,8 +64,8 @@ void DBPlugin::initDBPlugin(std::string dbDir)
 		std::cout << std::endl;
 	}
 	catch (std::exception& e) {
-		Logger::logError("$sql error %s", e.what());
+		LOG_ERROR("sql error %s", e.what());
 	}
 
-	Logger::logInfo("$init db plugin");
+	LOG_INFO("init db plugin");
 }

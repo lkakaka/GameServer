@@ -19,12 +19,12 @@ Redis::Redis(const char* ip, int port) : ip(ip), port(port)
 	struct timeval tv = { 10, 0 };
 	m_redisContext = redisConnectWithTimeout(ip, port, tv);
 	if (m_redisContext->err != 0) {
-		Logger::logError("$cannot connect redis server, ip:%s, port:%d", ip, port);
+		LOG_ERROR("cannot connect redis server, ip:%s, port:%d", ip, port);
 		THROW_EXCEPTION("connect redis failed")
 		//throw new std::exception("connect redis failed");
 		//exit(1);
 	}
-	Logger::logInfo("$connected redis server, ip:%s, port:%d", ip, port);
+	LOG_INFO("connected redis server, ip:%s, port:%d", ip, port);
 	redisEnableKeepAlive(m_redisContext);
 	redisReply* reply = (redisReply*)redisCommand(m_redisContext, "hgetall test");
 	parseReply(reply);
@@ -72,15 +72,15 @@ std::shared_ptr<RedisReply> Redis::execRedisCmd(const char* format, ...)
 	char cmd[REDIS_CMD_LOG_BUFFER_LENTGH]{ 0 };
 	vsnprintf(cmd, REDIS_CMD_LOG_BUFFER_LENTGH - 1, format, ap);
 	va_end(ap);
-	Logger::logInfo("$exec redis cmd, %s", cmd);
+	LOG_INFO("exec redis cmd, %s", cmd);
 	if (reply == NULL) {
-		Logger::logInfo("$exec redis cmd failed, %s", cmd);
+		LOG_ERROR("exec redis cmd failed, %s", cmd);
 		return NULL;
 	}
 	if (reply->type == REDIS_REPLY_ERROR) {
 		std::string err_msg;
 		std::copy(reply->str, reply->str + reply->len, std::back_inserter(err_msg));
-		Logger::logInfo("$exec redis cmd error, %s, cmd:%s", err_msg.c_str(), cmd);
+		LOG_ERROR("exec redis cmd error, %s, cmd:%s", err_msg.c_str(), cmd);
 		return NULL;
 	}
 	return std::make_shared<RedisReply>(reply);

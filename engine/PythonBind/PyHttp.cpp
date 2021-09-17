@@ -56,7 +56,7 @@ static PyObject* createHttpServer(PyObject* self, PyObject* args)
 	int port;
 	if (!PyArg_ParseTuple(args, "si", &ip, &port)) {
 		//PyErr_SetString(ModuleError, "logInfo failed");
-		Logger::logError("createHttpServer args error");
+		LOG_ERROR("createHttpServer args error");
 		Py_RETURN_NONE;
 	}
 
@@ -69,7 +69,7 @@ static PyObject* sendHttpResp(PyObject* self, PyObject* args)
 	PyObject* resp = NULL;
 	if (!PyArg_ParseTuple(args, "is", &conn_id, &resp)) {
 		//PyErr_SetString(ModuleError, "logInfo failed");
-		Logger::logError("sendHttpResp args error");
+		LOG_ERROR("sendHttpResp args error");
 		Py_RETURN_FALSE;
 	}
 	Py_RETURN_TRUE;
@@ -94,7 +94,7 @@ PyMODINIT_FUNC PyInit_Http(void)
 {
 	PyObject* module = PyModule_Create(&module_def);
 	if (module == NULL) {
-		Logger::logError("$init module %s failed", module_def.m_name);
+		LOG_ERROR("init module %s failed", module_def.m_name);
 		return NULL;
 	}
 

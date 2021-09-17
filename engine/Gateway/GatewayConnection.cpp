@@ -15,8 +15,8 @@
 using boost::asio::ip::udp;
 
 GatewayConnection::GatewayConnection(int connID, std::shared_ptr<tcp::socket> socket, ConnCloseCallback closeCallback) :
-	ServerConnection(connID, socket, closeCallback), m_kcp(NULL), m_clientUdpPort(0),
-	m_kcpTimerId(0), m_kcpEnabled(false), m_kcpTokenTs(0)
+	ServerConnection(connID, socket, closeCallback), m_kcp(NULL), 
+	m_kcpTimerId(0), m_kcpEnabled(false), m_kcpTokenTs(0), m_clientUdpPort(0)
 {
 	
 }
@@ -36,7 +36,7 @@ void GatewayConnection::startKCP() {
 		// 如 10ms调用一次，或用 ikcp_check确定下次调用 update的时间不必每次调用
 		ikcp_update(m_kcp, TimeUtil::getCurrentTime());
 	});
-	Logger::logInfo("$start kcp, connId:%d", connId);
+	LOG_INFO("start kcp, connId:%d", connId);
 }
 
 void GatewayConnection::stopKCP() {
@@ -47,7 +47,7 @@ void GatewayConnection::stopKCP() {
 	if (m_kcp != NULL) {
 		ikcp_release(m_kcp);
 		m_kcp = NULL;
-		Logger::logInfo("$stop kcp, connId:%d", getConnID());
+		LOG_INFO("stop kcp, connId:%d", getConnID());
 	}
 }
 
@@ -56,21 +56,17 @@ void GatewayConnection::stopKCP() {
 // user指针为 kcp对象创建时传入的值，用于区别多个 KCP对象
 int GatewayConnection::udp_output(const char* buf, int len, ikcpcb * kcp, void* user)
 {
-	Logger::logInfo("$kcp output, len:%d", len);
+	LOG_INFO("kcp output, len:%d", len);
 	GatewayConnection* gcPtr = (GatewayConnection*)user;
 	try {
-		boost::asio::io_service* io = GatewayNet::getSingleton()->getIOService();
-		//udp::endpoint ep(udp::v4(), 9999);
-		/*udp::socket udp_sock(*io);
-		udp_sock.open(boost::asio::ip::udp::v4());*/
 		udp::socket* udp_sock = GatewayNet::getSingleton()->getUpdSocket();
 		auto sbuf = boost::asio::buffer(buf, len);
 		const char* ip = gcPtr->getClientUdpIP();
 		int port = gcPtr->getClientUdpPort();
 		udp_sock->send_to(sbuf, udp::endpoint(boost::asio::ip::address_v4::from_string(ip), port));
-		Logger::logInfo("$send kcp data, ip:%s, port:%d", ip, port);
+		LOG_INFO("send kcp data, ip:%s, port:%d", ip, port);
 	} catch (std::exception& e) {
-		Logger::logError("$udp data send error, %s", e.what());
+		LOG_ERROR("udp data send error, %s", e.what());
 	}
 	return 1;
 }
@@ -105,7 +101,7 @@ void GatewayConnection::parsePacket()
 		
 		int packetLen = m_recvBuffer.getInt();
 		if (packetLen < 8 || packetLen > MAX_CLIENT_PACKET_LEN) {
-			Logger::logInfo("$packet len(%d) error", packetLen);
+			LOG_ERROR("packet len(%d) error", packetLen);
 			setWaitClose("packet format error");
 			return;
 		}
@@ -118,7 +114,7 @@ void GatewayConnection::parsePacket()
 		dispatchClientMsg(msgId, msgLen, (char*)m_recvBuffer.data());
 		m_recvBuffer.remove(msgLen);
 		dataLen = m_recvBuffer.size();
-		Logger::logInfo("$receive client msg, connId:%d, msgId:%d", getConnID(), msgId);
+		LOG_INFO("receive client msg, connId:%d, msgId:%d", getConnID(), msgId);
 	}
 }
 
@@ -137,17 +133,9 @@ void GatewayConnection::dispatchClientMsg(int msgId, int msgLen, const char* msg
 			CommEntityMgr::getSingleton()->getCommEntity()->sendToService(&addr, (char*)buffer.data(), buffer.size());
 			break;
 		}
-		//case MSG_ID_SEND_UDP_PORT: {
-		//	std::shared_ptr<google::protobuf::Message> ptr = createMessage(msgId, const_cast<char*>(msgData), msgLen);
-		//	SendUdpPort* msg = (SendUdpPort*)ptr.get();
-		//	// TODO: 这里可能有问题，由于客户端在NAT环境中，因此UDP端口并不一定是客户端实际绑定的端口，而是NAT转换后的端口
-		//	this->m_remoteUdpPort = msg->udp_port();
-		//	startKCP();
-		//	break;
-		//}
 		default: {
 			if (m_sceneServiceId < 0) {
-				Logger::logError("$player not in scene, connId:%d, msgId:%d", getConnID(), msgId);
+				LOG_ERROR("player not in scene, connId:%d, msgId:%d", getConnID(), msgId);
 				setWaitClose("player not in scene");
 				return;
 			}
@@ -156,29 +144,7 @@ void GatewayConnection::dispatchClientMsg(int msgId, int msgLen, const char* msg
 			break;
 		}
 	}
-	/*if (msgId == MSG_ID_LOGIN_REQ || msgId == MSG_ID_CREATE_ROLE_REQ || msgId == MSG_ID_ENTER_GAME) {
-		ServiceAddr addr(ServiceInfo::getSingleton()->getServiceGroup(), ServiceType::SERVICE_TYPE_LOGIN, 0);
-		CommEntityMgr::getSingleton()->getCommEntity()->sendToService(&addr, (char*)buffer.data(), buffer.size());
-	} else {
-		if (m_sceneServiceId < 0) {
-			Logger::logError("$player not in scene, connId:%d, msgId:%d", getConnID(), msgId);
-			setWaitClose("player not in scene");
-			return;
-		}
-		ServiceAddr addr(ServiceInfo::getSingleton()->getServiceGroup(), ServiceType::SERVICE_TYPE_SCENE, m_sceneServiceId);
-		CommEntityMgr::getSingleton()->getCommEntity()->sendToService(&addr, (char*)buffer.data(), buffer.size());
-	}*/
 }
-
-//void GatewayConnection::sendMsgToService(int msgId, int msgLen, const char* msgData, ServiceAddr* addr) {
-//	MyBuffer buffer;
-//	buffer.writeByte(1);
-//	buffer.writeInt(getConnID()); // 统一格式
-//	buffer.writeInt(msgId);
-//	buffer.writeString(msgData, msgLen);
-//	
-//	CommEntityMgr::getSingleton()->getCommEntity()->sendToService(addr, (char*)buffer.data(), buffer.size());
-//}
 
 void GatewayConnection::sendMsgToClient(send_type type, int msgId,  char* data, int dataLen) {
 	int packetLen = dataLen + 8;
@@ -188,7 +154,7 @@ void GatewayConnection::sendMsgToClient(send_type type, int msgId,  char* data, 
 	buffer.writeString(data, dataLen);
 	if (type == SEND_TYPE_KCP) {
 		if (m_kcp == NULL) {
-			Logger::logError("$send msg to client fail, kcp not start!!, connId:%d", getConnID());
+			LOG_ERROR("send msg to client fail, kcp not start!!, connId:%d", getConnID());
 			return;
 		}
 		ikcp_send(m_kcp, (char*)buffer.data(), buffer.size());
@@ -200,5 +166,5 @@ void GatewayConnection::sendMsgToClient(send_type type, int msgId,  char* data, 
 
 void GatewayConnection::setSceneServiceId(int sceneServiceId) {
 	m_sceneServiceId = sceneServiceId;
-	Logger::logDebug("$set secene service id, connId:%d, sceneServiceId:%d", getConnID(), sceneServiceId);
+	LOG_DEBUG("set secene service id, connId:%d, sceneServiceId:%d", getConnID(), sceneServiceId);
 }

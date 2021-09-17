@@ -29,7 +29,7 @@ PyMODINIT_FUNC PyInit_Scene(void)
 {
 	PyObject* module = PyModule_Create(&module_def);
 	if (module == NULL) {
-		Logger::logInfo("$init module %s failed", module_def.m_name);
+		LOG_ERROR("init module %s failed", module_def.m_name);
 		return NULL;
 	}
 

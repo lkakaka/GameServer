@@ -32,7 +32,7 @@ int panicFunc (lua_State* L) {
 	const char* message = lua_tolstring(L, -1, &messagesize);
 	if (message) {
 		std::string err(message, messagesize);
-		Logger::logError("$%s", err.c_str());
+		LOG_ERROR("%s", err.c_str());
 	}
 	lua_settop(L, 0);
 	return -1;
@@ -46,12 +46,11 @@ int exceptionHandler(lua_State*, sol::optional<const std::exception&> e, sol::st
 
 static void initLoggerModule(std::shared_ptr<sol::state> lua) {
 	sol::table logger = lua->create_named_table("Logger");
-	logger["log_info"] = [](std::string s) {Logger::logInfo(s.c_str()); };//&Logger::logInfo;
-	logger["log_error"] = &Logger::logError;
-	logger["log_warn"] = &Logger::logWarning;
-	logger["log_debug"] = &Logger::logDebug;
+	logger["log_info"] = [](std::string s) { LOG_INFO(s.c_str()); };//&Logger::logInfo;
+	logger["log_error"] = [](std::string s) { LOG_ERROR(s.c_str()); };
+	logger["log_warn"] = [](std::string s) { LOG_WARN(s.c_str()); };
+	logger["log_debug"] = [](std::string s) { LOG_DEBUG(s.c_str()); };
 }
-
 
 sol::table LuaPlugin::initLua(const char* funcName) {
 	m_lua->open_libraries(sol::lib::base, sol::lib::package, sol::lib::coroutine, sol::lib::string, sol::lib::os, sol::lib::math, 

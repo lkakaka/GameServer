@@ -41,7 +41,7 @@ void GatewayNet::startUdp(int udpPort) {
 		//m_udp->bind(ep1);
 	}
 	catch (std::exception& e) {
-		Logger::logError("$%s, port:%d", e.what(), udpPort);
+		LOG_ERROR("$%s, port:%d", e.what(), udpPort);
 		throw(e);
 	}
 	m_udpReadBuf.assign(UDP_BUFF_SIZE, 0);
@@ -54,18 +54,18 @@ void GatewayNet::recvUdpMsg() {
 		if (error)
 		{
 			const std::string err_str = error.message();
-			Logger::logError("$upd msg error, %s", err_str.c_str());
+			LOG_ERROR("upd msg error, %s", err_str.c_str());
 			return;
 		}
 
 		if (bytes_transferred > 0)
 		{
 			/*if (remotePoint.address().is_v6()) {
-				Logger::logDebug("$ipv6");
+				LOG_DEBUG("ipv6");
 			}*/
 			std::string remoteIp = m_remotePoint.address().to_string();
 			unsigned short remotePort = m_remotePoint.port();
-			Logger::logDebug("$receive udp data from ip:%s, port:%d, len=%d", remoteIp.c_str(), remotePort, bytes_transferred);
+			LOG_DEBUG("$receive udp data from ip:%s, port:%d, len=%d", remoteIp.c_str(), remotePort, bytes_transferred);
 			handleUdpMsg(remoteIp, remotePort, bytes_transferred);
 
 			//try {
@@ -75,12 +75,12 @@ void GatewayNet::recvUdpMsg() {
 			//	//m_udp->send_to(sbuf, remotePoint);
 			//}
 			//catch (std::exception& e) {
-			//	Logger::logError("$%s", e.what());
+			//	LOG_ERROR("%s", e.what());
 			//	//throw(e);
 			//}
 		}
 		else {
-			Logger::logInfo("$receive udp data len is 0");
+			LOG_INFO("$receive udp data len is 0");
 		}
 
 		recvUdpMsg();
@@ -88,7 +88,6 @@ void GatewayNet::recvUdpMsg() {
 }
 
 void GatewayNet::handleUdpMsg(std::string& remoteIP, int remotePort, int len) {
-
 	unsigned char msgType = *m_udpReadBuf.data();
 	const char* data = m_udpReadBuf.data() + 1;
 	len -= 1;
@@ -103,7 +102,7 @@ void GatewayNet::handleUdpMsg(std::string& remoteIP, int remotePort, int len) {
 			handleKCPCtrlMsg(data, len);
 			break;
 		default:
-			Logger::logError("$recv invalid udp msg");
+			LOG_ERROR("recv invalid udp msg");
 	}
 }
 
@@ -115,14 +114,14 @@ void GatewayNet::handleUdpVerify(const char* data, int len, std::string& remoteI
 	int connId = *((unsigned int*)data);
 	GatewayConnection* conn = (GatewayConnection*)getConnection(connId);
 	if (conn == NULL) {
-		Logger::logError("$udp verify, not found connection: %d", connId);
+		LOG_ERROR("$udp verify, not found connection: %d", connId);
 		return;
 	}
 
 	std::string token;
 	std::copy(data + 4, data + len, std::back_inserter(token));
 	if (!conn->isKcpTokenValid(token)) {
-		Logger::logError("$kcp token invalid: %d", connId);
+		LOG_ERROR("kcp token invalid: %d", connId);
 		return;
 	}
 	conn->setClientUdpAddr(remoteIP, remotePort);
@@ -136,7 +135,7 @@ void GatewayNet::handleKCPCtrlMsg(const char* data, int len) {
 	int connId = *((unsigned int*)data);
 	GatewayConnection* conn = (GatewayConnection*)getConnection(connId);
 	if (conn == NULL) {
-		Logger::logError("$kcp ctrl msg, not found connection: %d", connId);
+		LOG_ERROR("$kcp ctrl msg, not found connection: %d", connId);
 		return;
 	}
 

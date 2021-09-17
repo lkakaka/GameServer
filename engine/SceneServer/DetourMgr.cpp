@@ -19,7 +19,7 @@ bool SceneDetourMgr::initNavMesh(const char* meshFileName)
 {
 	FILE* fp = fopen(meshFileName, "rb");
 	if (!fp) {
-		Logger::logError("$not found scene navmesh file; %s£¡£¡£¡", meshFileName);
+		LOG_ERROR("not found scene navmesh file; %s£¡£¡£¡", meshFileName);
 		return false;
 	}
 
@@ -28,19 +28,19 @@ bool SceneDetourMgr::initNavMesh(const char* meshFileName)
 	if (readLen != 1)
 	{
 		fclose(fp);
-		Logger::logError("$init scene navmesh error, readlen:%d", readLen);
+		LOG_ERROR("init scene navmesh error, readlen:%d", readLen);
 		return false;
 	}
 	if (header.magic != NAVMESHSET_MAGIC)
 	{
 		fclose(fp);
-		Logger::logError("$init scene navmesh error, header.magic:%d", header.magic);
+		LOG_ERROR("init scene navmesh error, header.magic:%d", header.magic);
 		return false;
 	}
 	if (header.version != NAVMESHSET_VERSION)
 	{
 		fclose(fp);
-		Logger::logError("$init scene navmesh error, header.version:%d", header.version);
+		LOG_ERROR("init scene navmesh error, header.version:%d", header.version);
 		return false;
 	}
 
@@ -48,14 +48,14 @@ bool SceneDetourMgr::initNavMesh(const char* meshFileName)
 	if (!mesh)
 	{
 		fclose(fp);
-		Logger::logError("$init scene navmesh error, alloc dtNavMesh failed");
+		LOG_ERROR("init scene navmesh error, alloc dtNavMesh failed");
 		return false;
 	}
 	dtStatus status = mesh->init(&header.params);
 	if (dtStatusFailed(status))
 	{
 		fclose(fp);
-		Logger::logError("$init scene navmesh error, mesh init failed");
+		LOG_ERROR("init scene navmesh error, mesh init failed");
 		return false;
 	}
 
@@ -67,7 +67,7 @@ bool SceneDetourMgr::initNavMesh(const char* meshFileName)
 		if (readLen != 1)
 		{
 			fclose(fp);
-			Logger::logError("$init scene navmesh error, NavMeshTileHeader readLen:%d", readLen);
+			LOG_ERROR("init scene navmesh error, NavMeshTileHeader readLen:%d", readLen);
 			return false;
 		} 
 
@@ -82,7 +82,7 @@ bool SceneDetourMgr::initNavMesh(const char* meshFileName)
 		{
 			dtFree(data);
 			fclose(fp);
-			Logger::logError("$init scene navmesh error, tileHeader readLen:%d", readLen);
+			LOG_ERROR("init scene navmesh error, tileHeader readLen:%d", readLen);
 			return false;
 		}
 
@@ -91,7 +91,7 @@ bool SceneDetourMgr::initNavMesh(const char* meshFileName)
 		{
 			dtFree(data);
 			fclose(fp);
-			Logger::logError("$init scene navmesh error, add title failed");
+			LOG_ERROR("init scene navmesh error, add title failed");
 			return false;
 		}
 	}
@@ -100,13 +100,13 @@ bool SceneDetourMgr::initNavMesh(const char* meshFileName)
 	m_query = dtAllocNavMeshQuery();
 	status = m_query->init(m_mesh, 1000);
 	if (dtStatusFailed(status)) {
-		Logger::logError("$init scene navmesh error, navmesh query init failed");
+		LOG_ERROR("init scene navmesh error, navmesh query init failed");
 		fclose(fp);
 		return false;
 	}
 
 	fclose(fp);
-	Logger::logInfo("$init scene navmesh success");
+	LOG_INFO("init scene navmesh success");
 	return true;
 }
 

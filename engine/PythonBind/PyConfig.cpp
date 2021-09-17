@@ -13,7 +13,7 @@ static PyObject* getConfigInt(PyObject* self, PyObject* args)
 	char* key = NULL;
 	if (!PyArg_ParseTuple(args, "s", &key)) {
 		//PyErr_SetString(ModuleError, "logInfo failed");
-		Logger::logError("get config(int) args error");
+		LOG_ERROR("get config(int) args error");
 		Py_RETURN_NONE;
 	}
 
@@ -26,7 +26,7 @@ static PyObject* getConfigStr(PyObject* self, PyObject* args)
 	char* key = NULL;
 	if (!PyArg_ParseTuple(args, "s", &key)) {
 		//PyErr_SetString(ModuleError, "logInfo failed");
-		Logger::logError("get config(str) args error");
+		LOG_ERROR("get config(str) args error");
 		Py_RETURN_NONE;
 	}
 
@@ -56,7 +56,7 @@ PyMODINIT_FUNC PyInit_Config(void)
 {
 	PyObject* moudle = PyModule_Create(&module_def);
 	if (moudle == NULL) {
-		Logger::logInfo("$init module %s failed", module_def.m_name);
+		LOG_ERROR("init module %s failed", module_def.m_name);
 		return NULL;
 	}
 

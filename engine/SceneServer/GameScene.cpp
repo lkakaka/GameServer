@@ -46,7 +46,7 @@ void GameScene::_syncThreadFunc() {
 
 void GameScene::onDestory()
 {
-	Logger::logInfo("$destory scene, sceneId:%d, sceneUid:%d", m_sceneId, m_sceneUid);
+	LOG_INFO("destory scene, sceneId:%d, sceneUid:%d", m_sceneId, m_sceneUid);
 }
 
 GamePlayer* GameScene::createPlayer(int connId, int roleId, const char* name, int x, int y)
@@ -56,14 +56,14 @@ GamePlayer* GameScene::createPlayer(int connId, int roleId, const char* name, in
 	m_actors.emplace(std::make_pair(actorId, gamePlayer));
 	m_players.emplace(std::make_pair(connId, gamePlayer));
 	SceneMgr::getSceneMgr()->addPlayer(connId, m_sceneUid);
-	Logger::logInfo("$create player, sceneId:%d, sceneUid:%d, actorId:%d", m_sceneId, m_sceneUid, actorId);
+	LOG_INFO("create player, sceneId:%d, sceneUid:%d, actorId:%d", m_sceneId, m_sceneUid, actorId);
 	return gamePlayer;
 }
 
 void GameScene::onActorEnter(int actorId) {
 	GameActor* actor = getActor(actorId);
 	if (actor == NULL) {
-		Logger::logError("$on actor enter error, not found actorId:%d", actorId);
+		LOG_ERROR("on actor enter error, not found actorId:%d", actorId);
 		return;
 	}
 
@@ -84,7 +84,7 @@ void GameScene::onActorEnter(int actorId) {
 	} else if(actor->getActorType() == ActorType::NPC) {
 		onNpcEnter((GameNpc*)actor, neighbours);
 	} else {
-		Logger::logError("$on actor enter error, unkown actor type:%d", actor->getActorType());
+		LOG_ERROR("on actor enter error, unkown actor type:%d", actor->getActorType());
 	}
 }
 
@@ -146,7 +146,7 @@ void GameScene::onActorMove(GameActor* gameActor) {
 GameActor* GameScene::getActor(int actorId) {
 	auto iter = m_actors.find(actorId);
 	if (iter == m_actors.end()) {
-		Logger::logError("$get actor error, actor not found, sceneId:%d, sceneUid:%d, actorId:%d", m_sceneId, m_sceneUid, actorId);
+		LOG_ERROR("get actor error, actor not found, sceneId:%d, sceneUid:%d, actorId:%d", m_sceneId, m_sceneUid, actorId);
 		return NULL;
 	}
 
@@ -156,7 +156,7 @@ GameActor* GameScene::getActor(int actorId) {
 GamePlayer* GameScene::getPlayer(int connId) {
 	auto iter = m_players.find(connId);
 	if (iter == m_players.end()) {
-		Logger::logError("$get player error, player not found, sceneId:%d, sceneUid:%d, connId:%d", m_sceneId, m_sceneUid, connId);
+		LOG_ERROR("get player error, player not found, sceneId:%d, sceneUid:%d, connId:%d", m_sceneId, m_sceneUid, connId);
 		return NULL;
 	}
 
@@ -166,7 +166,7 @@ GamePlayer* GameScene::getPlayer(int connId) {
 void GameScene::removeActor(int actorId) {
 	auto iter = m_actors.find(actorId);
 	if (iter == m_actors.end()) {
-		Logger::logError("$remove actor error, actor not found, sceneId:%d, sceneUid:%d, actorId:%d", m_sceneId, m_sceneUid, actorId);
+		LOG_ERROR("remove actor error, actor not found, sceneId:%d, sceneUid:%d, actorId:%d", m_sceneId, m_sceneUid, actorId);
 		return;
 	}
 
@@ -181,18 +181,18 @@ void GameScene::removeActor(int actorId) {
 
 	delete gameActor;
 	m_actors.erase(iter);
-	Logger::logInfo("$remove actor, sceneId:%d, sceneUid:%d, actorId:%d", m_sceneId, m_sceneUid, actorId);
+	LOG_INFO("remove actor, sceneId:%d, sceneUid:%d, actorId:%d", m_sceneId, m_sceneUid, actorId);
 }
 
 void GameScene::onActorGridChg(int actorId, Grid* grid) {
 	GameActor* actor = getActor(actorId);
 	if (actor == NULL) {
-		Logger::logError("move actor error, actor not found, sceneId:%d, sceneUid:%d, actorId:%d", m_sceneId, m_sceneUid, actorId);
+		LOG_ERROR("move actor error, actor not found, sceneId:%d, sceneUid:%d, actorId:%d", m_sceneId, m_sceneUid, actorId);
 		return;
 	}
 
 	onActorMove(actor);
-	Logger::logDebug("$actor grid chg!!!");
+	LOG_DEBUG("$actor grid chg!!!");
 }
 
 void GameScene::onActorPosChg(int actorId, Position& pos) {

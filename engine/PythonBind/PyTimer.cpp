@@ -23,7 +23,7 @@ public:
 		Py_DECREF(m_cb);
 		PyGILState_Release(py_state);
 		/*if (PyGILState_Check() > 0) {
-			Logger::logInfo("$_CallbackHander------------");
+			LOG_INFO("_CallbackHander------------");
 		}*/
 	}
 };
@@ -49,7 +49,7 @@ static PyObject* pyAddTimer(PyObject* self, PyObject* args)
 	long timerId = TimerMgr::getSingleton()->addTimer(firstInterval, interval, loopCnt, [callbackHander](int timerId){
 		auto py_state = PyGILState_Ensure();
 		{
-			Logger::logInfo("$execute py timer:%d", timerId);
+			LOG_INFO("execute py timer:%d", timerId);
 			PROFILE_TRACK_WITH_TIME("py_timer", 10);
 			PyObject* result = PyObject_CallObject(callbackHander->m_cb, NULL);
 			if (result == NULL)
@@ -59,7 +59,7 @@ static PyObject* pyAddTimer(PyObject* self, PyObject* args)
 		}
 		PyGILState_Release(py_state);
 		});
-	Logger::logInfo("$add py timer:%d", timerId);
+	LOG_INFO("add py timer:%d", timerId);
 	return Py_BuildValue("l", timerId);
 }
 
@@ -70,7 +70,7 @@ static PyObject* pyRemoveTimer(PyObject* self, PyObject* args)
 		PyErr_SetString(ModuleError, "args error");
 		Py_RETURN_FALSE;
 	}
-	Logger::logInfo("$remove py timer:%d", timerId);
+	LOG_INFO("remove py timer:%d", timerId);
 	TimerMgr::getSingleton()->removeTimer(timerId, true);
 	Py_RETURN_TRUE;
 }
@@ -95,7 +95,7 @@ PyMODINIT_FUNC PyInit_Timer(void)
 {
 	PyObject* moudle = PyModule_Create(&module_def);
 	if (moudle == NULL) {
-		Logger::logInfo("$init module %s failed", module_def.m_name);
+		LOG_ERROR("init module %s failed", module_def.m_name);
 		return NULL;
 	}
 

@@ -20,7 +20,7 @@ void SCConnection::parse() {
 	if (buffSize < 16) return;
 	int msgLen = m_recvBuffer.getInt(12);
 	if (msgLen < 0 || msgLen > MAX_MSG_LEN) {
-		Logger::logError("$recv msg len error, %d", msgLen);
+		LOG_ERROR("recv msg len error, %d", msgLen);
 		close("msg len error");
 		return;
 	}

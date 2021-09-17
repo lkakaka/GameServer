@@ -9,7 +9,7 @@
 #include "LuaRegistryObj.h"
 
 static void callSceneScripFunc(void* ptr, ...) {
-	//Logger::logDebug("$callSceneScripFunc, %d", scriptEvent);
+	//LOG_DEBUG("callSceneScripFunc, %d", scriptEvent);
 	va_list args;
 	va_start(args, ptr);
 	int scriptEvent = va_arg(args, int);
@@ -59,7 +59,7 @@ static void callSceneScripFunc(void* ptr, ...) {
 			break;
 		}
 		default:
-			Logger::logError("$not impl call script func%d", scriptEvent);
+			LOG_ERROR("not impl call script func%d", scriptEvent);
 			break;
 	}
 	va_end(args);
@@ -76,7 +76,7 @@ sol::object LuaScene::createScene(int sceneId, sol::table script, sol::this_stat
 static void destroyScene(int sceneUid, sol::this_state s) {
 	GameScene* gameScene = SceneMgr::getSceneMgr()->getScene(sceneUid);
 	if (gameScene == NULL) {
-		Logger::logError("$destory scene error, not found scene, scene_uid:%d", sceneUid);
+		LOG_ERROR("destory scene error, not found scene, scene_uid:%d", sceneUid);
 		return;
 	}
 	LuaRegistryObj::removeRegistryObj(gameScene->getLuaObjId());

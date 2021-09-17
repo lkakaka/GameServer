@@ -21,7 +21,7 @@ bool LuaService::sendMsgToService(sol::table dstAddr, int msgId, const char* msg
 	sol::type serviceGroupTypeType = serviceTypeObj.get_type();
 	sol::type serviceGroupIdType = serviceIdObj.get_type();
 	if (serviceGroupObjType != sol::type::number && serviceGroupTypeType != sol::type::number && serviceGroupIdType != sol::type::number) {
-		Logger::logError("$dst addr type error");
+		LOG_ERROR("dst addr type error");
 		return false;
 	}
 	int serviceGroup = serviceGroupObj.as<int>();
@@ -39,7 +39,7 @@ bool LuaService::sendMsgToService(sol::table dstAddr, int msgId, const char* msg
 	buffer.writeString(msg, msgLen);
 	CommEntityMgr::getSingleton()->getCommEntity()->sendToService(&addr, (char*)buffer.data(), buffer.size());
 
-	Logger::logInfo("$send msg to service %s, msgId:%d", addr.getName(), msgId);
+	LOG_INFO("send msg to service %s, msgId:%d", addr.getName(), msgId);
 	return true;
 }
 

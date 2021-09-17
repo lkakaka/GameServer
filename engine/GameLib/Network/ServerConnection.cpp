@@ -20,9 +20,9 @@ ServerConnection::~ServerConnection()
 	try {
 		this->m_socket->close();
 	}catch (boost::system::system_error e) {
-		Logger::logError("socket close error, %s", e.what());
+		LOG_ERROR("socket close error, %s", e.what());
 	}
-	Logger::logDebug("$delete ServerConnection: connId:%d", m_connID);
+	LOG_DEBUG("delete ServerConnection: connId:%d", m_connID);
 }
 
 std::shared_ptr<tcp::socket> ServerConnection::getSocket()
@@ -43,21 +43,21 @@ void ServerConnection::_read()
 		if (error)
 		{
 			const std::string err_str = error.message();
-			Logger::logError("$close connection, %s", err_str.c_str());
+			LOG_ERROR("close connection, %s", err_str.c_str());
 			close("client disconnected");
 			return;
 		}
 
 		if (bytes_transferred > 0)
 		{
-			//Logger::logInfo("$receive data, len:%d, %s", datLen, m_vecData.data());
+			//LOG_INFO("receive data, len:%d, %s", datLen, m_vecData.data());
 			//m_readBuf.append(m_vecData, bytes_transferred);
 			//onRead(m_readBuf.data(), bytes_transferred);
-			Logger::logDebug("$receive data, len=%d", bytes_transferred);
+			LOG_DEBUG("receive data, len=%d", bytes_transferred);
 			m_recvBuffer.writeString(m_readBuf.data(), bytes_transferred);
 			parseMessage();
 		} else {
-			Logger::logInfo("$receive data len is 0");
+			LOG_ERROR("receive data len is 0");
 		}
 
 		checkRecvBufferSize();
@@ -76,7 +76,7 @@ void ServerConnection::_read()
 void ServerConnection::checkRecvBufferSize() {
 	int size = m_recvBuffer.size();
 	if (size >= SERVER_RECV_BUFF_WARN_SIZE) {
-		Logger::logWarning("$cache too much recv data!!!, size:%d", size);
+		LOG_WARN("cache too much recv data!!!, size:%d", size);
 	}
 
 	if (size >= SERVER_RECV_MAX_BUFF_SIZE) {
@@ -107,13 +107,13 @@ void ServerConnection::_send() {
 		if (err_code)
 		{
 			const std::string err_str = err_code.message();
-			Logger::logError("$send data error, %s", err_str.data());
+			LOG_ERROR("send data error, %s", err_str.data());
 			return;
 		}
 
 		if (datLen > 0) {
 			m_sendBuf.erase(m_sendBuf.begin(), m_sendBuf.begin() + datLen);
-			Logger::logDebug("$send data, len:%d", datLen);
+			LOG_DEBUG("send data, len:%d", datLen);
 			_send();
 		}
 		});*/
@@ -128,7 +128,7 @@ void ServerConnection::close(const char* reason) {
 	if (m_isClosed) return;
 	m_isClosed = true;
 	m_closeCallback(this, reason);
-	//Logger::logInfo("$connection close, id:%d, reason:%s", m_connID, reason);
+	//LOG_INFO("connection close, id:%d, reason:%s", m_connID, reason);
 }
 //
 //void ServerConnection::destroy() {
@@ -136,6 +136,6 @@ void ServerConnection::close(const char* reason) {
 //		m_socket.shutdown(m_socket.shutdown_both);
 //	}
 //	catch (boost::system::system_error e) {
-//		Logger::logError("$socket shutdown error, %s", e.what());
+//		LOG_ERROR("socket shutdown error, %s", e.what());
 //	}
 //}

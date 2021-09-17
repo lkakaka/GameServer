@@ -27,20 +27,20 @@ GameScene* SceneMgr::createScene(int sceneId)
 {
 	int sceneUid = allocSceneUid();
 	if (m_scenes.find(sceneUid) != m_scenes.end()) {
-		Logger::logError("$alloc scene failed, scene uid(%d) exist", sceneUid);
+		LOG_ERROR("alloc scene failed, scene uid(%d) exist", sceneUid);
 		return NULL;
 	}
 	GameScene* gameScene = new GameScene(sceneId, sceneUid);
 	m_scenes.emplace(std::make_pair(sceneUid, gameScene));
 	gameScene->onCreate();
-	Logger::logInfo("$create scene, scene_uid:%d, sceneId:%d", sceneUid, sceneId);
+	LOG_INFO("create scene, scene_uid:%d, sceneId:%d", sceneUid, sceneId);
 	return gameScene;
 }
 
 GameScene* SceneMgr::getScene(int sceneUid) {
 	auto iter = m_scenes.find(sceneUid);
 	if (iter == m_scenes.end()) {
-		Logger::logError("$get scene failed, scene uid(%d) not exist", sceneUid);
+		LOG_ERROR("get scene failed, scene uid(%d) not exist", sceneUid);
 		return NULL;
 	}
 	return iter->second;
@@ -49,12 +49,12 @@ GameScene* SceneMgr::getScene(int sceneUid) {
 void SceneMgr::destroyScene(int sceneUid) {
 	auto iter = m_scenes.find(sceneUid);
 	if (iter == m_scenes.end()) {
-		Logger::logError("$destory scene failed, scene uid(%d) not exist", sceneUid);
+		LOG_ERROR("destory scene failed, scene uid(%d) not exist", sceneUid);
 		return;
 	}
 	GameScene* gameScene = (GameScene*)iter->second;
 	gameScene->onDestory();
-	Logger::logInfo("$destroy scene, scene_uid:%d, sceneId:%d", sceneUid, gameScene->getSceneId());
+	LOG_INFO("destroy scene, scene_uid:%d, sceneId:%d", sceneUid, gameScene->getSceneId());
 	delete gameScene;
 	m_scenes.erase(sceneUid);
 }

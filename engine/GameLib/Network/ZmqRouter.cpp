@@ -31,7 +31,7 @@ ZmqRouter* ZmqRouter::getZmqRouter()
 
 void ZmqRouter::run()
 {
-	Logger::logInfo("$zmq router running...");
+	LOG_INFO("zmq router running...");
 	auto threadFunc = [this]() {
 		char src_name[MAX_PEER_NAME_LEN]{ 0 };
 		char dst_name[MAX_PEER_NAME_LEN]{ 0 };
@@ -41,7 +41,7 @@ void ZmqRouter::run()
 			bool isOk = true;
 			int len = zmq_recv(m_socket, src_name, sizeof(src_name), 0);
 			if (len <= 0 || len >= MAX_PEER_NAME_LEN) {
-				Logger::logError("$recv src name len(%d) error!", len);
+				LOG_ERROR("recv src name len(%d) error!", len);
 				isOk = false;
 				// 不能continue，需要把数据接收完
 				//continue;
@@ -49,7 +49,7 @@ void ZmqRouter::run()
 			src_name[len] = '\0';
 			len = zmq_recv(m_socket, msg, MAX_MSG_LEN, 0);
 			if (len <= 0 || len > MAX_MSG_LEN) {
-				Logger::logError("$recv msg len(%d) error!", len);
+				LOG_ERROR("recv msg len(%d) error!", len);
 				isOk = false;
 				// 不能continue，需要把数据接收完
 				//continue;
@@ -63,7 +63,7 @@ void ZmqRouter::run()
 				len = zmq_recv(m_socket, msg, MAX_MSG_LEN, 0);
 				zmq_getsockopt(m_socket, ZMQ_RCVMORE, &rcvMore, &sizeInt);
 				isOk = false;
-				Logger::logError("$recv msg error! maybe invalid connection!!");
+				LOG_ERROR("recv msg error! maybe invalid connection!!");
 			}
 
 			if (!isOk) {
@@ -80,7 +80,7 @@ void ZmqRouter::run()
 			}
 
 			if (idstNameIdx == 0 || idstNameIdx >= len) {
-				Logger::logError("$dstNameLen (%d) error!", idstNameIdx);
+				LOG_ERROR("dstNameLen (%d) error!", idstNameIdx);
 				memset(msg, '\0', MAX_MSG_LEN);
 				memset(src_name, '\0', MAX_PEER_NAME_LEN);
 				continue;
@@ -91,24 +91,24 @@ void ZmqRouter::run()
 
 			/*int dstNameLen = strlen(msg);
 			if (dstNameLen == 0 || dstNameLen >= MAX_PEER_NAME_LEN) {
-				Logger::logError("$dstNameLen (%d) error!", dstNameLen);
+				LOG_ERROR("dstNameLen (%d) error!", dstNameLen);
 				continue;
 			}
 			if (dstNameLen + 1 >= len) {
-				Logger::logError("$msg len error, dstNameLen:%d, recv_len:%d", dstNameLen, len);
+				LOG_ERROR("msg len error, dstNameLen:%d, recv_len:%d", dstNameLen, len);
 				continue;
 			}
 			memcpy(dst_name, msg, dstNameLen);
 			dst_name[dstNameLen] = '\0';*/
 			int iMsgBodyIdx = idstNameIdx + 1;
 			int iMsgBodyLen = len - iMsgBodyIdx;
-			Logger::logInfo("$recv msg, src_name:%s, dst_name:%s, msg_len:%d", src_name, dst_name, iMsgBodyLen);
+			LOG_INFO("recv msg, src_name:%s, dst_name:%s, msg_len:%d", src_name, dst_name, iMsgBodyLen);
 
 			int ret = zmq_send(m_socket, dst_name, strlen(dst_name), ZMQ_SNDMORE);
 			if (ret <= 0) {
-				Logger::logError("$router dst_name fail, src_name:%s, dst_name:%s, msg_len:%d", src_name, dst_name, iMsgBodyLen);
+				LOG_ERROR("router dst_name fail, src_name:%s, dst_name:%s, msg_len:%d", src_name, dst_name, iMsgBodyLen);
 			} else {
-				Logger::logInfo("$router msg, ret:%d", ret);
+				LOG_INFO("router msg, ret:%d", ret);
 			}
 			int srcNameLen = strlen(src_name);
 
@@ -118,11 +118,11 @@ void ZmqRouter::run()
 			buffer.writeString(&msg[iMsgBodyIdx], iMsgBodyLen);
 			ret = zmq_send(m_socket, buffer.data(), buffer.size(), 0);
 			if (ret <= 0) {
-				Logger::logError("$router msg fail, src_name:%s, dst_name:%s, msg_len:%d", src_name, dst_name, iMsgBodyLen);
+				LOG_ERROR("router msg fail, src_name:%s, dst_name:%s, msg_len:%d", src_name, dst_name, iMsgBodyLen);
 			}
 		}
 
-		Logger::logInfo("$zmq router exit");
+		LOG_INFO("zmq router exit");
 	};
 
 	work_thread = new std::thread(threadFunc);
@@ -137,7 +137,7 @@ void ZmqRouter::startZmqRouter(const char* name, int port)
 	{
 		zmq_close(m_socket);
 		zmq_ctx_destroy(zmq_context);
-		Logger::logError("$zmq router set identity error, name: %s", name);
+		LOG_ERROR("zmq router set identity error, name: %s", name);
 		return;
 	}
 
@@ -146,17 +146,17 @@ void ZmqRouter::startZmqRouter(const char* name, int port)
 	if (zmq_bind(m_socket, addr) < 0) {
 		zmq_close(m_socket);
 		zmq_ctx_destroy(zmq_context);
-		Logger::logError("$zmq router bind error, port: %d", port);
+		LOG_ERROR("zmq router bind error, port: %d", port);
 		return ;
 	}
 
 	int major, minor, patch;
 	zmq_version(&major, &minor, &patch);
-	Logger::logInfo("$Current ZMQ version is %d.%d.%d", major, minor, patch);
+	LOG_INFO("Current ZMQ version is %d.%d.%d", major, minor, patch);
 
 	run();
 
-	Logger::logInfo("$create zmq router, name: %s, router addr:%s", name, addr);
+	LOG_INFO("create zmq router, name: %s, router addr:%s", name, addr);
 }
 
 void ZmqRouter::destory()

@@ -70,7 +70,7 @@ void GameActor::setPos(float x, float y, bool isTemp) {
 	}
 
 	
-	Logger::logInfo("$pos:%0.3f, %0.3f, gird_x:%d, gird_y:%d", x, y, m_grid.x, m_grid.y);
+	LOG_INFO("pos:%0.3f, %0.3f, gird_x:%d, gird_y:%d", x, y, m_grid.x, m_grid.y);
 }
 
 void GameActor::setTgtPosList(std::vector<Position> tgtPosList) {

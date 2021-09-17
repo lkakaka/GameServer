@@ -20,7 +20,7 @@ void ServiceAddr::serialize(MyBuffer* buffer) {
 void ServiceAddr::parseAddr(char* addr) {
 	std::vector<std::string> vec = StrUtil::split(addr, ".");
 	if (vec.size() != 3) {
-		Logger::logError("$service addr(%s) is error", addr);
+		LOG_ERROR("service addr(%s) is error", addr);
 	}
 	serviceGroup = atoi(vec[0].c_str());
 	serviceType = atoi(vec[1].c_str());

@@ -58,7 +58,7 @@ void ZmqCommEntity::sendToService(ServiceAddr* dstAddr, char* msg, int msgLen) {
 
 void ZmqCommEntity::run()
 {
-	Logger::logInfo("$zmq intance running...");
+	LOG_INFO("zmq intance running...");
 	//while (1) {
 	//	//  等待客户端请求
 	//	zmq_msg_t request;
@@ -85,12 +85,12 @@ void ZmqCommEntity::run()
 		while (1) {
 			int len = zmq_recv(this->conn_socket, msg, MAX_MSG_LEN, 0);
 			if (len <= 0 || len > MAX_MSG_LEN) {
-				Logger::logError("$recv msg len(%d) error", len);
+				LOG_ERROR("recv msg len(%d) error", len);
 				continue;
 			}
 			int srcAddrLen = strlen(msg);
 			if (srcAddrLen == 0 || srcAddrLen + 1 >= len) {
-				Logger::logError("$recv msg len error, srcAddrLen:%d, len:%d", srcAddrLen, len);
+				LOG_ERROR("recv msg len error, srcAddrLen:%d, len:%d", srcAddrLen, len);
 				continue;
 			}
 			memcpy(srcAddr, &msg, srcAddrLen);
@@ -104,7 +104,7 @@ void ZmqCommEntity::run()
 			}
 		}
 
-		Logger::logInfo("$zmq intance exit");
+		LOG_INFO("zmq intance exit");
 	};
 	work_thread = new std::thread(threadFunc);
 }
@@ -143,11 +143,11 @@ void ZmqCommEntity::start()
 
 	int major, minor, patch;
 	zmq_version(&major, &minor, &patch);
-	Logger::logInfo("$Current ZMQ version is %d.%d.%d", major, minor, patch);
+	LOG_INFO("Current ZMQ version is %d.%d.%d", major, minor, patch);
 
 	run();
 
-	Logger::logInfo("$create zmq instance, name: %s, router addr:%s:%d", m_name.c_str(), m_serverIp.c_str(), m_serverPort);
+	LOG_INFO("create zmq instance, name: %s, router addr:%s:%d", m_name.c_str(), m_serverIp.c_str(), m_serverPort);
 }
 
 void ZmqCommEntity::destory()
@@ -165,7 +165,7 @@ void ZmqCommEntity::destory()
 }
 
 void zmqTest() {
-	Logger::logInfo("$zmq test start");
+	LOG_INFO("zmq test start");
 	void* context = zmq_init(1);
 
 	//  与客户端通信的套接字

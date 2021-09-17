@@ -29,7 +29,7 @@ static boost::asio::io_service io;
 static void signalHandler(int signum)
 {
     std::cout << "Interrupt signal (" << signum << ") received.\n";
-	Logger::logInfo("$stop server!!!!");
+	LOG_INFO("stop server!!!!");
 	io.stop();
 }
 
@@ -77,7 +77,7 @@ int main(int argc, char** argv)
 	std::string logFileName = serviceName;
 	if (serviceId > 0) logFileName += "_" + std::to_string(serviceId);
 	Logger::initLog(logFileName.c_str());
-	Logger::logInfo("$dfas,%%n");
+	LOG_INFO("dfas,%%n");
 
 	std::string dbUrl = GET_CONFG_STR("db_url");
 	if (dbUrl.length() > 0) {
@@ -85,7 +85,7 @@ int main(int argc, char** argv)
 		std::string dbPassword = GET_CONFG_STR("db_password");
 		int dbPort = GET_CONFG_INT("db_port");
 		new DBMgr(dbUserName, dbPassword, dbUrl, dbPort);
-		Logger::logInfo("$db config, url: %s, port:%d", dbUrl.c_str(), dbPort);
+		LOG_INFO("db config, url: %s, port:%d", dbUrl.c_str(), dbPort);
 	}
 
 	TimerMgr::initTimerMgr(&io);
@@ -104,7 +104,7 @@ int main(int argc, char** argv)
 
 	//	// Run the server until stopped.
 	//	http_thread.reset(new std::thread([&http_server] { http_server->run(); }));
-	//	Logger::logInfo("$start http server, ip: %s, port:%s", httpServerIp.c_str(), httpServerPort.c_str());
+	//	LOG_INFO("start http server, ip: %s, port:%s", httpServerIp.c_str(), httpServerPort.c_str());
 	//}
 
 
@@ -123,7 +123,7 @@ int main(int argc, char** argv)
 //		HINSTANCE h = LoadLibrary("Gateway.dll");
 //#endif // _DEBUG
 //		if (h == NULL) {
-//			Logger::logError("$gateway.dll not found");
+//			LOG_ERROR("gateway.dll not found");
 //			return 1;
 //		}
 //		typedef void(*FunPtr)(boost::asio::io_service*, int);//定义函数指针
@@ -135,12 +135,12 @@ int main(int argc, char** argv)
 
 	startCmd();
 
-	Logger::logInfo("$MyServer Start!!!");
+	LOG_INFO("$MyServer Start!!!");
 
 	boost::asio::io_service::work work(io);
 	io.run();
 
-	Logger::logInfo("$MyServer exit!!!");
+	LOG_INFO("$MyServer exit!!!");
 
 	return 0;
 }
@@ -148,13 +148,13 @@ int main(int argc, char** argv)
 void initServiceCommEntity(boost::asio::io_service* io) {
 	std::string centerServiceIp = GET_CONFG_STR("center_service_ip");
 	if (centerServiceIp.length() == 0) {
-		Logger::logError("$not config center service ip, file name: %s", Config::getSingleton()->getConfigFileName());
+		LOG_ERROR("not config center service ip, file name: %s", Config::getSingleton()->getConfigFileName());
 		THROW_EXCEPTION("not config center service ip");
 	}
 
 	int centerServicePort = GET_CONFG_INT("center_service_port");
 	if (centerServicePort <= 0) {
-		Logger::logError("$not config center service port, file name: %s", Config::getSingleton()->getConfigFileName());
+		LOG_ERROR("not config center service port, file name: %s", Config::getSingleton()->getConfigFileName());
 		THROW_EXCEPTION("not config center service port");
 	}
 

@@ -15,7 +15,7 @@ USING_DATA_BASE;
 
 MongoDBHandler::~MongoDBHandler()
 {
-	Logger::logInfo("$mongo db hander destory!!!");
+    LOG_INFO("mongo db hander destory!!!");
 }
 
 MongoDBHandler::MongoDBHandler(std::string& dbUrl, std::string& dbName) : m_dbUrl(dbUrl), m_dbName(dbName)
@@ -29,13 +29,13 @@ MongoDBHandler::MongoDBHandler(std::string& dbUrl, std::string& dbName) : m_dbUr
             "error message:       %s\n",
             dbUrl.c_str(),
             error.message);
-        Logger::logError("connect mongo db failed, url:%s", dbUrl.c_str());
+        LOG_ERROR("connect mongo db failed, url:%s", dbUrl.c_str());
         THROW_EXCEPTION("connect mongo db failed")
     }
 
     mongoc_client_t* client = mongoc_client_new_from_uri(uri);
     if (!client) {
-        Logger::logError("new mongo db client failed, url:%s", dbUrl.c_str());
+        LOG_ERROR("new mongo db client failed, url:%s", dbUrl.c_str());
         THROW_EXCEPTION("new mongo db client failed");
     }
 

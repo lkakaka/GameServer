@@ -10,7 +10,7 @@
 void initGateway(boost::asio::io_service* io) {
 	int port = GET_CONFG_INT("port");
 	int udpPort = GET_CONFG_INT("udp_port");
-	Logger::logInfo("$gateway port:%d, updPort:%d", port, udpPort);
+	LOG_INFO("$gateway port:%d, updPort:%d", port, udpPort);
 	if (port <= 0) {
 		THROW_EXCEPTION("not config port!!!");
 	}
@@ -19,5 +19,4 @@ void initGateway(boost::asio::io_service* io) {
 	if (udpPort > 0) gatewayNet->startUdp(udpPort);
 	GatewayMessageHandler* messageHandler = new GatewayMessageHandler();
 	CommEntityMgr::getSingleton()->getCommEntity()->setMessageHandler(messageHandler);
-	//CommEntityMgr::getSingleton()->getCommEntity()->setRecvCallback(std::bind(&GatewayMessageHandler::onRecvMessage, messageHandler, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 }

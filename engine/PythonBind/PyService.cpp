@@ -10,7 +10,7 @@ static PyObject* PyService_New(struct _typeobject* tobj, PyObject* args, PyObjec
 	//PyObject* scriptObj;
 	//if (!PyArg_ParseTuple(args, "O", &scriptObj)) {
 	//	//PyErr_SetString(ModuleError, "create scene obj failed");
-	//	Logger::logError("$create py service failed, arg error");
+	//	LOG_ERROR("create py service failed, arg error");
 	//	return NULL;
 	//}
 	PyObject* obj = PyType_GenericNew(tobj, args, obj2);
@@ -30,7 +30,7 @@ static PyObject* sendMsgToClient(PyObject* self, PyObject* args)
 	char* msg = NULL;
 	if (!PyArg_ParseTuple(args, "iiy#", &connId, &msgId, &msg, &msgLen)) {
 		//PyErr_SetString(ModuleError, "sendMessage failed");
-		Logger::logError("$send msg to client error, args error");
+		LOG_ERROR("send msg to client error, args error");
 		Py_RETURN_FALSE;
 	}
 
@@ -53,13 +53,13 @@ static PyObject* sendMsgToService(PyObject* self, PyObject* args)
 	Py_ssize_t msgLen;
 	char* msg = NULL;
 	if (!PyArg_ParseTuple(args, "Oiy#", &serviceAddr, &msgId, &msg, &msgLen)) {
-		Logger::logError("$send msg to service error, args error");
+		LOG_ERROR("send msg to service error, args error");
 		//PyErr_SetString(ModuleError, "sendMessageToService failed");
 		Py_RETURN_FALSE;
 	}
 
 	if (serviceAddr == NULL) {
-		Logger::logError("$send msg to service error, service addr is null");
+		LOG_ERROR("send msg to service error, service addr is null");
 		Py_RETURN_FALSE;
 	}
 
@@ -80,7 +80,7 @@ static PyObject* sendMsgToService(PyObject* self, PyObject* args)
 	buffer.writeString(msg, msgLen);
 	CommEntityMgr::getSingleton()->getCommEntity()->sendToService(&addr, (char*)buffer.data(), buffer.size());
 
-	Logger::logInfo("$send msg to service %s, msgId:%d", addr.getName(), msgId);
+	LOG_INFO("send msg to service %s, msgId:%d", addr.getName(), msgId);
 	Py_RETURN_TRUE;
 }
 
@@ -108,14 +108,14 @@ static void initPyService_Type()
 bool addPyServiceObj(PyObject* module) {
 	initPyService_Type();
 	if (PyType_Ready(&PyService_Type) < 0) {
-		Logger::logError("$add py service error, ready type failed");
+		LOG_ERROR("add py service error, ready type failed");
 		return false;
 	}
 
 	Py_INCREF(&PyService_Type);
 	if (PyModule_AddObject(module, "Service", (PyObject*)& PyService_Type) < 0) {
 		Py_DECREF(&PyService_Type);
-		Logger::logError("$add py service error, add failed");
+		LOG_ERROR("add py service error, add failed");
 		return false;
 	}
 	return true;
