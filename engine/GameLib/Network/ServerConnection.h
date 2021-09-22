@@ -35,7 +35,6 @@ protected:
 	
 	// 子类处理, 并返回处理的数据长度
 	virtual void parseMessage() = 0;
-	void setWaitClose(const char* reason);
 	void close(const char* reason);
 
 public:
@@ -49,6 +48,8 @@ public:
 
 	inline void startRead() { _read(); }
 	void send(const char* data, int len);
+
+	void setWaitClose(const char* reason);
 
 	//void destroy();
 	

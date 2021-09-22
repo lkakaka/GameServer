@@ -12,23 +12,22 @@ void SCMessageHandler::onRecvMessage(ServiceAddr* sender, char* data, int dataLe
 	
 }
 
-void SCMessageHandler::handleVerifyMsg(SCConnection* conn, ServiceAddr* sender, char* data, int len) {
+int SCMessageHandler::handleVerifyMsg(SCConnection* conn, ServiceAddr* sender, char* data, int len) {
 	int keyLen = strlen(SERVICE_CONN_KEY);
 	if (keyLen != len) {
 		LOG_ERROR("verify msg len mismatch! len:%d,%d", len, keyLen);
-		SCNet::getSingleton()->closeConnection(conn, "verify failed");
-		return;
+		return MSG_ERROR_CODE::VERIFY_FAIL;
 	}
 	if (std::strncmp(SERVICE_CONN_KEY, (char*)data, len) != 0) {
 		LOG_ERROR("verify msg content mismatch!");
-		SCNet::getSingleton()->closeConnection(conn, "verify failed");
-		return;
+		return MSG_ERROR_CODE::VERIFY_FAIL;
 	}
 	conn->setVerify(true);
 	conn->setServiceAddr(*sender);
 	SCNet::getSingleton()->addServiceConnection(sender->getName(), conn);
 	LOG_INFO("service %s connected!!, connId:%d", sender->getName(), conn->getConnID());
 	dispatchCacheMsg(conn);
+	return MSG_ERROR_CODE::OK;
 }
 
 void sendServiceMsg(SCConnection* dstConn, MyBuffer* buffer, ServiceAddr* srcAddr) {
@@ -97,11 +96,12 @@ void SCMessageHandler::dispatchCacheMsg(SCConnection* conn) {
 	msgCaches.erase(dstAddr);
 }
 
-void SCMessageHandler::onRecvConnectionMessage(SCConnection* conn, ServiceAddr* addr, char* data, int dataLen) {
+int SCMessageHandler::onRecvConnectionMessage(SCConnection* conn, ServiceAddr* addr, char* data, int dataLen) {
 	if (!conn->isVerify()) {
-		handleVerifyMsg(conn, addr, data, dataLen);
+		return handleVerifyMsg(conn, addr, data, dataLen);
 	} else {
 		dispatchServiceMsg(conn, addr, data, dataLen);
+		return MSG_ERROR_CODE::OK;
 	}
 
 }

@@ -22,6 +22,7 @@ private:
 	std::vector<unsigned char> m_sendBuff;
 	
 	std::shared_ptr<std::thread> m_connectThread;
+	long m_connectTimer;
 
 private:
 	void _read();
@@ -30,6 +31,8 @@ private:
 protected:
 	virtual void onRecvData(std::vector<char>& data, int len) = 0;
 	virtual void onConnect() {};
+
+	void connectHandler(boost::system::error_code ec);
 
 public:
 	ClientConnection(boost::asio::io_context* io, const char* server_ip, int server_port);

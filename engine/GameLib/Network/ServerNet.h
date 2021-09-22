@@ -25,6 +25,7 @@ protected:
 	inline int allocConnID() { return m_curConnId++; }
 	virtual ServerConnection* onAccept(std::shared_ptr<tcp::socket> sock) = 0;
 	virtual void onCloseConnection(ServerConnection* conn, const char* reason) = 0;
+	
 
 public:
 	ServerNetwork(boost::asio::io_service* io);

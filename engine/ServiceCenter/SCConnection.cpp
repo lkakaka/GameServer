@@ -21,7 +21,7 @@ void SCConnection::parse() {
 	int msgLen = m_recvBuffer.getInt(12);
 	if (msgLen < 0 || msgLen > MAX_MSG_LEN) {
 		LOG_ERROR("recv msg len error, %d", msgLen);
-		close("msg len error");
+		setWaitClose("msg len error");
 		return;
 	}
 	if (buffSize < msgLen + 16) return;
@@ -31,7 +31,17 @@ void SCConnection::parse() {
 	int serviceId = m_recvBuffer.readInt();
 	msgLen = m_recvBuffer.readInt();
 	ServiceAddr sender(serviceGroup, serviceType, serviceId);
-	SCMessageHandler::getSingleton()->onRecvConnectionMessage(this, &sender, (char*)m_recvBuffer.data(), msgLen);
+	int errCode = SCMessageHandler::getSingleton()->onRecvConnectionMessage(this, &sender, (char*)m_recvBuffer.data(), msgLen);
+	if (errCode != MSG_ERROR_CODE::OK) {
+		LOG_ERROR("sc conn msg error, errCode:%d", errCode);
+		if (errCode == MSG_ERROR_CODE::VERIFY_FAIL) {
+			setWaitClose("verify failed");
+		}
+		else {
+			setWaitClose("msg error");
+		}
+		return;
+	}
 	m_recvBuffer.remove(msgLen);
 	parse();
 }

@@ -58,7 +58,7 @@ void ServerNetwork::acceptHandler(std::shared_ptr<tcp::socket> sock, boost::syst
 				LOG_INFO("client connected, ip:%s, port:%d", remoteIP.c_str(), clientPort);
 			}
 			catch (std::exception& e) {
-				LOG_INFO("client connected, cannot get remote addr , e:%s", e.what());
+				LOG_INFO("client connected, cannot get remote addr, e:%s", e.what());
 			}
 		} else { 
 			closeInvalidSocket(sock);
