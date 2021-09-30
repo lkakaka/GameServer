@@ -60,12 +60,9 @@ void GatewayNet::recvUdpMsg() {
 
 		if (bytes_transferred > 0)
 		{
-			/*if (remotePoint.address().is_v6()) {
-				LOG_DEBUG("ipv6");
-			}*/
 			std::string remoteIp = m_remotePoint.address().to_string();
 			unsigned short remotePort = m_remotePoint.port();
-			LOG_DEBUG("$receive udp data from ip:%s, port:%d, len=%d", remoteIp.c_str(), remotePort, bytes_transferred);
+			//LOG_DEBUG("receive udp data from ip:%s, port:%d, len=%d", remoteIp.c_str(), remotePort, bytes_transferred);
 			handleUdpMsg(remoteIp, remotePort, bytes_transferred);
 
 			//try {
@@ -80,7 +77,7 @@ void GatewayNet::recvUdpMsg() {
 			//}
 		}
 		else {
-			LOG_INFO("$receive udp data len is 0");
+			LOG_INFO("receive udp data len is 0");
 		}
 
 		recvUdpMsg();

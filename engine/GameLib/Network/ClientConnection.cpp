@@ -101,6 +101,7 @@ bool ClientConnection::send(const char* data, int len) {
 	if (m_sendBuff.size() >= SEND_BUFFER_WARNING_SIZE) {
 		LOG_WARN("send buffer too large, size£º%d", m_sendBuff.size());
 	}
+	std::unique_lock<std::mutex> lock(m_sendLock);
 	std::copy(data, data + len, std::back_inserter(m_sendBuff));
 	_send();
 	return true;
@@ -109,16 +110,16 @@ bool ClientConnection::send(const char* data, int len) {
 void ClientConnection::_send() {
 	if (!m_isConnected) return;
 
-	/*if (m_sendBuff.size() == 0) return;
+	if (m_sendBuff.size() == 0) return;
 	boost::asio::const_buffer buf(&m_sendBuff.front(), m_sendBuff.size());
 	size_t len = m_socket->write_some(buf);
 	if (len > 0) {
 		m_sendBuff.erase(m_sendBuff.begin(), m_sendBuff.begin() + len);
 		LOG_DEBUG("send data success, len=%d", len);
 		_send();
-	}*/
+	}
 
-	if (m_isSending) return;
+	/*if (m_isSending) return;
 	if (m_sendBuff.size() == 0) return;
 	m_isSending = true;
 	boost::asio::const_buffer buf(&m_sendBuff.front(), m_sendBuff.size());
@@ -136,5 +137,5 @@ void ClientConnection::_send() {
 			LOG_DEBUG("send data, len:%d", datLen);
 			_send();
 		}
-	});
+	});*/
 }

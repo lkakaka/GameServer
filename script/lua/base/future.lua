@@ -20,7 +20,7 @@ function clsFuture:__init__(rpc, rpcId, timeout)
 end
 
 function clsFuture:initTimer()
-    self.timerId = timer.addTimer(self.timeout, 1, function(timerId) self:onTimeout() end)
+    self.timerId = timer.add_timer(self.timeout, 1, function(timer_id) self:onTimeout() end)
 end
 
 function clsFuture:onTimeout()
@@ -48,7 +48,7 @@ function clsFuture:Destroy()
     self.rpc = nil
     self.callback = nil
     if self.timerId > 0 then
-        timer.removeTimer(self.timerId)
+        timer.remove_timer(self.timerId)
     end
     print("clsFuture:Destroy")
 end

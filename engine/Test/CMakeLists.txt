@@ -1,7 +1,7 @@
 
 set(CMAKE_DEBUG_POSTFIX "_d") 
 
-gnu_setting(false)
+gnu_setting(true)
 open_vs_cplus17()
 
 file(GLOB_RECURSE CURRENT_HEADERS *.h *.hpp)

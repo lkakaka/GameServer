@@ -10,7 +10,7 @@
 void initGateway(boost::asio::io_service* io) {
 	int port = GET_CONFG_INT("port");
 	int udpPort = GET_CONFG_INT("udp_port");
-	LOG_INFO("$gateway port:%d, updPort:%d", port, udpPort);
+	LOG_INFO("gateway port:%d, updPort:%d", port, udpPort);
 	if (port <= 0) {
 		THROW_EXCEPTION("not config port!!!");
 	}

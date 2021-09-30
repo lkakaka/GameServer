@@ -86,6 +86,18 @@ function clsServiceBase:sendMsgToClient(connId, msgId, msg)
     Service.sendMsgToClient(connId, msgId, data, string.len(data))
 end
 
+function clsServiceBase:broadcastMsgToClient(connIds, msgId, msg)
+    if type(msgId) ~= "table" then
+        logger.logError("broadcastMsgToClient error, connIds is not table, msgId:%d", msgId)
+        return
+    end
+    logger.logInfo("broadcastMsgToClient to %d, msgId:%d", StrUtil.tableToStr(connIds), msgId)
+    -- local msgName = MSG_ID_TO_NAME[msgId]
+    local data = encodeMsg(msgId, msg)
+    -- print(dstAddr, msgId, data, string.len(data))
+    Service.broadcastMsgToClient(connIds, msgId, data, string.len(data))
+end
+
 function clsServiceBase:sendMsgToClientKCP(connId, msgId, msg)
     logger.logInfo("sendMsgToClientKCP to %d, msgId:%d", connId, msgId)
     -- local msgName = MSG_ID_TO_NAME[msgId]

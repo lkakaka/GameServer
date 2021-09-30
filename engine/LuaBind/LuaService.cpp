@@ -10,6 +10,7 @@ void LuaService::bindLuaService(std::shared_ptr<sol::state> lua) {
 	sol::table service = lua->create_named_table("Service");
 	service["sendMsgToService"] = &LuaService::sendMsgToService;
 	service["sendMsgToClient"] = &LuaService::sendMsgToClient;
+	service["broadcastMsgToClient"] = &LuaService::broadcastMsgToClient;
 	service["sendMsgToClientKCP"] = &LuaService::sendMsgToClientKCP;
 }
 
@@ -33,6 +34,7 @@ bool LuaService::sendMsgToService(sol::table dstAddr, int msgId, const char* msg
 	buffer.writeInt(msgId);
 	if (serviceType == SERVICE_TYPE_GATEWAY) {
 		// 补齐数据格式, 发往gateway的消息都需要一个connId
+		buffer.writeInt(1);
 		buffer.writeInt(-1);
 		buffer.writeByte(SEND_TYPE_TCP);
 	}
@@ -46,7 +48,22 @@ bool LuaService::sendMsgToService(sol::table dstAddr, int msgId, const char* msg
 bool LuaService::sendMsgToClient(int connId, int msgId, const char* msg, int msgLen) {
 	MyBuffer buffer;
 	buffer.writeInt(msgId);
+	buffer.writeInt(1);
 	buffer.writeInt(connId);
+	buffer.writeByte(SEND_TYPE_TCP);
+	buffer.writeString(msg, msgLen);
+	ServiceAddr addr(ServiceInfo::getSingleton()->getServiceGroup(), ServiceType::SERVICE_TYPE_GATEWAY, 0);
+	CommEntityMgr::getSingleton()->getCommEntity()->sendToService(&addr, (char*)buffer.data(), buffer.size());
+	return true;
+}
+
+bool LuaService::broadcastMsgToClient(std::set<int> connIds, int msgId, const char* msg, int msgLen) {
+	MyBuffer buffer;
+	buffer.writeInt(msgId);
+	buffer.writeInt(connIds.size());
+	for (int connId : connIds) {
+		buffer.writeInt(connId);
+	}
 	buffer.writeByte(SEND_TYPE_TCP);
 	buffer.writeString(msg, msgLen);
 	ServiceAddr addr(ServiceInfo::getSingleton()->getServiceGroup(), ServiceType::SERVICE_TYPE_GATEWAY, 0);
@@ -57,6 +74,7 @@ bool LuaService::sendMsgToClient(int connId, int msgId, const char* msg, int msg
 bool LuaService::sendMsgToClientKCP(int connId, int msgId, const char* msg, int msgLen) {
 	MyBuffer buffer;
 	buffer.writeInt(msgId);
+	buffer.writeInt(1);
 	buffer.writeInt(connId);
 	buffer.writeByte(SEND_TYPE_KCP);
 	buffer.writeString(msg, msgLen);

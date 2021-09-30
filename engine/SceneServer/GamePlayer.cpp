@@ -19,13 +19,9 @@ void GamePlayer::sendToClient(int msgId, google::protobuf::Message* msg) {
 }
 
 void GamePlayer::sendToClient(int msgId, const char* msg, int msgLen) {
-	MyBuffer buffer;
-	buffer.writeInt(msgId);
-	buffer.writeInt(m_connId);
-	buffer.writeByte(SEND_TYPE_TCP);
-	buffer.writeString(msg, msgLen);
-	ServiceAddr addr(ServiceInfo::getSingleton()->getServiceGroup(), ServiceType::SERVICE_TYPE_GATEWAY, 0);
-	CommEntityMgr::getSingleton()->getCommEntity()->sendToService(&addr, (char*)buffer.data(), buffer.size());
+	std::set<int> connIds;
+	connIds.emplace(m_connId);
+	broadcastMsgToClient(connIds, msgId, msg, msgLen);
 }
 
 bool GamePlayer::onRecvClientMsg(int msgId, char* data, int dataLen) {

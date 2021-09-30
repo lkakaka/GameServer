@@ -135,12 +135,12 @@ int main(int argc, char** argv)
 
 	startCmd();
 
-	LOG_INFO("$MyServer Start!!!");
+	LOG_INFO("MyServer Start!!!");
 
 	boost::asio::io_service::work work(io);
 	io.run();
 
-	LOG_INFO("$MyServer exit!!!");
+	LOG_INFO("MyServer exit!!!");
 
 	return 0;
 }

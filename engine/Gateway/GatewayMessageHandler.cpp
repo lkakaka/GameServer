@@ -77,10 +77,24 @@ void GatewayMessageHandler::onRecvMessage(ServiceAddr* sender, char* data, int d
 		return;
 	}
 	int msgId = buffer.readInt();
-	int connId = buffer.readInt();
+	int connCount = buffer.readInt();
+	if (connCount < 0 || dataLen < 9 + connCount * 4) {
+		LOG_ERROR("recv %s msg format error, data len:%d, connCount:%d", sender->getName(), dataLen, connCount);
+		return;
+	}
+
+	int iDataOffset = 9;
+	std::vector<int> connIds;
+	for (int i = 0; i < connCount; i++) {
+		connIds.emplace_back(buffer.readInt());
+		iDataOffset += 4;
+	}
+	//int connId = buffer.readInt();
 	send_type sendType = buffer.readByte();
 	
-	LOG_INFO("recv msg, sender:%s, msgId:%d, connId:%d", sender->getName(), msgId, connId);
+	LOG_INFO("recv msg, sender:%s, msgId:%d, connCount:%d", sender->getName(), msgId, connCount);
 	// 网关处理的消息
-	handMsg(msgId, connId, sendType, &data[9], dataLen - 9);
+	for (int connId : connIds) {
+		handMsg(msgId, connId, sendType, &data[iDataOffset], dataLen - iDataOffset);
+	}
 }

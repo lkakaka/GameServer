@@ -5,9 +5,11 @@
 #include "GameNpc.h"
 #include "AOIMgr.h"
 #include <thread>
+#include <mutex>
 #include "DetourMgr.h"
 #include "Vector.h"
 #include "IScriptRegister.h"
+#include "SceneTask.h"
 
 enum SceneScriptEvent {
 	AFTER_ACTOR_ENTER = 1,
@@ -27,6 +29,9 @@ private:
 
 	std::shared_ptr<SceneDetourMgr> m_detour;
 
+	SceneTask m_logicTaskMgr;
+	SceneTask m_syncTaskMgr;
+
 	void onPlayerEnter(GamePlayer* gamePlayer, std::set<int>& neighbours);
 	void onNpcEnter(GameNpc* gameNpc, std::set<int>& neighbours);
 
@@ -34,6 +39,7 @@ private:
 	void onLeaveSight(GameActor* actor, std::set<int>& leaveIds);
 
 	void _syncThreadFunc();
+
 public:
 	AOIMgr m_AOIMgr;
 
@@ -59,6 +65,9 @@ public:
 
 	bool loadNavMesh(const char* meshFileName);
 	void findPath(float *sPos, float* ePos, std::vector<float>* path);
+
+	void addLogicTask(std::function<void()> func);
+	void addSyncTask(std::function<void()> func);
 };
 
 

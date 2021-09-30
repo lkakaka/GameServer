@@ -4,6 +4,11 @@
 #include "Logger.h"
 #include "GameScene.h"
 #include "proto.h"
+#include "MyBuffer.h"
+#include "../Common/ServerMacros.h"
+#include "ServiceType.h"
+#include "ServiceInfo.h"
+#include "Network/ServiceCommEntityMgr.h"
 
 
 GameActor::GameActor(ActorType actorType, int actorId, void* gameScene, GridChgFunc gridChgFunc) :
@@ -62,12 +67,7 @@ void GameActor::setPos(float x, float y, bool isTemp) {
 		pos_msg.set_actor_id(m_actorId);
 		pos_msg.set_pos_x(getX());
 		pos_msg.set_pos_y(getY());
-		for (int actor_id : m_sightActors) {
-			GameActor* gameActor = gameScene->getActor(actor_id);
-			if (gameActor == NULL || !gameActor->isPlayer()) continue;
-			((GamePlayer*)gameActor)->sendToClient(MSG_ID_SYNC_POS, &pos_msg);
-		}
-
+		broadcastMsgToSight(MSG_ID_SYNC_POS, &pos_msg);
 		((GameScene*)m_gameScene)->onActorPosChg(m_actorId, m_pos);
 	}
 
@@ -75,17 +75,25 @@ void GameActor::setPos(float x, float y, bool isTemp) {
 	LOG_INFO("pos:%0.3f, %0.3f, gird_x:%d, gird_y:%d", x, y, m_grid.x, m_grid.y);
 }
 
-void GameActor::setTgtPosList(std::vector<Position> tgtPosList) {
+void GameActor::setTgtPosList(std::vector<Position>& tgtPosList) {
 	int64_t ts = TimeUtil::nowMillSec();
-	if (!m_tgtPosList.empty()) {
+	/*if (!m_tgtPosList.empty()) {
 		updatePos(ts);
-	}
-	m_tgtPosList = tgtPosList;
+	}*/
+	std::unique_lock<std::mutex> lock(m_tgtPosLock);
+	m_srcTgtPosList = tgtPosList;
 	m_lastMoveTime = ts;
 }
 
 void GameActor::updatePos(int64_t ts) {
 	if (m_moveSpeed <= 0) return;
+	{
+		std::unique_lock<std::mutex> lock(m_tgtPosLock);
+		if (!m_srcTgtPosList.empty()) {
+			m_tgtPosList = m_srcTgtPosList;
+			m_srcTgtPosList.clear();
+		}
+	}
 	if (m_tgtPosList.empty()) return;
 	Position tgt_pos = m_tgtPosList[0];
 	Vector2<float> path = tgt_pos - m_pos;
@@ -110,4 +118,51 @@ void GameActor::updatePos(int64_t ts) {
 			setPos(tgt_pos.x, tgt_pos.y);
 		}
 	}
+}
+
+std::set<int> GameActor::getSightActorConndIds() {
+	std::set<int> connIds;
+	GameScene* gameScene = (GameScene*)m_gameScene;
+	for (int actor_id : m_sightActors) {
+		GameActor* gameActor = gameScene->getActor(actor_id);
+		if (gameActor == NULL || !gameActor->isPlayer()) continue;
+		GamePlayer* gamePlayer = (GamePlayer*)gameActor;
+		connIds.emplace(gamePlayer->getConnId());
+	}
+	return connIds;
+}
+
+void GameActor::broadcastMsgToClient(std::set<int>& connIds, int msgId, google::protobuf::Message* msg) {
+	std::string msgData;
+	msg->SerializeToString(&msgData);
+	broadcastMsgToClient(connIds, msgId, msgData.c_str(), msgData.length());
+}
+
+void GameActor::broadcastMsgToClient(std::set<int>& connIds, int msgId, const char* msg, int msgLen) {
+	MyBuffer buffer;
+	buffer.writeInt(msgId);
+	buffer.writeInt(connIds.size()); // 连接数量
+	for (int connId : connIds) {
+		buffer.writeInt(connId);
+	}
+	buffer.writeByte(SEND_TYPE_TCP);
+	buffer.writeString(msg, msgLen);
+	ServiceAddr addr(ServiceInfo::getSingleton()->getServiceGroup(), ServiceType::SERVICE_TYPE_GATEWAY, 0);
+	CommEntityMgr::getSingleton()->getCommEntity()->sendToService(&addr, (char*)buffer.data(), buffer.size());
+}
+
+void GameActor::broadcastMsgToSight(int msgId, const char* msg, int msgLen) {
+	if (m_sightActors.size() == 0) return;
+	std::set<int> connIds = getSightActorConndIds();
+	if (connIds.size() == 0) return;
+	broadcastMsgToClient(connIds, msgId, msg, msgLen);
+}
+
+void GameActor::broadcastMsgToSight(int msgId, google::protobuf::Message* msg) {
+	if (m_sightActors.size() == 0) return;
+	std::set<int> connIds = getSightActorConndIds();
+	if (connIds.size() == 0) return;
+	std::string msgData;
+	msg->SerializeToString(&msgData);
+	broadcastMsgToClient(connIds, msgId, msgData.c_str(), msgData.length());
 }

@@ -70,7 +70,8 @@ sol::object LuaScene::createScene(int sceneId, sol::table script, sol::this_stat
 	GameScene* gameScene = SceneMgr::getSceneMgr()->createScene(sceneId);
 	std::vector<int> regInfo = LuaRegistryObj::addRegistryObj(script);
 	gameScene->bindLuaScriptObject(regInfo[0], regInfo[1], callSceneScripFunc);
-	return sol::make_object(lua, *gameScene);
+	// ∞Û∂®÷∏’Î
+	return sol::make_object(lua, gameScene);
 }
 
 static void destroyScene(int sceneUid, sol::this_state s) {
@@ -103,17 +104,12 @@ static sol::table findPath(GameScene* gameScene, sol::table startPos, sol::table
 	return pathTbl;
 }
 
-void LuaScene::bindLuaScene(std::shared_ptr<sol::state> lua) {
-	sol::table sceneMgr = lua->create_named_table("SceneMgr");
-	sceneMgr["createScene"] = &LuaScene::createScene;
-	sceneMgr["destroyScene"] = &destroyScene;
-
+static void bindScene(std::shared_ptr<sol::state> lua) {
 	//sol::usertype<GameScene> gameScene_type = lua->new_usertype<GameScene>("GameScene",
 	//	// 3 constructors
 	//	sol::constructors<GameScene(int, int)>());
-	sol::usertype<GameScene> gameScene_type = lua->new_usertype<GameScene>("GameScene");
-
 	// typical member function that returns a variable
+	sol::usertype<GameScene> gameScene_type = lua->new_usertype<GameScene>("GameScene");
 	gameScene_type["loadNavMesh"] = &GameScene::loadNavMesh;
 	// typical member function
 	gameScene_type["findPath"] = &findPath;
@@ -123,21 +119,39 @@ void LuaScene::bindLuaScene(std::shared_ptr<sol::state> lua) {
 	gameScene_type["createNpc"] = &GameScene::createNpc;
 	gameScene_type["removeActor"] = &GameScene::removeActor;
 	gameScene_type["onActorEnter"] = &GameScene::onActorEnter;
+}
 
+static void bindPlayer(std::shared_ptr<sol::state> lua) {
 	sol::usertype<GamePlayer> gamePlayer_type = lua->new_usertype<GamePlayer>("GamePlayer");
 	gamePlayer_type["setScriptObj"] = &GamePlayer::setScriptObj;
 	gamePlayer_type["getConnId"] = &GamePlayer::getConnId;
 	gamePlayer_type["getActorId"] = &GameActor::getActorId;
 	//void(GamePlayer::*sendToClient)(int, const char*, int) = &GamePlayer::sendToClient;
 	gamePlayer_type["sendToClient"] = sol::resolve<void(int, const char*, int)>(&GamePlayer::sendToClient);   //sendToClient;
+	gamePlayer_type["sendToSight"] = sol::resolve<void(int, const char*, int)>(&GameActor::broadcastMsgToSight);
 	gamePlayer_type["x"] = sol::property(&GamePlayer::getX);
 	gamePlayer_type["y"] = sol::property(&GamePlayer::getY);
+	gamePlayer_type["move_speed"] = sol::property(&GamePlayer::getMoveSpeed, &GamePlayer::setMoveSpeed);
+}
 
+static void bindNpc(std::shared_ptr<sol::state> lua) {
 	sol::usertype<GameNpc> gameNpc_type = lua->new_usertype<GameNpc>("GameNpc");
 	gameNpc_type["getActorId"] = &GameActor::getActorId;
-	
-	// gets or set the value using member variable syntax
-	//gameScene_type["hp"] = sol::property(&player::get_hp, &player::set_hp);
+	gameNpc_type["x"] = sol::property(&GameNpc::getX);
+	gameNpc_type["y"] = sol::property(&GameNpc::getY);
+	gameNpc_type["move_speed"] = sol::property(&GameNpc::getMoveSpeed, &GameNpc::setMoveSpeed);
+	gameNpc_type["moveTo"] = &GameNpc::moveTo;
+	gameNpc_type["sendToSight"] = sol::resolve<void(int, const char*, int)>(&GameActor::broadcastMsgToSight);
+}
+
+void LuaScene::bindLuaScene(std::shared_ptr<sol::state> lua) {
+	sol::table sceneMgr = lua->create_named_table("SceneMgr");
+	sceneMgr["createScene"] = &LuaScene::createScene;
+	sceneMgr["destroyScene"] = &destroyScene;
+
+	bindScene(lua);
+	bindPlayer(lua);
+	bindNpc(lua);
 }
 
 

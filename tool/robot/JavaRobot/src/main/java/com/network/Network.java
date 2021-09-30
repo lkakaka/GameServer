@@ -288,7 +288,7 @@ public class Network {
 
     private void sendUdpHeart() {
         sendUdpData(UDP_MSG_TYPE_KEEP_ALIVE, new byte[0], 0);
-        System.out.println("send udp heart");
+//        System.out.println("send udp heart");
     }
 }
 

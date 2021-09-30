@@ -3,6 +3,8 @@
 #include <vector>
 #include <set>
 #include "Vector.h"
+#include <mutex>
+#include "proto.h"
 //#include "GameScene.h"
 
 enum ActorType
@@ -31,9 +33,12 @@ protected:
 	Position m_pos; // 当前位置
 	Grid m_grid; // 所处格子
 	std::vector<Position> m_tgtPosList;  // 移动的目标位置
+	std::vector<Position> m_srcTgtPosList;  // 移动的目标位置
+	std::mutex m_tgtPosLock;
 	int64_t m_lastMoveTime;	// 上次计算移动的时间戳(更新位置是使用)
 
 	GridChgFunc m_gridChgFunc;
+
 public:
 
 	GameActor(ActorType actorType, int actorId, void* gameScene, GridChgFunc posChgFunc);
@@ -57,16 +62,18 @@ public:
 	void addSightActor(int actorId);
 	void removeSightActors(std::set<int>& actors);
 	void removeSightActor(int actorId);
+	std::set<int> getSightActorConndIds();
 
-	void setTgtPosList(std::vector<Position> tgtPosList);
-
-	inline bool isMoving() {
-		return !m_tgtPosList.empty();
-	}
-
-	void setPos(float x, float y, bool isTemp=false);
+	void setTgtPosList(std::vector<Position>& tgtPosList);
 	void updatePos(int64_t ts);
 
+	void setPos(float x, float y, bool isTemp=false);
+
 	virtual void test() {};
+
+	void broadcastMsgToClient(std::set<int>& connIds, int msgId, google::protobuf::Message* msg);
+	void broadcastMsgToClient(std::set<int>& connIds, int msgId, const char* msg, int msgLen);
+	void broadcastMsgToSight(int msgId, google::protobuf::Message* msg);
+	void broadcastMsgToSight(int msgId, const char* msg, int msgLen);
 };
 

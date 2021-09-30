@@ -4,8 +4,8 @@
 #include <iterator>
 
 // 视野范围（以格子为单位）
-#define X_VIEW_RANGE 5
-#define Y_VIEW_RANGE 5
+#define X_VIEW_RANGE 50
+#define Y_VIEW_RANGE 50
 
 AOINode::AOINode(int actorId, int x, int y) : actorId(actorId), x(x), y(y), 
 x_pre(nullptr), x_next(nullptr), y_pre(nullptr), y_next(nullptr)
@@ -89,19 +89,16 @@ void AOIMgr::removeNode(int actorId, std::set<int>& neighbours)
 
 	std::shared_ptr<AOINode> x_cur_node = iter->second;
 	getNeighbours(x_cur_node, neighbours);
-
 	// 从X链上移除
 	x_cur_node->x_pre->x_next = x_cur_node->x_next;
 	x_cur_node->x_next->x_pre = x_cur_node->x_pre;
 
-	printf("remove x link\n");
 	std::shared_ptr<AOINode> y_cur_node = iter->second;
 	// 从Y链上移除
 	y_cur_node->y_pre->y_next = y_cur_node->y_next;
 	y_cur_node->y_next->y_pre = y_cur_node->y_pre;
 
 	m_nodes.erase(actorId);
-	printf("remove y link\n");
 	LOG_INFO("remove aoi node, actorId:%d", actorId);
 }
 

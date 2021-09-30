@@ -85,13 +85,6 @@ function clsGameScene:create_player(conn_id, role_id, tbls)
     return game_player
 end
 
-function clsGameScene:create_npc(npc_id, x, y)
-    local npc_obj = self._engineObj:createNpc(npc_id, x, y, 0)
-    local game_npc = clsGameNpc:New(self, npc_obj)
-    logger.logInfo("create npc, npc_id:%d, scene_id:%d", npc_id, self.scene_id)
-    return game_npc
-end
-
 function clsGameScene:add_player(game_player)
     if self:get_player_by_role_id(game_player.role_id) ~= nil then
         logger.logWarn("player exist, role_id:{0}", game_player.role_id)
@@ -135,6 +128,32 @@ end
 
 function clsGameScene:get_actor(actor_id)
     return self._actors[actor_id]
+end
+
+function clsGameScene:create_npc(npc_id, x, y)
+    local npc_obj = self._engineObj:createNpc(npc_id, x, y, 0)
+    local game_npc = clsGameNpc:New(npc_id, self, npc_obj)
+    self._actors[game_npc.actor_id] = game_npc
+    self._engineObj:onActorEnter(game_npc.actor_id)
+    game_npc:on_leave_scene()
+    logger.logInfo("create npc, npc_id:%d, scene_id:%d", npc_id, self.scene_id)
+    return game_npc
+end
+
+function clsGameScene:remove_npc(actor_id)
+    local npc = self:get_actor(actor_id)
+    if npc == nil then
+        logger.logWarn("remove npc error, not found npc:%d", actor_id)
+        return
+    end
+
+    if not npc:is_npc() then
+        logger.logError("remove not a npc, actor_id:%d", actor_id)
+        return
+    end
+
+    self._engineObj:removeActor(actor_id)
+    self._actors[actor_id] = nil
 end
 
 function clsGameScene:on_recv_client_msg(conn_id, msg_id, msg)

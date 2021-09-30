@@ -18,7 +18,7 @@ function clsDBHandler:__init__(dbName, redisIp, redisPort)
     self.db_inst = LuaDB.new(dbName)
     self.redis_inst = LuaRedis.new(redisIp, redisPort)
     self:initTable(TblDefs)
-    self._flush_timer_id = timer.addTimer(REDIS_FLUSH_TIME, -1, function() self:flushRedis() end)
+    self._flush_timer_id = timer.add_timer(REDIS_FLUSH_TIME, -1, function() self:flushRedis() end)
     self:test_db_and_redis()
     self:test()
 end

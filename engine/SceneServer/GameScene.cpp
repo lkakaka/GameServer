@@ -4,6 +4,7 @@
 //#include "../Common/PyCommon.h"
 #include "SceneMgr.h"
 #include "TimeUtil.h"
+#include "Timer.h"
 
 
 GameScene::GameScene(int sceneId, int sceneUid) : m_sceneId(sceneId), m_sceneUid(sceneUid), m_maxActorId(0),
@@ -30,6 +31,9 @@ void GameScene::onCreate()
 	/*m_AOIMgr.removeNode(2);
 	m_AOIMgr.dump();*/
 	m_syncThread.reset(new std::thread(std::bind(&GameScene::_syncThreadFunc, this)));
+	TimerMgr::getSingleton()->addTimer(33, 33, -1, [this](int timerId) {
+		m_logicTaskMgr.runTask();
+	});
 }
 
 void GameScene::_syncThreadFunc() {
@@ -37,9 +41,10 @@ void GameScene::_syncThreadFunc() {
 		int64_t ts = TimeUtil::nowMillSec();
 		for (auto iter = m_actors.begin(); iter != m_actors.end(); iter++) {
 			GameActor* gameActor = iter->second;
-			if (gameActor == NULL || !gameActor->isMoving()) continue;
+			if (gameActor == NULL) continue;
 			gameActor->updatePos(ts);
 		}
+		m_syncTaskMgr.runTask();
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
 }
@@ -110,8 +115,11 @@ void GameScene::onEnterSight(GameActor* actor, std::set<int>& enterIds) {
 	actor->addSightActors(enterIds);
 	for (int actorId : enterIds) {
 		GameActor* neiActor = getActor(actorId);
-		if (neiActor == NULL) continue;
-		neiActor->addSightActor(actorId);
+		if (neiActor == NULL) {
+			LOG_DEBUG("enter sight actor not found, actorId:%d", actorId);
+			continue;
+		}
+		neiActor->addSightActor(actor->getActorId());
 	}
 }
 
@@ -119,8 +127,11 @@ void GameScene::onLeaveSight(GameActor* actor, std::set<int>& leaveIds) {
 	actor->removeSightActors(leaveIds);
 	for (int actorId : leaveIds) {
 		GameActor* neiActor = getActor(actorId);
-		if (neiActor == NULL) continue;
-		neiActor->removeSightActor(actorId);
+		if (neiActor == NULL) {
+			LOG_DEBUG("leave sight actor not found, actorId:%d", actorId);
+			continue;
+		}
+		neiActor->removeSightActor(actor->getActorId());
 	}
 }
 
@@ -147,10 +158,12 @@ void GameScene::onActorMove(GameActor* gameActor) {
 	onEnterSight(gameActor, enterIds);
 	onLeaveSight(gameActor, leaveIds);
 
-	CallScripFunc func = getCallScriptFunc();
-	if (func != NULL) {
-		func(this, SceneScriptEvent::AFTER_ACTOR_MOVE, gameActor->getActorId(), enterIds, leaveIds);
-	}
+	addLogicTask([this, gameActor, enterIds, leaveIds]() {
+		CallScripFunc func = getCallScriptFunc();
+		if (func != NULL) {
+			func(this, SceneScriptEvent::AFTER_ACTOR_MOVE, gameActor->getActorId(), enterIds, leaveIds);
+		}
+	});
 }
 
 GameActor* GameScene::getActor(int actorId) {
@@ -223,4 +236,12 @@ bool GameScene::loadNavMesh(const char* meshFileName) {
 
 void GameScene::findPath(float* sPos, float* ePos, std::vector<float>* path) {
 	m_detour->findPath(sPos, ePos, path);
+}
+
+void GameScene::addLogicTask(std::function<void()> task) {
+	m_logicTaskMgr.addTask(task);
+}
+
+void GameScene::addSyncTask(std::function<void()> task) {
+	m_syncTaskMgr.addTask(task);
 }

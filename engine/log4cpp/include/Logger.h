@@ -7,15 +7,15 @@
 #include <vector>
 
 #ifndef LOG_NOT_ON_CONSOLE
-#define LOG_DEBUG(fmt, ...) do { Logger::logDebugWithConsole(fmt, __VA_ARGS__); } while(0)
-#define LOG_INFO(fmt, ...)  do { Logger::logInfoWithConsole(fmt, __VA_ARGS__); } while(0)
-#define LOG_WARN(fmt, ...)  do { Logger::logWarningWithConsole(fmt, __VA_ARGS__); } while(0)
-#define LOG_ERROR(fmt, ...) do { Logger::logErrorWithConsole(fmt, __VA_ARGS__); } while(0)
+#define LOG_DEBUG(fmt, ...) do { Logger::logDebugWithConsole(fmt, ##__VA_ARGS__); } while(0)
+#define LOG_INFO(fmt, ...)  do { Logger::logInfoWithConsole(fmt, ##__VA_ARGS__); } while(0)
+#define LOG_WARN(fmt, ...)  do { Logger::logWarningWithConsole(fmt, ##__VA_ARGS__); } while(0)
+#define LOG_ERROR(fmt, ...) do { Logger::logErrorWithConsole(fmt, ##__VA_ARGS__); } while(0)
 #else
-#define LOG_DEBUG(fmt, ...) do { Logger::logDebug(fmt, __VA_ARGS__); } while(0)
-#define LOG_INFO(fmt, ...)  do { Logger::logInfo(fmt, __VA_ARGS__); } while(0)
-#define LOG_WARN(fmt, ...)  do { Logger::logWarning(fmt, __VA_ARGS__); } while(0)
-#define LOG_ERROR(fmt, ...) do { Logger::logError(fmt, __VA_ARGS__); } while(0)
+#define LOG_DEBUG(fmt, ...) do { Logger::logDebug(fmt, ##__VA_ARGS__); } while(0)
+#define LOG_INFO(fmt, ...)  do { Logger::logInfo(fmt, ##__VA_ARGS__); } while(0)
+#define LOG_WARN(fmt, ...)  do { Logger::logWarning(fmt, ##__VA_ARGS__); } while(0)
+#define LOG_ERROR(fmt, ...) do { Logger::logError(fmt, ##__VA_ARGS__); } while(0)
 #endif
 
 

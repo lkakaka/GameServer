@@ -2,6 +2,7 @@
 
 #include "boost/asio.hpp"
 #include "Network.h"
+#include <mutex>
 
 using boost::asio::ip::tcp;
 
@@ -23,6 +24,8 @@ private:
 	
 	std::shared_ptr<std::thread> m_connectThread;
 	long m_connectTimer;
+
+	std::mutex m_sendLock;
 
 private:
 	void _read();

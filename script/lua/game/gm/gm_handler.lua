@@ -118,7 +118,6 @@ function clsGMHandler:_gm_create_npc(param)
     local arg_list = StrUtil.split(param.args, ",")
     local npc_id = tonumber(arg_list[1])
     local x, y = param.player.engineObj.x, param.player.engineObj.y
-    print("---------", x, y)
     if arg_list[2] ~= nil and arg_list[3] ~= nil then
         x = tonumber(arg_list[2])
         y = tonumber(arg_list[3])
@@ -128,7 +127,23 @@ function clsGMHandler:_gm_create_npc(param)
         return ErrorCode.ILLEGAL_PARAM, "pos invalid"
     end
 
-    param.player.game_scene:create_npc(npc_id, x, y)
+    for i=1,1000 do
+        local npc = param.player.game_scene:create_npc(npc_id, x, y)
+        npc:rand_move()
+    end
+    -- local npc_info = string.format( "actor_id:%d, npc_id:%d", npc.actor_id, npc_id)
+    local npc_info = "ok"
+    return ErrorCode.OK, npc_info
+end
+
+function clsGMHandler:_gm_remove_npc(param)
+    if param.args == nil or param.args == "" then
+        return ErrorCode.ILLEGAL_PARAM, "error arg"
+    end
+
+    local arg_list = StrUtil.split(param.args, ",")
+    local npc_uid = tonumber(arg_list[1])
+    param.player.game_scene:remove_npc(npc_uid)
     return ErrorCode.OK, "ok"
 end
 
@@ -140,4 +155,5 @@ clsGMHandler._gm_cmd = {
     ["hotfix"] = clsGMHandler._gm_hotfix,
     ["goto_scene"] = clsGMHandler._gm_goto_scene,
     ["cnpc"] = clsGMHandler._gm_create_npc,
+    ["rnpc"] = clsGMHandler._gm_remove_npc,
 }

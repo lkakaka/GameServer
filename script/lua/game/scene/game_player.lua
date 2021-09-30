@@ -42,6 +42,12 @@ function clsGamePlayer:send_msg_to_client(msgId, msg)
     self.engineObj:sendToClient(msgId, data, string.len(data))
 end
 
+function clsGamePlayer:send_msg_to_sight(msgId, msg)
+    -- self.game_scene.service:sendMsgToClient(self.conn_id, msgId, msg)
+    local data = encodeMsg(msgId, msg)
+    self.engineObj:sendToSight(msgId, data, string.len(data))
+end
+
 function clsGamePlayer:send_msg_to_client_kcp(msgId, msg)
     self.game_scene.service:sendMsgToClientKCP(self.conn_id, msgId, msg)
 end
