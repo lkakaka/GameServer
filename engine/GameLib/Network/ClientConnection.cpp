@@ -22,24 +22,24 @@ bool ClientConnection::connect() {
 	if (m_isConnected) return true;
 	try {
 		tcp::endpoint target(boost::asio::ip::make_address(m_serverIp), m_serverPort);
-		m_socket->async_connect(target, std::bind(&ClientConnection::connectHandler, this, std::placeholders::_1));
+		//m_socket->async_connect(target, std::bind(&ClientConnection::connectHandler, this, std::placeholders::_1));
 
-		/*m_socket->connect(target);
-		m_isConnected = true;*/
+		m_socket->connect(target);
+		m_isConnected = true;
 	}
 	catch (std::exception& e) {
 		LOG_ERROR("connect failed, %s", e.what());
 		return false;
 	}
-	/*onConnect();
+	onConnect();
 	_read();
-	_send();*/
+	_send();
 	return true;
 }
 
 void ClientConnection::connectHandler(boost::system::error_code ec) {
 	if (ec) {
-		boost::asio::error::connection_refused;
+		//boost::asio::error::connection_refused;
 		LOG_ERROR("connect failed, %d, %s", ec.value(), ec.message());
 		connect();
 		return;
@@ -51,7 +51,7 @@ void ClientConnection::connectHandler(boost::system::error_code ec) {
 }
 
 void ClientConnection::tryConnect() {
-	if (connect()) return;
+	//if (connect()) return;
 	/*std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 	tryConnect();*/
 
@@ -60,13 +60,17 @@ void ClientConnection::tryConnect() {
 			TimerMgr::getSingleton()->removeTimer(timerId, true);
 		}
 	});*/
-
-	/*m_connectThread.reset(new std::thread([this] {
+	m_connectThread.reset(new std::thread([this] {
 		while (1) {
 			std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-			if (connect()) break;
+			if (connect()) {
+				break;
+			}
 		}
-	}));*/
+		// 必须先detach,析构joinable的线程会crash
+		m_connectThread.get()->detach();
+		m_connectThread.reset();
+	}));
 }
 
 void ClientConnection::_read() {
