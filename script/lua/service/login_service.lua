@@ -7,6 +7,7 @@ require("util.const")
 require("util.crypt")
 require("os")
 require("math")
+require("base.http_server")
 
 clsLoginService = clsServiceBase:Inherit("clsLoginService")
 
@@ -16,6 +17,7 @@ function clsLoginService:__init__()
     self._account_dict = {}
     self._conn_dict = {}
     self:initClientMsgHandler()
+    self.http_server = clsHttpServer:New(8080)
 end
 
 function clsLoginService:initClientMsgHandler()

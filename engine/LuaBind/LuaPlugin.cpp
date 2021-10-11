@@ -9,6 +9,7 @@
 #include "LuaDB.h"
 #include "LuaConfig.h"
 #include "LuaCrypt.h"
+#include "LuaHttpServer.h"
 
 //#ifndef WIN32
 INIT_SINGLETON_CLASS(LuaPlugin)
@@ -63,6 +64,7 @@ sol::table LuaPlugin::initLua(const char* funcName) {
 	LuaDB::bindLuaDB(m_lua);
 	LuaConfig::bindLuaConfig(m_lua);
 	LuaCrypt::bindLuaCrypt(m_lua);
+	LuaHttpServer::bindLuaHttpServer(m_lua);
 
 	m_lua->script("package.path = '../script/lua/?.lua;'..package.path");
 	m_lua->script("package.cpath = '../bin/?.so;'..package.cpath");
@@ -77,6 +79,11 @@ sol::table LuaPlugin::initLua(const char* funcName) {
 	sol::protected_function_result result = callLuaFunc("service_factory", funcName);
 	if (!result.valid()) THROW_EXCEPTION("create service error");
 	sol::table tbl = result.get<sol::table>(0);
+
+	TimerMgr::getSingleton()->addTimer(33, 33, -1, [this](int timerId) {
+		m_luaTaskMgr.runTask();
+	});
+
 	return tbl;
 }
 

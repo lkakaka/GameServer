@@ -28,8 +28,8 @@ void connection_manager::start(connection_ptr c)
 
 void connection_manager::stop(connection_ptr c)
 {
-  connections_.erase(c);
-  c->stop();
+    c->stop();
+    connections_.erase(c);
 }
 
 void connection_manager::stop_all()

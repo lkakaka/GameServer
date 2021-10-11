@@ -14,6 +14,7 @@
 #include "server.hpp"
 #include "CmdLine.h"
 #include "ServiceInfo.h"
+#include "ExitTraceback.h"
 
 #include "GatewayEntry.h"
 #include "ServiceCenter.h"
@@ -71,6 +72,8 @@ int main(int argc, char** argv)
 	}
 	
 	signal(SIGTERM, signalHandler);
+	signal(SIGSEGV, signalExit);
+	signal(SIGABRT, signalExit);
 
 	ServiceInfo* serviceInfo = new ServiceInfo(serverId, serviceType, serviceId);
 

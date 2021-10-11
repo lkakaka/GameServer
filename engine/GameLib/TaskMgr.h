@@ -3,7 +3,7 @@
 #include <mutex>
 #include <vector>
 
-class SceneTask
+class TaskMgr
 {
 private:
 	std::mutex m_taskLock;

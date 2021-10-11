@@ -9,7 +9,7 @@
 #include "DetourMgr.h"
 #include "Vector.h"
 #include "IScriptRegister.h"
-#include "SceneTask.h"
+#include "TaskMgr.h"
 
 enum SceneScriptEvent {
 	AFTER_ACTOR_ENTER = 1,
@@ -29,8 +29,8 @@ private:
 
 	std::shared_ptr<SceneDetourMgr> m_detour;
 
-	SceneTask m_logicTaskMgr;
-	SceneTask m_syncTaskMgr;
+	TaskMgr m_logicTaskMgr;
+	TaskMgr m_syncTaskMgr;
 
 	void onPlayerEnter(GamePlayer* gamePlayer, std::set<int>& neighbours);
 	void onNpcEnter(GameNpc* gameNpc, std::set<int>& neighbours);

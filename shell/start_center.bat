@@ -1,9 +1,11 @@
 @echo off
 
-call config.bat
+call start.bat center
+
+::call config.bat
 ::set ConfigFile="../../conf/center.cfg"
 
 ::cd ../bin/Debug
 
-%ServerCmd% %CenterConfig%
+::%ServerCmd% %CenterConfig%
 ::pause

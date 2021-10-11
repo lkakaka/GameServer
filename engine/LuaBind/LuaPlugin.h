@@ -13,12 +13,14 @@ extern "C" {
 #include "Logger.h"
 
 #include "sol/sol.hpp"
+#include "TaskMgr.h"
 
 class LuaPlugin : public Singleton<LuaPlugin> {
 private:
 	//lua_State* m_lua;
 
 	std::shared_ptr<sol::state> m_lua;
+	TaskMgr m_luaTaskMgr;
 
 public:
 	LuaPlugin();
@@ -26,6 +28,8 @@ public:
 	sol::table initLua(const char* funcName);
 	static LuaPlugin* getLuaPlugin();
 	inline std::shared_ptr<sol::state> getLua() { return m_lua; }
+
+	inline void addTask(std::function<void()> task) { m_luaTaskMgr.addTask(task); }
 
 	template <typename... Args>
 	sol::protected_function_result callLuaFunc(const char* modName, const char* funcName, Args&&... args) {

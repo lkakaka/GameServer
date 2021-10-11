@@ -53,6 +53,10 @@ function service_factory.create_scene_service()
 	return scene_service
 end
 
+function service_factory.test(a)
+	print(a)
+end
+
 -- timer.add_timer(300, -1, Mem.gc())
 
 -- for k, v in pairs(package.loaded) do
