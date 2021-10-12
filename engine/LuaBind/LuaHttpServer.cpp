@@ -2,6 +2,7 @@
 #include "Logger.h"
 #include "LuaRegistryObj.h"
 #include "LuaPlugin.h"
+#include "http_client/HttpClientMgr.h"
 
 
 std::map<int, server*> LuaHttpServer::m_servers;
@@ -73,6 +74,25 @@ reply_ptr onRecvHttpReq(void* server, int conn_id, const http::server::request& 
 	return NULL;
 }
 
+static void sendHttpReq(std::string server, std::string path, sol::function cb) {
+	HttpClientMgr::getSingleton()->sendHttpReq(server, path, [cb](HTTP_CLIENT_ERROR err, reply* reply) {
+		std::shared_ptr<sol::state> luaPtr = LuaPlugin::getSingleton()->getLua();
+		sol::table httpResp = sol::table::create_with(luaPtr->lua_state());
+		if (err == HTTP_CLIENT_ERROR::OK) {
+			httpResp["status"] = reply->status;
+			httpResp["content"] = reply->content.c_str();
+		}
+		sol::protected_function_result result = cb(err, httpResp);
+		if (!result.valid()) {
+			LOG_ERROR("lua result = %d", result.status());
+			sol::error err = result;
+			std::string what = err.what();
+			std::cout << what << std::endl;
+			LOG_ERROR("%s", err.what());
+		}
+	});
+}
+
 void LuaHttpServer::bindLuaHttpServer(std::shared_ptr<sol::state> lua) {
 	//sol::usertype<LuaHttpServer> luaHttp_type = lua->new_usertype<LuaHttpServer>("LuaHttpServer",
 	//	// 3 constructors
@@ -83,6 +103,9 @@ void LuaHttpServer::bindLuaHttpServer(std::shared_ptr<sol::state> lua) {
 	sol::table httpServer = lua->create_named_table("HttpServer");
 	httpServer["createHttpServer"] = &LuaHttpServer::createHttpServer;
 	httpServer["stopHttpServer"] = &LuaHttpServer::stopHttpServer;
+
+	sol::table httpClient = lua->create_named_table("HttpClient");
+	httpClient["sendHttpReq"] = &sendHttpReq;
 }
 
 void LuaHttpServer::createHttpServer(int port, sol::table script, sol::this_state s) {

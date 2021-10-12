@@ -8,6 +8,7 @@ require("util.crypt")
 require("os")
 require("math")
 require("base.http_server")
+require("util.str_util")
 
 clsLoginService = clsServiceBase:Inherit("clsLoginService")
 
@@ -18,6 +19,13 @@ function clsLoginService:__init__()
     self._conn_dict = {}
     self:initClientMsgHandler()
     self.http_server = clsHttpServer:New(8080)
+    HttpClient.sendHttpReq("localhost:8028", "/1?cmd=gm_list", function(err, resp)
+        -- print("content len:", string.len(resp.content))
+        logger.logInfo("http resp, %d, %s", err, StrUtil.tableToStr(resp))
+    end)
+    -- HttpClient.sendHttpReq("www.baidu.com:8080", "", function(err, resp)
+    --     print("http resp", err, StrUtil.tableToStr(resp))
+    -- end)
 end
 
 function clsLoginService:initClientMsgHandler()
@@ -33,6 +41,7 @@ function clsLoginService:loginReq(conn_id, msg_id, msg)
     --     self:sendMsgToClient(conn_id, MessageObj.MSG_ID_LOGIN_RSP, rsp_msg)
     --     return
     -- todo:验证账号
+
     self._conn_dict[conn_id] = msg.account
     logger.logInfo("recv login req conn_id=%d", conn_id)
     self:sendMsgToClient(conn_id, MSG_ID_LOGIN_RSP, rsp_msg)

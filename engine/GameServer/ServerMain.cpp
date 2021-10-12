@@ -19,6 +19,7 @@
 #include "GatewayEntry.h"
 #include "ServiceCenter.h"
 #include "Network/ServiceCommEntityMgr.h"
+#include "http_client/HttpClientMgr.h"
 
 using namespace std;
 
@@ -92,6 +93,7 @@ int main(int argc, char** argv)
 	}
 
 	TimerMgr::initTimerMgr(&io);
+	HttpClientMgr::init(&io);
 	
 	std::string funcName = GET_CONFG_STR("script_init_func");
 	GameService::g_gameService = new GameService(serviceName, serviceType);
