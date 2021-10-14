@@ -64,7 +64,7 @@ void HttpClient::handle_resolve(const boost::system::error_code& err,
 	else
 	{
 		LOG_ERROR("http client resolve error, %s", err.message().c_str());
-		call_cb(HTTP_CLIENT_ERROR::CANNOT_CONNECT);
+		call_cb(err.message().c_str());
 	}
 }
 
@@ -80,7 +80,7 @@ void HttpClient::handle_connect(const boost::system::error_code& err)
 	else
 	{
 		LOG_ERROR("http client connect error, %s", err.message().c_str());
-		call_cb(HTTP_CLIENT_ERROR::CANNOT_CONNECT);
+		call_cb(err.message().c_str());
 	}
 }
 
@@ -98,7 +98,7 @@ void HttpClient::handle_write_request(const boost::system::error_code& err)
 	else
 	{	
 		LOG_ERROR("http client write error, %s", err.message().c_str());
-		call_cb(HTTP_CLIENT_ERROR::SEND_ERROR);
+		call_cb(err.message().c_str());
 	}
 }
 
@@ -117,7 +117,7 @@ void HttpClient::handle_read_status_line(const boost::system::error_code& err)
 		if (!response_stream || http_version.substr(0, 5) != "HTTP/")
 		{
 			LOG_ERROR("http client Invalid response");
-			call_cb(HTTP_CLIENT_ERROR::RESP_ERROR);
+			call_cb(err.message().c_str());
 			return;
 		}
 		reply_.status = (http::server::reply::status_type)status_code;
@@ -125,7 +125,7 @@ void HttpClient::handle_read_status_line(const boost::system::error_code& err)
 		{
 			/*std::cout << "Response returned with status code ";
 			std::cout << status_code << "\n";*/
-			call_cb(HTTP_CLIENT_ERROR::OK);
+			call_cb(err.message().c_str());
 			return;
 		}
 
@@ -137,7 +137,7 @@ void HttpClient::handle_read_status_line(const boost::system::error_code& err)
 	else
 	{
 		LOG_ERROR("http client read status error, %s", err.message().c_str());
-		call_cb(HTTP_CLIENT_ERROR::RESP_ERROR);
+		call_cb(err.message().c_str());
 	}
 }
 
@@ -179,7 +179,7 @@ void HttpClient::handle_read_headers(const boost::system::error_code& err)
 	else
 	{
 		LOG_ERROR("http client read headers error, %s", err.message().c_str());
-		call_cb(HTTP_CLIENT_ERROR::RESP_ERROR);
+		call_cb(err.message().c_str());
 	}
 }
 
@@ -206,18 +206,21 @@ void HttpClient::handle_read_content(const boost::system::error_code& err)
 	else if (err != boost::asio::error::eof)
 	{
 		LOG_ERROR("http client read content error, %s", err.message().c_str());
-		call_cb(HTTP_CLIENT_ERROR::RESP_ERROR);
+		call_cb(err.message().c_str());
 	}
 	else {
 		
 		//LOG_INFO("%s", reply_.content.c_str());
-		call_cb(HTTP_CLIENT_ERROR::OK);
+		call_cb(NULL);
 	}
 }
 
-void HttpClient::call_cb(HTTP_CLIENT_ERROR err) {
+void HttpClient::call_cb(const char* err) {
 	if (m_callback != NULL) {
-		m_callback(err, &reply_);
+		if (err != NULL) {
+			reply_.content = err;
+		}
+		m_callback(reply_.status, reply_.content);
 	}
 	HttpClientMgr::getSingleton()->removeClient(this);
 }

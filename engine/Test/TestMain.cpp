@@ -245,17 +245,9 @@ int main() {
 	printf("size=%d", sizeof(e.b));
 
 	testBindFunction();
-		
-	std::string s;
-	for (int i = 0; i < 80000; i++) {
-		s += "a";
-		if (i % 20 == 0) {
-			char s1[8]{ 0 };
-			sprintf(s1, "%d", i / 20);
-			s = s + s1 + "\n";
-		}
-	}
-	printf("%s\n", s.c_str());
+	
+	//curl_multi_demo();
+	run_asio_curl();
 
 	return 1;
 }

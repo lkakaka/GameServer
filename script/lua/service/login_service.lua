@@ -19,13 +19,13 @@ function clsLoginService:__init__()
     self._conn_dict = {}
     self:initClientMsgHandler()
     self.http_server = clsHttpServer:New(8080)
-    HttpClient.sendHttpReq("localhost:8028", "/1?cmd=gm_list", function(err, resp)
+    HttpClient.sendHttpReq("localhost:8028/1?cmd=gm_list", function(resp)
         -- print("content len:", string.len(resp.content))
-        logger.logInfo("http resp, %d, %s", err, StrUtil.tableToStr(resp))
+        logger.logInfo("http resp, %d, %s", resp.status, resp.content)
     end)
-    -- HttpClient.sendHttpReq("www.baidu.com:8080", "", function(err, resp)
-    --     print("http resp", err, StrUtil.tableToStr(resp))
-    -- end)
+    HttpClient.sendHttpReq("www.baidu.com", function(resp)
+        logger.logInfo("http resp, %d, %s", resp.status, resp.content)
+    end)
 end
 
 function clsLoginService:initClientMsgHandler()

@@ -20,14 +20,7 @@
 
 using boost::asio::ip::tcp;
 
-typedef enum {
-   OK = 0,
-   CANNOT_CONNECT,
-   SEND_ERROR,
-   RESP_ERROR,
-}HTTP_CLIENT_ERROR;
-
-typedef std::function<void(HTTP_CLIENT_ERROR error, http::server::reply* reply)> HTTP_CLIENT_CB;
+typedef std::function<void(int http_code, std::string& resp)> HTTP_CLIENT_CB;
 
 class HttpClient
 {
@@ -51,6 +44,6 @@ private:
     void handle_read_headers(const boost::system::error_code& err);
     void handle_read_content(const boost::system::error_code& err);
 
-    void call_cb(HTTP_CLIENT_ERROR err);
+    void call_cb(const char* err);
 };
 

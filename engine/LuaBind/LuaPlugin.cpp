@@ -9,7 +9,7 @@
 #include "LuaDB.h"
 #include "LuaConfig.h"
 #include "LuaCrypt.h"
-#include "LuaHttpServer.h"
+#include "LuaHttp.h"
 
 //#ifndef WIN32
 INIT_SINGLETON_CLASS(LuaPlugin)
@@ -64,7 +64,7 @@ sol::table LuaPlugin::initLua(const char* funcName) {
 	LuaDB::bindLuaDB(m_lua);
 	LuaConfig::bindLuaConfig(m_lua);
 	LuaCrypt::bindLuaCrypt(m_lua);
-	LuaHttpServer::bindLuaHttpServer(m_lua);
+	LuaHttp::bindLuaHttp(m_lua);
 
 	m_lua->script("package.path = '../script/lua/?.lua;'..package.path");
 	m_lua->script("package.cpath = '../bin/?.so;'..package.cpath");

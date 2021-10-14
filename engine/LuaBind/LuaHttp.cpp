@@ -1,11 +1,11 @@
-#include "LuaHttpServer.h"
+#include "LuaHttp.h"
 #include "Logger.h"
 #include "LuaRegistryObj.h"
 #include "LuaPlugin.h"
 #include "http_client/HttpClientMgr.h"
 
 
-std::map<int, server*> LuaHttpServer::m_servers;
+std::map<int, server*> LuaHttp::m_servers;
 
 http::server::reply_ptr getHttpReply(sol::table resp) {
 	http::server::reply_ptr rep = std::make_shared<http::server::reply>();
@@ -74,15 +74,13 @@ reply_ptr onRecvHttpReq(void* server, int conn_id, const http::server::request& 
 	return NULL;
 }
 
-static void sendHttpReq(std::string server, std::string path, sol::function cb) {
-	HttpClientMgr::getSingleton()->sendHttpReq(server, path, [cb](HTTP_CLIENT_ERROR err, reply* reply) {
+static void sendHttpReq(const char* url, sol::function cb) {
+	HttpClientMgr::getSingleton()->sendHttpReq(url, [cb](int http_code, std::string& resp) {
 		std::shared_ptr<sol::state> luaPtr = LuaPlugin::getSingleton()->getLua();
 		sol::table httpResp = sol::table::create_with(luaPtr->lua_state());
-		if (err == HTTP_CLIENT_ERROR::OK) {
-			httpResp["status"] = reply->status;
-			httpResp["content"] = reply->content.c_str();
-		}
-		sol::protected_function_result result = cb(err, httpResp);
+		httpResp["status"] = http_code;
+		httpResp["content"] = resp.c_str();
+		sol::protected_function_result result = cb(httpResp);
 		if (!result.valid()) {
 			LOG_ERROR("lua result = %d", result.status());
 			sol::error err = result;
@@ -93,7 +91,7 @@ static void sendHttpReq(std::string server, std::string path, sol::function cb) 
 	});
 }
 
-void LuaHttpServer::bindLuaHttpServer(std::shared_ptr<sol::state> lua) {
+void LuaHttp::bindLuaHttp(std::shared_ptr<sol::state> lua) {
 	//sol::usertype<LuaHttpServer> luaHttp_type = lua->new_usertype<LuaHttpServer>("LuaHttpServer",
 	//	// 3 constructors
 	//	sol::constructors<LuaHttpServer(int)>());
@@ -101,14 +99,14 @@ void LuaHttpServer::bindLuaHttpServer(std::shared_ptr<sol::state> lua) {
 	// typical member function that returns a variable
 
 	sol::table httpServer = lua->create_named_table("HttpServer");
-	httpServer["createHttpServer"] = &LuaHttpServer::createHttpServer;
-	httpServer["stopHttpServer"] = &LuaHttpServer::stopHttpServer;
+	httpServer["createHttpServer"] = &LuaHttp::createHttpServer;
+	httpServer["stopHttpServer"] = &LuaHttp::stopHttpServer;
 
 	sol::table httpClient = lua->create_named_table("HttpClient");
 	httpClient["sendHttpReq"] = &sendHttpReq;
 }
 
-void LuaHttpServer::createHttpServer(int port, sol::table script, sol::this_state s) {
+void LuaHttp::createHttpServer(int port, sol::table script, sol::this_state s) {
 	char httpServerPort[8]{ 0 };
 	sprintf(httpServerPort, "%d", port);
 	http::server::server* serv = new http::server::server("0.0.0.0", httpServerPort, "");
@@ -124,6 +122,6 @@ void LuaHttpServer::createHttpServer(int port, sol::table script, sol::this_stat
 	LOG_INFO("create http server, port:%d", port);
 }
 
-void LuaHttpServer::stopHttpServer(sol::table script, sol::this_state s) {
+void LuaHttp::stopHttpServer(sol::table script, sol::this_state s) {
 
 }

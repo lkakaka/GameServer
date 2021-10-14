@@ -27,7 +27,7 @@ int Logger::initLog(const char* serverName)
 	console.setPriority(log4cpp::Priority::DEBUG);
 #else
 	root.setPriority(log4cpp::Priority::INFO);
-	sub.setPriority(log4cpp::Priority::INFO);
+	console.setPriority(log4cpp::Priority::INFO);
 #endif
 	std::string logFileName = serverName;
 	std::string logDirName = "../log/";
