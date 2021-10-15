@@ -164,6 +164,11 @@ public:
 	std::vector<int> b;
 };
 
+struct _S {
+public:
+    std::string data;
+};
+
 #ifdef _TEST_MAIN
 
 int main() {
@@ -243,6 +248,11 @@ int main() {
 	e.b.assign(1000, 1);
 	printf("ptr2=%I64d\n", &e.b);
 	printf("size=%d", sizeof(e.b));
+    
+    printf("\n\n");
+    _S* p = new _S();
+    p->data = "aa";
+    printf("data=%s\n", p->data.c_str());
 
 	testBindFunction();
 	

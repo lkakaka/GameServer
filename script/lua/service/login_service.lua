@@ -18,7 +18,7 @@ function clsLoginService:__init__()
     self._account_dict = {}
     self._conn_dict = {}
     self:initClientMsgHandler()
-    self.http_server = clsHttpServer:New(8080)
+    self.http_server = clsHttpServer:New(8088)
     HttpClient.sendHttpReq("localhost:8028/1?cmd=gm_list", function(resp)
         -- print("content len:", string.len(resp.content))
         logger.logInfo("http resp, %d, %s", resp.status, resp.content)

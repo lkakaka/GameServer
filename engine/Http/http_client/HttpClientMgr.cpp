@@ -120,6 +120,7 @@ static void check_multi_info(HttpClientMgr* mgr)
 			curl_easy_getinfo(easy, CURLINFO_EFFECTIVE_URL, &eff_url);
 			curl_easy_getinfo(easy, CURLINFO_RESPONSE_CODE, &request->resp_code);
 			LOG_DEBUG("DONE: %s => (%d) %s", eff_url, res, request->error);
+	        curl_easy_setopt(easy, CURLOPT_PRIVATE, NULL);
 			curl_multi_remove_handle(mulit, easy);
 			//free(request->url);
 			curl_easy_cleanup(easy);
@@ -356,7 +357,7 @@ void HttpClientMgr::sendHttpReq(const char* url, HTTP_CLIENT_CB callback) {
 	CURLRequest* request = new CURLRequest();
 	request->callback = callback;
 	
-	CURLM* curl = curl_easy_init();
+	CURL* curl = curl_easy_init();
 	curl_easy_setopt(curl, CURLOPT_URL, url);
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, on_curl_write_cb);
 	curl_easy_setopt(curl, CURLOPT_WRITEDATA, request);

@@ -7,8 +7,9 @@
 typedef struct _CURLRequest {
 	bool is_done;
 	int resp_code;
-	std::string resp_content;
 	char error[CURL_ERROR_SIZE]{0};
+	// 放在error变量前定义，运行时会跑段错误,为什么??
+    std::string resp_content;
 
 	HTTP_CLIENT_CB callback;
 

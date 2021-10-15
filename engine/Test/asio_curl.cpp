@@ -96,6 +96,7 @@ typedef struct _ConnInfo
     CURL* easy;
     char* url;
     GlobalInfo* global;
+    std::string content;
     char error[CURL_ERROR_SIZE];
 } ConnInfo;
 
@@ -173,6 +174,7 @@ static void check_multi_info(GlobalInfo* g)
             curl_easy_getinfo(easy, CURLINFO_PRIVATE, &conn);
             curl_easy_getinfo(easy, CURLINFO_EFFECTIVE_URL, &eff_url);
             fprintf(MSG_OUT, "\nDONE: %s => (%d) %s", eff_url, res, conn->error);
+            fprintf(MSG_OUT, "\ncontent = %s\n", conn->content.c_str());
             curl_multi_remove_handle(g->multi, easy);
             free(conn->url);
             curl_easy_cleanup(easy);
@@ -344,7 +346,9 @@ static size_t write_cb(void* ptr, size_t size, size_t nmemb, void* data)
     pBuffer[written] = '\0';
 
     fprintf(MSG_OUT, "\nfetch %u bytes\n", written);
-    fprintf(MSG_OUT, "%s", pBuffer);
+    //fprintf(MSG_OUT, "%s", pBuffer);
+    ConnInfo* conn = (ConnInfo*)data;
+    std::copy((char*)ptr, (char*)ptr + written, std::back_inserter(conn->content));
 
     free(pBuffer);
 
@@ -434,8 +438,9 @@ static void new_conn(const char* url, GlobalInfo* g)
     ConnInfo* conn;
     CURLMcode rc;
 
-    conn = (ConnInfo*)calloc(1, sizeof(ConnInfo));
-    memset(conn, 0, sizeof(ConnInfo));
+    //conn = (ConnInfo*)calloc(1, sizeof(ConnInfo));
+    //memset(conn, 0, sizeof(ConnInfo));
+    conn = new ConnInfo();
     conn->error[0] = '\0';
 
     conn->easy = curl_easy_init();
@@ -449,7 +454,7 @@ static void new_conn(const char* url, GlobalInfo* g)
     conn->url = strdup(url);
     curl_easy_setopt(conn->easy, CURLOPT_URL, conn->url);
     curl_easy_setopt(conn->easy, CURLOPT_WRITEFUNCTION, write_cb);
-    curl_easy_setopt(conn->easy, CURLOPT_WRITEDATA, &conn);
+    curl_easy_setopt(conn->easy, CURLOPT_WRITEDATA, conn);
     curl_easy_setopt(conn->easy, CURLOPT_VERBOSE, 1L);
     curl_easy_setopt(conn->easy, CURLOPT_ERRORBUFFER, conn->error);
     curl_easy_setopt(conn->easy, CURLOPT_PRIVATE, conn);
