@@ -3,6 +3,8 @@
 #include <thread>
 
 #include "boost/asio.hpp"
+#include "AsioService.h"
+#include "TaskMgr.h"
 #include "Logger.h"
 #include "DBMgr.h"
 #include "../Common/ServerMacros.h"
@@ -25,14 +27,15 @@ using namespace std;
 
 static void initServiceCommEntity(boost::asio::io_service* io);
 	
-static boost::asio::io_service io;
+//static boost::asio::io_service io;
 
 
 static void signalHandler(int signum)
 {
     std::cout << "Interrupt signal (" << signum << ") received.\n";
 	LOG_INFO("stop server!!!!");
-	io.stop();
+	//io.stop();
+	AsioServiceMgr::getSingleton()->stopAll();
 }
 
 int main(int argc, char** argv)
@@ -71,6 +74,10 @@ int main(int argc, char** argv)
 		printf("$service id error, serviceName: %s", serviceName.c_str());
 		return 0;
 	}
+
+	AsioServiceMgr* asioServiceMgr = new AsioServiceMgr();
+	AsioService* ioService = asioServiceMgr->createAsioService();
+	boost::asio::io_service* io = ioService->getIoService();
 	
 	signal(SIGTERM, signalHandler);
 	//signal(SIGSEGV, signalExit);
@@ -92,8 +99,8 @@ int main(int argc, char** argv)
 		LOG_INFO("db config, url: %s, port:%d", dbUrl.c_str(), dbPort);
 	}
 
-	TimerMgr::initTimerMgr(&io);
-	HttpClientMgr::init(&io);
+	TimerMgr::initTimerMgr();
+	HttpClientMgr::init();
 	
 	std::string funcName = GET_CONFG_STR("script_init_func");
 	GameService::g_gameService = new GameService(serviceName, serviceType);
@@ -114,10 +121,10 @@ int main(int argc, char** argv)
 
 
 	if (serviceType == SERVICE_TYPE_CENTER) {
-		initServiceCenter(&io);
+		initServiceCenter(io);
 	}
 	else {
-		initServiceCommEntity(&io);
+		initServiceCommEntity(io);
 	}
 
 //	int port = Config::getConfigInt(cfgName, "port");
@@ -142,8 +149,9 @@ int main(int argc, char** argv)
 
 	LOG_INFO("MyServer Start!!!");
 
-	boost::asio::io_service::work work(io);
-	io.run();
+	/*boost::asio::io_service::work work(*io);
+	io->run();*/
+	MAIN_IO_SERVICE_PTR->run();
 
 	LOG_INFO("MyServer exit!!!");
 

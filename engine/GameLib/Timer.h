@@ -23,20 +23,19 @@ typedef struct
 class TimerMgr : public Singleton<TimerMgr>
 {
 private:
-	boost::asio::io_service* m_io;
 	long m_curTimerId;
 	std::unordered_map<long, Timer> m_timerMap;
 
 	std::mutex m_timerMutex;
 public:
-	TimerMgr(boost::asio::io_service* io);
+	TimerMgr();
 	long allocTimerId();
 	long addTimer(int nextTime, int interval, int loopCnt, TimerCallback callback);
 	void removeTimer(long timerId, bool needCancel);
 
 	void onTimer(const boost::system::error_code& e, long timerId);
 
-	static void initTimerMgr(boost::asio::io_service* io);
+	static void initTimerMgr();
 	//static TimerMgr* getTimerInstance();
 };
 

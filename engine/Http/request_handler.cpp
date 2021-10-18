@@ -17,6 +17,7 @@
 #include "request.hpp"
 //#include "PyHttp.h"
 #include "server.hpp"
+#include "Logger.h"
 
 namespace http {
 namespace server {
@@ -28,6 +29,7 @@ request_handler::request_handler(const std::string& doc_root, void* server)
 
 reply_ptr request_handler::handle_request(int conn_id, const request& req)
 {
+    LOG_DEBUG(">>>recv http request, conn_id:%d", conn_id);
   // Decode url to path.
   std::string request_path;
   if (!url_decode(req.uri, request_path))

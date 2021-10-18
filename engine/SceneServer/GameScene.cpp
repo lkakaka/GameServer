@@ -5,12 +5,12 @@
 #include "SceneMgr.h"
 #include "TimeUtil.h"
 #include "Timer.h"
+#include "AsioService.h"
 
 
 GameScene::GameScene(int sceneId, int sceneUid) : m_sceneId(sceneId), m_sceneUid(sceneUid), m_maxActorId(0),
  m_detour(new SceneDetourMgr())
 {
-
 }
 
 void GameScene::onCreate()
@@ -31,9 +31,9 @@ void GameScene::onCreate()
 	/*m_AOIMgr.removeNode(2);
 	m_AOIMgr.dump();*/
 	m_syncThread.reset(new std::thread(std::bind(&GameScene::_syncThreadFunc, this)));
-	TimerMgr::getSingleton()->addTimer(33, 33, -1, [this](int timerId) {
+	/*TimerMgr::getSingleton()->addTimer(33, 33, -1, [this](int timerId) {
 		m_logicTaskMgr.runTask();
-	});
+	});*/
 }
 
 void GameScene::_syncThreadFunc() {
@@ -44,7 +44,7 @@ void GameScene::_syncThreadFunc() {
 			if (gameActor == NULL) continue;
 			gameActor->updatePos(ts);
 		}
-		m_syncTaskMgr.runTask();
+		//m_syncTaskMgr.runTask();
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
 }
@@ -158,7 +158,7 @@ void GameScene::onActorMove(GameActor* gameActor) {
 	onEnterSight(gameActor, enterIds);
 	onLeaveSight(gameActor, leaveIds);
 
-	addLogicTask([this, gameActor, enterIds, leaveIds]() {
+	runLogicTask([this, gameActor, enterIds, leaveIds]() {
 		CallScripFunc func = getCallScriptFunc();
 		if (func != NULL) {
 			func(this, SceneScriptEvent::AFTER_ACTOR_MOVE, gameActor->getActorId(), enterIds, leaveIds);
@@ -238,10 +238,10 @@ void GameScene::findPath(float* sPos, float* ePos, std::vector<float>* path) {
 	m_detour->findPath(sPos, ePos, path);
 }
 
-void GameScene::addLogicTask(std::function<void()> task) {
-	m_logicTaskMgr.addTask(task);
+void GameScene::runLogicTask(std::function<void()> task) {
+	MAIN_IO_SERVICE_PTR->async_run_task(task);
 }
 
-void GameScene::addSyncTask(std::function<void()> task) {
-	m_syncTaskMgr.addTask(task);
-}
+//void GameScene::addSyncTask(std::function<void()> task) {
+//	m_syncTaskMgr->addTask(task);
+//}

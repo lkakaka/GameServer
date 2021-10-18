@@ -29,8 +29,7 @@ private:
 
 	std::shared_ptr<SceneDetourMgr> m_detour;
 
-	TaskMgr m_logicTaskMgr;
-	TaskMgr m_syncTaskMgr;
+	//std::shared_ptr<TaskMgr> m_syncTaskMgr;
 
 	void onPlayerEnter(GamePlayer* gamePlayer, std::set<int>& neighbours);
 	void onNpcEnter(GameNpc* gameNpc, std::set<int>& neighbours);
@@ -66,8 +65,8 @@ public:
 	bool loadNavMesh(const char* meshFileName);
 	void findPath(float *sPos, float* ePos, std::vector<float>* path);
 
-	void addLogicTask(std::function<void()> func);
-	void addSyncTask(std::function<void()> func);
+	void runLogicTask(std::function<void()> func);
+	//void addSyncTask(std::function<void()> func);
 };
 
 

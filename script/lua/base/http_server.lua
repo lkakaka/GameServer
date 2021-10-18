@@ -11,5 +11,5 @@ end
 
 function clsHttpServer:on_recv_http_req(conn_id, req)
     logger.logInfo("*****recv http req, %d, %s", conn_id, StrUtil.tableToStr(req))
-    return {status=200, body="ok"}
+    return {status=200, body="welcome to game world"}
 end

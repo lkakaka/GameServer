@@ -3,6 +3,7 @@
 #include "LuaRegistryObj.h"
 #include "LuaPlugin.h"
 #include "http_client/HttpClientMgr.h"
+#include "AsioService.h"
 
 
 std::map<int, server*> LuaHttp::m_servers;
@@ -29,7 +30,7 @@ http::server::reply_ptr getHttpReply(sol::table resp) {
 }
 
 reply_ptr onRecvHttpReq(void* server, int conn_id, const http::server::request& req) {
-	LuaPlugin::getSingleton()->addTask([server, conn_id, req]() {
+	MAIN_IO_SERVICE_PTR->async_run_task([server, conn_id, req]() {
 
 		http::server::server* _server = (http::server::server*)server;
 		connection_ptr conn = _server->get_connection_mgr()->get_connection(conn_id);

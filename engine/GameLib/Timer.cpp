@@ -3,12 +3,13 @@
 #include "boost/bind.hpp"
 //#include "boost/asio/error.hpp"
 #include "Profile/ProfileTrack.h"
+#include "AsioService.h"
 
 //static TimerMgr* g_timerMgr = NULL;
 
 INIT_SINGLETON_CLASS(TimerMgr)
 
-TimerMgr::TimerMgr(boost::asio::io_service* io): m_curTimerId(1), m_io(io)
+TimerMgr::TimerMgr(): m_curTimerId(1)
 {
 }
 
@@ -54,7 +55,7 @@ void  TimerMgr::onTimer(const boost::system::error_code& e, long timerId) {
 long TimerMgr::addTimer(int firstInterval, int interval, int loopCnt, TimerCallback callback)
 {
 	//boost::asio::deadline_timer t(*m_io, boost::posix_time::seconds(time));
-	boost::asio::deadline_timer *t = new boost::asio::deadline_timer(*m_io, boost::posix_time::milliseconds(firstInterval));
+	boost::asio::deadline_timer *t = new boost::asio::deadline_timer(MAIN_IO, boost::posix_time::milliseconds(firstInterval));
 	Timer timer;
 	timer.m_callback = callback;
 	timer.timer = t;
@@ -105,7 +106,7 @@ void TimerMgr::removeTimer(long timerId, bool needCancel)
 //	return g_timerMgr;
 //}
 
-void TimerMgr::initTimerMgr(boost::asio::io_service* io) 
+void TimerMgr::initTimerMgr() 
 {
-	new TimerMgr(io);
+	new TimerMgr();
 }

@@ -1,6 +1,10 @@
 #include "TaskMgr.h"
 #include "Logger.h"
 
+TaskMgr::TaskMgr() {
+
+}
+
 void TaskMgr::addTask(std::function<void()> task) {
 	std::unique_lock<std::mutex> lock(m_taskLock);
 	m_tasks.emplace_back(task);

@@ -38,19 +38,17 @@ typedef struct _CURLRequest {
 class HttpClientMgr : public Singleton<HttpClientMgr>
 {
 private:
-	boost::asio::io_service* m_io;
 	std::map<int, HttpClient*> m_clients;
 	CURLM* m_curlm;
 	std::map<curl_socket_t, CURLRequest*> m_requests;
 
-	HttpClientMgr(boost::asio::io_service* io, CURLM* curlm);
+	HttpClientMgr(CURLM* curlm);
 
 public:
 	int still_running;
 	boost::asio::deadline_timer timer;
 
-	static void init(boost::asio::io_service* io);
-	inline boost::asio::io_service* getIoService() { return m_io; }
+	static void init();
 	inline CURLM* getCURLM() { return m_curlm; }
 	
 	void sendHttpReq(const char* url, HTTP_CLIENT_CB callback);

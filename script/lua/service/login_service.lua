@@ -23,9 +23,9 @@ function clsLoginService:__init__()
         -- print("content len:", string.len(resp.content))
         logger.logInfo("http resp, %d, %s", resp.status, resp.content)
     end)
-    HttpClient.sendHttpReq("www.baidu.com", function(resp)
-        logger.logInfo("http resp, %d, %s", resp.status, resp.content)
-    end)
+    -- HttpClient.sendHttpReq("www.baidu.com", function(resp)
+    --     logger.logInfo("http resp, %d, %s", resp.status, resp.content)
+    -- end)
 end
 
 function clsLoginService:initClientMsgHandler()

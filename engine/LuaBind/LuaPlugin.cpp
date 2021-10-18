@@ -10,6 +10,7 @@
 #include "LuaConfig.h"
 #include "LuaCrypt.h"
 #include "LuaHttp.h"
+#include "AsioService.h"
 
 //#ifndef WIN32
 INIT_SINGLETON_CLASS(LuaPlugin)
@@ -79,10 +80,6 @@ sol::table LuaPlugin::initLua(const char* funcName) {
 	sol::protected_function_result result = callLuaFunc("service_factory", funcName);
 	if (!result.valid()) THROW_EXCEPTION("create service error");
 	sol::table tbl = result.get<sol::table>(0);
-
-	TimerMgr::getSingleton()->addTimer(33, 33, -1, [this](int timerId) {
-		m_luaTaskMgr.runTask();
-	});
 
 	return tbl;
 }

@@ -1,5 +1,6 @@
 #include "HttpClientMgr.h"
 #include "Logger.h"
+#include "AsioService.h"
 
 #define HTTP_REQUEST_TIMEOUT 30
 
@@ -26,7 +27,7 @@ INIT_SINGLETON_CLASS(HttpClientMgr)
 
 static void setsock(socket_ptr& tcp_socket, curl_socket_t s, CURL* e, int act, HttpClientMgr* mgr);
 
-HttpClientMgr::HttpClientMgr(boost::asio::io_service* io, CURLM* curlm) : m_io(io), m_curlm(curlm), timer(boost::asio::deadline_timer(*io))
+HttpClientMgr::HttpClientMgr(CURLM* curlm) : m_curlm(curlm), timer(boost::asio::deadline_timer(MAIN_IO))
 {
 
 }
@@ -41,8 +42,8 @@ static curl_socket_t opensocket(void* clientp, curlsocktype purpose, struct curl
 	if (purpose == CURLSOCKTYPE_IPCXN && address->family == AF_INET)
 	{
 		/* create a tcp socket object */
-		boost::asio::io_service* io_service = HttpClientMgr::getSingleton()->getIoService();
-		SocketInfo* tcp_socket = new SocketInfo(*io_service);
+		//boost::asio::io_service* io_service = HttpClientMgr::getSingleton()->getIoService();
+		SocketInfo* tcp_socket = new SocketInfo(MAIN_IO);
 
 		/* open it and get the native handle*/
 		boost::system::error_code ec;
@@ -332,7 +333,7 @@ static int multi_timer_cb(CURLM* multi, long timeout_ms)
 }
 
 
-void HttpClientMgr::init(boost::asio::io_service* io) {
+void HttpClientMgr::init() {
 	if (HttpClientMgr::_singleon != NULL) return;
 	curl_version_info_data* curl_version = curl_version_info(CURLversion::CURLVERSION_FIRST);
 	LOG_INFO("curl version: %s", curl_version->version);
@@ -340,7 +341,7 @@ void HttpClientMgr::init(boost::asio::io_service* io) {
 	CURLM* curlm = curl_multi_init();
 	curl_multi_setopt(curlm, CURLMOPT_SOCKETFUNCTION, multi_sock_cb);
 	curl_multi_setopt(curlm, CURLMOPT_TIMERFUNCTION, multi_timer_cb);
-	HttpClientMgr* mgr = new HttpClientMgr(io, curlm);
+	HttpClientMgr* mgr = new HttpClientMgr(curlm);
 }
 
 static size_t on_curl_write_cb(char* ptr, size_t size, size_t nmemb, void* userp)

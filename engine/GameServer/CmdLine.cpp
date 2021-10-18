@@ -2,8 +2,8 @@
 #include "CmdLine.h"
 #include <thread>
 #include <iostream>
-#include "PyCommon.h"
 #include "LuaPlugin.h"
+#include "PyCommon.h"
 
 static std::thread cmd_thread;
 
@@ -19,7 +19,7 @@ void handleCmd(std::string& cmd) {
 	}
 	PyGILState_Release(py_state);
 #else
-	LuaPlugin::getLuaPlugin()->callLuaFunc("cmdLine", "on_cmd", cmd.c_str());
+	//LuaPlugin::getLuaPlugin()->callLuaFunc("cmdLine", "on_cmd", cmd.c_str());
 #endif
 }
 
