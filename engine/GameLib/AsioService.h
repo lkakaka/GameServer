@@ -16,6 +16,7 @@ private:
 	std::shared_ptr<boost::asio::io_service> m_io;
 
 	void signalHandler(std::function<void()> task, const boost::system::error_code& error, int signal_number);
+	void taskHandler(std::function<void()> task);
 public:
 	AsioService();
 	inline boost::asio::io_service* getIoService() { return m_io.get(); }

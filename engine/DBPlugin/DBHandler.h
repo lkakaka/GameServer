@@ -43,7 +43,7 @@ public:
 				m_st->close();
 				delete m_st;
 			}
-			catch (std::exception e) {
+			catch (std::exception& e) {
 				LOG_ERROR("statement free\n, %s", e.what());
 			}
 		}

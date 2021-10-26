@@ -48,6 +48,7 @@ function clsMsgHandler:_on_recv_test_req(msg_id, msg)
                                                                                 game_scene.scene_id,
                                                                                 game_scene.scene_uid)
     self.player:send_msg_to_client_kcp(MSG_ID_TEST_REQ, rsp_msg)
+    self.player:send_msg_to_client(MSG_ID_TEST_REQ, rsp_msg)
     self.player:send_msg_to_sight(MSG_ID_TEST_REQ, rsp_msg)
     self.player:send_msg_to_service(LOCAL_SERVICE_DB, MSG_ID_TEST_REQ, msg)
 

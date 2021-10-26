@@ -21,6 +21,7 @@ public:
 	inline size_t size() { return buffer.size() - cur_pos; }
 	inline unsigned char* data() { return buffer.data() + cur_pos; }
 	void remove(int len);
+	inline std::vector<unsigned char> getBuf() { return buffer; }
 
 	unsigned char readByte();
 	short readShort();

@@ -7,9 +7,9 @@ USE_NS_GAME_NET
 #define READ_BUFF_SIZE 1024
 
 ServerConnection::ServerConnection(int connID, std::shared_ptr<tcp::socket> socket, ConnCloseCallback closeCallback) :
-	m_isClosed(false), m_waitClosed(false), m_isSending(false),
+	ConnectionBase(socket, true),
+	m_waitClosed(false),
 	m_connID(connID),
-	m_socket(socket),
 	m_closeCallback(closeCallback)
 {
 	m_readBuf.resize(READ_BUFF_SIZE);
@@ -23,11 +23,6 @@ ServerConnection::~ServerConnection()
 		LOG_ERROR("socket close error, %s", e.what());
 	}
 	LOG_DEBUG("delete ServerConnection: connId:%d", m_connID);
-}
-
-std::shared_ptr<tcp::socket> ServerConnection::getSocket()
-{
-	return m_socket;
 }
 
 int ServerConnection::getConnID() const
@@ -67,7 +62,7 @@ void ServerConnection::_read()
 			return;
 		}
 
-		if (!m_isClosed) {
+		if (m_isConnected) {
 			this->_read();
 		}
 	});
@@ -84,49 +79,14 @@ void ServerConnection::checkRecvBufferSize() {
 	}
 }
 
-void ServerConnection::send(const char* data, int len) {
-	std::copy(data, data + len, std::back_inserter(m_sendBuf));
-	_send();
-}
-
-void ServerConnection::_send() {
-	if (m_sendBuf.size() == 0) return;
-	boost::asio::const_buffer buf(&m_sendBuf.front(), m_sendBuf.size());
-	size_t len = m_socket->write_some(buf);
-	if (len > 0) {
-		m_sendBuf.erase(m_sendBuf.begin(), m_sendBuf.begin() + len);
-		_send();
-	}
-
-	/*if (m_isSending) return;
-	if (m_sendBuf.size() == 0) return;
-	m_isSending = true;
-	boost::asio::const_buffer buf(&m_sendBuf.front(), m_sendBuf.size());
-	m_socket.async_write_some(buf, [this](const boost::system::error_code err_code, size_t datLen) {
-		m_isSending = false;
-		if (err_code)
-		{
-			const std::string err_str = err_code.message();
-			LOG_ERROR("send data error, %s", err_str.data());
-			return;
-		}
-
-		if (datLen > 0) {
-			m_sendBuf.erase(m_sendBuf.begin(), m_sendBuf.begin() + datLen);
-			LOG_DEBUG("send data, len:%d", datLen);
-			_send();
-		}
-		});*/
-}
-
 void ServerConnection::setWaitClose(const char* reason) { 
 	m_waitCloseReason = reason;  
 	m_waitClosed = true; 
 }
 
 void ServerConnection::close(const char* reason) {
-	if (m_isClosed) return;
-	m_isClosed = true;
+	if (!m_isConnected) return;
+	m_isConnected = false;
 	m_closeCallback(this, reason);
 	//LOG_INFO("connection close, id:%d, reason:%s", m_connID, reason);
 }

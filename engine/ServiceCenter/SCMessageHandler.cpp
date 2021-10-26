@@ -32,7 +32,8 @@ int SCMessageHandler::handleVerifyMsg(SCConnection* conn, ServiceAddr* sender, c
 
 void sendServiceMsg(SCConnection* dstConn, MyBuffer* buffer, ServiceAddr* srcAddr) {
 	int size = buffer->size();
-	dstConn->send((char*)buffer->data(), size);
+	//dstConn->send((char*)buffer->data(), size);
+	dstConn->send(std::move(buffer->getBuf()));
 	int msgId = -1;
 	if (size >= 20) msgId = buffer->getInt(16);
 	if (srcAddr != NULL) {

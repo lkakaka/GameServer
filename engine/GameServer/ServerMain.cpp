@@ -173,7 +173,7 @@ void initServiceCommEntity(boost::asio::io_service* io) {
 
 	ServiceAddr commAddr(SERVICE_GROUP, SERVICE_TYPE, SERVICE_ID);
 	CommEntityMgr* commEntityMgr = new CommEntityMgr();
-	IServiceCommEntity* commEntity = commEntityMgr->createCommEntity(io, commAddr, centerServiceIp.c_str(), centerServicePort);
+	IServiceCommEntity* commEntity = commEntityMgr->createCommEntity(commAddr, centerServiceIp.c_str(), centerServicePort);
 
 	if (SERVICE_TYPE == SERVICE_TYPE_GATEWAY) {
 		initGateway(io);

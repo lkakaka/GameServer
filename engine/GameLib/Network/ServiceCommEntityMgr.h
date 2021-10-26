@@ -9,9 +9,9 @@ private:
 	IServiceCommEntity* m_commEntity;
 
 	IServiceCommEntity* createZmqCommEntity(ServiceAddr& addr, const char* serverIp, int serverPort);
-	IServiceCommEntity* createTcpCommEntity(boost::asio::io_context* io, ServiceAddr& addr, const char* serverIp, int serverPort);
+	IServiceCommEntity* createTcpCommEntity(ServiceAddr& addr, const char* serverIp, int serverPort);
 public:
-	IServiceCommEntity* createCommEntity(boost::asio::io_context* io, ServiceAddr& addr, const char* serverIp, int serverPort);
+	IServiceCommEntity* createCommEntity(ServiceAddr& addr, const char* serverIp, int serverPort);
 	inline IServiceCommEntity* getCommEntity() { return m_commEntity; }
 };
 

@@ -160,7 +160,7 @@ void GatewayConnection::sendMsgToClient(send_type type, int msgId,  char* data, 
 		ikcp_send(m_kcp, (char*)buffer.data(), buffer.size());
 	}
 	else {
-		send((char*)buffer.data(), buffer.size());
+		send(std::move(buffer.getBuf()));
 	}
 }
 

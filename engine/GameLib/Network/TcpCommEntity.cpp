@@ -4,9 +4,9 @@
 extern const char* SERVICE_CONN_KEY;
 INIT_SINGLETON_CLASS(TcpCommEntity)
 
-TcpCommEntity::TcpCommEntity(boost::asio::io_context* io, ServiceAddr& addr, const char* serverIp, int port) :
+TcpCommEntity::TcpCommEntity(ServiceAddr& addr, const char* serverIp, int port) :
 	IServiceCommEntity(addr),
-	ClientConnection(io, serverIp, port)
+	ClientConnection(serverIp, port)
 {
 
 }
@@ -44,7 +44,8 @@ void TcpCommEntity::sendToService(ServiceAddr* dstAddr, char* msg, int msgLen) {
 	buffer.writeInt(dstAddr->getServiceId());
 	buffer.writeInt(msgLen);
 	buffer.writeString(msg, msgLen);
-	send((char*)buffer.data(), buffer.size());
+	//send((char*)buffer.data(), buffer.size());
+	send(std::move(buffer.getBuf()));
 	LOG_INFO("tcp comm send msg to service %s, len:%d!!!", dstAddr->getName(), msgLen);
 }
 
@@ -56,6 +57,7 @@ void TcpCommEntity::onConnect() {
 	buffer.writeInt(strlen(SERVICE_CONN_KEY));
 	int len = strlen(SERVICE_CONN_KEY);
 	buffer.writeString(SERVICE_CONN_KEY, strlen(SERVICE_CONN_KEY));
-	send((char*)buffer.data(), buffer.size());
+	//send((char*)buffer.data(), buffer.size());
+	send(std::move(buffer.getBuf()));
 	LOG_INFO("connected center service!!!");
 }

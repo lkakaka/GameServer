@@ -17,10 +17,10 @@ private:
 protected:
 	void onRecvData(std::vector<char>& data, int len);
 public:
-	TcpCommEntity(boost::asio::io_context* io, ServiceAddr& addr, const char* serverIp, int port);
+	TcpCommEntity(ServiceAddr& addr, const char* serverIp, int port);
 
 	void sendToService(ServiceAddr* dstAddr, char* msg, int msgLen);
-	void start() { tryConnect(); }
+	void start() { connect(); }
 	void onConnect();
 };
 

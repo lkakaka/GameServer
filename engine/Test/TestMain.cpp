@@ -171,6 +171,10 @@ public:
 
 #ifdef _TEST_MAIN
 
+#define print_error(fmt, ...)	{	\
+		printf("%s:%d : "#fmt"\n", __FILE__, __LINE__, ##__VA_ARGS__); \
+		LOG_ERROR("%s:%d : "#fmt"\n", __FILE__, __LINE__, ##__VA_ARGS__);	\
+		}
 int main() {
 
 	Logger::initLog("test");
@@ -242,6 +246,7 @@ int main() {
 	//testSOL();
 
 	LOG_DEBUG("test");
+	print_error("test,%d", 1);
 
 	Empty e;
 	printf("ptr1=%I64d\n", &e.b);
@@ -257,7 +262,7 @@ int main() {
 	testBindFunction();
 	
 	//curl_multi_demo();
-	run_asio_curl();
+	//run_asio_curl();
 
 	return 1;
 }

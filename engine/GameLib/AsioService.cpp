@@ -18,9 +18,12 @@ void AsioService::run() {
 }
 
 void AsioService::async_run_task(std::function<void()> task) {
-	boost::asio::signal_set signals(*m_io, SIGUSR1);
+	//m_io->post(std::bind(&AsioService::taskHandler, this, task));
+	boost::asio::post(*m_io, std::bind(&AsioService::taskHandler, this, task));
+	//boost::asio::post(*m_io, task);
+	/*boost::asio::signal_set signals(*m_io, SIGUSR1);
 	signals.async_wait(std::bind(&AsioService::signalHandler, this, task, std::placeholders::_1, std::placeholders::_2));
-	raise(SIGUSR1);
+	raise(SIGUSR1);*/
 }
 
 void AsioService::signalHandler(std::function<void()> task, const boost::system::error_code& error, int signal_number) {
@@ -28,6 +31,10 @@ void AsioService::signalHandler(std::function<void()> task, const boost::system:
 		LOG_ERROR("asio service async task error!!!");
 	}
 	LOG_DEBUG("signalHandler, %d", signal_number);
+	task();
+}
+
+void AsioService::taskHandler(std::function<void()> task) {
 	task();
 }
 
