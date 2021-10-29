@@ -48,10 +48,11 @@ int exceptionHandler(lua_State*, sol::optional<const std::exception&> e, sol::st
 
 static void initLoggerModule(std::shared_ptr<sol::state> lua) {
 	sol::table logger = lua->create_named_table("Logger");
-	logger["log_info"] = [](std::string s) { LOG_INFO(s.c_str()); };//&Logger::logInfo;
-	logger["log_error"] = [](std::string s) { LOG_ERROR(s.c_str()); };
-	logger["log_warn"] = [](std::string s) { LOG_WARN(s.c_str()); };
-	logger["log_debug"] = [](std::string s) { LOG_DEBUG(s.c_str()); };
+	// 必须使用LOG_INFO("%s", s.c_str())，如果使用 LOG_INFO(s.c_str()),字符串中含有%有可能会crash
+	logger["log_info"] = [](std::string s) { LOG_INFO("%s", s.c_str()); };
+	logger["log_error"] = [](std::string s) { LOG_ERROR("%s", s.c_str()); };
+	logger["log_warn"] = [](std::string s) { LOG_WARN("%s", s.c_str()); };
+	logger["log_debug"] = [](std::string s) { LOG_DEBUG("%s", s.c_str()); };
 }
 
 sol::table LuaPlugin::initLua(const char* funcName) {
