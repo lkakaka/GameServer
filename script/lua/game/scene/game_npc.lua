@@ -5,7 +5,7 @@ require("util.timer")
 clsGameNpc = clsGameActor:Inherit("clsGameNpc")
 
 function clsGameNpc:__init__(npc_id, game_scene, engine_obj)
-    Super(clsGameNpc).__init__(self, game_scene, engine_obj:getActorId())
+    Super(clsGameNpc).__init__(self, game_scene, engine_obj:getActorId(), nil)
     self.npc_id = npc_id
     self.engine_obj = engine_obj
     self.rand_move_timer_id = -1

@@ -28,6 +28,18 @@ function clsGameScene:__init__(service, scene_id)
     logger.logInfo("create scene, scene_id=%d, scene_uid=%d", self.scene_id, self.scene_uid)
 end
 
+function clsGameScene:player_req_enter(role_id, conn_id)
+    local player = self:get_player_by_role_id(role_id)
+    if player ~= nil then
+        if player.conn_id ~= conn_id then
+            self:send_disconnect_msg(player.conn_id, "reconnect")
+        end
+        player:on_reconnect(conn_id)
+    else
+        self:prepare_enter_scene(conn_id, role_id)
+    end
+end
+
 function clsGameScene:prepare_enter_scene(conn_id, role_id)
     local tbls = self:_add_load_tb(role_id)
     local future = self.service.db_proxy:loadMulti(tbls)
@@ -112,8 +124,12 @@ function clsGameScene:tick_player(role_id, reason)
     if player == nil then return end
     self:remove_player(role_id, reason)
     player:on_leave_game()
+    self:send_disconnect_msg(player.conn_id, reason)
+end
+
+function clsGameScene:send_disconnect_msg(conn_id, reason)
     local msg = {}
-    msg.conn_id = player.conn_id
+    msg.conn_id = conn_id
     msg.reason = reason
     self.service:sendMsgToClient(player.conn_id, MSG_ID_CLIENT_DISCONNECT, msg)
 end

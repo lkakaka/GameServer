@@ -12,6 +12,7 @@ function clsMultIndexContainer:__init__(attrNames)
 end
 
 function clsMultIndexContainer:addElem(elem)
+    elem:set_container(self)
     for _, attrName in ipairs(self.attrNames) do
         local attrVal = elem[attrName]
         if attrVal ~= nil then
@@ -28,6 +29,7 @@ function clsMultIndexContainer:addElem(elem)
 end
 
 function clsMultIndexContainer:removeElem(elem)
+    elem:set_container(nil)
     for _, attrName in ipairs(self.attrNames) do
         local attrVal = elem[attrName]
         if attrVal ~= nil then
@@ -36,6 +38,11 @@ function clsMultIndexContainer:removeElem(elem)
             error(string.format("elem's %s is nil", attrName))
         end
     end
+end
+
+function clsMultIndexContainer:on_elem_change_attr(elem, attr_name, old_attr_val, attr_val)
+    self._container[attr_name][old_attr_val][elem] = nil
+    self._container[attr_name][attr_val][elem] = true
 end
 
 function clsMultIndexContainer:getElems(attrName, attrVal)

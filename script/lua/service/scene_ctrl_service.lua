@@ -43,11 +43,26 @@ function clsSceneCtrlService:rpcPlayerEnterGame(sender, param)
     local conn_id = param.conn_id
     local role_id = param.role_id
     local scene_id = param.scene_id or 1
+
+    local player_info = self._player_mgr:get_player_info_by_role_id(role_id)
+    -- 玩家在场景中
+    if player_info ~= nil then
+        if player_info.state == PlayerState.IN_SCENE then
+            logger.logInfo("player already entered game, role_id:%d, scene_id:%d, scene_uid:%d", role_id, scene_id, player_info.scene_uid)
+            player_info:change_conn_id(conn_id)
+            self:callRpc(scene.service_addr, "Scene_EnterScene", -1, {conn_id=conn_id, role_id=role_id, scene_uid=player_info.scene_uid})
+            return ErrorCode.OK
+        end
+        logger.logError("player status error, role_id:%d, state:%d", role_id, player_info.state)
+        return ErrorCode.SYS_ERROR
+    end
+
     local scene = self._scene_mgr:get_min_player_scene(scene_id)
     if scene == nil then
         logger.logInfo("player enter game failed, not found scene, scene_id:%d, role_id:%d", scene_id, role_id)
         return ErrorCode.NOT_FOUND_SCENE
     end
+
     local player_info = self._player_mgr:add_player(role_id, conn_id)
     player_info.state = PlayerState.LOGINING
     logger.logInfo("player enter game, role_id:%d, scene_id:%d, scene_uid:%d", role_id, scene_id, scene.scene_uid)

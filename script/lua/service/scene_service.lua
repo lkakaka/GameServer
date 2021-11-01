@@ -91,7 +91,7 @@ function clsSceneService:rpcEnterScene(sender, param)
     logger.logInfo("recv rpc enter scene, conn_id:%d, role_id:%d, scene_uid:%d", conn_id, role_id, scene_uid)
     local scene = self._scenes[scene_uid]
     self._player_to_scene[conn_id] = scene_uid
-    scene:prepare_enter_scene(conn_id, role_id)
+    scene:player_req_enter(role_id, conn_id)
 end
 
 -- function clsSceneService:onClientDisconnect(sender, msgId, msg)

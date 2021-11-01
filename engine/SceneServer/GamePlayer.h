@@ -15,6 +15,7 @@ public:
 	inline void setScriptObj(void* scriptObj) { m_scriptObj = scriptObj; }
 
 	inline int getConnId() { return m_connId; }
+	void setConnId(int connId);
 
 	void sendToClient(int msgId, const char* msg, int msgLen);
 	void sendToClient(int msgId, google::protobuf::Message* msg);

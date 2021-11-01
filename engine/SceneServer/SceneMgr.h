@@ -20,6 +20,7 @@ public:
 	void destroyScene(int sceneUid);
 
 	void addPlayer(int conn_id, int scene_uid);
+	void changePlayerConnId(int oldConnId, int connId);
 	void removePlayer(int conn_id);
 
 	bool handleClientMsg(int connId, int msgId, char* data, int dataLen);

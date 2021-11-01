@@ -63,6 +63,14 @@ void SceneMgr::addPlayer(int conn_id, int scene_uid) {
 	m_player_scene.emplace(conn_id, scene_uid);
 }
 
+void SceneMgr::changePlayerConnId(int oldConnId, int connId) {
+	auto iter = m_player_scene.find(oldConnId);
+	if (iter == m_player_scene.end()) return;
+	int scene_uid = iter->second;
+	m_player_scene.erase(iter);
+	m_player_scene.emplace(connId, scene_uid);
+}
+
 void SceneMgr::removePlayer(int conn_id) {
 	m_player_scene.erase(conn_id);
 }

@@ -10,7 +10,7 @@ clsGamePlayer.index_roleId = "role_id"
 clsGamePlayer.index_connId = "conn_id"
 
 function clsGamePlayer:__init__(game_scene, engine_obj, role_id, name)
-    Super(clsGamePlayer).__init__(self, game_scene, engine_obj:getActorId())
+    Super(clsGamePlayer).__init__(self, game_scene, engine_obj:getActorId(), {clsGamePlayer.index_roleId, clsGamePlayer.index_connId})
     self.engineObj = engine_obj
     self.role_id = role_id
     self.name = name
@@ -84,6 +84,17 @@ function clsGamePlayer:on_enter_scene()
                                 scene_uid=game_scene.scene_uid, scene_id=game_scene.scene_id})
 end
 
+function clsGamePlayer:on_reconnect(conn_id)
+    self:change_conn_id(conn_id)
+    logger.logInfo("reconnect, role_id:%d", self.role_id)
+end
+
+function clsGamePlayer:change_conn_id(conn_id)
+    self:change_index_attr_value(clsGamePlayer.index_connId, conn_id)
+    self.conn_id = conn_id
+    self.engineObj:setConnId(conn_id)
+end
+
 function clsGamePlayer:on_leave_scene()
 end
 
@@ -93,7 +104,7 @@ end
 
 function clsGamePlayer:try_switch_scene(scene_id)
     if self.game_scene.scene_id == scene_id then
-        logger.log_info("try switch scene fail, cur scene id=%d, role_id:%d", scene_id, self.role_id)
+        logger.logInfo("try switch scene fail, cur scene id=%d, role_id:%d", scene_id, self.role_id)
         return
     end
     local role_id = self.role_id

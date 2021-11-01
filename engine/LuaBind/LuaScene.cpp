@@ -132,6 +132,7 @@ static void bindPlayer(std::shared_ptr<sol::state> lua) {
 	gamePlayer_type["x"] = sol::property(&GamePlayer::getX);
 	gamePlayer_type["y"] = sol::property(&GamePlayer::getY);
 	gamePlayer_type["move_speed"] = sol::property(&GamePlayer::getMoveSpeed, &GamePlayer::setMoveSpeed);
+	gamePlayer_type["setConnId"] = &GamePlayer::setConnId;
 }
 
 static void bindNpc(std::shared_ptr<sol::state> lua) {
@@ -153,5 +154,3 @@ void LuaScene::bindLuaScene(std::shared_ptr<sol::state> lua) {
 	bindPlayer(lua);
 	bindNpc(lua);
 }
-
-

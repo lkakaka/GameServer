@@ -186,6 +186,17 @@ GamePlayer* GameScene::getPlayer(int connId) {
 	return iter->second;
 }
 
+void GameScene::changePlayerConnId(int oldConnId, int connId) {
+	auto iter = m_players.find(oldConnId);
+	if (iter == m_players.end()) {
+		return;
+	}
+	GamePlayer* gamePlayer = iter->second;
+	m_players.erase(iter);
+	m_players.emplace(std::make_pair(connId, gamePlayer));
+	SceneMgr::getSceneMgr()->changePlayerConnId(oldConnId, connId);
+}
+
 void GameScene::removeActor(int actorId) {
 	auto iter = m_actors.find(actorId);
 	if (iter == m_actors.end()) {

@@ -54,6 +54,7 @@ public:
 	void onActorMove(GameActor* gameActor);
 	GameActor* getActor(int actorId);
 	GamePlayer* getPlayer(int connId);
+	void changePlayerConnId(int oldConnId, int connId);
 	void removeActor(int actorId);
 	void onCreate();
 

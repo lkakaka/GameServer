@@ -5,6 +5,7 @@
 #include "ServiceInfo.h"
 #include "Logger.h"
 #include "../Common/ServerMacros.h"
+#include "GameScene.h"
 
 GamePlayer::GamePlayer(int connId, int actorId, int roleId, std::string name, int x, int y, int moveSpeed, void* gameScene, GridChgFunc gridChgFunc):
 	GameActor(ActorType::PLYAER, actorId, x, y, moveSpeed, gameScene, gridChgFunc),
@@ -22,6 +23,12 @@ void GamePlayer::sendToClient(int msgId, const char* msg, int msgLen) {
 	std::set<int> connIds;
 	connIds.emplace(m_connId);
 	broadcastMsgToClient(connIds, msgId, msg, msgLen);
+}
+
+void GamePlayer::setConnId(int connId) {
+	if (m_connId == connId) return;
+	((GameScene*)m_gameScene)->changePlayerConnId(m_connId, connId);
+	m_connId = connId;
 }
 
 bool GamePlayer::onRecvClientMsg(int msgId, char* data, int dataLen) {
