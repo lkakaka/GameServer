@@ -50,6 +50,7 @@ function clsSceneCtrlService:rpcPlayerEnterGame(sender, param)
         if player_info.state == PlayerState.IN_SCENE then
             logger.logInfo("player already entered game, role_id:%d, scene_id:%d, scene_uid:%d", role_id, scene_id, player_info.scene_uid)
             player_info:change_conn_id(conn_id)
+            local scene = self._scene_mgr:get_scene_by_uid(player_info.scene_uid)
             self:callRpc(scene.service_addr, "Scene_EnterScene", -1, {conn_id=conn_id, role_id=role_id, scene_uid=player_info.scene_uid})
             return ErrorCode.OK
         end

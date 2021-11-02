@@ -2,6 +2,7 @@
 #include "Logger.h"
 #include "../Timer.h"
 #include "../AsioService.h"
+#include "../TimeUtil.h"
 
 #define READ_BUFFER_SIZE 1024
 
@@ -11,7 +12,7 @@ USE_NS_GAME_NET
 
 ClientConnection::ClientConnection(const char* server_ip, int server_port) : 
 	ConnectionBase(NULL, false),
-	m_serverIp(server_ip), m_serverPort(server_port)
+	m_serverIp(server_ip), m_serverPort(server_port), m_lastConnectTime(0)
 {
 	m_readBuff.resize(READ_BUFFER_SIZE);
 	m_readBuff.assign(m_readBuff.size(), 0);
@@ -23,6 +24,7 @@ ClientConnection::ClientConnection(const char* server_ip, int server_port) :
 bool ClientConnection::connect() {
 	if (m_isConnected) return true;
 	try {
+		m_lastConnectTime = TimeUtil::nowSec();
 		tcp::endpoint target(boost::asio::ip::make_address(m_serverIp), m_serverPort);
 		m_socket->async_connect(target, std::bind(&ClientConnection::connectHandler, this, std::placeholders::_1));
 
@@ -43,7 +45,14 @@ void ClientConnection::connectHandler(boost::system::error_code ec) {
 	if (ec) {
 		//boost::asio::error::connection_refused;
 		LOG_ERROR("connect failed, %d, %s", ec.value(), ec.message());
-		connect();
+		if (TimeUtil::nowSec() - m_lastConnectTime > 1) {
+			connect();
+		}
+		else {
+			TimerMgr::getSingleton()->addTimer(1000, 1000, 1, [this](int timerId) {
+				connect();
+			});
+		}
 		return;
 	}
 	m_isConnected = true;

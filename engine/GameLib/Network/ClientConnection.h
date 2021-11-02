@@ -17,6 +17,7 @@ private:
 	std::vector<char> m_readBuff;
 	std::shared_ptr<std::thread> m_connectThread;
 	long m_connectTimer;
+	long m_lastConnectTime;
 
 	std::mutex m_sendLock;
 

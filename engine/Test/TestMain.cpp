@@ -260,6 +260,10 @@ int main() {
     printf("data=%s\n", p->data.c_str());
 
 	testBindFunction();
+
+#ifndef WIN32
+	test_signal();
+#endif // WIN32
 	
 	//curl_multi_demo();
 	//run_asio_curl();

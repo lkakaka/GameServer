@@ -32,9 +32,11 @@ function clsGameScene:player_req_enter(role_id, conn_id)
     local player = self:get_player_by_role_id(role_id)
     if player ~= nil then
         if player.conn_id ~= conn_id then
+            self.service:unreg_player(player.conn_id)
             self:send_disconnect_msg(player.conn_id, "reconnect")
         end
         player:on_reconnect(conn_id)
+        self:send_player_switch_scene_msg(player)
     else
         self:prepare_enter_scene(conn_id, role_id)
     end
@@ -79,12 +81,16 @@ function clsGameScene:on_load_player(err_code, conn_id, role_id, tbls)
 end
 
 function clsGameScene:on_player_enter(game_player)
+    self:send_player_switch_scene_msg(game_player)
+    self._engineObj:onActorEnter(game_player.actor_id)
+    logger.logInfo("player enter scene, role_id:%d, scene_uid:%d, name:%s", game_player.role_id, self.scene_uid, game_player.name)
+end
+
+function clsGameScene:send_player_switch_scene_msg(game_player)
     local msg = {}
     msg.conn_id = game_player.conn_id
     msg.scene_service_id = self.scene_service_id
     self.service:sendMsgToService(LOCAL_SERVICE_GATEWAY, MSG_ID_SWITCH_SCENE_SERVICE, msg)
-    self._engineObj:onActorEnter(game_player.actor_id)
-    logger.logInfo("player enter scene, role_id:%d, scene_uid:%d, name:%s", game_player.role_id, self.scene_uid, game_player.name)
 end
 
 function clsGameScene:create_player(conn_id, role_id, tbls)
@@ -113,7 +119,7 @@ function clsGameScene:remove_player(role_id, reason)
     self._engineObj:removeActor(player.actor_id)
     self._mic_player:removeElem(player)
     self._actors[player.actor_id] = nil
-    self.service:on_remove_player(player.conn_id)
+    self.service:unreg_player(player.conn_id)
     player:on_leave_scene()
 
     logger.logInfo("remove player, role_id:%d, reason:%s", role_id, reason)
@@ -131,7 +137,7 @@ function clsGameScene:send_disconnect_msg(conn_id, reason)
     local msg = {}
     msg.conn_id = conn_id
     msg.reason = reason
-    self.service:sendMsgToClient(player.conn_id, MSG_ID_CLIENT_DISCONNECT, msg)
+    self.service:sendMsgToClient(conn_id, MSG_ID_CLIENT_DISCONNECT, msg)
 end
 
 function clsGameScene:get_player_by_conn_id(conn_id)

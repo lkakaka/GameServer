@@ -15,7 +15,7 @@
 using boost::asio::ip::udp;
 
 GatewayConnection::GatewayConnection(int connID, std::shared_ptr<tcp::socket> socket, ConnCloseCallback closeCallback) :
-	ServerConnection(connID, socket, closeCallback), m_kcp(NULL), 
+	ServerConnection(connID, socket, closeCallback), m_sceneServiceId(-1), m_kcp(NULL),
 	m_kcpTimerId(0), m_kcpEnabled(false), m_kcpTokenTs(0), m_clientUdpPort(0)
 {
 	

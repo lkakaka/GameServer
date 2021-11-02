@@ -62,7 +62,11 @@ function clsSceneService:get_player_scene(conn_id)
     return self._scenes[scene_uid]
 end
 
-function clsSceneService:on_remove_player(conn_id)
+function clsSceneService:reg_player(conn_id, scene_uid)
+    self._player_to_scene[conn_id] = scene_uid
+end
+
+function clsSceneService:unreg_player(conn_id)
     self._player_to_scene[conn_id] = nil
 end
 
@@ -90,7 +94,7 @@ function clsSceneService:rpcEnterScene(sender, param)
     local scene_uid = param.scene_uid
     logger.logInfo("recv rpc enter scene, conn_id:%d, role_id:%d, scene_uid:%d", conn_id, role_id, scene_uid)
     local scene = self._scenes[scene_uid]
-    self._player_to_scene[conn_id] = scene_uid
+    self:reg_player(conn_id, scene_uid)
     scene:player_req_enter(role_id, conn_id)
 end
 

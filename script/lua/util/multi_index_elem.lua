@@ -5,7 +5,7 @@ clsMultiIndexElem = clsObject:Inherit("clsMultiIndexElem")
 
 function clsMultiIndexElem:__init__(index_attr_names)
     self._index_attr_names = {}
-    for attr_name in ipairs(index_attr_names or {}) do
+    for _,attr_name in ipairs(index_attr_names or {}) do
         self._index_attr_names[attr_name] = true
     end
     self._container = nil
@@ -17,6 +17,7 @@ end
 
 function clsMultiIndexElem:change_index_attr_value(attr_name, attr_val)
     if self._index_attr_names[attr_name] == nil then
+        logger.logError("not index attr name, %s", attr_name)
         return
     end
     local old_attr_val = self[attr_name]

@@ -86,7 +86,7 @@ end
 
 function clsGamePlayer:on_reconnect(conn_id)
     self:change_conn_id(conn_id)
-    logger.logInfo("reconnect, role_id:%d", self.role_id)
+    logger.logInfo("reconnect, role_id:%d, conn_id:%d", self.role_id, conn_id)
 end
 
 function clsGamePlayer:change_conn_id(conn_id)

@@ -162,11 +162,11 @@ public class Network {
                 System.out.println("event hander is null");
             }
             System.out.println(String.format("read len: %d, total_len:%d", len, total_len));
+            return len >= 0;
         } catch (IOException e) {
             System.out.println("read error, e: " + e.getMessage());
             return false;
         }
-        return true;
     }
 
     public void close() {

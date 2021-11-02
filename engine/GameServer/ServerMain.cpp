@@ -26,16 +26,65 @@
 using namespace std;
 
 static void initServiceCommEntity(boost::asio::io_service* io);
-	
-//static boost::asio::io_service io;
 
+static std::thread* g_sinal_thread = NULL;
+static bool _stop = false;
 
-static void signalHandler(int signum)
+static void stopServer()
 {
-    std::cout << "Interrupt signal (" << signum << ") received.\n";
+    //std::cout << "Interrupt signal (" << signum << ") received.\n";
+	//thread::id id = std::this_thread::get_id();
 	LOG_INFO("stop server!!!!");
-	//io.stop();
-	AsioServiceMgr::getSingleton()->stopAll();
+	_stop = true;
+	MAIN_IO_SERVICE_PTR->async_run_task([]() { AsioServiceMgr::getSingleton()->stopAll(); });
+}
+
+static void signalThreadFunc() {
+#ifndef WIN32
+	//sigset_t waitset;
+	//int signum;
+	//sigemptyset(&waitset);
+	//sigaddset(&waitset, SIGTERM);
+	//struct timespec timeout = { 1, 0 };
+	//while (!_stop) {
+	//	if (-1 == (signum = sigtimedwait(&waitset, NULL, &timeout))) {
+	//		//do not log error, because timeout will also return -1.
+	//		printf("time out or error, errno=%d, errmsg=%s\n", errno, strerror(errno));
+	//	}
+	//	else {
+	//		printf("sigwaitinfo() fetch the signal: %d\n", signum);
+	//		stopServer();
+	//	}
+	//}
+
+	sigset_t waitset;
+	sigemptyset(&waitset);
+	sigaddset(&waitset, SIGTERM);
+	int res, sig;
+	while(!_stop) {
+		res = sigwait(&waitset, &sig);
+		if (res == 0) {
+			if (sig == SIGTERM) {
+				LOG_INFO("recv SIGTERM!!!");
+				stopServer();
+			}
+		} else {
+			LOG_ERROR("sigwait error, %d", res);
+		}
+	}
+
+#endif // WIN32
+}
+
+static void startSignalHandlerThread() {
+#ifndef WIN32
+	sigset_t mask;
+	sigemptyset(&mask);
+	sigaddset(&mask, SIGTERM);
+	pthread_sigmask(SIG_SETMASK, &mask, NULL);//SIG_BLOCK SIG_SETMASK 会屏蔽掉SIGTERM，但SIG_UNBLOCK不会屏蔽SIGTERM
+	g_sinal_thread = new std::thread(signalThreadFunc);
+	LOG_INFO("start signal thread!!!!");
+#endif // WIN32
 }
 
 int main(int argc, char** argv)
@@ -79,7 +128,6 @@ int main(int argc, char** argv)
 	AsioService* ioService = asioServiceMgr->createAsioService();
 	boost::asio::io_service* io = ioService->getIoService();
 	
-	signal(SIGTERM, signalHandler);
 	//signal(SIGSEGV, signalExit);
 	signal(SIGABRT, signalExit);
 
@@ -89,6 +137,8 @@ int main(int argc, char** argv)
 	if (serviceId > 0) logFileName += "_" + std::to_string(serviceId);
 	Logger::initLog(logFileName.c_str());
 	LOG_INFO("dfas,%%n");
+
+	startSignalHandlerThread();
 
 	std::string dbUrl = GET_CONFG_STR("db_url");
 	if (dbUrl.length() > 0) {
@@ -105,20 +155,6 @@ int main(int argc, char** argv)
 	std::string funcName = GET_CONFG_STR("script_init_func");
 	GameService::g_gameService = new GameService(serviceName, serviceType);
 	GameService::g_gameService->initScript(funcName.c_str());
-
-	// Initialise the http server.
-	//std::string httpServerIp = Config::getConfigStr(cfgName, "http_server_ip");
-	//std::string httpServerPort = Config::getConfigStr(cfgName, "http_server_port");
-	//std::shared_ptr<std::thread> http_thread;
-	//std::shared_ptr<http::server::server> http_server;
-	//if (httpServerIp.length() > 0 && httpServerPort.length() > 0) {
-	//	http_server.reset(new http::server::server(httpServerIp, httpServerPort, "", NULL));
-
-	//	// Run the server until stopped.
-	//	http_thread.reset(new std::thread([&http_server] { http_server->run(); }));
-	//	LOG_INFO("start http server, ip: %s, port:%s", httpServerIp.c_str(), httpServerPort.c_str());
-	//}
-
 
 	if (serviceType == SERVICE_TYPE_CENTER) {
 		initServiceCenter(io);
