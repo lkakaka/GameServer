@@ -7,7 +7,7 @@
 #include "proto.h"
 //#include "GameScene.h"
 
-enum ActorType
+enum SceneEntityType
 {
 	UNKNOW = 0,
 	PLYAER = 1,
@@ -22,14 +22,14 @@ typedef Vector2<int> Grid;
 
 typedef std::function<void(int, Grid*)> GridChgFunc;
 
-class GameActor
+class SceneEntity
 {
 protected:
-	int m_actorId;
-	ActorType m_actorType;
+	int m_entityId;
+	SceneEntityType m_entityType;
 	int m_moveSpeed;
 	void* m_gameScene;
-	std::set<int> m_sightActors; // 视野中的角色
+	std::set<int> m_sightEntityIds; // 视野中的角色
 	Position m_pos; // 当前位置
 	Grid m_grid; // 所处格子
 	std::vector<Position> m_tgtPosList;  // 移动的目标位置
@@ -41,12 +41,12 @@ protected:
 
 public:
 
-	GameActor(ActorType actorType, int actorId, void* gameScene, GridChgFunc posChgFunc);
-	GameActor(ActorType actorType, int actorId, int x, int y, int moveSpeed, void* gameScene, GridChgFunc posChgFunc);
+	SceneEntity(SceneEntityType eType, int eid, void* gameScene, GridChgFunc posChgFunc);
+	SceneEntity(SceneEntityType eType, int eid, int x, int y, int moveSpeed, void* gameScene, GridChgFunc posChgFunc);
 
-	virtual ~GameActor() {}
+	virtual ~SceneEntity() {}
 
-	inline int getActorId() { return m_actorId; }
+	inline int getEntityId() { return m_entityId; }
 
 	inline void setMoveSpeed(int speed) { m_moveSpeed = speed; }
 	inline int getMoveSpeed() { return m_moveSpeed; }
@@ -54,15 +54,15 @@ public:
 	inline int getY() { return m_pos.y; }
 	inline int getGridX() { return m_grid.x; }
 	inline int getGridY() { return m_grid.y; }
-	inline ActorType getActorType() { return m_actorType; }
-	inline bool isPlayer() { return m_actorType == PLYAER; }
-	inline bool isNpc() { return m_actorType == NPC; }
+	inline SceneEntityType getEntityType() { return m_entityType; }
+	inline bool isPlayer() { return m_entityType == PLYAER; }
+	inline bool isNpc() { return m_entityType == NPC; }
 
-	void addSightActors(std::set<int>& actors);
-	void addSightActor(int actorId);
-	void removeSightActors(std::set<int>& actors);
-	void removeSightActor(int actorId);
-	std::set<int> getSightActorConndIds();
+	void addSightEntities(std::set<int>& entities);
+	void addSightEntity(int eid);
+	void removeSightEntities(std::set<int>& entities);
+	void removeSightEntity(int eid);
+	std::set<int> getSightEntityConndIds();
 
 	void setTgtPosList(std::vector<Position>& tgtPosList);
 	void updatePos(int64_t ts);

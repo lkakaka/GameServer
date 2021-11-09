@@ -2,10 +2,10 @@
 require("math")
 require("util.timer")
 
-clsGameNpc = clsGameActor:Inherit("clsGameNpc")
+clsGameNpc = clsSceneEntity:Inherit("clsGameNpc")
 
 function clsGameNpc:__init__(npc_id, game_scene, engine_obj)
-    Super(clsGameNpc).__init__(self, game_scene, engine_obj:getActorId(), nil)
+    Super(clsGameNpc).__init__(self, game_scene, engine_obj:getEntityId(), nil)
     self.npc_id = npc_id
     self.engine_obj = engine_obj
     self.rand_move_timer_id = -1
@@ -18,16 +18,16 @@ end
 function clsGameNpc:pack_born_info(msg)
     msg.npc_list = msg.npc_list or {}
     local npc_info = {}
-    npc_info.actor_id = self.actor_id
+    npc_info.actor_id = self.entity_id
     npc_info.npc_id = self.npc_id
     table.insert(msg.npc_list, npc_info)
 end
 
 
-function clsGameNpc:on_actor_enter_sight(actor)
+function clsGameNpc:on_entity_enter_sight(entity)
 end
 
-function clsGameNpc:on_actor_leave_sight(actor)
+function clsGameNpc:on_entity_leave_sight(entity)
 end
 
 function clsGameNpc:on_leave_scene()

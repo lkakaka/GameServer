@@ -50,5 +50,5 @@ function clsFuture:Destroy()
     if self.timerId > 0 then
         timer.remove_timer(self.timerId)
     end
-    print("clsFuture:Destroy")
+    -- print("clsFuture:Destroy")
 end

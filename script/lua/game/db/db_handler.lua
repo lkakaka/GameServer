@@ -467,15 +467,15 @@ function clsDBHandler:test_db_and_redis()
         local tbl_sql = {}
         tbl_sql.role_id = 3
         local res = self:load({table_name="test", row=tbl_sql})
-        print(flag)
+        logger.logInfo(flag)
         for _,row in ipairs(res.rows) do
-            print(StrUtil.tableToStr(row))
+            logger.logInfo(StrUtil.tableToStr(row))
         end
-        print("\n")
+        logger.logInfo("\n")
         return res.rows
     end
 
-    print("--------test insert--------")
+    logger.logInfo("--------test insert--------")
     local tbl_test = {}
     tbl_test.role_id = 3
     tbl_test.role_name = "test3"
@@ -490,7 +490,7 @@ function clsDBHandler:test_db_and_redis()
         error(err_msg)
     end
 
-    print("--------test update--------")
+    logger.logInfo("--------test update--------")
     tbl_test = {}
     tbl_test.role_id = 3
     tbl_test.role_name = "test3-1"
@@ -504,7 +504,7 @@ function clsDBHandler:test_db_and_redis()
         error(err_msg)
     end
 
-    print("--------test delete--------")
+    logger.logInfo("--------test delete--------")
     tbl_test = {}
     tbl_test.role_id = 3
     self:delete_table({table_name="test", rows = {tbl_test}})

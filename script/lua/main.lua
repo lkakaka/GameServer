@@ -31,10 +31,7 @@ function got_problems(error_msg)
 end
 
 function service_factory.create_login_service()
-	print("create_login_service")
 	login_service = clsLoginService:New()
-	-- assert(false, "assert")
-	print("create_login_service end")
 	return login_service
 end
 

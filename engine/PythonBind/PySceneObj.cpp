@@ -13,8 +13,8 @@ static void callSceneScripFunc(void* ptr, ...) {
 	PyObject* scriptObj = (PyObject*)gameScene->getScriptObject();
 
 	switch (scriptEvent) {
-		case SceneScriptEvent::AFTER_ACTOR_ENTER: {
-			int actorId = va_arg(args, int);
+		case SceneScriptEvent::AFTER_ENTITY_ENTER: {
+			int eid = va_arg(args, int);
 			std::set<int> enterActors = va_arg(args, std::set<int>);
 			auto py_state = PyGILState_Ensure();
 			PyObject* arg = PyTuple_New(2);
@@ -23,30 +23,30 @@ static void callSceneScripFunc(void* ptr, ...) {
 			for (int actorId : enterActors) {
 				PyTuple_SetItem(actors, i++, PyLong_FromLong(actorId));
 			}
-			PyTuple_SetItem(arg, 0, PyLong_FromLong(actorId));
+			PyTuple_SetItem(arg, 0, PyLong_FromLong(eid));
 			PyTuple_SetItem(arg, 1, actors);
 			callPyObjFunc(scriptObj, "after_actor_enter", arg);
 			PyGILState_Release(py_state);
 			break;
 		}
-		case SceneScriptEvent::AFTER_ACTOR_LEAVE: {
-			int actorId = va_arg(args, int);
+		case SceneScriptEvent::AFTER_ENTITY_LEAVE: {
+			int eid = va_arg(args, int);
 			std::set<int> leaveActors = va_arg(args, std::set<int>);
 			auto py_state = PyGILState_Ensure();
 			PyObject* arg = PyTuple_New(2);
 			PyObject* actors = PyTuple_New(leaveActors.size());
 			int i = 0;
-			for (int actorId : leaveActors) {
-				PyTuple_SetItem(actors, i++, PyLong_FromLong(actorId));
+			for (int leid : leaveActors) {
+				PyTuple_SetItem(actors, i++, PyLong_FromLong(leid));
 			}
-			PyTuple_SetItem(arg, 0, PyLong_FromLong(actorId));
+			PyTuple_SetItem(arg, 0, PyLong_FromLong(eid));
 			PyTuple_SetItem(arg, 1, actors);
 			callPyObjFunc(scriptObj, "after_actor_leave", arg);
 			PyGILState_Release(py_state);
 			break;
 		}
-		case SceneScriptEvent::AFTER_ACTOR_MOVE: {
-			int actorId = va_arg(args, int);
+		case SceneScriptEvent::AFTER_ENTITY_MOVE: {
+			int eid = va_arg(args, int);
 			std::set<int> enterActors = va_arg(args, std::set<int>);
 			std::set<int> leaveActors = va_arg(args, std::set<int>);
 			auto py_state = PyGILState_Ensure();
@@ -54,16 +54,16 @@ static void callSceneScripFunc(void* ptr, ...) {
 			PyObject* enterTuple = PyTuple_New(enterActors.size());
 			PyObject* leaveTuple = PyTuple_New(leaveActors.size());
 			int i = 0;
-			for (int actorId : enterActors) {
-				PyTuple_SetItem(enterTuple, i++, PyLong_FromLong(actorId));
+			for (int eeid : enterActors) {
+				PyTuple_SetItem(enterTuple, i++, PyLong_FromLong(eeid));
 			}
 
 			i = 0;
-			for (int actorId : leaveActors) {
-				PyTuple_SetItem(leaveTuple, i++, PyLong_FromLong(actorId));
+			for (int leid : leaveActors) {
+				PyTuple_SetItem(leaveTuple, i++, PyLong_FromLong(leid));
 			}
 
-			PyTuple_SetItem(arg, 0, PyLong_FromLong(actorId));
+			PyTuple_SetItem(arg, 0, PyLong_FromLong(eid));
 			PyTuple_SetItem(arg, 1, enterTuple);
 			PyTuple_SetItem(arg, 2, leaveTuple);
 			callPyObjFunc(scriptObj, "after_actor_move", arg);
@@ -117,35 +117,35 @@ static PyObject* createPlayer(PyObject* self, PyObject* args)
 		Py_RETURN_NONE;
 	}
 	GameScene* gameScene = ((PySceneObj*)self)->gameScene;
-	GamePlayer* gamePlayer = gameScene->createPlayer(connId, roleId, name, x, y, move_speed);
+	PlayerEntity* player = gameScene->createPlayer(connId, roleId, name, x, y, move_speed);
 	//return PyLong_FromSize_t((long long)gamePlayer);
 	PyObject* tuple = PyTuple_New(2);
 	PyTuple_SetItem(tuple, 0, PyLong_FromLong(gameScene->getSceneUid()));
-	PyTuple_SetItem(tuple, 1, PyLong_FromLong(gamePlayer->getActorId()));
+	PyTuple_SetItem(tuple, 1, PyLong_FromLong(player->getEntityId()));
 	return tuple;
 }
 
 static PyObject* removeActor(PyObject* self, PyObject* args)
 {
-	int actorId;
-	if (!PyArg_ParseTuple(args, "i", &actorId)) {
+	int eid;
+	if (!PyArg_ParseTuple(args, "i", &eid)) {
 		LOG_ERROR("remove actor failed, arg error");
 		Py_RETURN_FALSE;
 	}
 	GameScene* gameScene = ((PySceneObj*)self)->gameScene;
-	gameScene->removeActor(actorId);
+	gameScene->removeEntity(eid);
 	Py_RETURN_TRUE;
 }
 
 static PyObject* onPlayerEnter(PyObject* self, PyObject* args)
 {
-	int actorId;
-	if (!PyArg_ParseTuple(args, "i", &actorId)) {
+	int eid;
+	if (!PyArg_ParseTuple(args, "i", &eid)) {
 		LOG_ERROR("on player enter failed, arg error");
 		Py_RETURN_FALSE;
 	}
 	GameScene* gameScene = ((PySceneObj*)self)->gameScene;
-	gameScene->onActorEnter(actorId);
+	gameScene->onEntityEnter(eid);
 	Py_RETURN_TRUE;
 }
 

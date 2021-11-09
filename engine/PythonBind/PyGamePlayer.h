@@ -1,13 +1,13 @@
 #pragma once
 
 #include "PyTypeBase.h"
-#include "GamePlayer.h"
+#include "PlayerEntity.h"
 
 class PyGamePlayer
 {
 public:
 	PyObject_HEAD
-	GamePlayer* gamePlayer;
+	PlayerEntity* gamePlayer;
 };
 
 class PyTypeGamePlayer : public PyTypeBase

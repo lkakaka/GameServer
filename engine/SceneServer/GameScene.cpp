@@ -8,7 +8,7 @@
 #include "AsioService.h"
 
 
-GameScene::GameScene(int sceneId, int sceneUid) : m_sceneId(sceneId), m_sceneUid(sceneUid), m_maxActorId(0),
+GameScene::GameScene(int sceneId, int sceneUid) : m_sceneId(sceneId), m_sceneUid(sceneUid), m_maxEntityId(0),
  m_detour(new SceneDetourMgr())
 {
 }
@@ -39,10 +39,10 @@ void GameScene::onCreate()
 void GameScene::_syncThreadFunc() {
 	while (true) {
 		int64_t ts = TimeUtil::nowMillSec();
-		for (auto iter = m_actors.begin(); iter != m_actors.end(); iter++) {
-			GameActor* gameActor = iter->second;
-			if (gameActor == NULL) continue;
-			gameActor->updatePos(ts);
+		for (auto iter = m_entities.begin(); iter != m_entities.end(); iter++) {
+			SceneEntity* entity = iter->second;
+			if (entity == NULL) continue;
+			entity->updatePos(ts);
 		}
 		//m_syncTaskMgr.runTask();
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
@@ -55,128 +55,128 @@ void GameScene::onDestory()
 	LOG_INFO("destory scene, sceneId:%d, sceneUid:%d", m_sceneId, m_sceneUid);
 }
 
-GamePlayer* GameScene::createPlayer(int connId, int roleId, const char* name, int x, int y, int moveSpeed)
+PlayerEntity* GameScene::createPlayer(int connId, int roleId, const char* name, int x, int y, int moveSpeed)
 {
-	int actorId = m_maxActorId++;
-	GamePlayer* gamePlayer = new GamePlayer(connId, actorId, roleId, name, x, y, moveSpeed, this, std::bind(&GameScene::onActorGridChg, this, std::placeholders::_1, std::placeholders::_2));
-	m_actors.emplace(std::make_pair(actorId, gamePlayer));
-	m_players.emplace(std::make_pair(connId, gamePlayer));
+	int eid = m_maxEntityId++;
+	PlayerEntity* player = new PlayerEntity(connId, eid, roleId, name, x, y, moveSpeed, this, std::bind(&GameScene::onEntityGridChg, this, std::placeholders::_1, std::placeholders::_2));
+	m_entities.emplace(std::make_pair(eid, player));
+	m_players.emplace(std::make_pair(connId, player));
 	SceneMgr::getSceneMgr()->addPlayer(connId, m_sceneUid);
-	LOG_INFO("create player, sceneId:%d, sceneUid:%d, actorId:%d", m_sceneId, m_sceneUid, actorId);
-	return gamePlayer;
+	LOG_INFO("create player, sceneId:%d, sceneUid:%d, eid:%d", m_sceneId, m_sceneUid, eid);
+	return player;
 }
 
-GameNpc* GameScene::createNpc(int npcId, int x, int y, int moveSpeed)
+NpcEntity* GameScene::createNpc(int npcId, int x, int y, int moveSpeed)
 {
-	int actorId = m_maxActorId++;
-	GameNpc* gameNpc = new GameNpc(actorId, npcId, x, y, moveSpeed, this, std::bind(&GameScene::onActorGridChg, this, std::placeholders::_1, std::placeholders::_2));
-	m_actors.emplace(std::make_pair(actorId, gameNpc));
-	LOG_INFO("create npc, sceneId:%d, sceneUid:%d, actorId:%d", m_sceneId, m_sceneUid, actorId);
-	return gameNpc;
+	int eid = m_maxEntityId++;
+	NpcEntity* npc = new NpcEntity(eid, npcId, x, y, moveSpeed, this, std::bind(&GameScene::onEntityGridChg, this, std::placeholders::_1, std::placeholders::_2));
+	m_entities.emplace(std::make_pair(eid, npc));
+	LOG_INFO("create npc, sceneId:%d, sceneUid:%d, eid:%d", m_sceneId, m_sceneUid, eid);
+	return npc;
 }
 
-void GameScene::onActorEnter(int actorId) {
-	GameActor* actor = getActor(actorId);
-	if (actor == NULL) {
-		LOG_ERROR("on actor enter error, not found actorId:%d", actorId);
+void GameScene::onEntityEnter(int eid) {
+	SceneEntity* entity = getEntity(eid);
+	if (entity == NULL) {
+		LOG_ERROR("on entity enter error, not found eid:%d", eid);
 		return;
 	}
 
 	std::set<int> neighbours;
-	m_AOIMgr.addNode(actor->getActorId(), actor->getGridX(), actor->getGridY(), neighbours);
+	m_AOIMgr.addNode(entity->getEntityId(), entity->getGridX(), entity->getGridY(), neighbours);
 
 	if (!neighbours.empty()) {
-		onEnterSight(actor, neighbours);
+		onEnterSight(entity, neighbours);
 
 		CallScripFunc func = getCallScriptFunc();
 		if (func != NULL) {
-			func(this, SceneScriptEvent::AFTER_ACTOR_ENTER, actor->getActorId(), neighbours);
+			func(this, SceneScriptEvent::AFTER_ENTITY_ENTER, entity->getEntityId(), neighbours);
 		}
 	}
 
-	if (actor->isPlayer()) {
-		onPlayerEnter((GamePlayer*)actor, neighbours);
-	} else if(actor->isNpc()) {
-		onNpcEnter((GameNpc*)actor, neighbours);
+	if (entity->isPlayer()) {
+		onPlayerEnter((PlayerEntity*)entity, neighbours);
+	} else if(entity->isNpc()) {
+		onNpcEnter((NpcEntity*)entity, neighbours);
 	} else {
-		LOG_ERROR("on actor enter error, unkown actor type:%d", actor->getActorType());
+		LOG_ERROR("on entity enter error, unkown entity type:%d", entity->getEntityType());
 	}
 }
 
-void GameScene::onPlayerEnter(GamePlayer* gamePlayer, std::set<int>& neighbours) {
+void GameScene::onPlayerEnter(PlayerEntity* player, std::set<int>& neighbours) {
 	
 }
 
-void GameScene::onNpcEnter(GameNpc* gameNpc, std::set<int>& neighbours) {
+void GameScene::onNpcEnter(NpcEntity* npc, std::set<int>& neighbours) {
 	
 }
 
-void GameScene::onEnterSight(GameActor* actor, std::set<int>& enterIds) {
-	actor->addSightActors(enterIds);
-	for (int actorId : enterIds) {
-		GameActor* neiActor = getActor(actorId);
-		if (neiActor == NULL) {
-			LOG_DEBUG("enter sight actor not found, actorId:%d", actorId);
+void GameScene::onEnterSight(SceneEntity* entity, std::set<int>& enterIds) {
+	entity->addSightEntities(enterIds);
+	for (int eid : enterIds) {
+		SceneEntity* neiEntity = getEntity(eid);
+		if (neiEntity == NULL) {
+			LOG_DEBUG("enter sight entity not found, eid:%d", eid);
 			continue;
 		}
-		neiActor->addSightActor(actor->getActorId());
+		neiEntity->addSightEntity(entity->getEntityId());
 	}
 }
 
-void GameScene::onLeaveSight(GameActor* actor, std::set<int>& leaveIds) {
-	actor->removeSightActors(leaveIds);
-	for (int actorId : leaveIds) {
-		GameActor* neiActor = getActor(actorId);
-		if (neiActor == NULL) {
-			LOG_DEBUG("leave sight actor not found, actorId:%d", actorId);
+void GameScene::onLeaveSight(SceneEntity* entity, std::set<int>& leaveIds) {
+	entity->removeSightEntities(leaveIds);
+	for (int eid : leaveIds) {
+		SceneEntity* neiEntity = getEntity(eid);
+		if (neiEntity == NULL) {
+			LOG_DEBUG("leave sight entity not found, eid:%d", eid);
 			continue;
 		}
-		neiActor->removeSightActor(actor->getActorId());
+		neiEntity->removeSightEntity(entity->getEntityId());
 	}
 }
 
-void GameScene::onActorLeave(GameActor* gameActor) {
+void GameScene::onEntityLeave(SceneEntity* entity) {
 	std::set<int> neighbours;
-	m_AOIMgr.removeNode(gameActor->getActorId(), neighbours);
+	m_AOIMgr.removeNode(entity->getEntityId(), neighbours);
 
 	if (!neighbours.empty()) {
-		onLeaveSight(gameActor, neighbours);
+		onLeaveSight(entity, neighbours);
 
 		CallScripFunc func = getCallScriptFunc();
 		if (func != NULL) {
-			func(this, SceneScriptEvent::AFTER_ACTOR_LEAVE, gameActor->getActorId(), neighbours);
+			func(this, SceneScriptEvent::AFTER_ENTITY_LEAVE, entity->getEntityId(), neighbours);
 		}
 	}
 }
 
-void GameScene::onActorMove(GameActor* gameActor) {
+void GameScene::onEntityMove(SceneEntity* entity) {
 	std::set<int> enterIds;
 	std::set<int> leaveIds;
-	m_AOIMgr.moveNode(gameActor->getActorId(), gameActor->getGridX(), gameActor->getGridY(), leaveIds, enterIds);
+	m_AOIMgr.moveNode(entity->getEntityId(), entity->getGridX(), entity->getGridY(), leaveIds, enterIds);
 	if (enterIds.empty() && leaveIds.empty()) return;
 
-	onEnterSight(gameActor, enterIds);
-	onLeaveSight(gameActor, leaveIds);
+	onEnterSight(entity, enterIds);
+	onLeaveSight(entity, leaveIds);
 
-	runLogicTask([this, gameActor, enterIds, leaveIds]() {
+	runLogicTask([this, entity, enterIds, leaveIds]() {
 		CallScripFunc func = getCallScriptFunc();
 		if (func != NULL) {
-			func(this, SceneScriptEvent::AFTER_ACTOR_MOVE, gameActor->getActorId(), enterIds, leaveIds);
+			func(this, SceneScriptEvent::AFTER_ENTITY_MOVE, entity->getEntityId(), enterIds, leaveIds);
 		}
 	});
 }
 
-GameActor* GameScene::getActor(int actorId) {
-	auto iter = m_actors.find(actorId);
-	if (iter == m_actors.end()) {
-		LOG_ERROR("get actor error, actor not found, sceneId:%d, sceneUid:%d, actorId:%d", m_sceneId, m_sceneUid, actorId);
+SceneEntity* GameScene::getEntity(int eid) {
+	auto iter = m_entities.find(eid);
+	if (iter == m_entities.end()) {
+		LOG_ERROR("get entity error, entity not found, sceneId:%d, sceneUid:%d, eid:%d", m_sceneId, m_sceneUid, eid);
 		return NULL;
 	}
 
 	return iter->second;
 }
 
-GamePlayer* GameScene::getPlayer(int connId) {
+PlayerEntity* GameScene::getPlayer(int connId) {
 	auto iter = m_players.find(connId);
 	if (iter == m_players.end()) {
 		LOG_ERROR("get player error, player not found, sceneId:%d, sceneUid:%d, connId:%d", m_sceneId, m_sceneUid, connId);
@@ -191,50 +191,50 @@ void GameScene::changePlayerConnId(int oldConnId, int connId) {
 	if (iter == m_players.end()) {
 		return;
 	}
-	GamePlayer* gamePlayer = iter->second;
+	PlayerEntity* player = iter->second;
 	m_players.erase(iter);
-	m_players.emplace(std::make_pair(connId, gamePlayer));
+	m_players.emplace(std::make_pair(connId, player));
 	SceneMgr::getSceneMgr()->changePlayerConnId(oldConnId, connId);
 }
 
-void GameScene::removeActor(int actorId) {
-	auto iter = m_actors.find(actorId);
-	if (iter == m_actors.end()) {
-		LOG_ERROR("remove actor error, actor not found, sceneId:%d, sceneUid:%d, actorId:%d", m_sceneId, m_sceneUid, actorId);
+void GameScene::removeEntity(int eid) {
+	auto iter = m_entities.find(eid);
+	if (iter == m_entities.end()) {
+		LOG_ERROR("remove entity error, entity not found, sceneId:%d, sceneUid:%d, eid:%d", m_sceneId, m_sceneUid, eid);
 		return;
 	}
 
-	GameActor* gameActor = iter->second;
-	onActorLeave(gameActor);
+	SceneEntity* entity = iter->second;
+	onEntityLeave(entity);
 
-	if (gameActor->isPlayer()) {
-		int connId = ((GamePlayer*)gameActor)->getConnId();
+	if (entity->isPlayer()) {
+		int connId = ((PlayerEntity*)entity)->getConnId();
 		SceneMgr::getSceneMgr()->removePlayer(connId);
 		m_players.erase(connId);
 	}
 
-	delete gameActor;
-	m_actors.erase(iter);
-	LOG_INFO("remove actor, sceneId:%d, sceneUid:%d, actorId:%d", m_sceneId, m_sceneUid, actorId);
+	delete entity;
+	m_entities.erase(iter);
+	LOG_INFO("remove entity, sceneId:%d, sceneUid:%d, eid:%d", m_sceneId, m_sceneUid, eid);
 }
 
-void GameScene::onActorGridChg(int actorId, Grid* grid) {
-	GameActor* actor = getActor(actorId);
-	if (actor == NULL) {
-		LOG_ERROR("move actor error, actor not found, sceneId:%d, sceneUid:%d, actorId:%d", m_sceneId, m_sceneUid, actorId);
+void GameScene::onEntityGridChg(int eid, Grid* grid) {
+	SceneEntity* entity = getEntity(eid);
+	if (entity == NULL) {
+		LOG_ERROR("move entity error, entity not found, sceneId:%d, sceneUid:%d, eid:%d", m_sceneId, m_sceneUid, eid);
 		return;
 	}
 
-	onActorMove(actor);
-	LOG_DEBUG("actor grid chg!!!");
+	onEntityMove(entity);
+	LOG_DEBUG("entity grid chg!!!");
 }
 
-void GameScene::onActorPosChg(int actorId, Position& pos) {
+void GameScene::onEntityPosChg(int eid, Position& pos) {
 	
 }
 
 bool GameScene::onRecvClientMsg(int connId, int msgId, char* data, int dataLen) {
-	GamePlayer* player = getPlayer(connId);
+	PlayerEntity* player = getPlayer(connId);
 	if (player == NULL) {
 		return false;
 	}

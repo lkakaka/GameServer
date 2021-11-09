@@ -13,10 +13,9 @@ function clsGameScene:__init__(service, scene_id)
     self.service = service
     self.scene_id = scene_id
     self.scene_service_id = Config:getConfigInt("service_id")
-    print("clsGameScene:__init__", scene_id)
     self._engineObj = SceneMgr.createScene(scene_id, self)
     self.scene_uid = self._engineObj:getSceneUid()
-    self._actors = {}
+    self._entities = {}
     self._mic_player = clsMultIndexContainer:New({clsGamePlayer.index_roleId, clsGamePlayer.index_connId})
 
     local cfg_scene = CfgScene.find(scene_id)
@@ -82,7 +81,7 @@ end
 
 function clsGameScene:on_player_enter(game_player)
     self:send_player_switch_scene_msg(game_player)
-    self._engineObj:onActorEnter(game_player.actor_id)
+    self._engineObj:onEntityEnter(game_player.entity_id)
     logger.logInfo("player enter scene, role_id:%d, scene_uid:%d, name:%s", game_player.role_id, self.scene_uid, game_player.name)
 end
 
@@ -109,16 +108,16 @@ function clsGameScene:add_player(game_player)
         self:remove_player(game_player.role_id, "repeated")
     end
     self._mic_player:addElem(game_player)
-    self._actors[game_player.actor_id] = game_player
+    self._entities[game_player.entity_id] = game_player
 end
 
 function clsGameScene:remove_player(role_id, reason)
     local player = self:get_player_by_role_id(role_id)
     if player == nil then return end
     -- # self.scene_obj.removePlayer()
-    self._engineObj:removeActor(player.actor_id)
+    self._engineObj:removeEntity(player.entity_id)
     self._mic_player:removeElem(player)
-    self._actors[player.actor_id] = nil
+    self._entities[player.entity_id] = nil
     self.service:unreg_player(player.conn_id)
     player:on_leave_scene()
 
@@ -148,34 +147,34 @@ function clsGameScene:get_player_by_role_id(role_id)
     return self._mic_player:getOneElem(clsGamePlayer.index_roleId, role_id)
 end
 
-function clsGameScene:get_actor(actor_id)
-    return self._actors[actor_id]
+function clsGameScene:get_entity(entity_id)
+    return self._entities[entity_id]
 end
 
 function clsGameScene:create_npc(npc_id, x, y)
     local npc_obj = self._engineObj:createNpc(npc_id, x, y, 0)
     local game_npc = clsGameNpc:New(npc_id, self, npc_obj)
-    self._actors[game_npc.actor_id] = game_npc
-    self._engineObj:onActorEnter(game_npc.actor_id)
+    self._entities[game_npc.entity_id] = game_npc
+    self._engineObj:onEntityEnter(game_npc.entity_id)
     game_npc:on_leave_scene()
     logger.logInfo("create npc, npc_id:%d, scene_id:%d", npc_id, self.scene_id)
     return game_npc
 end
 
-function clsGameScene:remove_npc(actor_id)
-    local npc = self:get_actor(actor_id)
+function clsGameScene:remove_npc(entity_id)
+    local npc = self:get_entity(entity_id)
     if npc == nil then
-        logger.logWarn("remove npc error, not found npc:%d", actor_id)
+        logger.logWarn("remove npc error, not found npc:%d", entity_id)
         return
     end
 
     if not npc:is_npc() then
-        logger.logError("remove not a npc, actor_id:%d", actor_id)
+        logger.logError("remove not a npc, entity_id:%d", entity_id)
         return
     end
 
-    self._engineObj:removeActor(actor_id)
-    self._actors[actor_id] = nil
+    self._engineObj:removeEntity(entity_id)
+    self._entities[entity_id] = nil
 end
 
 function clsGameScene:on_recv_client_msg(conn_id, msg_id, msg)
@@ -188,66 +187,66 @@ function clsGameScene:on_recv_client_msg(conn_id, msg_id, msg)
     player.msg_handler:on_recv_client_msg(msg_id, msg)
 end
 
-function clsGameScene:_on_enter_sight(actor, enter_ids)
+function clsGameScene:_on_enter_sight(entity, enter_ids)
     if TableUtil.isEmpty(enter_ids) then return end
     local msg = nil
-    if actor.is_player() then msg = {} end
+    if entity.is_player() then msg = {} end
 
-    for _,actor_id in ipairs(enter_ids) do
-        local enter_actor = self:get_actor(actor_id)
-        if enter_actor ~= nil then
+    for _,entity_id in ipairs(enter_ids) do
+        local enter_entity = self:get_entity(entity_id)
+        if enter_entity ~= nil then
             if msg ~= nil then
-                enter_actor:pack_born_info(msg)
+                enter_entity:pack_born_info(msg)
             end
         end
-        enter_actor:on_actor_enter_sight(actor)
+        enter_entity:on_entity_enter_sight(entity)
     end
 
     if msg ~= nil then
-        actor:send_msg_to_client(MSG_ID_ACTOR_BORN, msg)
+        entity:send_msg_to_client(MSG_ID_ACTOR_BORN, msg)
     end
 end
 
-function clsGameScene:_on_leave_sight(actor, leave_ids, is_actor_leave)
+function clsGameScene:_on_leave_sight(entity, leave_ids, is_entity_leave)
     if TableUtil.isEmpty(leave_ids) then return end
     local msg = nil
-    if not is_actor_leave and actor.is_player() then
+    if not is_entity_leave and entity.is_player() then
         msg = {actor_ids = {}}
     end
 
-    for _,actor_id in ipairs(leave_ids) do
-        local leave_actor = self:get_actor(actor_id)
-        if leave_actor ~= nil then
+    for _,entity_id in ipairs(leave_ids) do
+        local leave_entity = self:get_entity(entity_id)
+        if leave_entity ~= nil then
             if msg ~= nil then
-                table.insert(msg.actor_ids, leave_actor.actor_id)
+                table.insert(msg.actor_ids, leave_entity.entity_id)
             end
-            leave_actor:on_actor_leave_sight(actor)
+            leave_entity:on_entity_leave_sight(entity)
         end
     end
 
     if msg ~= nil then
-        actor:send_msg_to_client(MSG_ID_ACTOR_DISSOLVE, msg)
+        entity:send_msg_to_client(MSG_ID_ACTOR_DISSOLVE, msg)
     end
 end
 
-function clsGameScene:after_actor_enter(actor_id, enter_ids)
-    print("after_actor_enter", self.scene_id, actor_id, type(enter_ids), StrUtil.tableToStr(enter_ids or {}))
-    local actor = self:get_actor(actor_id)
-    if actor == nil then return end
-    self:_on_enter_sight(actor, enter_ids)
+function clsGameScene:after_entity_enter(entity_id, enter_ids)
+    print("after_entity_enter", self.scene_id, entity_id, type(enter_ids), StrUtil.tableToStr(enter_ids or {}))
+    local entity = self:get_entity(entity_id)
+    if entity == nil then return end
+    self:_on_enter_sight(entity, enter_ids)
 end
 
-function clsGameScene:after_actor_leave(actor_id, leave_ids)
-    local actor = self:get_actor(actor_id)
-    if actor == nil then return end
-    self:_on_leave_sight(actor, leave_ids, true)
+function clsGameScene:after_entity_leave(entity_id, leave_ids)
+    local entity = self:get_entity(entity_id)
+    if entity == nil then return end
+    self:_on_leave_sight(entity, leave_ids, true)
 end
 
-function clsGameScene:after_actor_move(actor_id, enter_ids, leave_ids)
-    local actor = self:get_actor(actor_id)
-    if actor == nil then return end
-    self:_on_enter_sight(actor, enter_ids)
-    self:_on_leave_sight(actor, leave_ids, false)
+function clsGameScene:after_entity_move(entity_id, enter_ids, leave_ids)
+    local entity = self:get_entity(entity_id)
+    if entity == nil then return end
+    self:_on_enter_sight(entity, enter_ids)
+    self:_on_leave_sight(entity, leave_ids, false)
 end
 
 function clsGameScene:destroy()

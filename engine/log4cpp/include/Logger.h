@@ -6,6 +6,10 @@
 #include <thread>
 #include <vector>
 
+#ifndef _WIN32
+#define LOG_NOT_ON_CONSOLE
+#endif
+
 #ifndef LOG_NOT_ON_CONSOLE
 #define LOG_DEBUG(fmt, ...) do { Logger::logDebugWithConsole(fmt, ##__VA_ARGS__); } while(0)
 #define LOG_INFO(fmt, ...)  do { Logger::logInfoWithConsole(fmt, ##__VA_ARGS__); } while(0)
@@ -29,7 +33,6 @@ private:
 	static void _writeLog();
 public:
 	static Logger* g_log;
-	//static std::list < std::
 	static void test();
 	static int initLog(const char* serverName);
 	static void formatLog(char* buff, const char* fmt, va_list va);

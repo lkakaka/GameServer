@@ -131,7 +131,7 @@ function clsGMHandler:_gm_create_npc(param)
         local npc = param.player.game_scene:create_npc(npc_id, x, y)
         npc:rand_move()
     end
-    -- local npc_info = string.format( "actor_id:%d, npc_id:%d", npc.actor_id, npc_id)
+    -- local npc_info = string.format( "entity_id:%d, npc_id:%d", npc.entity_id, npc_id)
     local npc_info = "ok"
     return ErrorCode.OK, npc_info
 end

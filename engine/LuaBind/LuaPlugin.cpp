@@ -70,8 +70,9 @@ sol::table LuaPlugin::initLua(const char* funcName) {
 
 	m_lua->script("package.path = '../script/lua/?.lua;'..package.path");
 	m_lua->script("package.cpath = '../bin/?.so;'..package.cpath");
-	m_lua->script("print(package.path)");
-	m_lua->script("print(_VERSION)");
+	//m_lua->script("print(package.path)");
+	//m_lua->script("print(_VERSION)");
+
 	//m_lua->set_panic(panicFunc);
 	//m_lua->set_exception_handler(exceptionHandler);
 

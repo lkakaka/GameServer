@@ -18,44 +18,44 @@ static void callSceneScripFunc(void* ptr, ...) {
 	sol::table sceneScriptObj = luaPtr->registry()[gameScene->getLuaRef()];
 
 	switch (scriptEvent) {
-		case SceneScriptEvent::AFTER_ACTOR_ENTER: {
-			int actorId = va_arg(args, int);
-			std::set<int> enterActors = va_arg(args, std::set<int>);
+		case SceneScriptEvent::AFTER_ENTITY_ENTER: {
+			int eid = va_arg(args, int);
+			std::set<int> enterIds = va_arg(args, std::set<int>);
 			sol::table tbl = sol::table::create_with(luaPtr->lua_state());
-			for (int actorId : enterActors) {
-				tbl.add(actorId);
+			for (int eeid : enterIds) {
+				tbl.add(eeid);
 			}
-			sol::function funcObj = sceneScriptObj["after_actor_enter"];
-			LuaPlugin::callLuaFunc(funcObj, sceneScriptObj, actorId, tbl);
+			sol::function funcObj = sceneScriptObj["after_entity_enter"];
+			LuaPlugin::callLuaFunc(funcObj, sceneScriptObj, eid, tbl);
 			break;
 		}
-		case SceneScriptEvent::AFTER_ACTOR_LEAVE: {
-			int actorId = va_arg(args, int);
-			std::set<int> leaveActors = va_arg(args, std::set<int>);
+		case SceneScriptEvent::AFTER_ENTITY_LEAVE: {
+			int eid = va_arg(args, int);
+			std::set<int> leaveIds = va_arg(args, std::set<int>);
 			sol::table tbl = sol::table::create_with(luaPtr->lua_state());
-			for (int actorId : leaveActors) {
-				tbl.add(actorId);
+			for (int leid : leaveIds) {
+				tbl.add(leid);
 			}
-			sol::function funcObj = sceneScriptObj["after_actor_leave"];
-			LuaPlugin::callLuaFunc(funcObj, sceneScriptObj, actorId, tbl);
+			sol::function funcObj = sceneScriptObj["after_entity_leave"];
+			LuaPlugin::callLuaFunc(funcObj, sceneScriptObj, eid, tbl);
 			break;
 		}
-		case SceneScriptEvent::AFTER_ACTOR_MOVE: {
-			int actorId = va_arg(args, int);
-			std::set<int> enterActors = va_arg(args, std::set<int>);
+		case SceneScriptEvent::AFTER_ENTITY_MOVE: {
+			int eid = va_arg(args, int);
+			std::set<int> enterIds = va_arg(args, std::set<int>);
 			sol::table enterTbl = sol::table::create_with(luaPtr->lua_state());
-			for (int actorId : enterActors) {
-				enterTbl.add(actorId);
+			for (int eeid : enterIds) {
+				enterTbl.add(eeid);
 			}
 
-			std::set<int> leaveActors = va_arg(args, std::set<int>);
+			std::set<int> leaveIds = va_arg(args, std::set<int>);
 			sol::table leaveTbl = sol::table::create_with(luaPtr->lua_state());
-			for (int actorId : leaveActors) {
-				leaveTbl.add(actorId);
+			for (int leid : leaveIds) {
+				leaveTbl.add(leid);
 			}
 
-			sol::function funcObj = sceneScriptObj["after_actor_move"];
-			LuaPlugin::callLuaFunc(funcObj, sceneScriptObj, actorId, enterTbl, leaveTbl);
+			sol::function funcObj = sceneScriptObj["after_entity_move"];
+			LuaPlugin::callLuaFunc(funcObj, sceneScriptObj, eid, enterTbl, leaveTbl);
 			break;
 		}
 		default:
@@ -117,32 +117,32 @@ static void bindScene(std::shared_ptr<sol::state> lua) {
 
 	gameScene_type["createPlayer"] = &GameScene::createPlayer;
 	gameScene_type["createNpc"] = &GameScene::createNpc;
-	gameScene_type["removeActor"] = &GameScene::removeActor;
-	gameScene_type["onActorEnter"] = &GameScene::onActorEnter;
+	gameScene_type["removeEntity"] = &GameScene::removeEntity;
+	gameScene_type["onEntityEnter"] = &GameScene::onEntityEnter;
 }
 
 static void bindPlayer(std::shared_ptr<sol::state> lua) {
-	sol::usertype<GamePlayer> gamePlayer_type = lua->new_usertype<GamePlayer>("GamePlayer");
-	gamePlayer_type["setScriptObj"] = &GamePlayer::setScriptObj;
-	gamePlayer_type["getConnId"] = &GamePlayer::getConnId;
-	gamePlayer_type["getActorId"] = &GameActor::getActorId;
+	sol::usertype<PlayerEntity> playerType = lua->new_usertype<PlayerEntity>("GamePlayer");
+	playerType["setScriptObj"] = &PlayerEntity::setScriptObj;
+	playerType["getConnId"] = &PlayerEntity::getConnId;
+	playerType["getEntityId"] = &SceneEntity::getEntityId;
 	//void(GamePlayer::*sendToClient)(int, const char*, int) = &GamePlayer::sendToClient;
-	gamePlayer_type["sendToClient"] = sol::resolve<void(int, const char*, int)>(&GamePlayer::sendToClient);   //sendToClient;
-	gamePlayer_type["sendToSight"] = sol::resolve<void(int, const char*, int)>(&GameActor::broadcastMsgToSight);
-	gamePlayer_type["x"] = sol::property(&GamePlayer::getX);
-	gamePlayer_type["y"] = sol::property(&GamePlayer::getY);
-	gamePlayer_type["move_speed"] = sol::property(&GamePlayer::getMoveSpeed, &GamePlayer::setMoveSpeed);
-	gamePlayer_type["setConnId"] = &GamePlayer::setConnId;
+	playerType["sendToClient"] = sol::resolve<void(int, const char*, int)>(&PlayerEntity::sendToClient);   //sendToClient;
+	playerType["sendToSight"] = sol::resolve<void(int, const char*, int)>(&SceneEntity::broadcastMsgToSight);
+	playerType["x"] = sol::property(&PlayerEntity::getX);
+	playerType["y"] = sol::property(&PlayerEntity::getY);
+	playerType["move_speed"] = sol::property(&PlayerEntity::getMoveSpeed, &PlayerEntity::setMoveSpeed);
+	playerType["setConnId"] = &PlayerEntity::setConnId;
 }
 
 static void bindNpc(std::shared_ptr<sol::state> lua) {
-	sol::usertype<GameNpc> gameNpc_type = lua->new_usertype<GameNpc>("GameNpc");
-	gameNpc_type["getActorId"] = &GameActor::getActorId;
-	gameNpc_type["x"] = sol::property(&GameNpc::getX);
-	gameNpc_type["y"] = sol::property(&GameNpc::getY);
-	gameNpc_type["move_speed"] = sol::property(&GameNpc::getMoveSpeed, &GameNpc::setMoveSpeed);
-	gameNpc_type["moveTo"] = &GameNpc::moveTo;
-	gameNpc_type["sendToSight"] = sol::resolve<void(int, const char*, int)>(&GameActor::broadcastMsgToSight);
+	sol::usertype<NpcEntity> npcType = lua->new_usertype<NpcEntity>("GameNpc");
+	npcType["getEntityId"] = &SceneEntity::getEntityId;
+	npcType["x"] = sol::property(&NpcEntity::getX);
+	npcType["y"] = sol::property(&NpcEntity::getY);
+	npcType["move_speed"] = sol::property(&NpcEntity::getMoveSpeed, &NpcEntity::setMoveSpeed);
+	npcType["moveTo"] = &NpcEntity::moveTo;
+	npcType["sendToSight"] = sol::resolve<void(int, const char*, int)>(&SceneEntity::broadcastMsgToSight);
 }
 
 void LuaScene::bindLuaScene(std::shared_ptr<sol::state> lua) {

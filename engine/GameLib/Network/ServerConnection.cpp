@@ -18,6 +18,7 @@ ServerConnection::ServerConnection(int connID, std::shared_ptr<tcp::socket> sock
 ServerConnection::~ServerConnection()
 {
 	try {
+		m_isConnected = false;
 		this->m_socket->close();
 	}catch (boost::system::system_error e) {
 		LOG_ERROR("socket close error, %s", e.what());

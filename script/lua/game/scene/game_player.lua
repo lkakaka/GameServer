@@ -1,16 +1,16 @@
-require("game.scene.game_actor")
+require("game.scene.scene_entity")
 require("util.logger")
 require("game.scene.player.item_mgr")
 require("game.scene.player.msg_handler")
 require("base.service_type")
 
-clsGamePlayer = clsGameActor:Inherit("clsGamePlayer")
+clsGamePlayer = clsSceneEntity:Inherit("clsGamePlayer")
 
 clsGamePlayer.index_roleId = "role_id"
 clsGamePlayer.index_connId = "conn_id"
 
 function clsGamePlayer:__init__(game_scene, engine_obj, role_id, name)
-    Super(clsGamePlayer).__init__(self, game_scene, engine_obj:getActorId(), {clsGamePlayer.index_roleId, clsGamePlayer.index_connId})
+    Super(clsGamePlayer).__init__(self, game_scene, engine_obj:getEntityId(), {clsGamePlayer.index_roleId, clsGamePlayer.index_connId})
     self.engineObj = engine_obj
     self.role_id = role_id
     self.name = name
@@ -59,23 +59,23 @@ end
 function clsGamePlayer:pack_born_info(msg)
     msg.player_list = msg.player_list or {}
     local player_info = {}
-    player_info.actor_id = self.actor_id
+    player_info.actor_id = self.entity_id
     player_info.name = self.name
     table.insert(msg.player_list, player_info)
 end
 
-function clsGamePlayer:on_actor_enter_sight(actor)
-    if not self:check_can_see(actor) then return end
+function clsGamePlayer:on_entity_enter_sight(entity)
+    if not self:check_can_see(entity) then return end
     local msg = {}
-    actor:pack_born_info(msg)
+    entity:pack_born_info(msg)
     self:send_msg_to_client(MSG_ID_ACTOR_BORN, msg)
 end
 
-function clsGamePlayer:on_actor_leave_sight(actor)
+function clsGamePlayer:on_entity_leave_sight(entity)
     local msg = {actor_ids = {}}
-    table.insert(msg.actor_ids, actor.actor_id)
+    table.insert(msg.actor_ids, entity.entity_id)
     self:send_msg_to_client(MSG_ID_ACTOR_DISSOLVE, msg)
-    print("on_actor_leave_sight")
+    print("on_entity_leave_sight")
 end
 
 function clsGamePlayer:on_enter_scene()

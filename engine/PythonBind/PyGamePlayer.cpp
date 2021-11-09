@@ -16,7 +16,7 @@ static PyObject* PyPlayer_New(struct _typeobject* tobj, PyObject* args, PyObject
 	PyObject* actorIdObj = PyTuple_GetItem(tuple, 1);
 
 	int sceneUid = PyLong_AsLong(sceneUidObj);
-	int actorId = PyLong_AsLong(actorIdObj);
+	int eid = PyLong_AsLong(actorIdObj);
 
 	GameScene* gameScene = SceneMgr::getSceneMgr()->getScene(sceneUid);
 	if (gameScene == NULL) {
@@ -24,20 +24,20 @@ static PyObject* PyPlayer_New(struct _typeobject* tobj, PyObject* args, PyObject
 		Py_RETURN_NONE;
 	}
 
-	GameActor* gameActor = gameScene->getActor(actorId);
-	if (gameActor == NULL) {
-		LOG_ERROR("new py player failed, not found actor, sceneUid:%d,actorId:%d", sceneUid, actorId);
+	SceneEntity* entity = gameScene->getEntity(eid);
+	if (entity == NULL) {
+		LOG_ERROR("new py player failed, not found entity, sceneUid:%d,actorId:%d", sceneUid, eid);
 		Py_RETURN_NONE;
 	}
-	GamePlayer* gamePlayer = dynamic_cast<GamePlayer*>(gameActor);
-	if (gamePlayer == NULL) {
-		LOG_ERROR("new py player failed, not found player, sceneUid:%d,actorId:%d", sceneUid, actorId);
+	PlayerEntity* player = dynamic_cast<PlayerEntity*>(entity);
+	if (player == NULL) {
+		LOG_ERROR("new py player failed, not found player, sceneUid:%d,eid:%d", sceneUid, eid);
 		Py_RETURN_NONE;
 	}
 	/*GamePlayer* gamePlayer = (GamePlayer*)ptr;*/
-	gamePlayer->setScriptObj(scriptObj);
+	player->setScriptObj(scriptObj);
 	PyObject* obj = PyType_GenericNew(tobj, args, obj2);
-	((PyGamePlayer*)obj)->gamePlayer = gamePlayer;
+	((PyGamePlayer*)obj)->gamePlayer = player;
 	return obj;
 }
 

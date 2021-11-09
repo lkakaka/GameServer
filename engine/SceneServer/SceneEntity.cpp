@@ -1,4 +1,4 @@
-#include "GameActor.h"
+#include "SceneEntity.h"
 #include "TimeUtil.h"
 #include <algorithm>
 #include "Logger.h"
@@ -11,43 +11,43 @@
 #include "Network/ServiceCommEntityMgr.h"
 
 
-GameActor::GameActor(ActorType actorType, int actorId, void* gameScene, GridChgFunc gridChgFunc) :
-	m_actorId(actorId), m_actorType(actorType), m_moveSpeed(0), m_gameScene(gameScene), 
+SceneEntity::SceneEntity(SceneEntityType eType, int eid, void* gameScene, GridChgFunc gridChgFunc) :
+	m_entityId(eid), m_entityType(eType), m_moveSpeed(0), m_gameScene(gameScene),
 	m_pos(Position(0, 0)), m_grid(Grid(0, 0)), m_lastMoveTime(0),
 	m_gridChgFunc(gridChgFunc) 
 {
 	
 }
 
-GameActor::GameActor(ActorType actorType, int actorId, int x, int y, int moveSpeed, void* gameScene, GridChgFunc posChgFunc) :
-	m_actorId(actorId), m_actorType(actorType), m_moveSpeed(moveSpeed), m_gameScene(gameScene),
+SceneEntity::SceneEntity(SceneEntityType eType, int eid, int x, int y, int moveSpeed, void* gameScene, GridChgFunc posChgFunc) :
+	m_entityId(eid), m_entityType(eType), m_moveSpeed(moveSpeed), m_gameScene(gameScene),
 	m_pos(Position(x, y)), m_grid(Grid(x / GRID_X_SIZE, y / GRID_Y_SIZE)), m_lastMoveTime(0),
 	m_gridChgFunc(posChgFunc)
 {
 
 }
 
-void GameActor::addSightActors(std::set<int>& actors) {
-	for (int actor_id : actors) {
-		m_sightActors.insert(actor_id);
+void SceneEntity::addSightEntities(std::set<int>& entityIds) {
+	for (int eid : entityIds) {
+		m_sightEntityIds.insert(eid);
 	}
 }
 
-void GameActor::addSightActor(int actorId) {
-	m_sightActors.insert(actorId);
+void SceneEntity::addSightEntity(int eid) {
+	m_sightEntityIds.insert(eid);
 }
 
-void GameActor::removeSightActors(std::set<int>& actors) {
-	for (int actor_id : actors) {
-		m_sightActors.erase(actor_id);
+void SceneEntity::removeSightEntities(std::set<int>& entityIds) {
+	for (int eid : entityIds) {
+		m_sightEntityIds.erase(eid);
 	}
 }
 
-void GameActor::removeSightActor(int actorId) {
-	m_sightActors.erase(actorId);
+void SceneEntity::removeSightEntity(int eid) {
+	m_sightEntityIds.erase(eid);
 }
 
-void GameActor::setPos(float x, float y, bool isTemp) {
+void SceneEntity::setPos(float x, float y, bool isTemp) {
 	m_pos.x = x;
 	m_pos.y = y;
 	if (isTemp) return;
@@ -58,24 +58,24 @@ void GameActor::setPos(float x, float y, bool isTemp) {
 		m_grid.y = y / GRID_Y_SIZE;
 		//m_gridChgFunc(m_actorId, &m_grid);
 		if (gameScene != NULL) {
-			gameScene->onActorGridChg(m_actorId, &m_grid);
+			gameScene->onEntityGridChg(m_entityId, &m_grid);
 		}
 	}
 
 	if (gameScene != NULL) {
 		SyncPos pos_msg;
-		pos_msg.set_actor_id(m_actorId);
+		pos_msg.set_actor_id(m_entityId);
 		pos_msg.set_pos_x(getX());
 		pos_msg.set_pos_y(getY());
 		broadcastMsgToSight(MSG_ID_SYNC_POS, &pos_msg);
-		((GameScene*)m_gameScene)->onActorPosChg(m_actorId, m_pos);
+		((GameScene*)m_gameScene)->onEntityPosChg(m_entityId, m_pos);
 	}
 
 	
 	LOG_INFO("pos:%0.3f, %0.3f, gird_x:%d, gird_y:%d", x, y, m_grid.x, m_grid.y);
 }
 
-void GameActor::setTgtPosList(std::vector<Position>& tgtPosList) {
+void SceneEntity::setTgtPosList(std::vector<Position>& tgtPosList) {
 	int64_t ts = TimeUtil::nowMillSec();
 	/*if (!m_tgtPosList.empty()) {
 		updatePos(ts);
@@ -85,7 +85,7 @@ void GameActor::setTgtPosList(std::vector<Position>& tgtPosList) {
 	m_lastMoveTime = ts;
 }
 
-void GameActor::updatePos(int64_t ts) {
+void SceneEntity::updatePos(int64_t ts) {
 	if (m_moveSpeed <= 0) return;
 	{
 		std::unique_lock<std::mutex> lock(m_tgtPosLock);
@@ -120,25 +120,25 @@ void GameActor::updatePos(int64_t ts) {
 	}
 }
 
-std::set<int> GameActor::getSightActorConndIds() {
+std::set<int> SceneEntity::getSightEntityConndIds() {
 	std::set<int> connIds;
 	GameScene* gameScene = (GameScene*)m_gameScene;
-	for (int actor_id : m_sightActors) {
-		GameActor* gameActor = gameScene->getActor(actor_id);
-		if (gameActor == NULL || !gameActor->isPlayer()) continue;
-		GamePlayer* gamePlayer = (GamePlayer*)gameActor;
-		connIds.emplace(gamePlayer->getConnId());
+	for (int eid : m_sightEntityIds) {
+		SceneEntity* entity = gameScene->getEntity(eid);
+		if (entity == NULL || !entity->isPlayer()) continue;
+		PlayerEntity* player = (PlayerEntity*)entity;
+		connIds.emplace(player->getConnId());
 	}
 	return connIds;
 }
 
-void GameActor::broadcastMsgToClient(std::set<int>& connIds, int msgId, google::protobuf::Message* msg) {
+void SceneEntity::broadcastMsgToClient(std::set<int>& connIds, int msgId, google::protobuf::Message* msg) {
 	std::string msgData;
 	msg->SerializeToString(&msgData);
 	broadcastMsgToClient(connIds, msgId, msgData.c_str(), msgData.length());
 }
 
-void GameActor::broadcastMsgToClient(std::set<int>& connIds, int msgId, const char* msg, int msgLen) {
+void SceneEntity::broadcastMsgToClient(std::set<int>& connIds, int msgId, const char* msg, int msgLen) {
 	MyBuffer buffer;
 	buffer.writeInt(msgId);
 	buffer.writeInt(connIds.size()); // 连接数量
@@ -151,16 +151,16 @@ void GameActor::broadcastMsgToClient(std::set<int>& connIds, int msgId, const ch
 	CommEntityMgr::getSingleton()->getCommEntity()->sendToService(&addr, (char*)buffer.data(), buffer.size());
 }
 
-void GameActor::broadcastMsgToSight(int msgId, const char* msg, int msgLen) {
-	if (m_sightActors.size() == 0) return;
-	std::set<int> connIds = getSightActorConndIds();
+void SceneEntity::broadcastMsgToSight(int msgId, const char* msg, int msgLen) {
+	if (m_sightEntityIds.size() == 0) return;
+	std::set<int> connIds = getSightEntityConndIds();
 	if (connIds.size() == 0) return;
 	broadcastMsgToClient(connIds, msgId, msg, msgLen);
 }
 
-void GameActor::broadcastMsgToSight(int msgId, google::protobuf::Message* msg) {
-	if (m_sightActors.size() == 0) return;
-	std::set<int> connIds = getSightActorConndIds();
+void SceneEntity::broadcastMsgToSight(int msgId, google::protobuf::Message* msg) {
+	if (m_sightEntityIds.size() == 0) return;
+	std::set<int> connIds = getSightEntityConndIds();
 	if (connIds.size() == 0) return;
 	std::string msgData;
 	msg->SerializeToString(&msgData);
