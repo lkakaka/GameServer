@@ -3,12 +3,13 @@ while read choice;do
 echo "你输入的是$choice"
 cd ..
 if [ "$choice" == "restart" ]; then
-./stop_all.sh
-./start_all.sh
+./stop.sh all
+sleep 3
+./start.sh all
 elif [ "$choice" == "start_all" ]; then
-./start_all.sh
+./start.sh all
 elif [ $choice == "stop_all" ]; then
-./stop_all.sh
+./stop.sh all
 fi
 cd wsd
 done

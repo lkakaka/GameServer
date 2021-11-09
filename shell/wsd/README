@@ -1,0 +1,4 @@
+1、启动websocketd
+./start_ws.sh
+
+2、在客户端用浏览器打开ws.html

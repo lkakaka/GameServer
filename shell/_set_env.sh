@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "call set_path.sh"
+
 basedir=`cd $(dirname $0);pwd -P`
 bindir=$basedir/../bin
 logdir=$basedir/../log
