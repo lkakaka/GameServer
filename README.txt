@@ -1,1 +1,20 @@
-﻿this is a gameserver demo
+# GameServer
+
+#### 介绍
+分布式游戏服务器，跨平台（支持WIN和LINUX平台）, 引擎C++开发（需要编译器支持C++17），脚本支持Python3和Lua。
+
+#### 架构
+微服务架构，基本架构需要包含Center、DB、Gateway、Game、Login、Global几个微服务。
+Center：中心服，负责一组服务器所有微服务之间的数据转发。
+DB：数据服务，负责数据存储相关功能，目前使用的数据库是MySql，缓存使用的是redis。
+Gateway: 网关服，负责与客户端的连接。
+Login：登陆服，负责登陆相关校验
+Game：游戏服，玩家进入游戏后所在服务，主要包含游戏场景及场景相关功能。
+Global：全局服务，记录一些全局信息，如：场景分配管理、玩家在哪个Game哪个场景等信息
+另外可以根据需要开启其他服务，比如邮件服等。
+
+#### 安装教程
+参考INSTALL.md
+
+#### 使用说明
+参考INSTALL.md
