@@ -37,6 +37,8 @@ public:
 	void writeShort(short val);
 	void writeInt(int val);
 	void writeLong(long long val);
+
+	void changeInt(int offset, int val);
 	
 	void writeString(const char* dat, int len);
 	void append(std::vector<char>& dat);

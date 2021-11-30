@@ -130,7 +130,7 @@ void GatewayConnection::dispatchClientMsg(int msgId, int msgLen, const char* msg
 		case MSG_ID_CREATE_ROLE_REQ:
 		case MSG_ID_ENTER_GAME: {
 			ServiceAddr addr(ServiceInfo::getSingleton()->getServiceGroup(), ServiceType::SERVICE_TYPE_LOGIN, 0);
-			CommEntityMgr::getSingleton()->getCommEntity()->sendToService(&addr, (char*)buffer.data(), buffer.size());
+			SERVER_CENTER_COMM_ENTITY->sendToService(&addr, (char*)buffer.data(), buffer.size());
 			break;
 		}
 		default: {
@@ -140,7 +140,7 @@ void GatewayConnection::dispatchClientMsg(int msgId, int msgLen, const char* msg
 				return;
 			}
 			ServiceAddr addr(ServiceInfo::getSingleton()->getServiceGroup(), ServiceType::SERVICE_TYPE_SCENE, m_sceneServiceId);
-			CommEntityMgr::getSingleton()->getCommEntity()->sendToService(&addr, (char*)buffer.data(), buffer.size());
+			SERVER_CENTER_COMM_ENTITY->sendToService(&addr, (char*)buffer.data(), buffer.size());
 			break;
 		}
 	}

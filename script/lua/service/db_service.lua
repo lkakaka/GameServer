@@ -9,7 +9,10 @@ clsDBService = clsServiceBase:Inherit("clsDBService")
 function clsDBService:__init__()
     Super(clsDBService).__init__(self)
     logger.logInfo("clsDBService:__init__")
-    self.db_hander = clsDBHandler:New("save", "127.0.0.1", 6379)
+    local db_name = Config:getConfigStr("db_name")
+    local redis_ip = Config:getConfigStr("redis_ip")
+    local redis_port = Config:getConfigInt("redis_port")
+    self.db_hander = clsDBHandler:New(db_name, redis_ip, redis_port)
     self:initRpcHandler()
     self:regServiceMsgHandler(MSG_ID_TEST_REQ, self._on_recv_test_req)
 end
@@ -85,6 +88,7 @@ end
 
 
 function clsDBService:_on_recv_test_req(sender, msg_id, msg)
+    print("-----recv test msg", msg.id, msg.msg)
     -- local tbl_player = { table_name = "player", row = {account = "test"} }
     -- local db_res = self.db_hander:load(tbl_player)
     -- print(db_res)

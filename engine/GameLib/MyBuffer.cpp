@@ -104,6 +104,13 @@ void MyBuffer::writeInt(int val) {
 	}
 }
 
+void MyBuffer::changeInt(int offset, int val) {
+	for (int i = 0; i < 4; i++) {
+		unsigned char ch = (unsigned char)(val >> (24 - 8 * i));
+		buffer[offset + i] = ch;
+	}
+}
+
 void MyBuffer::writeLong(long long val) {
 	for (int i = 0; i < 8; i++) {
 		unsigned char ch = (unsigned char)(val >> (56 - 8 * i));

@@ -102,25 +102,25 @@ int main(int argc, char** argv)
 
 	int serverId = GET_CONFG_INT("server_id");
 	if (serverId <= 0) {
-		printf("$not config server id, config file: %s", cfgName);
+		printf("not config server id, config file: %s", cfgName);
 		return 0;
 	}
 
 	std::string serviceName = GET_CONFG_STR("service_name");
 	if (serviceName.length() == 0) {
-		printf("$not config service name, file name: %s", cfgName);
+		printf("not config service name, file name: %s", cfgName);
 		return 0;
 	}
 
 	ServiceType serviceType = getServiceType(serviceName);
-	if (serviceType <= ServiceType::SERVICE_TYPE_START || serviceType >= ServiceType::SERVICE_TYPE_END) {
-		printf("$service type error, serviceName: %s", serviceName.c_str());
+	if (serviceType < ServiceType::SERVICE_TYPE_START || serviceType >= ServiceType::SERVICE_TYPE_END) {
+		printf("service type error, serviceName: %s", serviceName.c_str());
 		return 0;
 	}
 
 	int serviceId = GET_CONFG_INT("service_id");
 	if (serviceId < 0) {
-		printf("$service id error, serviceName: %s", serviceName.c_str());
+		printf("service id error, serviceName: %s", serviceName.c_str());
 		return 0;
 	}
 
@@ -156,7 +156,7 @@ int main(int argc, char** argv)
 	GameService::g_gameService = new GameService(serviceName, serviceType);
 	GameService::g_gameService->initScript(funcName.c_str());
 
-	if (serviceType == SERVICE_TYPE_CENTER) {
+	if (serviceType == SERVICE_TYPE_CENTER || serviceType == SERVICE_TYPE_GROUP_CENTER) {
 		initServiceCenter(io);
 	}
 	else {
@@ -209,7 +209,7 @@ void initServiceCommEntity(boost::asio::io_service* io) {
 
 	ServiceAddr commAddr(SERVICE_GROUP, SERVICE_TYPE, SERVICE_ID);
 	CommEntityMgr* commEntityMgr = new CommEntityMgr();
-	IServiceCommEntity* commEntity = commEntityMgr->createCommEntity(commAddr, centerServiceIp.c_str(), centerServicePort);
+	IServiceCommEntity* commEntity = commEntityMgr->createCommEntity(SERVER_CENTER_COMM_NAME, commAddr, centerServiceIp.c_str(), centerServicePort);
 
 	if (SERVICE_TYPE == SERVICE_TYPE_GATEWAY) {
 		initGateway(io);

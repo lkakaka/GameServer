@@ -147,6 +147,17 @@ function clsGMHandler:_gm_remove_npc(param)
     return ErrorCode.OK, "ok"
 end
 
+function clsGMHandler:_gm_test_cross(param)
+    local arg_list = StrUtil.split(param.args, ",")
+    local service_group = tonumber(arg_list[1])
+    local db_addr = { serviceGroup = service_group, serviceType = SERVICE_TYPE_DB, serviceId = 0 }
+    local msg = {}
+    msg.msg = "hello"
+    param.player:send_msg_to_service(db_addr, MSG_ID_TEST_REQ, msg)
+    logger.logInfo("send cross msg to %d", service_group)
+    return ErrorCode.OK, "ok"
+end
+
 clsGMHandler._gm_cmd = {
     ["mem_usage"] = clsGMHandler._gm_mem_usage,
     ["mem_gc"] = clsGMHandler._gm_mem_gc,
@@ -156,4 +167,5 @@ clsGMHandler._gm_cmd = {
     ["goto_scene"] = clsGMHandler._gm_goto_scene,
     ["cnpc"] = clsGMHandler._gm_create_npc,
     ["rnpc"] = clsGMHandler._gm_remove_npc,
+    ["test_cross"] = clsGMHandler._gm_test_cross,
 }

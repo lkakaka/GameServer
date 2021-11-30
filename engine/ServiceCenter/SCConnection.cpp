@@ -1,6 +1,7 @@
 #include "SCConnection.h"
 #include "Logger.h"
 #include "SCMessageHandler.h"
+#include "ServiceInfo.h"
 
 #define MAX_MSG_LEN 64 * 1024
 
@@ -30,8 +31,8 @@ void SCConnection::parse() {
 	int serviceType = m_recvBuffer.readInt();
 	int serviceId = m_recvBuffer.readInt();
 	msgLen = m_recvBuffer.readInt();
-	ServiceAddr sender(serviceGroup, serviceType, serviceId);
-	int errCode = SCMessageHandler::getSingleton()->onRecvConnectionMessage(this, &sender, (char*)m_recvBuffer.data(), msgLen);
+	ServiceAddr dstAddr(serviceGroup, serviceType, serviceId);
+	int errCode = SCMessageHandler::getSingleton()->onRecvConnectionMessage(this, &dstAddr, (char*)m_recvBuffer.data(), msgLen);
 	if (errCode != MSG_ERROR_CODE::OK) {
 		LOG_ERROR("sc conn msg error, errCode:%d", errCode);
 		if (errCode == MSG_ERROR_CODE::VERIFY_FAIL) {

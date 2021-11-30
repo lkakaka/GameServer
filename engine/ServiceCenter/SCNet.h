@@ -3,12 +3,15 @@
 #include "Network/ServerNet.h"
 #include "SCConnection.h"
 #include "Singleton.h"
+#include "Network/TcpCommEntity.h"
 
 USE_NS_GAME_NET
 
 class SCNet : public ServerNetwork, public Singleton<SCNet> {
 private:
 	std::unordered_map<std::string, std::shared_ptr<ServerConnection>> m_serviceConns;
+
+
 
 protected:
 	ServerConnection* onAccept(std::shared_ptr<tcp::socket> socket);

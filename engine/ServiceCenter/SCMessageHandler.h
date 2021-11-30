@@ -22,7 +22,8 @@ private:
 	int handleVerifyMsg(SCConnection* conn, ServiceAddr* sender, char* data, int len);
 	void addMsgCache(ServiceAddr* dst, MyBuffer* buffer);
 	void dispatchCacheMsg(SCConnection* conn);
+	void sendServiceMsg(SCConnection* dstConn, MyBuffer* buffer, ServiceAddr* srcAddr);
 public:
 	void onRecvMessage(ServiceAddr* sender, char* data, int dataLen);
-	int onRecvConnectionMessage(SCConnection* conn, ServiceAddr* sender, char* data, int dataLen);
+	int onRecvConnectionMessage(SCConnection* conn, ServiceAddr* dstAddr, char* data, int dataLen);
 };

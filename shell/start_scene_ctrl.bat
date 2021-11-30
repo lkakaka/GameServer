@@ -1,2 +1,2 @@
 @echo off
-call start.bat scene_ctrl
+call start.bat 101 scene_ctrl

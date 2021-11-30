@@ -40,6 +40,7 @@ DBHandler::DBHandler(const char* dbUrl, int dbPort, const char* dbUserName, cons
 	conn->close();
 	delete conn;
 	m_isCreateDB = true;
+	LOG_INFO("database name:%s", dbName);
 	initTableSchema();
 
 	//Table tbl;

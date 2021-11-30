@@ -1,2 +1,2 @@
 @echo off
-call start.bat gateway
+call start.bat 101 gateway

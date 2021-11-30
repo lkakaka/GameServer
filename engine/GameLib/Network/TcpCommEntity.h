@@ -6,7 +6,7 @@
 
 USE_NS_GAME_NET
 
-class TcpCommEntity : public ClientConnection, public Singleton<TcpCommEntity>, public IServiceCommEntity {
+class TcpCommEntity : public ClientConnection, public IServiceCommEntity {
 private:
 	std::string m_serverIp;
 	int m_serverPort;

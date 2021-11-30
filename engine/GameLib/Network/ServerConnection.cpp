@@ -20,7 +20,7 @@ ServerConnection::~ServerConnection()
 	try {
 		m_isConnected = false;
 		this->m_socket->close();
-	}catch (boost::system::system_error e) {
+	}catch (boost::system::system_error& e) {
 		LOG_ERROR("socket close error, %s", e.what());
 	}
 	LOG_DEBUG("delete ServerConnection: connId:%d", m_connID);

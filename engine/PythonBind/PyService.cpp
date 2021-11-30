@@ -41,7 +41,7 @@ static PyObject* sendMsgToClient(PyObject* self, PyObject* args)
 	buffer.writeInt(connId);
 	buffer.writeString(msg, msgLen);
 	ServiceAddr addr(ServiceInfo::getSingleton()->getServiceGroup(), ServiceType::SERVICE_TYPE_GATEWAY, 0);
-	CommEntityMgr::getSingleton()->getCommEntity()->sendToService(&addr, (char*)buffer.data(), buffer.size());
+	SERVER_CENTER_COMM_ENTITY->sendToService(&addr, (char*)buffer.data(), buffer.size());
 
 	Py_RETURN_TRUE;
 }
@@ -78,7 +78,7 @@ static PyObject* sendMsgToService(PyObject* self, PyObject* args)
 	// 发往gateway的消息都需要一个connId
 	if (addr.getServiceType() == SERVICE_TYPE_GATEWAY) buffer.writeInt(-1);
 	buffer.writeString(msg, msgLen);
-	CommEntityMgr::getSingleton()->getCommEntity()->sendToService(&addr, (char*)buffer.data(), buffer.size());
+	SERVER_CENTER_COMM_ENTITY->sendToService(&addr, (char*)buffer.data(), buffer.size());
 
 	LOG_INFO("send msg to service %s, msgId:%d", addr.getName(), msgId);
 	Py_RETURN_TRUE;

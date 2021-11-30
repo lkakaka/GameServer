@@ -148,7 +148,7 @@ void SceneEntity::broadcastMsgToClient(std::set<int>& connIds, int msgId, const 
 	buffer.writeByte(SEND_TYPE_TCP);
 	buffer.writeString(msg, msgLen);
 	ServiceAddr addr(ServiceInfo::getSingleton()->getServiceGroup(), ServiceType::SERVICE_TYPE_GATEWAY, 0);
-	CommEntityMgr::getSingleton()->getCommEntity()->sendToService(&addr, (char*)buffer.data(), buffer.size());
+	SERVER_CENTER_COMM_ENTITY->sendToService(&addr, (char*)buffer.data(), buffer.size());
 }
 
 void SceneEntity::broadcastMsgToSight(int msgId, const char* msg, int msgLen) {

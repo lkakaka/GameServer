@@ -1,6 +1,6 @@
 @echo off
 
-call start.bat all
+call start.bat 101 all
 
 ::call config.bat
 

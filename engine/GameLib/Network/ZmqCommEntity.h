@@ -10,7 +10,7 @@
 #include <thread>
 #include <functional>
 
-class ZmqCommEntity : public Singleton<ZmqCommEntity>, public IServiceCommEntity {
+class ZmqCommEntity : public IServiceCommEntity {
 private:
 	//static ZmqInst* zmqInstance;
 	void* zmq_context;

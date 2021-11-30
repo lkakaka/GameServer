@@ -1,3 +1,3 @@
 @echo off
-call start.bat scene
+call start.bat 101 scene
 

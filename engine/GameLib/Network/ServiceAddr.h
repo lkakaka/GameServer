@@ -23,6 +23,12 @@ public:
 	inline int getServiceType() { return serviceType; }
 	inline int getServiceId() { return serviceId; }
 
+	inline void changeServiceAddr(int serviceType, int serviceId) {
+		this->serviceType = serviceType;
+		this->serviceId = serviceId;
+		addrName = toString();
+	}
+
 	void parseAddr(char* addr);
 };
 

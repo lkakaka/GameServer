@@ -85,8 +85,8 @@ bool ServiceMessageHandler::handleEngineServiceMsg(int msgId, char* data, int da
 }
 
 int ServiceMessageHandler::handleServiceMessage(ServiceAddr* srcAddr, char* data, int dataLen) {
-	if (dataLen <= 4) {
-		LOG_ERROR("recv %s msg format error, data len <= 4", srcAddr->getName());
+	if (dataLen < 4) {
+		LOG_ERROR("recv %s msg format error, data len(%d) < 4", srcAddr->getName(), dataLen);
 		return 0;
 	}
 	MyBuffer buffer(data, dataLen);

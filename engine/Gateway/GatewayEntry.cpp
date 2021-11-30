@@ -18,5 +18,5 @@ void initGateway(boost::asio::io_service* io) {
 	gatewayNet->start(port);
 	if (udpPort > 0) gatewayNet->startUdp(udpPort);
 	GatewayMessageHandler* messageHandler = new GatewayMessageHandler();
-	CommEntityMgr::getSingleton()->getCommEntity()->setMessageHandler(messageHandler);
+	SERVER_CENTER_COMM_ENTITY->setMessageHandler(messageHandler);
 }

@@ -2,37 +2,37 @@
 
 check_all_start()
 {
-    for file in pid/*
+    for file in pid/$1/*
     do
     name=`echo $file | awk -F'[/.]' '{print $2}'`
-    check_server_start $name "$1"
+    check_server_start $name "$2"
     done
 }
 
 check_all_stop()
 {
-    for file in pid/*
+    for file in pid/$1/*
     do
     name=`echo $file | awk -F'[/.]' '{print $2}'`
-    check_server_stop $name "$1"
+    check_server_stop $1 $name "$2"
     done
 }
 
 check_server_start()
 {
-     pid=`sed -n '1 p' pid/$1.pid`
+     pid=`sed -n '1 p' pid/$1/$2.pid`
      pcount=`ps -ef | grep $pid | grep -v 'grep' | wc -l`
      if [ $pcount == 0 ];then
-        echo "$1 $2!!!"
+        echo "$2 $3!!!"
      fi
 }
 
 check_server_stop()
 {
-     pid=`sed -n '1 p' pid/$1.pid`
+     pid=`sed -n '1 p' pid/$1/$2.pid`
      pcount=`ps -ef | grep $pid | grep -v 'grep' | wc -l`
      if [ $pcount == 1 ];then
-        echo "$1 $2!!!"
+        echo "$2 $3!!!"
      fi
 }
 

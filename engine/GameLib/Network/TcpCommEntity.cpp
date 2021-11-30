@@ -2,7 +2,7 @@
 #include "Logger.h"
 
 extern const char* SERVICE_CONN_KEY;
-INIT_SINGLETON_CLASS(TcpCommEntity)
+//INIT_SINGLETON_CLASS(TcpCommEntity)
 
 TcpCommEntity::TcpCommEntity(ServiceAddr& addr, const char* serverIp, int port) :
 	IServiceCommEntity(addr),

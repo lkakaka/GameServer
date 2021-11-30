@@ -17,7 +17,7 @@ startAll(){
         exit
     fi
 
-	for cfg_file in conf/*
+	for cfg_file in conf/$1/*
 	do
 	#echo $cfg_file
 	server_name=${cfg_file%.*}
@@ -28,15 +28,20 @@ startAll(){
 }
 
 startServer(){
-    result=`check_server_stop $1 "not stopped"`
+    result=`check_server_stop $1 $2 "not stopped"`
     if [ -n "$result" ];then
         echo $result
         exit
     fi
+	
+	pid_dir=pid/$1
+	if [ ! -d "$pid_dir" ]; then
+		mkdir pid_dir
+	fi
     
-	$GAME_SERVER conf/$1.cfg >> ../log/$1_output.log 2>&1 &
-	echo $! > pid/$1.pid
-	echo "start" $1
+	$GAME_SERVER conf/$1/$2.cfg >> ../log/$1_output.log 2>&1 &
+	echo $! > pid_dir/$2.pid
+	echo "start" $2
 }
 
 startTest() {
@@ -46,15 +51,15 @@ startTest() {
 }
 
 usage(){
-	echo "Usage: start [all|center|login...]"
+	echo "Usage: start [server_id] [all|center|login...]"
 }
 
-case $1 in
+case $2 in
 all)
 	setEnv
-	startAll
+	startAll $1
     sleep 1
-    result=`check_all_start "start failed"`
+    result=`check_all_start $1 "start failed"`
     if [ -z "$result" ];then
         echo "all server start successful"
     fi
@@ -64,13 +69,13 @@ test)
 	startTest
 	;;
 *)
-	if [ -f "conf/$1.cfg" ];then
+	if [ -f "conf/$1/$2.cfg" ];then
 		setEnv
-		startServer $1
+		startServer $1 $2
         sleep 1
-        result=`check_server_start $1 "start failed"`
+        result=`check_server_start $1 $2 "start failed"`
         if [ -z "$result" ];then
-            echo "$1 start successful"
+            echo "$2 start successful"
         fi
 	else
 		usage	

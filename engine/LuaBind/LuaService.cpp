@@ -39,7 +39,7 @@ bool LuaService::sendMsgToService(sol::table dstAddr, int msgId, const char* msg
 		buffer.writeByte(SEND_TYPE_TCP);
 	}
 	buffer.writeString(msg, msgLen);
-	CommEntityMgr::getSingleton()->getCommEntity()->sendToService(&addr, (char*)buffer.data(), buffer.size());
+	SERVER_CENTER_COMM_ENTITY->sendToService(&addr, (char*)buffer.data(), buffer.size());
 
 	LOG_INFO("send msg to service %s, msgId:%d", addr.getName(), msgId);
 	return true;
@@ -53,7 +53,7 @@ bool LuaService::sendMsgToClient(int connId, int msgId, const char* msg, int msg
 	buffer.writeByte(SEND_TYPE_TCP);
 	buffer.writeString(msg, msgLen);
 	ServiceAddr addr(ServiceInfo::getSingleton()->getServiceGroup(), ServiceType::SERVICE_TYPE_GATEWAY, 0);
-	CommEntityMgr::getSingleton()->getCommEntity()->sendToService(&addr, (char*)buffer.data(), buffer.size());
+	SERVER_CENTER_COMM_ENTITY->sendToService(&addr, (char*)buffer.data(), buffer.size());
 	return true;
 }
 
@@ -67,7 +67,7 @@ bool LuaService::broadcastMsgToClient(std::set<int> connIds, int msgId, const ch
 	buffer.writeByte(SEND_TYPE_TCP);
 	buffer.writeString(msg, msgLen);
 	ServiceAddr addr(ServiceInfo::getSingleton()->getServiceGroup(), ServiceType::SERVICE_TYPE_GATEWAY, 0);
-	CommEntityMgr::getSingleton()->getCommEntity()->sendToService(&addr, (char*)buffer.data(), buffer.size());
+	SERVER_CENTER_COMM_ENTITY->sendToService(&addr, (char*)buffer.data(), buffer.size());
 	return true;
 }
 
@@ -79,7 +79,7 @@ bool LuaService::sendMsgToClientKCP(int connId, int msgId, const char* msg, int 
 	buffer.writeByte(SEND_TYPE_KCP);
 	buffer.writeString(msg, msgLen);
 	ServiceAddr addr(ServiceInfo::getSingleton()->getServiceGroup(), ServiceType::SERVICE_TYPE_GATEWAY, 0);
-	CommEntityMgr::getSingleton()->getCommEntity()->sendToService(&addr, (char*)buffer.data(), buffer.size());
+	SERVER_CENTER_COMM_ENTITY->sendToService(&addr, (char*)buffer.data(), buffer.size());
 	return true;
 }
 
