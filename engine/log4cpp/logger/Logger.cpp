@@ -18,7 +18,7 @@
 std::vector<std::string> Logger::m_logs;
 
 
-int Logger::initLog(const char* serverName)
+int Logger::initLog(int serverId, const char* logFile)
 {
 	log4cpp::Category& root = log4cpp::Category::getRoot();
 	log4cpp::Category& console = log4cpp::Category::getInstance("console");
@@ -29,9 +29,11 @@ int Logger::initLog(const char* serverName)
 	root.setPriority(log4cpp::Priority::INFO);
 	console.setPriority(log4cpp::Priority::INFO);
 #endif
-	std::string logFileName = serverName;
-	std::string logDirName = "../log/";
-	if (M_ACCESS(logDirName.c_str(), 0) == -1 && M_MKDIR(logDirName.c_str(), 0755) == -1) {
+	std::string logFileName = logFile;
+	char logDirName[64]{ 0 };
+	sprintf(logDirName, "../log/%d/", serverId);
+	//std::string logDirName = "../log/" + serverId;
+	if (M_ACCESS(logDirName, 0) == -1 && M_MKDIR(logDirName, 0755) == -1) {
 		printf("create log dir failed\n");
 	}
 	logFileName = logDirName + logFileName + ".log";

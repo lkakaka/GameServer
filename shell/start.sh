@@ -10,8 +10,15 @@ setEnv(){
 	#echo $LD_LIBRARY_PATH
 }
 
+create_dir()
+{   
+	if [ ! -d "$1" ];then
+		mkdir $1
+	fi
+}
+
 startAll(){
-    result=`check_all_stop "not stopped"`
+    result=`check_all_stop $1 "not stopped"`
     if [ -n "$result" ];then
         echo $result
         exit
@@ -23,7 +30,7 @@ startAll(){
 	server_name=${cfg_file%.*}
 	server_name=${server_name##*/}
 	#echo $server_name
-	startServer $server_name
+	startServer $1 $server_name
 	done
 }
 
@@ -35,12 +42,12 @@ startServer(){
     fi
 	
 	pid_dir=pid/$1
-	if [ ! -d "$pid_dir" ]; then
-		mkdir pid_dir
-	fi
+    create_dir $pid_dir
+    log_dir=../log/$1
+    create_dir $log_dir
     
-	$GAME_SERVER conf/$1/$2.cfg >> ../log/$1_output.log 2>&1 &
-	echo $! > pid_dir/$2.pid
+	$GAME_SERVER conf/$1/$2.cfg >> $log_dir/$2_output.log 2>&1 &
+	echo $! > $pid_dir/$2.pid
 	echo "start" $2
 }
 

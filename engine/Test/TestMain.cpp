@@ -177,7 +177,7 @@ public:
 		}
 int main() {
 
-	Logger::initLog("test");
+	Logger::initLog(0, "test");
 
 	Drive d;
 	Base* b = &d;

@@ -135,7 +135,7 @@ int main(int argc, char** argv)
 
 	std::string logFileName = serviceName;
 	if (serviceId > 0) logFileName += "_" + std::to_string(serviceId);
-	Logger::initLog(logFileName.c_str());
+	Logger::initLog(serverId, logFileName.c_str());
 	LOG_INFO("dfas,%%n");
 
 	startSignalHandlerThread();

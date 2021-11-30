@@ -18,7 +18,10 @@ function clsLoginService:__init__()
     self._account_dict = {}
     self._conn_dict = {}
     self:initClientMsgHandler()
-    self.http_server = clsHttpServer:New(8088)
+    local http_port = Config:getConfigInt("http_server_port")
+    if http_port > 0 then
+        self.http_server = clsHttpServer:New(http_port)
+    end
     -- HttpClient.sendHttpReq("www.baidu.com", function(resp)
     --     logger.logInfo("http resp, %d, %s", resp.status, resp.content)
     -- end)

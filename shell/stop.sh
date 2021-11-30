@@ -30,7 +30,7 @@ usage(){
 	echo "Usage: stop [server_id] [all|login|center...]"
 }
 
-case $1 in
+case $2 in
 all)
 	stopAll $1
     sleep 1
@@ -43,7 +43,7 @@ all)
 	if [ -f pid/$1/$2.pid ];then
 		stopServer $1 $2	
         sleep 1
-        result=`check_server_stop $1 "stop failed"`
+        result=`check_server_stop $1 $2 "stop failed"`
         if [ -z "$result" ];then
             echo "$2 stop successful"
         fi

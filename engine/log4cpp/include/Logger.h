@@ -34,7 +34,7 @@ private:
 public:
 	static Logger* g_log;
 	static void test();
-	static int initLog(const char* serverName);
+	static int initLog(int serverId, const char* serverName);
 	static void formatLog(char* buff, const char* fmt, va_list va);
 	static void logDebug(const char* fmt, ...);
 	static void logWarning(const char* fmt, ...);
