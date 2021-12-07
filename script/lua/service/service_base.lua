@@ -23,8 +23,8 @@ function clsServiceBase:__init__()
 end
 
 function clsServiceBase:_init_id_mgr()
-    local redis_ip = Config:getConfigStr("id_redis_ip")
-    local redis_port = Config:getConfigInt("id_redis_port")
+    local redis_ip = Config:getConfigStr("redis_ip")
+    local redis_port = Config:getConfigInt("redis_port")
     if redis_ip == "" and redis_port <= 0 then return end
     IDMgr.connect_redis(redis_ip, redis_port)
 end

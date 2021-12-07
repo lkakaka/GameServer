@@ -794,7 +794,7 @@ bool DBHandler::loadFromDB(Table* tbl, std::vector<Table>& result) {
 			case TableField::FieldType::TYPE_BIGINT:
 			{
 				char buf[128]{ 0 };
-				snprintf(buf, 128, "%I64d", field->lval);
+				snprintf(buf, 128, "%lld", field->lval);
 				colStr += buf;
 				break;
 			}
@@ -844,7 +844,7 @@ bool DBHandler::loadFromDB(Table* tbl, std::vector<Table>& result) {
 			if (colType >= sql::DataType::BIT && colType <= sql::DataType::BIGINT) {
 				int64_t val = rs->getInt64(i);
 				char buf[64];
-				snprintf(buf, 64, "%I64d", val);
+				snprintf(buf, 64, "%lld", val);
 				mpColVals.emplace(colName, buf);
 				tbField->lval = val;
 			}
@@ -893,7 +893,7 @@ bool DBHandler::insertRow(Table* tbl)
 			case TableField::FieldType::TYPE_BIGINT:
 			{
 				char buf[64]{ 0 };
-				snprintf(buf, 64, "%ld", field->lval);
+				snprintf(buf, 64, "%lld", field->lval);
 				vals += buf;
 				if (isPriKey) tbl->priKeyVal = field->lval;
 				break;
@@ -974,7 +974,7 @@ bool DBHandler::updateRow(Table* tbl)
 			case TableField::FieldType::TYPE_BIGINT:
 			{
 				char buf[64]{ 0 };
-				snprintf(buf, 64, "%ld", field->lval);
+				snprintf(buf, 64, "%lld", field->lval);
 				if (isPriKey) {
 					conditions = field->fieldName + "=" + buf;
 				}
@@ -1050,7 +1050,7 @@ bool DBHandler::replaceRow(Table* tbl)
 			case TableField::FieldType::TYPE_BIGINT:
 			{
 				char buf[64]{ 0 };
-				snprintf(buf, 64, "%ld", field->lval);
+				snprintf(buf, 64, "%lld", field->lval);
 				vals += buf;
 				break;
 			}
@@ -1104,7 +1104,7 @@ std::string formatSqlConditions(Table* tbl) {
 			case TableField::FieldType::TYPE_BIGINT:
 			{
 				char buf[64]{ 0 };
-				snprintf(buf, 64, "%ld", field->lval);
+				snprintf(buf, 64, "%lld", field->lval);
 				formatStr += buf;
 				break;
 			}

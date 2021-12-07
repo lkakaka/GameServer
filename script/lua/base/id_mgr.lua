@@ -5,8 +5,8 @@ IDMgr = {}
 
 IDMgr._redis = nil
 
-IDMgr.REDIS_KEY_ROLE = "player"
-IDMgr.REDIS_KEY_ITEM = "item"
+IDMgr.REDIS_KEY_ROLE = TblDefs.player.tb_name
+IDMgr.REDIS_KEY_ITEM = TblDefs.item.tb_name
 
 IDMgr._id_alloctor_names = {
     IDMgr.REDIS_KEY_ROLE,
@@ -22,21 +22,21 @@ function IDMgr.connect_redis(redis_ip, redis_port)
     logger.logInfo("connect id redis, ip:%s, port:%d", redis_ip, redis_port)
 end
 
-function IDMgr._make_uid(id)
-    return (SERVER_GROUP_ID << IDMgr.ID_BIT_COUNT) + id
-end
-
 function IDMgr.get_server_id_by_uid(uid)
     return uid >> IDMgr.ID_BIT_COUNT
 end
 
+function IDMgr.get_server_start_uid()
+    return SERVER_GROUP_ID << IDMgr.ID_BIT_COUNT
+end
+
 function IDMgr.alloc_role_id(count)
     local role_id = IDMgr._redis:execRedisCmd(string.format("HINCRBY %s %s %d", RedisKey.ID_ALLOCATOR, IDMgr.REDIS_KEY_ROLE, count))
-    return IDMgr._make_uid(tonumber(role_id))
+    return tonumber(role_id)
 end
 
 function IDMgr.alloc_item_uid(count)
     local item_uid = IDMgr._redis:execRedisCmd(string.format("HINCRBY %s %s %d", RedisKey.ID_ALLOCATOR, IDMgr.REDIS_KEY_ITEM, count))
     print("alloc_item_uid", item_uid, type(item_uid))
-    return IDMgr._make_uid(tonumber(item_uid))
+    return tonumber(item_uid)
 end

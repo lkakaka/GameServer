@@ -43,6 +43,9 @@ function clsDBHandler:_init_id_allocator(tblDefs)
             local res = self.db_inst:executeSql(sql)
             -- print(StrUtil.tableToStr(res))
             local max_id = res[1].max_id
+            if max_id == 0 then
+                max_id = IDMgr.get_server_start_uid()
+            end
             redis_cmd = redis_cmd .. string.format(" %s %d", tbl_name, max_id)
         end
     end
