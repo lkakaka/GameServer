@@ -14,6 +14,7 @@ function clsItemMgr:__init__(player)
     self.player = player
     self._items = {}
     self._items_by_id = {}
+    self._server_id = self.player.server_id
 end
 
 function clsItemMgr:on_load_item(tbl)
@@ -137,11 +138,11 @@ function clsItemMgr:add_item(item_list)
 
     print(chg_items, new_items)
     if not TableUtil.isEmpty(chg_items) then
-        self.service_obj.db_proxy:update(chg_items)
+        self.service_obj.db_proxy:update(self._server_id, chg_items)
     end
 
     if not TableUtil.isEmpty(new_items) then
-        self.service_obj.db_proxy:insert(new_items)
+        self.service_obj.db_proxy:insert(self._server_id, new_items)
     end
 
     logger.logInfo("add item:%s", StrUtil.tableToStr(item_list))
@@ -198,11 +199,11 @@ function clsItemMgr:use_item(item_id, item_count)
         for tbl_item,_ in ipairs(del_items) do
             self:_remove_item_by_uid(tbl_item.item_uid)
         end
-        self.service_obj.db_proxy:delete(del_items)
+        self.service_obj.db_proxy:delete(self._server_id, del_items)
     end
 
     if not TableUtil.isEmpty(chg_items) then
-        self.service_obj.db_proxy:update(chg_items)
+        self.service_obj.db_proxy:update(self._server_id, chg_items)
     end
 
     logger.logInfo("use item, item_id:%d, item_count:%d", item_id, item_count)

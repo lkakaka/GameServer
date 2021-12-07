@@ -13,6 +13,7 @@
 #include "Config.h"
 #include "MessageHandler.h"
 #include "GameService.h"
+#include "ScriptBind.h"
 #include "server.hpp"
 #include "CmdLine.h"
 #include "ServiceInfo.h"
@@ -153,8 +154,9 @@ int main(int argc, char** argv)
 	HttpClientMgr::init();
 	
 	std::string funcName = GET_CONFG_STR("script_init_func");
-	GameService::g_gameService = new GameService(serviceName, serviceType);
-	GameService::g_gameService->initScript(funcName.c_str());
+	IScript* script = ScriptBind::bindScript(funcName.c_str());
+	GameService* service = new GameService(serverId, serviceType, serviceId, script);
+	//GameService::g_gameService->initScript(funcName.c_str());
 
 	if (serviceType == SERVICE_TYPE_CENTER || serviceType == SERVICE_TYPE_GROUP_CENTER) {
 		initServiceCenter(io);

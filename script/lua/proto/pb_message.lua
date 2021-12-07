@@ -27,12 +27,14 @@ MSG_ID_LOAD_ROLE_LIST_RSP = 14
 MSG_ID_LOGIN_REQ = 15
 MSG_ID_LOGIN_RSP = 16
 MSG_ID_MOVE_TO = 17
-MSG_ID_RPC_MSG = 18
-MSG_ID_RPC_MSG_RSP = 19
-MSG_ID_START_KCP = 20
-MSG_ID_SWITCH_SCENE_SERVICE = 21
-MSG_ID_SYNC_POS = 22
-MSG_ID_TEST_REQ = 23
+MSG_ID_REMOTE_ENTER_GAME = 18
+MSG_ID_RPC_MSG = 19
+MSG_ID_RPC_MSG_RSP = 20
+MSG_ID_START_KCP = 21
+MSG_ID_SWITCH_REMOTE_SERVER = 22
+MSG_ID_SWITCH_SCENE_SERVICE = 23
+MSG_ID_SYNC_POS = 24
+MSG_ID_TEST_REQ = 25
 
 MSG_ID_TO_NAME = {
 	[1] = "ActorBorn",
@@ -52,12 +54,14 @@ MSG_ID_TO_NAME = {
 	[15] = "LoginReq",
 	[16] = "LoginRsp",
 	[17] = "MoveTo",
-	[18] = "RpcMsg",
-	[19] = "RpcMsgRsp",
-	[20] = "StartKcp",
-	[21] = "SwitchSceneService",
-	[22] = "SyncPos",
-	[23] = "TestReq",
+	[18] = "RemoteEnterGame",
+	[19] = "RpcMsg",
+	[20] = "RpcMsgRsp",
+	[21] = "StartKcp",
+	[22] = "SwitchRemoteServer",
+	[23] = "SwitchSceneService",
+	[24] = "SyncPos",
+	[25] = "TestReq",
 }
 
 MSG_NAME_TO_ID = {
@@ -78,12 +82,14 @@ MSG_NAME_TO_ID = {
 	LoginReq = 15,
 	LoginRsp = 16,
 	MoveTo = 17,
-	RpcMsg = 18,
-	RpcMsgRsp = 19,
-	StartKcp = 20,
-	SwitchSceneService = 21,
-	SyncPos = 22,
-	TestReq = 23,
+	RemoteEnterGame = 18,
+	RpcMsg = 19,
+	RpcMsgRsp = 20,
+	StartKcp = 21,
+	SwitchRemoteServer = 22,
+	SwitchSceneService = 23,
+	SyncPos = 24,
+	TestReq = 25,
 }
 
 local function decodeActorBorn(msg)
@@ -154,6 +160,10 @@ local function decodeMoveTo(msg)
 	return pb.decode("MoveTo", msg)
 end
 
+local function decodeRemoteEnterGame(msg)
+	return pb.decode("RemoteEnterGame", msg)
+end
+
 local function decodeRpcMsg(msg)
 	return pb.decode("RpcMsg", msg)
 end
@@ -164,6 +174,10 @@ end
 
 local function decodeStartKcp(msg)
 	return pb.decode("StartKcp", msg)
+end
+
+local function decodeSwitchRemoteServer(msg)
+	return pb.decode("SwitchRemoteServer", msg)
 end
 
 local function decodeSwitchSceneService(msg)
@@ -198,12 +212,14 @@ local decodeFunc = {
 	[15] = decodeLoginReq,
 	[16] = decodeLoginRsp,
 	[17] = decodeMoveTo,
-	[18] = decodeRpcMsg,
-	[19] = decodeRpcMsgRsp,
-	[20] = decodeStartKcp,
-	[21] = decodeSwitchSceneService,
-	[22] = decodeSyncPos,
-	[23] = decodeTestReq,
+	[18] = decodeRemoteEnterGame,
+	[19] = decodeRpcMsg,
+	[20] = decodeRpcMsgRsp,
+	[21] = decodeStartKcp,
+	[22] = decodeSwitchRemoteServer,
+	[23] = decodeSwitchSceneService,
+	[24] = decodeSyncPos,
+	[25] = decodeTestReq,
 }
 
 local function encodeActorBorn(msg)
@@ -274,6 +290,10 @@ local function encodeMoveTo(msg)
 	return pb.encode("MoveTo", msg)
 end
 
+local function encodeRemoteEnterGame(msg)
+	return pb.encode("RemoteEnterGame", msg)
+end
+
 local function encodeRpcMsg(msg)
 	return pb.encode("RpcMsg", msg)
 end
@@ -284,6 +304,10 @@ end
 
 local function encodeStartKcp(msg)
 	return pb.encode("StartKcp", msg)
+end
+
+local function encodeSwitchRemoteServer(msg)
+	return pb.encode("SwitchRemoteServer", msg)
 end
 
 local function encodeSwitchSceneService(msg)
@@ -318,12 +342,14 @@ local encodeFunc = {
 	[15] = encodeLoginReq,
 	[16] = encodeLoginRsp,
 	[17] = encodeMoveTo,
-	[18] = encodeRpcMsg,
-	[19] = encodeRpcMsgRsp,
-	[20] = encodeStartKcp,
-	[21] = encodeSwitchSceneService,
-	[22] = encodeSyncPos,
-	[23] = encodeTestReq,
+	[18] = encodeRemoteEnterGame,
+	[19] = encodeRpcMsg,
+	[20] = encodeRpcMsgRsp,
+	[21] = encodeStartKcp,
+	[22] = encodeSwitchRemoteServer,
+	[23] = encodeSwitchSceneService,
+	[24] = encodeSyncPos,
+	[25] = encodeTestReq,
 }
 
 function decodeMsg(msgId, msg)

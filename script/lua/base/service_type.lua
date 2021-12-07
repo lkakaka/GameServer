@@ -20,3 +20,11 @@ function parseToServiceAddr(str)
     local arr = StrUtil.split(str, ".")
     return { serviceGroup = tonumber(arr[1]), serviceType = tonumber(arr[2]), serviceId = tonumber(arr[3]) }
 end
+
+function make_scene_ctrl_addr(server_group)
+    return { serviceGroup = server_group, serviceType = SERVICE_TYPE_SCENE_CTRL, serviceId = 0 }
+end
+
+function make_db_addr(server_group)
+    return { serviceGroup = server_group, serviceType = SERVICE_TYPE_DB, serviceId = 0 }
+end

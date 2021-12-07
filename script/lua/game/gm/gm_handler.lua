@@ -59,11 +59,16 @@ function clsGMHandler:_gm_hotfix(param)
 end
 
 function clsGMHandler:_gm_goto_scene(param)
-    local scene_id = tonumber(param.args)
+    local arg_list = StrUtil.split(param.args, ",")
+    local scene_id = tonumber(arg_list[1])
     if scene_id == nil then
         return ErrorCode.ILLEGAL_PARAM, "error arg"
     end
-    param.player:try_switch_scene(scene_id)
+    local server_id = SERVER_GROUP_ID
+    if #arg_list >= 2 then
+        server_id = tonumber(arg_list[2])
+    end
+    param.player:try_switch_scene(server_id, scene_id)
     return ErrorCode.OK, "ok"
 end
 

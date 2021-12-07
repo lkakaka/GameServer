@@ -16,7 +16,7 @@ INIT_SINGLETON_CLASS(ServiceMessageHandler)
 
 bool ServiceMessageHandler::handleEngineGatewayMsg(int connId, int msgId, char* data, int dataLen)
 {
-	if (GameService::g_gameService->getServieType() == SERVICE_TYPE_SCENE) {
+	if (GameService::getSingleton()->getServieType() == SERVICE_TYPE_SCENE) {
 		if (SceneMgr::getSceneMgr()->handleClientMsg(connId, msgId, data, dataLen)) {
 			return true;
 		}
@@ -71,10 +71,10 @@ int ServiceMessageHandler::handleGatewayMessage(ServiceAddr* srcAddr, char* data
 	if (handleEngineGatewayMsg(connId, msgId, msgData, msgLen)) return msgId;
 
 	if (isClientMsg) {
-		GameService::g_gameService->dispatchClientMsgToScript(connId, msgId, msgData, msgLen);
+		GameService::getSingleton()->dispatchClientMsgToScript(connId, msgId, msgData, msgLen);
 	}
 	else {
-		GameService::g_gameService->dispatchServiceMsgToScript(srcAddr, msgId, msgData, msgLen);
+		GameService::getSingleton()->dispatchServiceMsgToScript(srcAddr, msgId, msgData, msgLen);
 	}
 	return msgId;
 }
@@ -96,7 +96,7 @@ int ServiceMessageHandler::handleServiceMessage(ServiceAddr* srcAddr, char* data
 	LOG_DEBUG("recv msg, sender:%s,  msgId:%d, msgLen:%d", srcAddr->getName(), msgId, msgLen);
 	if (handleEngineServiceMsg(msgId, msgData, msgLen)) return msgId;
 
-	GameService::g_gameService->dispatchServiceMsgToScript(srcAddr, msgId, msgData, msgLen);
+	GameService::getSingleton()->dispatchServiceMsgToScript(srcAddr, msgId, msgData, msgLen);
 	return msgId;
 }
 

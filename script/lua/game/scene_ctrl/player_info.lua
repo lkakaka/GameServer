@@ -7,6 +7,7 @@ PlayerState = {
     LOGINING = 1,    -- 登录中
     IN_SCENE = 2,    -- 在场景中
     SWITCHING = 3,   -- 切换场景中
+    REMOTE_SWITCHING = 4,   -- 切换到其他服场景中
 }
 
 clsPlayerInfo = clsMultiIndexElem:Inherit("clsPlayerInfo")

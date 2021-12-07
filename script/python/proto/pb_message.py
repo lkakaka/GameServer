@@ -28,12 +28,14 @@ class Message:
     MSG_ID_LOGIN_REQ = 15
     MSG_ID_LOGIN_RSP = 16
     MSG_ID_MOVE_TO = 17
-    MSG_ID_RPC_MSG = 18
-    MSG_ID_RPC_MSG_RSP = 19
-    MSG_ID_START_KCP = 20
-    MSG_ID_SWITCH_SCENE_SERVICE = 21
-    MSG_ID_SYNC_POS = 22
-    MSG_ID_TEST_REQ = 23
+    MSG_ID_REMOTE_ENTER_GAME = 18
+    MSG_ID_RPC_MSG = 19
+    MSG_ID_RPC_MSG_RSP = 20
+    MSG_ID_START_KCP = 21
+    MSG_ID_SWITCH_REMOTE_SERVER = 22
+    MSG_ID_SWITCH_SCENE_SERVICE = 23
+    MSG_ID_SYNC_POS = 24
+    MSG_ID_TEST_REQ = 25
 
     _MsgId2Msg = {
         MSG_ID_ACTOR_BORN: proto.scene_pb2.ActorBorn,
@@ -53,9 +55,11 @@ class Message:
         MSG_ID_LOGIN_REQ: proto.login_pb2.LoginReq,
         MSG_ID_LOGIN_RSP: proto.login_pb2.LoginRsp,
         MSG_ID_MOVE_TO: proto.role_pb2.MoveTo,
+        MSG_ID_REMOTE_ENTER_GAME: proto.login_pb2.RemoteEnterGame,
         MSG_ID_RPC_MSG: proto.server_only.common_pb2.RpcMsg,
         MSG_ID_RPC_MSG_RSP: proto.server_only.common_pb2.RpcMsgRsp,
         MSG_ID_START_KCP: proto.login_pb2.StartKcp,
+        MSG_ID_SWITCH_REMOTE_SERVER: proto.login_pb2.SwitchRemoteServer,
         MSG_ID_SWITCH_SCENE_SERVICE: proto.server_only.common_pb2.SwitchSceneService,
         MSG_ID_SYNC_POS: proto.scene_pb2.SyncPos,
         MSG_ID_TEST_REQ: proto.test_pb2.TestReq,
@@ -79,9 +83,11 @@ class Message:
         proto.login_pb2.LoginReq: MSG_ID_LOGIN_REQ,
         proto.login_pb2.LoginRsp: MSG_ID_LOGIN_RSP,
         proto.role_pb2.MoveTo: MSG_ID_MOVE_TO,
+        proto.login_pb2.RemoteEnterGame: MSG_ID_REMOTE_ENTER_GAME,
         proto.server_only.common_pb2.RpcMsg: MSG_ID_RPC_MSG,
         proto.server_only.common_pb2.RpcMsgRsp: MSG_ID_RPC_MSG_RSP,
         proto.login_pb2.StartKcp: MSG_ID_START_KCP,
+        proto.login_pb2.SwitchRemoteServer: MSG_ID_SWITCH_REMOTE_SERVER,
         proto.server_only.common_pb2.SwitchSceneService: MSG_ID_SWITCH_SCENE_SERVICE,
         proto.scene_pb2.SyncPos: MSG_ID_SYNC_POS,
         proto.test_pb2.TestReq: MSG_ID_TEST_REQ,

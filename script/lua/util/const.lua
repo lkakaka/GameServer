@@ -14,6 +14,8 @@ ErrorCode = {
     ROLE_COUNT_LIMIT = -20003,
     ROLE_NAME_EXIST = -20004,
     NOT_FOUND_SCENE = -20005,
+    CROSS_TOKEN_ERROR = -20006,
+    CROSS_ROLE_ERROR = -20007,
 
     ITEM_NOT_EXIST = -20100,
     ITEM_NOT_ENOUGH = -20101,
@@ -30,4 +32,5 @@ RedisKey = {
 
 TokenPrefix = {
     KCP = "KCPToken_$gs20210915@",
+    CROSS_SERVER = "CrossServerToken_$gs20211203@",
 }

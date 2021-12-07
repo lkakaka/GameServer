@@ -41,12 +41,16 @@ std::shared_ptr<google::protobuf::Message> CreateMsgById(int msgId)
 		return std::shared_ptr<google::protobuf::Message>(new LoginRsp());
 		case MSG_ID_MOVE_TO:
 		return std::shared_ptr<google::protobuf::Message>(new MoveTo());
+		case MSG_ID_REMOTE_ENTER_GAME:
+		return std::shared_ptr<google::protobuf::Message>(new RemoteEnterGame());
 		case MSG_ID_RPC_MSG:
 		return std::shared_ptr<google::protobuf::Message>(new RpcMsg());
 		case MSG_ID_RPC_MSG_RSP:
 		return std::shared_ptr<google::protobuf::Message>(new RpcMsgRsp());
 		case MSG_ID_START_KCP:
 		return std::shared_ptr<google::protobuf::Message>(new StartKcp());
+		case MSG_ID_SWITCH_REMOTE_SERVER:
+		return std::shared_ptr<google::protobuf::Message>(new SwitchRemoteServer());
 		case MSG_ID_SWITCH_SCENE_SERVICE:
 		return std::shared_ptr<google::protobuf::Message>(new SwitchSceneService());
 		case MSG_ID_SYNC_POS:
@@ -61,7 +65,7 @@ std::shared_ptr<google::protobuf::Message> createMessage(int msgId, char* data, 
 {
 	std::shared_ptr<google::protobuf::Message> msg = CreateMsgById(msgId);
 	if (msg == NULL) {
-		// LOG_ERROR("create proto msg error, msgId:%d", msgId);
+		// Logger::logError("$create proto msg error, msgId:%d", msgId);
 		return msg;
 	}
 	msg->ParseFromArray(data, dataLen);

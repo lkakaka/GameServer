@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=_b('\n\tcom.protoB\005Scene'),
-  serialized_pb=_b('\n\x11proto/scene.proto\"2\n\rEnterSceneReq\x12\x0f\n\x07role_id\x18\x01 \x01(\x05\x12\x10\n\x08scene_id\x18\x02 \x01(\x05\"D\n\rEnterSceneRsp\x12\x0f\n\x07role_id\x18\x01 \x01(\x05\x12\x10\n\x08scene_id\x18\x02 \x01(\x05\x12\x10\n\x08\x65rr_code\x18\x03 \x01(\x05\"-\n\x0b_PlayerInfo\x12\x10\n\x08\x61\x63tor_id\x18\x01 \x01(\x05\x12\x0c\n\x04name\x18\x02 \x01(\t\",\n\x08_NpcInfo\x12\x10\n\x08\x61\x63tor_id\x18\x01 \x01(\x05\x12\x0e\n\x06npc_id\x18\x02 \x01(\x05\"K\n\tActorBorn\x12!\n\x0bplayer_list\x18\x01 \x03(\x0b\x32\x0c._PlayerInfo\x12\x1b\n\x08npc_list\x18\x02 \x03(\x0b\x32\t._NpcInfo\"\"\n\rActorDissolve\x12\x11\n\tactor_ids\x18\x01 \x03(\x05\"9\n\x07SyncPos\x12\x10\n\x08\x61\x63tor_id\x18\x01 \x01(\x05\x12\r\n\x05pos_x\x18\x02 \x01(\x05\x12\r\n\x05pos_y\x18\x03 \x01(\x05\x42\x12\n\tcom.protoB\x05Sceneb\x06proto3')
+  serialized_pb=_b('\n\x11proto/scene.proto\"2\n\rEnterSceneReq\x12\x0f\n\x07role_id\x18\x01 \x01(\x03\x12\x10\n\x08scene_id\x18\x02 \x01(\x05\"D\n\rEnterSceneRsp\x12\x0f\n\x07role_id\x18\x01 \x01(\x03\x12\x10\n\x08scene_id\x18\x02 \x01(\x05\x12\x10\n\x08\x65rr_code\x18\x03 \x01(\x05\"-\n\x0b_PlayerInfo\x12\x10\n\x08\x61\x63tor_id\x18\x01 \x01(\x05\x12\x0c\n\x04name\x18\x02 \x01(\t\",\n\x08_NpcInfo\x12\x10\n\x08\x61\x63tor_id\x18\x01 \x01(\x05\x12\x0e\n\x06npc_id\x18\x02 \x01(\x05\"K\n\tActorBorn\x12!\n\x0bplayer_list\x18\x01 \x03(\x0b\x32\x0c._PlayerInfo\x12\x1b\n\x08npc_list\x18\x02 \x03(\x0b\x32\t._NpcInfo\"\"\n\rActorDissolve\x12\x11\n\tactor_ids\x18\x01 \x03(\x05\"9\n\x07SyncPos\x12\x10\n\x08\x61\x63tor_id\x18\x01 \x01(\x05\x12\r\n\x05pos_x\x18\x02 \x01(\x05\x12\r\n\x05pos_y\x18\x03 \x01(\x05\x42\x12\n\tcom.protoB\x05Sceneb\x06proto3')
 )
 
 
@@ -35,7 +35,7 @@ _ENTERSCENEREQ = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='role_id', full_name='EnterSceneReq.role_id', index=0,
-      number=1, type=5, cpp_type=1, label=1,
+      number=1, type=3, cpp_type=2, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -73,7 +73,7 @@ _ENTERSCENERSP = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='role_id', full_name='EnterSceneRsp.role_id', index=0,
-      number=1, type=5, cpp_type=1, label=1,
+      number=1, type=3, cpp_type=2, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,

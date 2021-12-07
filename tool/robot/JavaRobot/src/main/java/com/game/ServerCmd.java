@@ -58,7 +58,7 @@ public class ServerCmd extends CmdDispatch {
     @CmdAnnotation(serverCmd = ProtoBufferMsg.MSG_ID_CREATE_ROLE_RSP)
     private void onRecvCreateRoleRsp(Object param) {
         Login.CreateRoleRsp rsp = (Login.CreateRoleRsp) param;
-        logInfo("create role rsp, err_code:%d", rsp.getErrCode());
+        logInfo("create role rsp, err_code:%d, role_id:%d", rsp.getErrCode(), rsp.getRoleInfo().getRoleId());
         if (rsp.getErrCode() != 0) {
             return;
         }
@@ -71,7 +71,23 @@ public class ServerCmd extends CmdDispatch {
     private void onRecvEnterGameRsp(Object param) {
         Login.EnterGameRsp rsp = (Login.EnterGameRsp) param;
         int errCode = rsp.getErrCode();
+        long roleId = rsp.getRoleInfo().getRoleId();
+        if (roleId > 0) m_robot.setRoleId(roleId);
         logInfo("recv enter game rsp, err_code:%s", errCode);
+    }
+
+    @CmdAnnotation(serverCmd = ProtoBufferMsg.MSG_ID_SWITCH_REMOTE_SERVER)
+    private void onRecvSwitchRemoteServer(Object param) {
+        Login.SwitchRemoteServer rsp = (Login.SwitchRemoteServer) param;
+        String remoteIP = rsp.getRemoteIp();
+        int remotePort = rsp.getRemotePort();
+        int remoteUdpPort = rsp.getRemoteUdpPort();
+        logInfo("recv switch remote server, remoteIP:%s, remotePort:%d, %d", remoteIP, remotePort, remoteUdpPort);
+        m_robot.switchServer(remoteIP, remotePort, remoteUdpPort, () -> {
+            Login.RemoteEnterGame enterGame = ProtoBufferMsg.createRemoteEnterGameBuilder()
+                    .setRoleId(m_robot.getRoleId()).setToken(rsp.getToken()).build();
+            m_robot.sendProto(ProtoBufferMsg.MSG_ID_REMOTE_ENTER_GAME, enterGame);
+        });
     }
 
     @CmdAnnotation(serverCmd = ProtoBufferMsg.MSG_ID_START_KCP)

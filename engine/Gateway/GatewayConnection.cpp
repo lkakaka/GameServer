@@ -128,14 +128,17 @@ void GatewayConnection::dispatchClientMsg(int msgId, int msgLen, const char* msg
 	{
 		case MSG_ID_LOGIN_REQ:
 		case MSG_ID_CREATE_ROLE_REQ:
-		case MSG_ID_ENTER_GAME: {
+		case MSG_ID_ENTER_GAME: 
+		case MSG_ID_REMOTE_ENTER_GAME:
+		{
 			ServiceAddr addr(ServiceInfo::getSingleton()->getServiceGroup(), ServiceType::SERVICE_TYPE_LOGIN, 0);
 			SERVER_CENTER_COMM_ENTITY->sendToService(&addr, (char*)buffer.data(), buffer.size());
 			break;
 		}
-		default: {
+		default: 
+		{
 			if (m_sceneServiceId < 0) {
-				LOG_ERROR("player not in scene, connId:%d, msgId:%d", getConnID(), msgId);
+				LOG_ERROR("player not in scene when dispath msg, connId:%d, msgId:%d", getConnID(), msgId);
 				setWaitClose("player not in scene");
 				return;
 			}

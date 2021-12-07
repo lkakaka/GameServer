@@ -16,8 +16,9 @@
 INIT_SINGLETON_CLASS(LuaPlugin)
 //#endif
 
-LuaPlugin::LuaPlugin() {
+LuaPlugin::LuaPlugin(const char* entryFuncName) {
 	m_lua.reset(new sol::state());
+	initLua(entryFuncName);
 }
 
 LuaPlugin::~LuaPlugin() {
@@ -81,11 +82,31 @@ sol::table LuaPlugin::initLua(const char* funcName) {
 	sol::function::set_default_handler(((*m_lua)["got_problems"]));
 	sol::protected_function_result result = callLuaFunc("service_factory", funcName);
 	if (!result.valid()) THROW_EXCEPTION("create service error");
-	sol::table tbl = result.get<sol::table>(0);
+	m_service = result.get<sol::table>(0);
 
-	return tbl;
+	return m_service;
 }
 
 LuaPlugin* LuaPlugin::getLuaPlugin() {
 	return LuaPlugin::getSingleton();
+}
+
+void LuaPlugin::initScript() {
+	
+}
+
+void LuaPlugin::dispatchClientMsgToScript(int connId, int msgId, const char* data, int len) {
+	char* buff = new char[len + 1]{ 0 };
+	memcpy(buff, data, len);
+	sol::function func = m_service.get<sol::function>("on_recv_client_msg");
+	LuaPlugin::callLuaFunc(func, m_service, connId, msgId, buff);
+	delete[] buff;
+}
+
+void LuaPlugin::dispatchServiceMsgToScript(ServiceAddr* srcAddr, int msgId, const char* data, int len) {
+	char* buff = new char[len + 1]{ 0 };
+	memcpy(buff, data, len);
+	sol::function func = m_service.get<sol::function>("on_recv_service_msg");
+	LuaPlugin::callLuaFunc(func, m_service, srcAddr->getName(), msgId, buff);
+	delete[] buff;
 }

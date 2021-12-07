@@ -19,9 +19,9 @@ public final class Scene {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>int32 role_id = 1;</code>
+     * <code>int64 role_id = 1;</code>
      */
-    int getRoleId();
+    long getRoleId();
 
     /**
      * <code>int32 scene_id = 2;</code>
@@ -75,7 +75,7 @@ public final class Scene {
               break;
             case 8: {
 
-              roleId_ = input.readInt32();
+              roleId_ = input.readInt64();
               break;
             }
             case 16: {
@@ -116,11 +116,11 @@ public final class Scene {
     }
 
     public static final int ROLE_ID_FIELD_NUMBER = 1;
-    private int roleId_;
+    private long roleId_;
     /**
-     * <code>int32 role_id = 1;</code>
+     * <code>int64 role_id = 1;</code>
      */
-    public int getRoleId() {
+    public long getRoleId() {
       return roleId_;
     }
 
@@ -147,8 +147,8 @@ public final class Scene {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (roleId_ != 0) {
-        output.writeInt32(1, roleId_);
+      if (roleId_ != 0L) {
+        output.writeInt64(1, roleId_);
       }
       if (sceneId_ != 0) {
         output.writeInt32(2, sceneId_);
@@ -162,9 +162,9 @@ public final class Scene {
       if (size != -1) return size;
 
       size = 0;
-      if (roleId_ != 0) {
+      if (roleId_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, roleId_);
+          .computeInt64Size(1, roleId_);
       }
       if (sceneId_ != 0) {
         size += com.google.protobuf.CodedOutputStream
@@ -201,7 +201,8 @@ public final class Scene {
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
       hash = (37 * hash) + ROLE_ID_FIELD_NUMBER;
-      hash = (53 * hash) + getRoleId();
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getRoleId());
       hash = (37 * hash) + SCENE_ID_FIELD_NUMBER;
       hash = (53 * hash) + getSceneId();
       hash = (29 * hash) + unknownFields.hashCode();
@@ -337,7 +338,7 @@ public final class Scene {
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        roleId_ = 0;
+        roleId_ = 0L;
 
         sceneId_ = 0;
 
@@ -417,7 +418,7 @@ public final class Scene {
 
       public Builder mergeFrom(com.proto.Scene.EnterSceneReq other) {
         if (other == com.proto.Scene.EnterSceneReq.getDefaultInstance()) return this;
-        if (other.getRoleId() != 0) {
+        if (other.getRoleId() != 0L) {
           setRoleId(other.getRoleId());
         }
         if (other.getSceneId() != 0) {
@@ -452,28 +453,28 @@ public final class Scene {
         return this;
       }
 
-      private int roleId_ ;
+      private long roleId_ ;
       /**
-       * <code>int32 role_id = 1;</code>
+       * <code>int64 role_id = 1;</code>
        */
-      public int getRoleId() {
+      public long getRoleId() {
         return roleId_;
       }
       /**
-       * <code>int32 role_id = 1;</code>
+       * <code>int64 role_id = 1;</code>
        */
-      public Builder setRoleId(int value) {
+      public Builder setRoleId(long value) {
         
         roleId_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>int32 role_id = 1;</code>
+       * <code>int64 role_id = 1;</code>
        */
       public Builder clearRoleId() {
         
-        roleId_ = 0;
+        roleId_ = 0L;
         onChanged();
         return this;
       }
@@ -561,9 +562,9 @@ public final class Scene {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>int32 role_id = 1;</code>
+     * <code>int64 role_id = 1;</code>
      */
-    int getRoleId();
+    long getRoleId();
 
     /**
      * <code>int32 scene_id = 2;</code>
@@ -622,7 +623,7 @@ public final class Scene {
               break;
             case 8: {
 
-              roleId_ = input.readInt32();
+              roleId_ = input.readInt64();
               break;
             }
             case 16: {
@@ -668,11 +669,11 @@ public final class Scene {
     }
 
     public static final int ROLE_ID_FIELD_NUMBER = 1;
-    private int roleId_;
+    private long roleId_;
     /**
-     * <code>int32 role_id = 1;</code>
+     * <code>int64 role_id = 1;</code>
      */
-    public int getRoleId() {
+    public long getRoleId() {
       return roleId_;
     }
 
@@ -708,8 +709,8 @@ public final class Scene {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (roleId_ != 0) {
-        output.writeInt32(1, roleId_);
+      if (roleId_ != 0L) {
+        output.writeInt64(1, roleId_);
       }
       if (sceneId_ != 0) {
         output.writeInt32(2, sceneId_);
@@ -726,9 +727,9 @@ public final class Scene {
       if (size != -1) return size;
 
       size = 0;
-      if (roleId_ != 0) {
+      if (roleId_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, roleId_);
+          .computeInt64Size(1, roleId_);
       }
       if (sceneId_ != 0) {
         size += com.google.protobuf.CodedOutputStream
@@ -771,7 +772,8 @@ public final class Scene {
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
       hash = (37 * hash) + ROLE_ID_FIELD_NUMBER;
-      hash = (53 * hash) + getRoleId();
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getRoleId());
       hash = (37 * hash) + SCENE_ID_FIELD_NUMBER;
       hash = (53 * hash) + getSceneId();
       hash = (37 * hash) + ERR_CODE_FIELD_NUMBER;
@@ -909,7 +911,7 @@ public final class Scene {
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        roleId_ = 0;
+        roleId_ = 0L;
 
         sceneId_ = 0;
 
@@ -992,7 +994,7 @@ public final class Scene {
 
       public Builder mergeFrom(com.proto.Scene.EnterSceneRsp other) {
         if (other == com.proto.Scene.EnterSceneRsp.getDefaultInstance()) return this;
-        if (other.getRoleId() != 0) {
+        if (other.getRoleId() != 0L) {
           setRoleId(other.getRoleId());
         }
         if (other.getSceneId() != 0) {
@@ -1030,28 +1032,28 @@ public final class Scene {
         return this;
       }
 
-      private int roleId_ ;
+      private long roleId_ ;
       /**
-       * <code>int32 role_id = 1;</code>
+       * <code>int64 role_id = 1;</code>
        */
-      public int getRoleId() {
+      public long getRoleId() {
         return roleId_;
       }
       /**
-       * <code>int32 role_id = 1;</code>
+       * <code>int64 role_id = 1;</code>
        */
-      public Builder setRoleId(int value) {
+      public Builder setRoleId(long value) {
         
         roleId_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>int32 role_id = 1;</code>
+       * <code>int64 role_id = 1;</code>
        */
       public Builder clearRoleId() {
         
-        roleId_ = 0;
+        roleId_ = 0L;
         onChanged();
         return this;
       }
@@ -4717,8 +4719,8 @@ public final class Scene {
   static {
     java.lang.String[] descriptorData = {
       "\n\021proto/scene.proto\"2\n\rEnterSceneReq\022\017\n\007" +
-      "role_id\030\001 \001(\005\022\020\n\010scene_id\030\002 \001(\005\"D\n\rEnter" +
-      "SceneRsp\022\017\n\007role_id\030\001 \001(\005\022\020\n\010scene_id\030\002 " +
+      "role_id\030\001 \001(\003\022\020\n\010scene_id\030\002 \001(\005\"D\n\rEnter" +
+      "SceneRsp\022\017\n\007role_id\030\001 \001(\003\022\020\n\010scene_id\030\002 " +
       "\001(\005\022\020\n\010err_code\030\003 \001(\005\"-\n\013_PlayerInfo\022\020\n\010" +
       "actor_id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\",\n\010_NpcInfo" +
       "\022\020\n\010actor_id\030\001 \001(\005\022\016\n\006npc_id\030\002 \001(\005\"K\n\tAc" +

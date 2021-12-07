@@ -17,7 +17,9 @@ function clsLoginService:__init__()
     logger.logInfo("clsLoginService:__init__")
     self._account_dict = {}
     self._conn_dict = {}
-    self:initClientMsgHandler()
+    self._remote_login_roles = {}
+    self:init_client_msg_handler()
+    self:init_rpc_handler()
     local http_port = Config:getConfigInt("http_server_port")
     if http_port > 0 then
         self.http_server = clsHttpServer:New(http_port)
@@ -27,13 +29,27 @@ function clsLoginService:__init__()
     -- end)
 end
 
-function clsLoginService:initClientMsgHandler()
-    self:regClientMsgHandler(MSG_ID_LOGIN_REQ, self.loginReq)
-    self:regClientMsgHandler(MSG_ID_CREATE_ROLE_REQ, self.createRoleReq)
-    self:regClientMsgHandler(MSG_ID_ENTER_GAME, self.enterGameReq)
+function clsLoginService:init_client_msg_handler()
+    self:reg_client_msg_handler(MSG_ID_LOGIN_REQ, self.login_req)
+    self:reg_client_msg_handler(MSG_ID_CREATE_ROLE_REQ, self.create_role_req)
+    self:reg_client_msg_handler(MSG_ID_ENTER_GAME, self.enter_game)
+    self:reg_client_msg_handler(MSG_ID_REMOTE_ENTER_GAME, self.remote_enter_game)
 end
 
-function clsLoginService:loginReq(conn_id, msg_id, msg)
+function clsLoginService:init_rpc_handler()
+    self:reg_rpc_handler("regRemoteRole", self.rpc_reg_remote_role)
+end
+
+function clsLoginService:rpc_reg_remote_role(sender, param)
+    local role_id = param.role_id
+    local token = param.token
+    local token_ts = param.token_ts
+    self._remote_login_roles[role_id] = { token = token, token_ts = token_ts}
+    logger.logInfo("recv reg remote role, role_id:%d, ts:%d", role_id, token_ts)
+    return ErrorCode.OK
+end
+
+function clsLoginService:login_req(conn_id, msg_id, msg)
     local rsp_msg = { err_code = ErrorCode.OK }
     -- if msg.account in self._account_dict:
     --     rsp_msg.err_code = ErrorCode.ACCOUNT_IS_LOGINING
@@ -55,7 +71,7 @@ function clsLoginService:_load_role_list(conn_id, account)
         self:_on_load_role_list(account, err_code, tbl)
     end
 
-    local future = self.db_proxy:load("player", {account=account})
+    local future = self.db_proxy:load(-1, "player", {account=account})
     future:regCallback(on_load_role_list)
 end
 
@@ -77,7 +93,7 @@ function clsLoginService:_on_load_role_list(account, err_code, tbl)
     self:sendMsgToClient(conn_id, MSG_ID_LOAD_ROLE_LIST_RSP, rsp_msg)
 end
 
-function clsLoginService:createRoleReq(conn_id, msg_id, msg)
+function clsLoginService:create_role_req(conn_id, msg_id, msg)
     local rsp_msg = {}
     local account = self._conn_dict[conn_id]
     if account == nil or account ~= msg.account then
@@ -90,7 +106,7 @@ function clsLoginService:createRoleReq(conn_id, msg_id, msg)
     self:callRpc(LOCAL_SERVICE_DB, "CreateRole", -1, {conn_id=conn_id, account=msg.account, role_name=msg.role_name})
 end
 
-function clsLoginService:enterGameReq(conn_id, msg_id, msg)
+function clsLoginService:enter_game(conn_id, msg_id, msg)
     local account = self._conn_dict[conn_id]
     if account == nil then
         logger.logError("enter game error, conn_id(%d) invalid", conn_id)
@@ -102,9 +118,46 @@ function clsLoginService:enterGameReq(conn_id, msg_id, msg)
         self:_on_load_role(conn_id, err_code, tbl)
     end
 
-    local future = self.db_proxy:load("player", {role_id=msg.role_id})
+    local future = self.db_proxy:load(-1, "player", {role_id=msg.role_id})
     future:regCallback(on_load_role)
-    logger.logInfo("enter game req, conn_id:%d, account:%s", conn_id, account)
+    logger.logInfo("enter game req, conn_id:%d, account:%s, role_id:%d", conn_id, account, msg.role_id)
+end
+
+function clsLoginService:remote_enter_game(conn_id, msg_id, msg)
+    local role_id = msg.role_id
+    local remote_login_info = self._remote_login_roles[role_id]
+    if remote_login_info == nil then
+        logger.logError("remote enter game error, role_id:%d", role_id)
+        self:_send_enter_game_rsp(conn_id, ErrorCode.CROSS_ROLE_ERROR)
+        return
+    end
+    self._remote_login_roles[role_id] = nil
+
+    if remote_login_info.token ~= msg.token then
+        logger.logError("remote login token error, role_id:%d", role_id)
+        self:_send_enter_game_rsp(conn_id, ErrorCode.CROSS_TOKEN_ERROR)
+        return
+    end
+
+    if remote_login_info.token_ts < os.time() then
+        logger.logError("remote login token expired, role_id:%d", role_id)
+        self:_send_enter_game_rsp(conn_id, ErrorCode.CROSS_TOKEN_ERROR)
+        return
+    end
+
+    local function _on_query_login_scene(err_code, result)
+        if err_code ~= ErrorCode.OK then
+            self:_send_enter_game_rsp(conn_id, err_code)
+            return
+        end
+        self:_send_enter_game_rsp(conn_id, ErrorCode.OK, row)
+        self._conn_dict[conn_id] = nil
+        self:_send_kcp_start_info(conn_id)
+    end
+
+    local future = self:callRpc(LOCAL_SERVICE_SCENE_CTRL, "Player_RemoteEnterGame", 30, {conn_id=conn_id, role_id=role_id})
+    future:regCallback(_on_query_login_scene)
+    logger.logInfo("remote enter game, role_id:%d", role_id)
 end
 
 

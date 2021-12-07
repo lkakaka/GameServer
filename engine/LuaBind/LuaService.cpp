@@ -31,12 +31,21 @@ bool LuaService::sendMsgToService(sol::table dstAddr, int msgId, const char* msg
 	ServiceAddr addr(serviceGroup, serviceType, serviceId);
 
 	MyBuffer buffer;
-	buffer.writeInt(msgId);
-	if (serviceType == SERVICE_TYPE_GATEWAY) {
-		// 补齐数据格式, 发往gateway的消息都需要一个connId
-		buffer.writeInt(1);
-		buffer.writeInt(-1);
-		buffer.writeByte(SEND_TYPE_TCP);
+
+	if (SERVICE_TYPE != SERVICE_TYPE_GATEWAY) {
+		if (serviceType == SERVICE_TYPE_GATEWAY) {
+			//// 补齐数据格式, 发往gateway的消息都需要一个connId
+			//buffer.writeInt(1);
+			//buffer.writeInt(-1);
+			//buffer.writeByte(SEND_TYPE_TCP);
+			buffer.writeByte(0); // 是否是发给客户端的消息
+		}
+		buffer.writeInt(msgId);
+	} else {
+		// gateway发往其他服务的消息
+		buffer.writeByte(1); // 是否是服务器消息
+		buffer.writeInt(0);  // conn ID，服务器消息不需要，填-1
+		buffer.writeInt(msgId);
 	}
 	buffer.writeString(msg, msgLen);
 	SERVER_CENTER_COMM_ENTITY->sendToService(&addr, (char*)buffer.data(), buffer.size());
@@ -47,6 +56,7 @@ bool LuaService::sendMsgToService(sol::table dstAddr, int msgId, const char* msg
 
 bool LuaService::sendMsgToClient(int connId, int msgId, const char* msg, int msgLen) {
 	MyBuffer buffer;
+	buffer.writeByte(1); // 是否是发给客户端的消息
 	buffer.writeInt(msgId);
 	buffer.writeInt(1);
 	buffer.writeInt(connId);
@@ -59,6 +69,7 @@ bool LuaService::sendMsgToClient(int connId, int msgId, const char* msg, int msg
 
 bool LuaService::broadcastMsgToClient(std::set<int> connIds, int msgId, const char* msg, int msgLen) {
 	MyBuffer buffer;
+	buffer.writeByte(1); // 是否是发给客户端的消息
 	buffer.writeInt(msgId);
 	buffer.writeInt(connIds.size());
 	for (int connId : connIds) {
@@ -73,6 +84,7 @@ bool LuaService::broadcastMsgToClient(std::set<int> connIds, int msgId, const ch
 
 bool LuaService::sendMsgToClientKCP(int connId, int msgId, const char* msg, int msgLen) {
 	MyBuffer buffer;
+	buffer.writeByte(1); // 是否是发给客户端的消息
 	buffer.writeInt(msgId);
 	buffer.writeInt(1);
 	buffer.writeInt(connId);

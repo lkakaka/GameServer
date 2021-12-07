@@ -49,20 +49,21 @@ function clsMsgHandler:_on_recv_test_req(msg_id, msg)
     self.player:send_msg_to_client_kcp(MSG_ID_TEST_REQ, rsp_msg)
     self.player:send_msg_to_client(MSG_ID_TEST_REQ, rsp_msg)
     self.player:send_msg_to_sight(MSG_ID_TEST_REQ, rsp_msg)
-    self.player:send_msg_to_service(LOCAL_SERVICE_DB, MSG_ID_TEST_REQ, msg)
+    local db_addr = make_db_addr(self.player.server_id)
+    self.player:send_msg_to_service(db_addr, MSG_ID_TEST_REQ, msg)
 
-    local function on_load_cb(err_code, tbl)
-        print("on_load_cb----------", err_code, tbl)
-    end
+    -- local function on_load_cb(err_code, tbl)
+    --     print("on_load_cb----------", err_code, tbl)
+    -- end
 
-    local future = game_scene.service.db_proxy:load("player", {role_id=1})
-    future:regCallback(on_load_cb)
+    -- local future = game_scene.service.db_proxy:load(-1, "player", {role_id=1})
+    -- future:regCallback(on_load_cb)
 
-    local tbl_player = {}
-    tbl_player.role_id = 6
-    tbl_player.role_name = "rename"
-    -- # tbl_player.account = "aa"
-    game_scene.service.db_proxy:updateOne("player", tbl_player)
+    -- local tbl_player = {}
+    -- tbl_player.role_id = 6
+    -- tbl_player.role_name = "rename"
+    -- -- # tbl_player.account = "aa"
+    -- game_scene.service.db_proxy:update_one(-1, "player", tbl_player)
     local start_pos = {15, 10, -47}
     local end_pos = {43, 10, -1}
     -- # start_pos = {-665610, 0, -689073}

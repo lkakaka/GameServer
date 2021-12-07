@@ -2,10 +2,10 @@
 °
 proto/scene.proto"C
 EnterSceneReq
-role_id (RroleId
+role_id (RroleId
 scene_id (RsceneId"^
 EnterSceneRsp
-role_id (RroleId
+role_id (RroleId
 scene_id (RsceneId
 err_code (RerrCode"<
 _PlayerInfo

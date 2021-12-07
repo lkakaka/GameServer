@@ -23,7 +23,7 @@ void LuaDB::bindLuaDB(std::shared_ptr<sol::state> lua) {
 
 sol::object LuaDB::executeSql(const char* sql, sol::this_state s) {
 	StatementPtr ptr = m_dbHandler->executeSql(sql);
-	if (ptr == NULL) sol::nil;
+	if (ptr == NULL) return sol::nil;
 	//sql::Statement* st = ptr->getStatement();
 	bool isResultSet = ptr->isResultSet();
 
@@ -52,8 +52,11 @@ sol::object LuaDB::executeSql(const char* sql, sol::this_state s) {
 					sol::object colName = sol::make_object(lua, metaData->getColumnLabel(i).c_str());
 
 					int colType = metaData->getColumnType(i);
-					if (colType >= sql::DataType::BIT && colType <= sql::DataType::BIGINT) {
+					if (colType >= sql::DataType::BIT && colType <= sql::DataType::INTEGER) {
 						dataTuple[colName] = sol::make_object(lua, rs->getInt(i));
+					}
+					else if (colType == sql::DataType::BIGINT) {
+						dataTuple[colName] = sol::make_object(lua, rs->getInt64(i));
 					}
 					else if (colType >= sql::DataType::REAL && colType <= sql::DataType::NUMERIC) {
 						dataTuple[colName] = sol::make_object(lua, rs->getDouble(i));
@@ -116,7 +119,7 @@ static bool _initTable(DBHandler* dbHandler, sol::table tblObj) {
 		case TableField::FieldType::TYPE_BIGINT:
 		{
 			if (defaultObj != sol::nil) {
-				long defVal = defaultObj.as<int>();
+				int64_t defVal = defaultObj.as<int64_t>();
 				field->defaut_val = defVal;
 			}
 			break;
@@ -244,7 +247,7 @@ sol::object LuaDB::insertRow(sol::table obj, sol::this_state s) {
 		case TableField::FieldType::TYPE_INT:
 		case TableField::FieldType::TYPE_BIGINT:
 		{
-			field->lval = val.as<long>();
+			field->lval = val.as<int64_t>();
 			break;
 		}
 		case TableField::FieldType::TYPE_DOUBLE:
@@ -299,7 +302,7 @@ void LuaDB::luaTableToTable(sol::table luaTbl, Table* tbl) {
 			case TableField::FieldType::TYPE_INT:
 			case TableField::FieldType::TYPE_BIGINT:
 			{
-				tbField->lval = valObj.as<long>();
+				tbField->lval = valObj.as<int64_t>();
 				break;
 			}
 			case TableField::FieldType::TYPE_DOUBLE:

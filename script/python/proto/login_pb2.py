@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=_b('\n\tcom.protoB\005Login'),
-  serialized_pb=_b('\n\x11proto/login.proto\"9\n\x08LoginReq\x12\x0f\n\x07\x61\x63\x63ount\x18\x01 \x01(\t\x12\x0b\n\x03pwd\x18\x02 \x01(\t\x12\x0f\n\x07\x63onn_id\x18\x03 \x01(\x05\"\x1c\n\x08LoginRsp\x12\x10\n\x08\x65rr_code\x18\x01 \x01(\x05\"/\n\t_RoleInfo\x12\x0f\n\x07role_id\x18\x01 \x01(\x05\x12\x11\n\trole_name\x18\x02 \x01(\t\"S\n\x0fLoadRoleListRsp\x12\x0f\n\x07\x61\x63\x63ount\x18\x01 \x01(\t\x12\x10\n\x08\x65rr_code\x18\x02 \x01(\x05\x12\x1d\n\trole_list\x18\x03 \x03(\x0b\x32\n._RoleInfo\"3\n\rCreateRoleReq\x12\x0f\n\x07\x61\x63\x63ount\x18\x01 \x01(\t\x12\x11\n\trole_name\x18\x02 \x01(\t\"@\n\rCreateRoleRsp\x12\x10\n\x08\x65rr_code\x18\x01 \x01(\x05\x12\x1d\n\trole_info\x18\x02 \x01(\x0b\x32\n._RoleInfo\"-\n\tEnterGame\x12\x0f\n\x07role_id\x18\x01 \x01(\x05\x12\x0f\n\x07\x61\x63\x63ount\x18\x02 \x01(\t\"?\n\x0c\x45nterGameRsp\x12\x10\n\x08\x65rr_code\x18\x01 \x01(\x05\x12\x1d\n\trole_info\x18\x02 \x01(\x0b\x32\n._RoleInfo\"\x0f\n\rDisconnectReq\"\x1f\n\rDisconnectRsp\x12\x0e\n\x06reason\x18\x01 \x01(\t\")\n\x08StartKcp\x12\x0e\n\x06kcp_id\x18\x01 \x01(\x05\x12\r\n\x05token\x18\x02 \x01(\tB\x12\n\tcom.protoB\x05Loginb\x06proto3')
+  serialized_pb=_b('\n\x11proto/login.proto\"9\n\x08LoginReq\x12\x0f\n\x07\x61\x63\x63ount\x18\x01 \x01(\t\x12\x0b\n\x03pwd\x18\x02 \x01(\t\x12\x0f\n\x07\x63onn_id\x18\x03 \x01(\x05\"\x1c\n\x08LoginRsp\x12\x10\n\x08\x65rr_code\x18\x01 \x01(\x05\"/\n\t_RoleInfo\x12\x0f\n\x07role_id\x18\x01 \x01(\x03\x12\x11\n\trole_name\x18\x02 \x01(\t\"S\n\x0fLoadRoleListRsp\x12\x0f\n\x07\x61\x63\x63ount\x18\x01 \x01(\t\x12\x10\n\x08\x65rr_code\x18\x02 \x01(\x05\x12\x1d\n\trole_list\x18\x03 \x03(\x0b\x32\n._RoleInfo\"3\n\rCreateRoleReq\x12\x0f\n\x07\x61\x63\x63ount\x18\x01 \x01(\t\x12\x11\n\trole_name\x18\x02 \x01(\t\"@\n\rCreateRoleRsp\x12\x10\n\x08\x65rr_code\x18\x01 \x01(\x05\x12\x1d\n\trole_info\x18\x02 \x01(\x0b\x32\n._RoleInfo\"-\n\tEnterGame\x12\x0f\n\x07role_id\x18\x01 \x01(\x03\x12\x0f\n\x07\x61\x63\x63ount\x18\x02 \x01(\t\"?\n\x0c\x45nterGameRsp\x12\x10\n\x08\x65rr_code\x18\x01 \x01(\x05\x12\x1d\n\trole_info\x18\x02 \x01(\x0b\x32\n._RoleInfo\"\x0f\n\rDisconnectReq\"\x1f\n\rDisconnectRsp\x12\x0e\n\x06reason\x18\x01 \x01(\t\")\n\x08StartKcp\x12\x0e\n\x06kcp_id\x18\x01 \x01(\x05\x12\r\n\x05token\x18\x02 \x01(\t\"u\n\x12SwitchRemoteServer\x12\x0f\n\x07role_id\x18\x01 \x01(\x03\x12\x11\n\tremote_ip\x18\x02 \x01(\t\x12\x13\n\x0bremote_port\x18\x03 \x01(\x05\x12\x17\n\x0fremote_udp_port\x18\x04 \x01(\x05\x12\r\n\x05token\x18\x05 \x01(\t\"1\n\x0fRemoteEnterGame\x12\x0f\n\x07role_id\x18\x01 \x01(\x03\x12\r\n\x05token\x18\x02 \x01(\tB\x12\n\tcom.protoB\x05Loginb\x06proto3')
 )
 
 
@@ -111,7 +111,7 @@ __ROLEINFO = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='role_id', full_name='_RoleInfo.role_id', index=0,
-      number=1, type=5, cpp_type=1, label=1,
+      number=1, type=3, cpp_type=2, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -270,7 +270,7 @@ _ENTERGAME = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='role_id', full_name='EnterGame.role_id', index=0,
-      number=1, type=5, cpp_type=1, label=1,
+      number=1, type=3, cpp_type=2, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -429,6 +429,103 @@ _STARTKCP = _descriptor.Descriptor(
   serialized_end=566,
 )
 
+
+_SWITCHREMOTESERVER = _descriptor.Descriptor(
+  name='SwitchRemoteServer',
+  full_name='SwitchRemoteServer',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='role_id', full_name='SwitchRemoteServer.role_id', index=0,
+      number=1, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='remote_ip', full_name='SwitchRemoteServer.remote_ip', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='remote_port', full_name='SwitchRemoteServer.remote_port', index=2,
+      number=3, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='remote_udp_port', full_name='SwitchRemoteServer.remote_udp_port', index=3,
+      number=4, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='token', full_name='SwitchRemoteServer.token', index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=568,
+  serialized_end=685,
+)
+
+
+_REMOTEENTERGAME = _descriptor.Descriptor(
+  name='RemoteEnterGame',
+  full_name='RemoteEnterGame',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='role_id', full_name='RemoteEnterGame.role_id', index=0,
+      number=1, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='token', full_name='RemoteEnterGame.token', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=687,
+  serialized_end=736,
+)
+
 _LOADROLELISTRSP.fields_by_name['role_list'].message_type = __ROLEINFO
 _CREATEROLERSP.fields_by_name['role_info'].message_type = __ROLEINFO
 _ENTERGAMERSP.fields_by_name['role_info'].message_type = __ROLEINFO
@@ -443,6 +540,8 @@ DESCRIPTOR.message_types_by_name['EnterGameRsp'] = _ENTERGAMERSP
 DESCRIPTOR.message_types_by_name['DisconnectReq'] = _DISCONNECTREQ
 DESCRIPTOR.message_types_by_name['DisconnectRsp'] = _DISCONNECTRSP
 DESCRIPTOR.message_types_by_name['StartKcp'] = _STARTKCP
+DESCRIPTOR.message_types_by_name['SwitchRemoteServer'] = _SWITCHREMOTESERVER
+DESCRIPTOR.message_types_by_name['RemoteEnterGame'] = _REMOTEENTERGAME
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 LoginReq = _reflection.GeneratedProtocolMessageType('LoginReq', (_message.Message,), {
@@ -521,6 +620,20 @@ StartKcp = _reflection.GeneratedProtocolMessageType('StartKcp', (_message.Messag
   # @@protoc_insertion_point(class_scope:StartKcp)
   })
 _sym_db.RegisterMessage(StartKcp)
+
+SwitchRemoteServer = _reflection.GeneratedProtocolMessageType('SwitchRemoteServer', (_message.Message,), {
+  'DESCRIPTOR' : _SWITCHREMOTESERVER,
+  '__module__' : 'proto.login_pb2'
+  # @@protoc_insertion_point(class_scope:SwitchRemoteServer)
+  })
+_sym_db.RegisterMessage(SwitchRemoteServer)
+
+RemoteEnterGame = _reflection.GeneratedProtocolMessageType('RemoteEnterGame', (_message.Message,), {
+  'DESCRIPTOR' : _REMOTEENTERGAME,
+  '__module__' : 'proto.login_pb2'
+  # @@protoc_insertion_point(class_scope:RemoteEnterGame)
+  })
+_sym_db.RegisterMessage(RemoteEnterGame)
 
 
 DESCRIPTOR._options = None

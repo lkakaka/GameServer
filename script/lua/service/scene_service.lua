@@ -11,37 +11,37 @@ function clsSceneService:__init__()
     Super(clsSceneService).__init__(self)
     self._scenes = {}
     self._player_to_scene = {}
-    self:initRpcHandler()
-    self:initServiceMsgHandler()
-    timer.add_timer(3, 1, function(timerId) self:initScene() end)
+    self:init_rpc_handler()
+    self:init_service_msg_handler()
+    timer.add_timer(3, 1, function(timerId) self:init_scene() end)
     logger.logInfo("clsSceneService:__init__")
 end
 
-function clsSceneService:initScene()
+function clsSceneService:init_scene()
     local scene_ids = StrUtil.parseToIntArray(Config:getConfigStr("scene_ids"))
     for _,scene_id in ipairs(scene_ids) do
-        self:createScene(scene_id)
+        self:create_scene(scene_id)
     end
     logger.logInfo("initScene, %s", StrUtil.tableToStr(scene_ids))
 end
 
-function clsSceneService:createScene(scene_id)
+function clsSceneService:create_scene(scene_id)
     local gameScene = clsGameScene:New(self, scene_id)
     self._scenes[gameScene.scene_uid] = gameScene
     local scene_info = { scene_id = gameScene.scene_id, scene_uid = gameScene.scene_uid }
     local future = self:callRpc(LOCAL_SERVICE_SCENE_CTRL, "RegScene", 10, scene_info)
-    future:regCallback(function(err_code, result) self:onRegSceneResp(err_code, scene_info) end)
+    future:regCallback(function(err_code, result) self:on_reg_scene_resp(err_code, scene_info) end)
 end
 
-function clsSceneService:initRpcHandler()
-    self:regRpcHandler("Scene_EnterScene", self.rpcEnterScene)
+function clsSceneService:init_rpc_handler()
+    self:reg_rpc_handler("Scene_EnterScene", self.rpc_enter_scene)
 end
 
-function clsSceneService:initServiceMsgHandler()
-    -- self:regServiceMsgHandler(MSG_ID_CLIENT_DISCONNECT, self.onClientDisconnect)
+function clsSceneService:init_service_msg_handler()
+    -- self:reg_service_msg_handler(MSG_ID_CLIENT_DISCONNECT, self.onClientDisconnect)
 end
 
-function clsSceneService:onRegSceneResp(err_code, scene_info)
+function clsSceneService:on_reg_scene_resp(err_code, scene_info)
     if err_code == ErrorCode.OK then
         logger.logInfo("reg scene sucess, scene_id:%d, scene_uid:%d", scene_info.scene_id, scene_info.scene_uid)
     else
@@ -88,7 +88,7 @@ function clsSceneService:on_recv_client_msg(conn_id, msg_id, msg)
     game_scene:on_recv_client_msg(conn_id, msg_id, pbMsg)
 end
 
-function clsSceneService:rpcEnterScene(sender, param)
+function clsSceneService:rpc_enter_scene(sender, param)
     local conn_id = param.conn_id
     local role_id = param.role_id
     local scene_uid = param.scene_uid

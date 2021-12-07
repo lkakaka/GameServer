@@ -7,7 +7,7 @@
 #include "../Common/ServerMacros.h"
 #include "GameScene.h"
 
-PlayerEntity::PlayerEntity(int connId, int eid, int roleId, std::string name, int x, int y, int moveSpeed, void* gameScene, GridChgFunc gridChgFunc):
+PlayerEntity::PlayerEntity(int connId, int eid, int64_t roleId, std::string name, int x, int y, int moveSpeed, void* gameScene, GridChgFunc gridChgFunc):
 	SceneEntity(SceneEntityType::PLYAER, eid, x, y, moveSpeed, gameScene, gridChgFunc),
 	m_connId(connId), m_roleId(roleId), m_name(name), m_scriptObj(NULL)
 {

@@ -12,19 +12,26 @@ extern "C" {
 #include "../Common/ServerExports.h"
 #include "Logger.h"
 #include "sol/sol.hpp"
+#include "IScript.h"
 
-class LuaPlugin : public Singleton<LuaPlugin> {
+class LuaPlugin : public Singleton<LuaPlugin>, public IScript {
 private:
 	//lua_State* m_lua;
 
 	std::shared_ptr<sol::state> m_lua;
 
+	sol::table m_service;
+
 public:
-	LuaPlugin();
+	LuaPlugin(const char* entryFuncName);
 	~LuaPlugin();
 	sol::table initLua(const char* funcName);
 	static LuaPlugin* getLuaPlugin();
 	inline std::shared_ptr<sol::state> getLua() { return m_lua; }
+
+	void initScript();
+	void dispatchClientMsgToScript(int connId, int msgId, const char* data, int len);
+	void dispatchServiceMsgToScript(ServiceAddr* srcAddr, int msgId, const char* data, int len);
 
 	template <typename... Args>
 	sol::protected_function_result callLuaFunc(const char* modName, const char* funcName, Args&&... args) {

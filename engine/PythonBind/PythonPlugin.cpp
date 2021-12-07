@@ -6,8 +6,17 @@
 #include "PyTimer.h"
 #include "PyScene.h"
 #include "PyHttp.h"
+#include "PyCommon.h"
 
 static PyObject* TestError = NULL;
+INIT_SINGLETON_CLASS(PythonPlugin)
+
+PythonPlugin::PythonPlugin(const char* entryFuncName) {
+	PythonPlugin::initPython();
+	auto py_state = PyGILState_Ensure();
+	m_service = callPyFunction("main", entryFuncName, NULL);
+	PyGILState_Release(py_state);
+}
 
 static PyObject* test(PyObject* self, PyObject* args) 
 {
@@ -96,4 +105,45 @@ void PythonPlugin::initPython()
 void PythonPlugin::finalizePython()
 {
 	Py_Finalize();
+}
+
+
+PyObject* PythonPlugin::callServiceFunc(const char* funcName, PyObject* args) {
+	auto func = PyObject_GetAttrString(m_service, funcName);
+	PyObject* obj = PyObject_Call(func, args, NULL);
+	if (obj == NULL) {
+		//PyErr_Print();
+		logPyException();
+	}
+	return obj;
+}
+
+void PythonPlugin::initScript() {
+
+}
+
+void PythonPlugin::dispatchClientMsgToScript(int connId, int msgId, const char* data, int len) {
+	auto py_state = PyGILState_Ensure();
+	PyObject* arg = PyTuple_New(3);
+	PyTuple_SetItem(arg, 0, PyLong_FromLong(connId));
+	PyTuple_SetItem(arg, 1, PyLong_FromLong(msgId));
+	PyTuple_SetItem(arg, 2, Py_BuildValue("y#", data, len));
+	callServiceFunc("on_recv_client_msg", arg);
+	Py_INCREF(arg);
+	PyGILState_Release(py_state);
+}
+
+void PythonPlugin::dispatchServiceMsgToScript(ServiceAddr* srcAddr, int msgId, const char* data, int len) {
+	auto py_state = PyGILState_Ensure();
+	PyObject* arg = PyTuple_New(3);
+	PyObject* pArgs = Py_BuildValue("iii", srcAddr->getServiceGroup(), srcAddr->getServiceType(), srcAddr->getServiceId());
+	PyObject* pyObj = callServiceFunc("create_service_addr", pArgs);
+	PyTuple_SetItem(arg, 0, pyObj);
+	PyTuple_SetItem(arg, 1, PyLong_FromLong(msgId));
+	PyTuple_SetItem(arg, 2, Py_BuildValue("y#", data, len));
+	callServiceFunc("on_recv_service_msg", arg);
+	Py_INCREF(arg);
+	Py_INCREF(pArgs);
+	Py_INCREF(pyObj);
+	PyGILState_Release(py_state);
 }

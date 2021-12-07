@@ -19,9 +19,11 @@ public class ProtoBufferMsg {
 	public static final int MSG_ID_LOGIN_REQ = 15;
 	public static final int MSG_ID_LOGIN_RSP = 16;
 	public static final int MSG_ID_MOVE_TO = 17;
-	public static final int MSG_ID_START_KCP = 20;
-	public static final int MSG_ID_SYNC_POS = 22;
-	public static final int MSG_ID_TEST_REQ = 23;
+	public static final int MSG_ID_REMOTE_ENTER_GAME = 18;
+	public static final int MSG_ID_START_KCP = 21;
+	public static final int MSG_ID_SWITCH_REMOTE_SERVER = 22;
+	public static final int MSG_ID_SYNC_POS = 24;
+	public static final int MSG_ID_TEST_REQ = 25;
 
 	public static Object createMsgById(int msgId, byte[] dat) {
 		try {
@@ -59,8 +61,12 @@ public class ProtoBufferMsg {
 					return Login.LoginRsp.parseFrom(dat);
 				case MSG_ID_MOVE_TO:
 					return Role.MoveTo.parseFrom(dat);
+				case MSG_ID_REMOTE_ENTER_GAME:
+					return Login.RemoteEnterGame.parseFrom(dat);
 				case MSG_ID_START_KCP:
 					return Login.StartKcp.parseFrom(dat);
+				case MSG_ID_SWITCH_REMOTE_SERVER:
+					return Login.SwitchRemoteServer.parseFrom(dat);
 				case MSG_ID_SYNC_POS:
 					return Scene.SyncPos.parseFrom(dat);
 				case MSG_ID_TEST_REQ:
@@ -106,8 +112,12 @@ public class ProtoBufferMsg {
 				return Login.LoginRsp.newBuilder();
 			case MSG_ID_MOVE_TO:
 				return Role.MoveTo.newBuilder();
+			case MSG_ID_REMOTE_ENTER_GAME:
+				return Login.RemoteEnterGame.newBuilder();
 			case MSG_ID_START_KCP:
 				return Login.StartKcp.newBuilder();
+			case MSG_ID_SWITCH_REMOTE_SERVER:
+				return Login.SwitchRemoteServer.newBuilder();
 			case MSG_ID_SYNC_POS:
 				return Scene.SyncPos.newBuilder();
 			case MSG_ID_TEST_REQ:
@@ -180,8 +190,16 @@ public class ProtoBufferMsg {
 		return Role.MoveTo.newBuilder();
 	}
 	
+	public static Login.RemoteEnterGame.Builder createRemoteEnterGameBuilder() {
+		return Login.RemoteEnterGame.newBuilder();
+	}
+	
 	public static Login.StartKcp.Builder createStartKcpBuilder() {
 		return Login.StartKcp.newBuilder();
+	}
+	
+	public static Login.SwitchRemoteServer.Builder createSwitchRemoteServerBuilder() {
+		return Login.SwitchRemoteServer.newBuilder();
 	}
 	
 	public static Scene.SyncPos.Builder createSyncPosBuilder() {

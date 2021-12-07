@@ -20,7 +20,7 @@ function clsRpc:allocRpcId()
     return self.cur_rpc_id
 end
 
-function clsRpc:regRpcHandler(funcName, func)
+function clsRpc:reg_rpc_handler(funcName, func)
     if self.rpc_func[funcName] ~= nil then
         logger.logError("repeat reg rpc hander, %s", funcName)
     end

@@ -13,6 +13,7 @@ function clsGamePlayer:__init__(game_scene, engine_obj, role_id, name)
     Super(clsGamePlayer).__init__(self, game_scene, engine_obj:getEntityId(), {clsGamePlayer.index_roleId, clsGamePlayer.index_connId})
     self.engineObj = engine_obj
     self.role_id = role_id
+    self.server_id = IDMgr.get_server_id_by_uid(role_id)
     self.name = name
     self.conn_id = engine_obj:getConnId()
     self:_init_mgr()
@@ -102,31 +103,93 @@ function clsGamePlayer:on_leave_game()
     self.game_scene.service:callRpc(LOCAL_SERVICE_SCENE_CTRL, "Player_LeaveGame", -1, {role_id=self.role_id})
 end
 
-function clsGamePlayer:try_switch_scene(scene_id)
-    if self.game_scene.scene_id == scene_id then
+function clsGamePlayer:try_switch_scene(server_id, scene_id)
+    if SERVER_GROUP_ID == server_id and self.game_scene.scene_id == scene_id then
         logger.logInfo("try switch scene fail, cur scene id=%d, role_id:%d", scene_id, self.role_id)
         return
     end
     local role_id = self.role_id
 
+    -- local function _on_finish(err_code, scene_uid)
+    --     if err_code ~= ErrorCode.OK then
+    --         logger.logError("switch scene failed, role_id:%d, server_id:%d, scene_id:%d, err:%d", role_id, server_id, scene_id, err_code)
+    --         return
+    --     end
+    --     self:switch_scene(server_id, scene_uid)
+    -- end
+
+    -- local scene_ctrl_addr = make_scene_ctrl_addr(server_id)
+
+    if SERVER_GROUP_ID == server_id then
+        self:_local_switch_scene(server_id, scene_id)
+        -- local future = self.game_scene.service:callRpc(scene_ctrl_addr, "Player_SwitchSceneReq", -1, {scene_id=scene_id, role_id=role_id})
+        -- future:regCallback(_on_finish)
+    else
+        self:_remote_switch_scene(server_id, scene_id)
+        -- local future = self.game_scene.service:callRpc(scene_ctrl_addr, "Player_RemoteSwitchSceneReq", -1, {scene_id=scene_id, role_id=role_id})
+        -- future:regCallback(_on_finish)
+    end
+end
+
+-- 在本服切换场景
+function clsGamePlayer:_local_switch_scene(server_id, scene_id)
     local function _on_finish(err_code, scene_uid)
         if err_code ~= ErrorCode.OK then
-            logger.logError("switch scene failed, role_id:%d, scene_id:%d, err:%d", role_id, scene_id, err_code)
+            logger.logError("switch scene failed, role_id:%d, server_id:%d, scene_id:%d, err:%d", role_id, server_id, scene_id, err_code)
             return
         end
-        self:switch_scene(scene_uid)
+        self:switch_local_scene(server_id, scene_uid)
     end
 
-    local future = self.game_scene.service:callRpc(LOCAL_SERVICE_SCENE_CTRL, "Player_SwitchSceneReq", -1,
-                                            {scene_id=scene_id, role_id=role_id})
+    local scene_ctrl_addr = make_scene_ctrl_addr(server_id)
+    local future = self.game_scene.service:callRpc(scene_ctrl_addr, "Player_SwitchSceneReq", -1, {scene_id=scene_id, role_id=self.role_id})
     future:regCallback(_on_finish)
 end
 
-function clsGamePlayer:switch_scene(scene_uid)
-    logger.logInfo("switch scene, role_id:%d, scene_uid:%d", self.role_id, scene_uid)
+-- 切换到其他服场景
+function clsGamePlayer:_remote_switch_scene(server_id, scene_id)
+    local function _on_finish(err_code, result)
+        if err_code ~= ErrorCode.OK then
+            logger.logError("switch remote scene failed, role_id:%d, server_id:%d, scene_id:%d, err:%d", self.role_id, server_id, scene_id, err_code)
+            return
+        end
+        local server_id = result.server_id
+        local scene_uid = result.scene_uid
+        local gateway_ports = result.gateway_ports
+        local token = result.token
+        self:switch_remote_scene(server_id, scene_uid, gateway_ports, token)
+    end
+
+    local scene_ctrl_addr = make_scene_ctrl_addr(server_id)
+    local future = self.game_scene.service:callRpc(scene_ctrl_addr, "Player_RemoteSwitchSceneReq", -1, {scene_id=scene_id, role_id=self.role_id})
+    future:regCallback(_on_finish)
+end
+
+function clsGamePlayer:is_local_server()
+    return self.server_id == SERVER_GROUP_ID
+end
+
+function clsGamePlayer:switch_local_scene(server_id, scene_uid)
+    logger.logInfo("switch scene, role_id:%d, server_id:%d, scene_uid:%d", self.role_id, server_id, scene_uid)
     self.game_scene.service:callRpc(LOCAL_SERVICE_SCENE_CTRL, "Player_SwitchScene", -1,
-                                    {conn_id=self.conn_id, role_id=self.role_id, scene_uid=scene_uid})
+                                        {conn_id=self.conn_id, role_id=self.role_id, scene_uid=scene_uid})
     self:leave_scene("switch_scene")
+end
+
+function clsGamePlayer:switch_remote_scene(server_id, scene_uid, gateway_ports, token)
+    logger.logInfo("switch remote scene, role_id:%d, server_id:%d, scene_uid:%d, gateway_ports:%s", 
+                        self.role_id, server_id, scene_uid, StrUtil.tableToStr(gateway_ports))
+    local scene_ctrl_addr = make_scene_ctrl_addr(self.server_id)
+    self.game_scene.service:callRpc(scene_ctrl_addr, "Player_SwitchToRemoteScene", -1,
+                                        {role_id=self.role_id, server_id=server_id, scene_uid=scene_uid})
+    local msg = {}
+    msg.remote_ip = "127.0.0.1"
+    msg.remote_port = gateway_ports.port
+    msg.remote_udp_port = gateway_ports.udp_port
+    msg.token = token
+    self:send_msg_to_client(MSG_ID_SWITCH_REMOTE_SERVER, msg)
+    -- self:leave_scene("switch_remote_scene")
+    -- self.game_scene:tick_player(self.role_id, "switch_remote_scene")
 end
 
 function clsGamePlayer:leave_scene(reason)

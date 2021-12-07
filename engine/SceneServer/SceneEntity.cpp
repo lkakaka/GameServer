@@ -140,6 +140,7 @@ void SceneEntity::broadcastMsgToClient(std::set<int>& connIds, int msgId, google
 
 void SceneEntity::broadcastMsgToClient(std::set<int>& connIds, int msgId, const char* msg, int msgLen) {
 	MyBuffer buffer;
+	buffer.writeByte(1); // 是否是发给客户端的消息
 	buffer.writeInt(msgId);
 	buffer.writeInt(connIds.size()); // 连接数量
 	for (int connId : connIds) {

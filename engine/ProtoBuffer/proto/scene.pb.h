@@ -203,10 +203,10 @@ class EnterSceneReq :
     kRoleIdFieldNumber = 1,
     kSceneIdFieldNumber = 2,
   };
-  // int32 role_id = 1;
+  // int64 role_id = 1;
   void clear_role_id();
-  ::PROTOBUF_NAMESPACE_ID::int32 role_id() const;
-  void set_role_id(::PROTOBUF_NAMESPACE_ID::int32 value);
+  ::PROTOBUF_NAMESPACE_ID::int64 role_id() const;
+  void set_role_id(::PROTOBUF_NAMESPACE_ID::int64 value);
 
   // int32 scene_id = 2;
   void clear_scene_id();
@@ -218,7 +218,7 @@ class EnterSceneReq :
   class _Internal;
 
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
-  ::PROTOBUF_NAMESPACE_ID::int32 role_id_;
+  ::PROTOBUF_NAMESPACE_ID::int64 role_id_;
   ::PROTOBUF_NAMESPACE_ID::int32 scene_id_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_proto_2fscene_2eproto;
@@ -342,10 +342,10 @@ class EnterSceneRsp :
     kSceneIdFieldNumber = 2,
     kErrCodeFieldNumber = 3,
   };
-  // int32 role_id = 1;
+  // int64 role_id = 1;
   void clear_role_id();
-  ::PROTOBUF_NAMESPACE_ID::int32 role_id() const;
-  void set_role_id(::PROTOBUF_NAMESPACE_ID::int32 value);
+  ::PROTOBUF_NAMESPACE_ID::int64 role_id() const;
+  void set_role_id(::PROTOBUF_NAMESPACE_ID::int64 value);
 
   // int32 scene_id = 2;
   void clear_scene_id();
@@ -362,7 +362,7 @@ class EnterSceneRsp :
   class _Internal;
 
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
-  ::PROTOBUF_NAMESPACE_ID::int32 role_id_;
+  ::PROTOBUF_NAMESPACE_ID::int64 role_id_;
   ::PROTOBUF_NAMESPACE_ID::int32 scene_id_;
   ::PROTOBUF_NAMESPACE_ID::int32 err_code_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
@@ -1094,15 +1094,15 @@ class SyncPos :
 #endif  // __GNUC__
 // EnterSceneReq
 
-// int32 role_id = 1;
+// int64 role_id = 1;
 inline void EnterSceneReq::clear_role_id() {
-  role_id_ = 0;
+  role_id_ = PROTOBUF_LONGLONG(0);
 }
-inline ::PROTOBUF_NAMESPACE_ID::int32 EnterSceneReq::role_id() const {
+inline ::PROTOBUF_NAMESPACE_ID::int64 EnterSceneReq::role_id() const {
   // @@protoc_insertion_point(field_get:EnterSceneReq.role_id)
   return role_id_;
 }
-inline void EnterSceneReq::set_role_id(::PROTOBUF_NAMESPACE_ID::int32 value) {
+inline void EnterSceneReq::set_role_id(::PROTOBUF_NAMESPACE_ID::int64 value) {
   
   role_id_ = value;
   // @@protoc_insertion_point(field_set:EnterSceneReq.role_id)
@@ -1126,15 +1126,15 @@ inline void EnterSceneReq::set_scene_id(::PROTOBUF_NAMESPACE_ID::int32 value) {
 
 // EnterSceneRsp
 
-// int32 role_id = 1;
+// int64 role_id = 1;
 inline void EnterSceneRsp::clear_role_id() {
-  role_id_ = 0;
+  role_id_ = PROTOBUF_LONGLONG(0);
 }
-inline ::PROTOBUF_NAMESPACE_ID::int32 EnterSceneRsp::role_id() const {
+inline ::PROTOBUF_NAMESPACE_ID::int64 EnterSceneRsp::role_id() const {
   // @@protoc_insertion_point(field_get:EnterSceneRsp.role_id)
   return role_id_;
 }
-inline void EnterSceneRsp::set_role_id(::PROTOBUF_NAMESPACE_ID::int32 value) {
+inline void EnterSceneRsp::set_role_id(::PROTOBUF_NAMESPACE_ID::int64 value) {
   
   role_id_ = value;
   // @@protoc_insertion_point(field_set:EnterSceneRsp.role_id)

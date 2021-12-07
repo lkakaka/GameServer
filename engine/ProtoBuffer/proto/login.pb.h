@@ -47,7 +47,7 @@ struct TableStruct_proto_2flogin_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[11]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[13]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -81,9 +81,15 @@ extern LoginReqDefaultTypeInternal _LoginReq_default_instance_;
 class LoginRsp;
 class LoginRspDefaultTypeInternal;
 extern LoginRspDefaultTypeInternal _LoginRsp_default_instance_;
+class RemoteEnterGame;
+class RemoteEnterGameDefaultTypeInternal;
+extern RemoteEnterGameDefaultTypeInternal _RemoteEnterGame_default_instance_;
 class StartKcp;
 class StartKcpDefaultTypeInternal;
 extern StartKcpDefaultTypeInternal _StartKcp_default_instance_;
+class SwitchRemoteServer;
+class SwitchRemoteServerDefaultTypeInternal;
+extern SwitchRemoteServerDefaultTypeInternal _SwitchRemoteServer_default_instance_;
 class _RoleInfo;
 class _RoleInfoDefaultTypeInternal;
 extern _RoleInfoDefaultTypeInternal __RoleInfo_default_instance_;
@@ -97,7 +103,9 @@ template<> ::EnterGameRsp* Arena::CreateMaybeMessage<::EnterGameRsp>(Arena*);
 template<> ::LoadRoleListRsp* Arena::CreateMaybeMessage<::LoadRoleListRsp>(Arena*);
 template<> ::LoginReq* Arena::CreateMaybeMessage<::LoginReq>(Arena*);
 template<> ::LoginRsp* Arena::CreateMaybeMessage<::LoginRsp>(Arena*);
+template<> ::RemoteEnterGame* Arena::CreateMaybeMessage<::RemoteEnterGame>(Arena*);
 template<> ::StartKcp* Arena::CreateMaybeMessage<::StartKcp>(Arena*);
+template<> ::SwitchRemoteServer* Arena::CreateMaybeMessage<::SwitchRemoteServer>(Arena*);
 template<> ::_RoleInfo* Arena::CreateMaybeMessage<::_RoleInfo>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 
@@ -518,10 +526,10 @@ class _RoleInfo :
   std::string* release_role_name();
   void set_allocated_role_name(std::string* role_name);
 
-  // int32 role_id = 1;
+  // int64 role_id = 1;
   void clear_role_id();
-  ::PROTOBUF_NAMESPACE_ID::int32 role_id() const;
-  void set_role_id(::PROTOBUF_NAMESPACE_ID::int32 value);
+  ::PROTOBUF_NAMESPACE_ID::int64 role_id() const;
+  void set_role_id(::PROTOBUF_NAMESPACE_ID::int64 value);
 
   // @@protoc_insertion_point(class_scope:_RoleInfo)
  private:
@@ -529,7 +537,7 @@ class _RoleInfo :
 
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr role_name_;
-  ::PROTOBUF_NAMESPACE_ID::int32 role_id_;
+  ::PROTOBUF_NAMESPACE_ID::int64 role_id_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_proto_2flogin_2eproto;
 };
@@ -1110,10 +1118,10 @@ class EnterGame :
   std::string* release_account();
   void set_allocated_account(std::string* account);
 
-  // int32 role_id = 1;
+  // int64 role_id = 1;
   void clear_role_id();
-  ::PROTOBUF_NAMESPACE_ID::int32 role_id() const;
-  void set_role_id(::PROTOBUF_NAMESPACE_ID::int32 value);
+  ::PROTOBUF_NAMESPACE_ID::int64 role_id() const;
+  void set_role_id(::PROTOBUF_NAMESPACE_ID::int64 value);
 
   // @@protoc_insertion_point(class_scope:EnterGame)
  private:
@@ -1121,7 +1129,7 @@ class EnterGame :
 
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr account_;
-  ::PROTOBUF_NAMESPACE_ID::int32 role_id_;
+  ::PROTOBUF_NAMESPACE_ID::int64 role_id_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_proto_2flogin_2eproto;
 };
@@ -1669,6 +1677,321 @@ class StartKcp :
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_proto_2flogin_2eproto;
 };
+// -------------------------------------------------------------------
+
+class SwitchRemoteServer :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:SwitchRemoteServer) */ {
+ public:
+  SwitchRemoteServer();
+  virtual ~SwitchRemoteServer();
+
+  SwitchRemoteServer(const SwitchRemoteServer& from);
+  SwitchRemoteServer(SwitchRemoteServer&& from) noexcept
+    : SwitchRemoteServer() {
+    *this = ::std::move(from);
+  }
+
+  inline SwitchRemoteServer& operator=(const SwitchRemoteServer& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline SwitchRemoteServer& operator=(SwitchRemoteServer&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const SwitchRemoteServer& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const SwitchRemoteServer* internal_default_instance() {
+    return reinterpret_cast<const SwitchRemoteServer*>(
+               &_SwitchRemoteServer_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    11;
+
+  friend void swap(SwitchRemoteServer& a, SwitchRemoteServer& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(SwitchRemoteServer* other) {
+    if (other == this) return;
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline SwitchRemoteServer* New() const final {
+    return CreateMaybeMessage<SwitchRemoteServer>(nullptr);
+  }
+
+  SwitchRemoteServer* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<SwitchRemoteServer>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const SwitchRemoteServer& from);
+  void MergeFrom(const SwitchRemoteServer& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  #else
+  bool MergePartialFromCodedStream(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* InternalSerializeWithCachedSizesToArray(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(SwitchRemoteServer* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "SwitchRemoteServer";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_proto_2flogin_2eproto);
+    return ::descriptor_table_proto_2flogin_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kRemoteIpFieldNumber = 2,
+    kTokenFieldNumber = 5,
+    kRoleIdFieldNumber = 1,
+    kRemotePortFieldNumber = 3,
+    kRemoteUdpPortFieldNumber = 4,
+  };
+  // string remote_ip = 2;
+  void clear_remote_ip();
+  const std::string& remote_ip() const;
+  void set_remote_ip(const std::string& value);
+  void set_remote_ip(std::string&& value);
+  void set_remote_ip(const char* value);
+  void set_remote_ip(const char* value, size_t size);
+  std::string* mutable_remote_ip();
+  std::string* release_remote_ip();
+  void set_allocated_remote_ip(std::string* remote_ip);
+
+  // string token = 5;
+  void clear_token();
+  const std::string& token() const;
+  void set_token(const std::string& value);
+  void set_token(std::string&& value);
+  void set_token(const char* value);
+  void set_token(const char* value, size_t size);
+  std::string* mutable_token();
+  std::string* release_token();
+  void set_allocated_token(std::string* token);
+
+  // int64 role_id = 1;
+  void clear_role_id();
+  ::PROTOBUF_NAMESPACE_ID::int64 role_id() const;
+  void set_role_id(::PROTOBUF_NAMESPACE_ID::int64 value);
+
+  // int32 remote_port = 3;
+  void clear_remote_port();
+  ::PROTOBUF_NAMESPACE_ID::int32 remote_port() const;
+  void set_remote_port(::PROTOBUF_NAMESPACE_ID::int32 value);
+
+  // int32 remote_udp_port = 4;
+  void clear_remote_udp_port();
+  ::PROTOBUF_NAMESPACE_ID::int32 remote_udp_port() const;
+  void set_remote_udp_port(::PROTOBUF_NAMESPACE_ID::int32 value);
+
+  // @@protoc_insertion_point(class_scope:SwitchRemoteServer)
+ private:
+  class _Internal;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr remote_ip_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr token_;
+  ::PROTOBUF_NAMESPACE_ID::int64 role_id_;
+  ::PROTOBUF_NAMESPACE_ID::int32 remote_port_;
+  ::PROTOBUF_NAMESPACE_ID::int32 remote_udp_port_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_proto_2flogin_2eproto;
+};
+// -------------------------------------------------------------------
+
+class RemoteEnterGame :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:RemoteEnterGame) */ {
+ public:
+  RemoteEnterGame();
+  virtual ~RemoteEnterGame();
+
+  RemoteEnterGame(const RemoteEnterGame& from);
+  RemoteEnterGame(RemoteEnterGame&& from) noexcept
+    : RemoteEnterGame() {
+    *this = ::std::move(from);
+  }
+
+  inline RemoteEnterGame& operator=(const RemoteEnterGame& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline RemoteEnterGame& operator=(RemoteEnterGame&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const RemoteEnterGame& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const RemoteEnterGame* internal_default_instance() {
+    return reinterpret_cast<const RemoteEnterGame*>(
+               &_RemoteEnterGame_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    12;
+
+  friend void swap(RemoteEnterGame& a, RemoteEnterGame& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(RemoteEnterGame* other) {
+    if (other == this) return;
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline RemoteEnterGame* New() const final {
+    return CreateMaybeMessage<RemoteEnterGame>(nullptr);
+  }
+
+  RemoteEnterGame* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<RemoteEnterGame>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const RemoteEnterGame& from);
+  void MergeFrom(const RemoteEnterGame& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  #else
+  bool MergePartialFromCodedStream(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* InternalSerializeWithCachedSizesToArray(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(RemoteEnterGame* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "RemoteEnterGame";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_proto_2flogin_2eproto);
+    return ::descriptor_table_proto_2flogin_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kTokenFieldNumber = 2,
+    kRoleIdFieldNumber = 1,
+  };
+  // string token = 2;
+  void clear_token();
+  const std::string& token() const;
+  void set_token(const std::string& value);
+  void set_token(std::string&& value);
+  void set_token(const char* value);
+  void set_token(const char* value, size_t size);
+  std::string* mutable_token();
+  std::string* release_token();
+  void set_allocated_token(std::string* token);
+
+  // int64 role_id = 1;
+  void clear_role_id();
+  ::PROTOBUF_NAMESPACE_ID::int64 role_id() const;
+  void set_role_id(::PROTOBUF_NAMESPACE_ID::int64 value);
+
+  // @@protoc_insertion_point(class_scope:RemoteEnterGame)
+ private:
+  class _Internal;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr token_;
+  ::PROTOBUF_NAMESPACE_ID::int64 role_id_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_proto_2flogin_2eproto;
+};
 // ===================================================================
 
 
@@ -1818,15 +2141,15 @@ inline void LoginRsp::set_err_code(::PROTOBUF_NAMESPACE_ID::int32 value) {
 
 // _RoleInfo
 
-// int32 role_id = 1;
+// int64 role_id = 1;
 inline void _RoleInfo::clear_role_id() {
-  role_id_ = 0;
+  role_id_ = PROTOBUF_LONGLONG(0);
 }
-inline ::PROTOBUF_NAMESPACE_ID::int32 _RoleInfo::role_id() const {
+inline ::PROTOBUF_NAMESPACE_ID::int64 _RoleInfo::role_id() const {
   // @@protoc_insertion_point(field_get:_RoleInfo.role_id)
   return role_id_;
 }
-inline void _RoleInfo::set_role_id(::PROTOBUF_NAMESPACE_ID::int32 value) {
+inline void _RoleInfo::set_role_id(::PROTOBUF_NAMESPACE_ID::int64 value) {
   
   role_id_ = value;
   // @@protoc_insertion_point(field_set:_RoleInfo.role_id)
@@ -2161,15 +2484,15 @@ inline void CreateRoleRsp::set_allocated_role_info(::_RoleInfo* role_info) {
 
 // EnterGame
 
-// int32 role_id = 1;
+// int64 role_id = 1;
 inline void EnterGame::clear_role_id() {
-  role_id_ = 0;
+  role_id_ = PROTOBUF_LONGLONG(0);
 }
-inline ::PROTOBUF_NAMESPACE_ID::int32 EnterGame::role_id() const {
+inline ::PROTOBUF_NAMESPACE_ID::int64 EnterGame::role_id() const {
   // @@protoc_insertion_point(field_get:EnterGame.role_id)
   return role_id_;
 }
-inline void EnterGame::set_role_id(::PROTOBUF_NAMESPACE_ID::int32 value) {
+inline void EnterGame::set_role_id(::PROTOBUF_NAMESPACE_ID::int64 value) {
   
   role_id_ = value;
   // @@protoc_insertion_point(field_set:EnterGame.role_id)
@@ -2423,9 +2746,230 @@ inline void StartKcp::set_allocated_token(std::string* token) {
   // @@protoc_insertion_point(field_set_allocated:StartKcp.token)
 }
 
+// -------------------------------------------------------------------
+
+// SwitchRemoteServer
+
+// int64 role_id = 1;
+inline void SwitchRemoteServer::clear_role_id() {
+  role_id_ = PROTOBUF_LONGLONG(0);
+}
+inline ::PROTOBUF_NAMESPACE_ID::int64 SwitchRemoteServer::role_id() const {
+  // @@protoc_insertion_point(field_get:SwitchRemoteServer.role_id)
+  return role_id_;
+}
+inline void SwitchRemoteServer::set_role_id(::PROTOBUF_NAMESPACE_ID::int64 value) {
+  
+  role_id_ = value;
+  // @@protoc_insertion_point(field_set:SwitchRemoteServer.role_id)
+}
+
+// string remote_ip = 2;
+inline void SwitchRemoteServer::clear_remote_ip() {
+  remote_ip_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline const std::string& SwitchRemoteServer::remote_ip() const {
+  // @@protoc_insertion_point(field_get:SwitchRemoteServer.remote_ip)
+  return remote_ip_.GetNoArena();
+}
+inline void SwitchRemoteServer::set_remote_ip(const std::string& value) {
+  
+  remote_ip_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:SwitchRemoteServer.remote_ip)
+}
+inline void SwitchRemoteServer::set_remote_ip(std::string&& value) {
+  
+  remote_ip_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:SwitchRemoteServer.remote_ip)
+}
+inline void SwitchRemoteServer::set_remote_ip(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  
+  remote_ip_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:SwitchRemoteServer.remote_ip)
+}
+inline void SwitchRemoteServer::set_remote_ip(const char* value, size_t size) {
+  
+  remote_ip_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:SwitchRemoteServer.remote_ip)
+}
+inline std::string* SwitchRemoteServer::mutable_remote_ip() {
+  
+  // @@protoc_insertion_point(field_mutable:SwitchRemoteServer.remote_ip)
+  return remote_ip_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* SwitchRemoteServer::release_remote_ip() {
+  // @@protoc_insertion_point(field_release:SwitchRemoteServer.remote_ip)
+  
+  return remote_ip_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void SwitchRemoteServer::set_allocated_remote_ip(std::string* remote_ip) {
+  if (remote_ip != nullptr) {
+    
+  } else {
+    
+  }
+  remote_ip_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), remote_ip);
+  // @@protoc_insertion_point(field_set_allocated:SwitchRemoteServer.remote_ip)
+}
+
+// int32 remote_port = 3;
+inline void SwitchRemoteServer::clear_remote_port() {
+  remote_port_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SwitchRemoteServer::remote_port() const {
+  // @@protoc_insertion_point(field_get:SwitchRemoteServer.remote_port)
+  return remote_port_;
+}
+inline void SwitchRemoteServer::set_remote_port(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  remote_port_ = value;
+  // @@protoc_insertion_point(field_set:SwitchRemoteServer.remote_port)
+}
+
+// int32 remote_udp_port = 4;
+inline void SwitchRemoteServer::clear_remote_udp_port() {
+  remote_udp_port_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 SwitchRemoteServer::remote_udp_port() const {
+  // @@protoc_insertion_point(field_get:SwitchRemoteServer.remote_udp_port)
+  return remote_udp_port_;
+}
+inline void SwitchRemoteServer::set_remote_udp_port(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  remote_udp_port_ = value;
+  // @@protoc_insertion_point(field_set:SwitchRemoteServer.remote_udp_port)
+}
+
+// string token = 5;
+inline void SwitchRemoteServer::clear_token() {
+  token_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline const std::string& SwitchRemoteServer::token() const {
+  // @@protoc_insertion_point(field_get:SwitchRemoteServer.token)
+  return token_.GetNoArena();
+}
+inline void SwitchRemoteServer::set_token(const std::string& value) {
+  
+  token_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:SwitchRemoteServer.token)
+}
+inline void SwitchRemoteServer::set_token(std::string&& value) {
+  
+  token_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:SwitchRemoteServer.token)
+}
+inline void SwitchRemoteServer::set_token(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  
+  token_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:SwitchRemoteServer.token)
+}
+inline void SwitchRemoteServer::set_token(const char* value, size_t size) {
+  
+  token_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:SwitchRemoteServer.token)
+}
+inline std::string* SwitchRemoteServer::mutable_token() {
+  
+  // @@protoc_insertion_point(field_mutable:SwitchRemoteServer.token)
+  return token_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* SwitchRemoteServer::release_token() {
+  // @@protoc_insertion_point(field_release:SwitchRemoteServer.token)
+  
+  return token_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void SwitchRemoteServer::set_allocated_token(std::string* token) {
+  if (token != nullptr) {
+    
+  } else {
+    
+  }
+  token_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), token);
+  // @@protoc_insertion_point(field_set_allocated:SwitchRemoteServer.token)
+}
+
+// -------------------------------------------------------------------
+
+// RemoteEnterGame
+
+// int64 role_id = 1;
+inline void RemoteEnterGame::clear_role_id() {
+  role_id_ = PROTOBUF_LONGLONG(0);
+}
+inline ::PROTOBUF_NAMESPACE_ID::int64 RemoteEnterGame::role_id() const {
+  // @@protoc_insertion_point(field_get:RemoteEnterGame.role_id)
+  return role_id_;
+}
+inline void RemoteEnterGame::set_role_id(::PROTOBUF_NAMESPACE_ID::int64 value) {
+  
+  role_id_ = value;
+  // @@protoc_insertion_point(field_set:RemoteEnterGame.role_id)
+}
+
+// string token = 2;
+inline void RemoteEnterGame::clear_token() {
+  token_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline const std::string& RemoteEnterGame::token() const {
+  // @@protoc_insertion_point(field_get:RemoteEnterGame.token)
+  return token_.GetNoArena();
+}
+inline void RemoteEnterGame::set_token(const std::string& value) {
+  
+  token_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:RemoteEnterGame.token)
+}
+inline void RemoteEnterGame::set_token(std::string&& value) {
+  
+  token_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:RemoteEnterGame.token)
+}
+inline void RemoteEnterGame::set_token(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  
+  token_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:RemoteEnterGame.token)
+}
+inline void RemoteEnterGame::set_token(const char* value, size_t size) {
+  
+  token_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:RemoteEnterGame.token)
+}
+inline std::string* RemoteEnterGame::mutable_token() {
+  
+  // @@protoc_insertion_point(field_mutable:RemoteEnterGame.token)
+  return token_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* RemoteEnterGame::release_token() {
+  // @@protoc_insertion_point(field_release:RemoteEnterGame.token)
+  
+  return token_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void RemoteEnterGame::set_allocated_token(std::string* token) {
+  if (token != nullptr) {
+    
+  } else {
+    
+  }
+  token_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), token);
+  // @@protoc_insertion_point(field_set_allocated:RemoteEnterGame.token)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

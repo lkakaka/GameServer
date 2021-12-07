@@ -9,6 +9,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 public class GameRobot {
     private static final int TYPE_TCP = 0;
@@ -18,11 +20,12 @@ public class GameRobot {
     private String m_serverIP;
     private int m_serverPort;
     private int m_serverUdpPort;
-    private int m_userId;
+    private long m_roleId;
     private String m_account;
     private ByteArrayOutputStream m_buffer = new ByteArrayOutputStream();
     private ByteArrayOutputStream m_kcpBuffer = new ByteArrayOutputStream();
     private ServerCmd m_robotCmd;
+    private boolean isSwitchServer;
 
     GameRobot() {
         m_robotCmd = new ServerCmd(this);
@@ -39,6 +42,7 @@ public class GameRobot {
 
             @Override
             public void onDisConnected() {
+                if (isSwitchServer) return;
                 RobotMgr.getInstance().removeRobot(m_account);
             }
 
@@ -46,11 +50,11 @@ public class GameRobot {
             public void onRecv(byte[] data, int count) {
                 try {
                     m_buffer.write(data, 0, count);
-                }catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 while (true) {
-                    if(!parseData(TYPE_TCP, m_buffer)) break;
+                    if (!parseData(TYPE_TCP, m_buffer)) break;
                 }
             }
 
@@ -58,11 +62,11 @@ public class GameRobot {
             public void onKCPRecv(byte[] data, int count) {
                 try {
                     m_kcpBuffer.write(data, 0, count);
-                }catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 while (true) {
-                    if(!parseData(TYPE_KCP, m_kcpBuffer)) break;
+                    if (!parseData(TYPE_KCP, m_kcpBuffer)) break;
                 }
             }
 
@@ -106,12 +110,12 @@ public class GameRobot {
             int iMsgId = dataInputStream.readInt();
             int iMsgLen = iPacketLen - 8;
             byte[] dat = new byte[iMsgLen];
-            dataInputStream.read(dat,0, iMsgLen);
+            dataInputStream.read(dat, 0, iMsgLen);
             onMsg(type, iMsgId, dat);
             stream.reset();
             stream.write(allBytes, iPacketLen, allBytes.length - iPacketLen);
             return true;
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
@@ -166,12 +170,12 @@ public class GameRobot {
         this.m_serverUdpPort = serverUdpPort;
     }
 
-    public int getUserId() {
-        return m_userId;
+    public long getRoleId() {
+        return m_roleId;
     }
 
-    public void setUserId(int userId) {
-        this.m_userId = userId;
+    public void setRoleId(long roleId) {
+        this.m_roleId = roleId;
     }
 
     public String getAccount() {
@@ -188,5 +192,19 @@ public class GameRobot {
 
     public int getUdpPort() {
         return m_network.getUdpPort();
+    }
+
+    public void switchServer(String ip, int port, int udpPort, Runnable runnable) {
+        isSwitchServer = true;
+        disconnect();
+        m_serverIP = ip;
+        m_serverPort = port;
+        m_serverUdpPort = udpPort;
+        ScheduledThreadPoolExecutor tpe = new ScheduledThreadPoolExecutor(1);
+        tpe.schedule(() -> {
+            init();
+            isSwitchServer = false;
+            runnable.run();
+        }, 1, TimeUnit.SECONDS);
     }
 }

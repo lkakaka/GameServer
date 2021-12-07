@@ -3,6 +3,7 @@ require("util.logger")
 require("game.db.db_handler")
 require("util.const")
 require("util.table_util")
+require("base.id_mgr")
 
 clsDBService = clsServiceBase:Inherit("clsDBService")
 
@@ -14,26 +15,26 @@ function clsDBService:__init__()
     local redis_port = Config:getConfigInt("redis_port")
     self.db_hander = clsDBHandler:New(db_name, redis_ip, redis_port)
     self:initRpcHandler()
-    self:regServiceMsgHandler(MSG_ID_TEST_REQ, self._on_recv_test_req)
+    self:reg_service_msg_handler(MSG_ID_TEST_REQ, self._on_recv_test_req)
 end
 
 function clsDBService:initRpcHandler()
-    self:regRpcHandler("RpcLoad", self.rpcLoad)
-    self:regRpcHandler("RpcLoadMulti", self.rpcLoadMulti)
-    self:regRpcHandler("RpcInsert", self.rpcInsert)
-    self:regRpcHandler("RpcUpdate", self.rpcUpdate)
-    self:regRpcHandler("RpcDelete", self.rpcDelete)
+    self:reg_rpc_handler("RpcLoad", self.rpc_load)
+    self:reg_rpc_handler("RpcLoadMulti", self.rpc_load_multi)
+    self:reg_rpc_handler("RpcInsert", self.rpc_insert)
+    self:reg_rpc_handler("RpcUpdate", self.rpc_update)
+    self:reg_rpc_handler("RpcDelete", self.rpc_delete)
 
-    self:regRpcHandler("CreateRole", self.rpcCreateRole)
+    self:reg_rpc_handler("CreateRole", self.rpc_create_role)
 end
 
-function clsDBService:rpcLoad(sender, tbl)
+function clsDBService:rpc_load(sender, tbl)
     local result = self.db_hander:load(tbl)
     
     return ErrorCode.OK, result
 end
 
-function clsDBService:rpcLoadMulti(sender, tbls)
+function clsDBService:rpc_load_multi(sender, tbls)
     print(StrUtil.tableToStr(tbls))
     local results = {}
     for _,tbl in ipairs(tbls) do
@@ -43,26 +44,26 @@ function clsDBService:rpcLoadMulti(sender, tbls)
     return ErrorCode.OK, results
 end
 
-function clsDBService:rpcInsert(sender, tbl)
+function clsDBService:rpc_insert(sender, tbl)
     local result = self.db_hander:insert_table(tbl)
     return ErrorCode.OK, result
 end
 
-function clsDBService:rpcUpdate(sender, tbl)
+function clsDBService:rpc_update(sender, tbl)
     local result = self.db_hander:update_table(tbl)
     return ErrorCode.OK, result
 end
 
-function clsDBService:rpcDelete(sender, tbl)
+function clsDBService:rpc_delete(sender, tbl)
     local result = self.db_hander:delete_table(tbl)
     return ErrorCode.OK, result
 end
 
-function clsDBService:rpcCreateRole(sender, args)
+function clsDBService:rpc_create_role(sender, args)
     local conn_id = args.conn_id
     local account = args.account
     local role_name = args.role_name
-    print("_on_rpc_create_role----", conn_id, account, role_name)
+    -- print("_on_rpc_create_role----", conn_id, account, role_name)
     local rsp_msg = {role_info = {}}
     local db_res = self.db_hander:execute_sql(string.format("select * from player where account='%s'", account))
     if TableUtil.size(db_res) >= GlobalVar.MAX_ROLE_NUM then
@@ -77,13 +78,16 @@ function clsDBService:rpcCreateRole(sender, args)
         return
     end
 
-    self.db_hander:execute_sql(string.format("insert into player(role_name, account) values('%s', '%s')", role_name, account))
+    local role_id = IDMgr.alloc_role_id(1)
+
+    self.db_hander:execute_sql(string.format("insert into player(role_id, role_name, account) values(%d, '%s', '%s')", role_id, role_name, account))
     db_res = self.db_hander:execute_sql(string.format("select * from player where role_name='%s'", role_name))
 
     rsp_msg.role_info.role_id = db_res[1].role_id
     rsp_msg.role_info.role_name = role_name
     rsp_msg.err_code = ErrorCode.OK
     self:sendMsgToClient(conn_id, MSG_ID_CREATE_ROLE_RSP, rsp_msg)
+    logger.logInfo("create role, role_id:%d, role_name:%s, account:%s", role_id, role_name, account)
 end
 
 

@@ -1,3 +1,4 @@
+require("service.gateway_service")
 require("service.login_service")
 require("service.db_service")
 require("service.scene_ctrl_service")
@@ -28,6 +29,11 @@ service_factory = {}
 function got_problems(error_msg)
 	-- print(debug.traceback())
 	return error_msg .. "\n" .. debug.traceback(nil, 2)
+end
+
+function service_factory.create_gateway_service()
+	gateway_service = clsGatewayService:New()
+	return gateway_service
 end
 
 function service_factory.create_login_service()

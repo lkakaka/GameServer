@@ -1253,9 +1253,9 @@ public final class Login {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>int32 role_id = 1;</code>
+     * <code>int64 role_id = 1;</code>
      */
-    int getRoleId();
+    long getRoleId();
 
     /**
      * <code>string role_name = 2;</code>
@@ -1315,7 +1315,7 @@ public final class Login {
               break;
             case 8: {
 
-              roleId_ = input.readInt32();
+              roleId_ = input.readInt64();
               break;
             }
             case 18: {
@@ -1357,11 +1357,11 @@ public final class Login {
     }
 
     public static final int ROLE_ID_FIELD_NUMBER = 1;
-    private int roleId_;
+    private long roleId_;
     /**
-     * <code>int32 role_id = 1;</code>
+     * <code>int64 role_id = 1;</code>
      */
-    public int getRoleId() {
+    public long getRoleId() {
       return roleId_;
     }
 
@@ -1413,8 +1413,8 @@ public final class Login {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (roleId_ != 0) {
-        output.writeInt32(1, roleId_);
+      if (roleId_ != 0L) {
+        output.writeInt64(1, roleId_);
       }
       if (!getRoleNameBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 2, roleName_);
@@ -1428,9 +1428,9 @@ public final class Login {
       if (size != -1) return size;
 
       size = 0;
-      if (roleId_ != 0) {
+      if (roleId_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, roleId_);
+          .computeInt64Size(1, roleId_);
       }
       if (!getRoleNameBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, roleName_);
@@ -1466,7 +1466,8 @@ public final class Login {
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
       hash = (37 * hash) + ROLE_ID_FIELD_NUMBER;
-      hash = (53 * hash) + getRoleId();
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getRoleId());
       hash = (37 * hash) + ROLE_NAME_FIELD_NUMBER;
       hash = (53 * hash) + getRoleName().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
@@ -1602,7 +1603,7 @@ public final class Login {
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        roleId_ = 0;
+        roleId_ = 0L;
 
         roleName_ = "";
 
@@ -1682,7 +1683,7 @@ public final class Login {
 
       public Builder mergeFrom(com.proto.Login._RoleInfo other) {
         if (other == com.proto.Login._RoleInfo.getDefaultInstance()) return this;
-        if (other.getRoleId() != 0) {
+        if (other.getRoleId() != 0L) {
           setRoleId(other.getRoleId());
         }
         if (!other.getRoleName().isEmpty()) {
@@ -1718,28 +1719,28 @@ public final class Login {
         return this;
       }
 
-      private int roleId_ ;
+      private long roleId_ ;
       /**
-       * <code>int32 role_id = 1;</code>
+       * <code>int64 role_id = 1;</code>
        */
-      public int getRoleId() {
+      public long getRoleId() {
         return roleId_;
       }
       /**
-       * <code>int32 role_id = 1;</code>
+       * <code>int64 role_id = 1;</code>
        */
-      public Builder setRoleId(int value) {
+      public Builder setRoleId(long value) {
         
         roleId_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>int32 role_id = 1;</code>
+       * <code>int64 role_id = 1;</code>
        */
       public Builder clearRoleId() {
         
-        roleId_ = 0;
+        roleId_ = 0L;
         onChanged();
         return this;
       }
@@ -4223,9 +4224,9 @@ public final class Login {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>int32 role_id = 1;</code>
+     * <code>int64 role_id = 1;</code>
      */
-    int getRoleId();
+    long getRoleId();
 
     /**
      * <code>string account = 2;</code>
@@ -4285,7 +4286,7 @@ public final class Login {
               break;
             case 8: {
 
-              roleId_ = input.readInt32();
+              roleId_ = input.readInt64();
               break;
             }
             case 18: {
@@ -4327,11 +4328,11 @@ public final class Login {
     }
 
     public static final int ROLE_ID_FIELD_NUMBER = 1;
-    private int roleId_;
+    private long roleId_;
     /**
-     * <code>int32 role_id = 1;</code>
+     * <code>int64 role_id = 1;</code>
      */
-    public int getRoleId() {
+    public long getRoleId() {
       return roleId_;
     }
 
@@ -4383,8 +4384,8 @@ public final class Login {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (roleId_ != 0) {
-        output.writeInt32(1, roleId_);
+      if (roleId_ != 0L) {
+        output.writeInt64(1, roleId_);
       }
       if (!getAccountBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 2, account_);
@@ -4398,9 +4399,9 @@ public final class Login {
       if (size != -1) return size;
 
       size = 0;
-      if (roleId_ != 0) {
+      if (roleId_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, roleId_);
+          .computeInt64Size(1, roleId_);
       }
       if (!getAccountBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, account_);
@@ -4436,7 +4437,8 @@ public final class Login {
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
       hash = (37 * hash) + ROLE_ID_FIELD_NUMBER;
-      hash = (53 * hash) + getRoleId();
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getRoleId());
       hash = (37 * hash) + ACCOUNT_FIELD_NUMBER;
       hash = (53 * hash) + getAccount().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
@@ -4572,7 +4574,7 @@ public final class Login {
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        roleId_ = 0;
+        roleId_ = 0L;
 
         account_ = "";
 
@@ -4652,7 +4654,7 @@ public final class Login {
 
       public Builder mergeFrom(com.proto.Login.EnterGame other) {
         if (other == com.proto.Login.EnterGame.getDefaultInstance()) return this;
-        if (other.getRoleId() != 0) {
+        if (other.getRoleId() != 0L) {
           setRoleId(other.getRoleId());
         }
         if (!other.getAccount().isEmpty()) {
@@ -4688,28 +4690,28 @@ public final class Login {
         return this;
       }
 
-      private int roleId_ ;
+      private long roleId_ ;
       /**
-       * <code>int32 role_id = 1;</code>
+       * <code>int64 role_id = 1;</code>
        */
-      public int getRoleId() {
+      public long getRoleId() {
         return roleId_;
       }
       /**
-       * <code>int32 role_id = 1;</code>
+       * <code>int64 role_id = 1;</code>
        */
-      public Builder setRoleId(int value) {
+      public Builder setRoleId(long value) {
         
         roleId_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>int32 role_id = 1;</code>
+       * <code>int64 role_id = 1;</code>
        */
       public Builder clearRoleId() {
         
-        roleId_ = 0;
+        roleId_ = 0L;
         onChanged();
         return this;
       }
@@ -7099,6 +7101,1503 @@ public final class Login {
 
   }
 
+  public interface SwitchRemoteServerOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:SwitchRemoteServer)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>int64 role_id = 1;</code>
+     */
+    long getRoleId();
+
+    /**
+     * <code>string remote_ip = 2;</code>
+     */
+    java.lang.String getRemoteIp();
+    /**
+     * <code>string remote_ip = 2;</code>
+     */
+    com.google.protobuf.ByteString
+        getRemoteIpBytes();
+
+    /**
+     * <code>int32 remote_port = 3;</code>
+     */
+    int getRemotePort();
+
+    /**
+     * <code>int32 remote_udp_port = 4;</code>
+     */
+    int getRemoteUdpPort();
+
+    /**
+     * <code>string token = 5;</code>
+     */
+    java.lang.String getToken();
+    /**
+     * <code>string token = 5;</code>
+     */
+    com.google.protobuf.ByteString
+        getTokenBytes();
+  }
+  /**
+   * Protobuf type {@code SwitchRemoteServer}
+   */
+  public  static final class SwitchRemoteServer extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:SwitchRemoteServer)
+      SwitchRemoteServerOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use SwitchRemoteServer.newBuilder() to construct.
+    private SwitchRemoteServer(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private SwitchRemoteServer() {
+      remoteIp_ = "";
+      token_ = "";
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new SwitchRemoteServer();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private SwitchRemoteServer(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 8: {
+
+              roleId_ = input.readInt64();
+              break;
+            }
+            case 18: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              remoteIp_ = s;
+              break;
+            }
+            case 24: {
+
+              remotePort_ = input.readInt32();
+              break;
+            }
+            case 32: {
+
+              remoteUdpPort_ = input.readInt32();
+              break;
+            }
+            case 42: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              token_ = s;
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.proto.Login.internal_static_SwitchRemoteServer_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.proto.Login.internal_static_SwitchRemoteServer_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.proto.Login.SwitchRemoteServer.class, com.proto.Login.SwitchRemoteServer.Builder.class);
+    }
+
+    public static final int ROLE_ID_FIELD_NUMBER = 1;
+    private long roleId_;
+    /**
+     * <code>int64 role_id = 1;</code>
+     */
+    public long getRoleId() {
+      return roleId_;
+    }
+
+    public static final int REMOTE_IP_FIELD_NUMBER = 2;
+    private volatile java.lang.Object remoteIp_;
+    /**
+     * <code>string remote_ip = 2;</code>
+     */
+    public java.lang.String getRemoteIp() {
+      java.lang.Object ref = remoteIp_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        remoteIp_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string remote_ip = 2;</code>
+     */
+    public com.google.protobuf.ByteString
+        getRemoteIpBytes() {
+      java.lang.Object ref = remoteIp_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        remoteIp_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int REMOTE_PORT_FIELD_NUMBER = 3;
+    private int remotePort_;
+    /**
+     * <code>int32 remote_port = 3;</code>
+     */
+    public int getRemotePort() {
+      return remotePort_;
+    }
+
+    public static final int REMOTE_UDP_PORT_FIELD_NUMBER = 4;
+    private int remoteUdpPort_;
+    /**
+     * <code>int32 remote_udp_port = 4;</code>
+     */
+    public int getRemoteUdpPort() {
+      return remoteUdpPort_;
+    }
+
+    public static final int TOKEN_FIELD_NUMBER = 5;
+    private volatile java.lang.Object token_;
+    /**
+     * <code>string token = 5;</code>
+     */
+    public java.lang.String getToken() {
+      java.lang.Object ref = token_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        token_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string token = 5;</code>
+     */
+    public com.google.protobuf.ByteString
+        getTokenBytes() {
+      java.lang.Object ref = token_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        token_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (roleId_ != 0L) {
+        output.writeInt64(1, roleId_);
+      }
+      if (!getRemoteIpBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, remoteIp_);
+      }
+      if (remotePort_ != 0) {
+        output.writeInt32(3, remotePort_);
+      }
+      if (remoteUdpPort_ != 0) {
+        output.writeInt32(4, remoteUdpPort_);
+      }
+      if (!getTokenBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 5, token_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (roleId_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(1, roleId_);
+      }
+      if (!getRemoteIpBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, remoteIp_);
+      }
+      if (remotePort_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(3, remotePort_);
+      }
+      if (remoteUdpPort_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(4, remoteUdpPort_);
+      }
+      if (!getTokenBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, token_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof com.proto.Login.SwitchRemoteServer)) {
+        return super.equals(obj);
+      }
+      com.proto.Login.SwitchRemoteServer other = (com.proto.Login.SwitchRemoteServer) obj;
+
+      if (getRoleId()
+          != other.getRoleId()) return false;
+      if (!getRemoteIp()
+          .equals(other.getRemoteIp())) return false;
+      if (getRemotePort()
+          != other.getRemotePort()) return false;
+      if (getRemoteUdpPort()
+          != other.getRemoteUdpPort()) return false;
+      if (!getToken()
+          .equals(other.getToken())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + ROLE_ID_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getRoleId());
+      hash = (37 * hash) + REMOTE_IP_FIELD_NUMBER;
+      hash = (53 * hash) + getRemoteIp().hashCode();
+      hash = (37 * hash) + REMOTE_PORT_FIELD_NUMBER;
+      hash = (53 * hash) + getRemotePort();
+      hash = (37 * hash) + REMOTE_UDP_PORT_FIELD_NUMBER;
+      hash = (53 * hash) + getRemoteUdpPort();
+      hash = (37 * hash) + TOKEN_FIELD_NUMBER;
+      hash = (53 * hash) + getToken().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static com.proto.Login.SwitchRemoteServer parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.proto.Login.SwitchRemoteServer parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.proto.Login.SwitchRemoteServer parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.proto.Login.SwitchRemoteServer parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.proto.Login.SwitchRemoteServer parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.proto.Login.SwitchRemoteServer parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.proto.Login.SwitchRemoteServer parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.proto.Login.SwitchRemoteServer parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.proto.Login.SwitchRemoteServer parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static com.proto.Login.SwitchRemoteServer parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.proto.Login.SwitchRemoteServer parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.proto.Login.SwitchRemoteServer parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(com.proto.Login.SwitchRemoteServer prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code SwitchRemoteServer}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:SwitchRemoteServer)
+        com.proto.Login.SwitchRemoteServerOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.proto.Login.internal_static_SwitchRemoteServer_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.proto.Login.internal_static_SwitchRemoteServer_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.proto.Login.SwitchRemoteServer.class, com.proto.Login.SwitchRemoteServer.Builder.class);
+      }
+
+      // Construct using com.proto.Login.SwitchRemoteServer.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        roleId_ = 0L;
+
+        remoteIp_ = "";
+
+        remotePort_ = 0;
+
+        remoteUdpPort_ = 0;
+
+        token_ = "";
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.proto.Login.internal_static_SwitchRemoteServer_descriptor;
+      }
+
+      @java.lang.Override
+      public com.proto.Login.SwitchRemoteServer getDefaultInstanceForType() {
+        return com.proto.Login.SwitchRemoteServer.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public com.proto.Login.SwitchRemoteServer build() {
+        com.proto.Login.SwitchRemoteServer result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public com.proto.Login.SwitchRemoteServer buildPartial() {
+        com.proto.Login.SwitchRemoteServer result = new com.proto.Login.SwitchRemoteServer(this);
+        result.roleId_ = roleId_;
+        result.remoteIp_ = remoteIp_;
+        result.remotePort_ = remotePort_;
+        result.remoteUdpPort_ = remoteUdpPort_;
+        result.token_ = token_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.proto.Login.SwitchRemoteServer) {
+          return mergeFrom((com.proto.Login.SwitchRemoteServer)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(com.proto.Login.SwitchRemoteServer other) {
+        if (other == com.proto.Login.SwitchRemoteServer.getDefaultInstance()) return this;
+        if (other.getRoleId() != 0L) {
+          setRoleId(other.getRoleId());
+        }
+        if (!other.getRemoteIp().isEmpty()) {
+          remoteIp_ = other.remoteIp_;
+          onChanged();
+        }
+        if (other.getRemotePort() != 0) {
+          setRemotePort(other.getRemotePort());
+        }
+        if (other.getRemoteUdpPort() != 0) {
+          setRemoteUdpPort(other.getRemoteUdpPort());
+        }
+        if (!other.getToken().isEmpty()) {
+          token_ = other.token_;
+          onChanged();
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.proto.Login.SwitchRemoteServer parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (com.proto.Login.SwitchRemoteServer) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private long roleId_ ;
+      /**
+       * <code>int64 role_id = 1;</code>
+       */
+      public long getRoleId() {
+        return roleId_;
+      }
+      /**
+       * <code>int64 role_id = 1;</code>
+       */
+      public Builder setRoleId(long value) {
+        
+        roleId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int64 role_id = 1;</code>
+       */
+      public Builder clearRoleId() {
+        
+        roleId_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object remoteIp_ = "";
+      /**
+       * <code>string remote_ip = 2;</code>
+       */
+      public java.lang.String getRemoteIp() {
+        java.lang.Object ref = remoteIp_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          remoteIp_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string remote_ip = 2;</code>
+       */
+      public com.google.protobuf.ByteString
+          getRemoteIpBytes() {
+        java.lang.Object ref = remoteIp_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          remoteIp_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string remote_ip = 2;</code>
+       */
+      public Builder setRemoteIp(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        remoteIp_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string remote_ip = 2;</code>
+       */
+      public Builder clearRemoteIp() {
+        
+        remoteIp_ = getDefaultInstance().getRemoteIp();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string remote_ip = 2;</code>
+       */
+      public Builder setRemoteIpBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        remoteIp_ = value;
+        onChanged();
+        return this;
+      }
+
+      private int remotePort_ ;
+      /**
+       * <code>int32 remote_port = 3;</code>
+       */
+      public int getRemotePort() {
+        return remotePort_;
+      }
+      /**
+       * <code>int32 remote_port = 3;</code>
+       */
+      public Builder setRemotePort(int value) {
+        
+        remotePort_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 remote_port = 3;</code>
+       */
+      public Builder clearRemotePort() {
+        
+        remotePort_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int remoteUdpPort_ ;
+      /**
+       * <code>int32 remote_udp_port = 4;</code>
+       */
+      public int getRemoteUdpPort() {
+        return remoteUdpPort_;
+      }
+      /**
+       * <code>int32 remote_udp_port = 4;</code>
+       */
+      public Builder setRemoteUdpPort(int value) {
+        
+        remoteUdpPort_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 remote_udp_port = 4;</code>
+       */
+      public Builder clearRemoteUdpPort() {
+        
+        remoteUdpPort_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object token_ = "";
+      /**
+       * <code>string token = 5;</code>
+       */
+      public java.lang.String getToken() {
+        java.lang.Object ref = token_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          token_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string token = 5;</code>
+       */
+      public com.google.protobuf.ByteString
+          getTokenBytes() {
+        java.lang.Object ref = token_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          token_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string token = 5;</code>
+       */
+      public Builder setToken(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        token_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string token = 5;</code>
+       */
+      public Builder clearToken() {
+        
+        token_ = getDefaultInstance().getToken();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string token = 5;</code>
+       */
+      public Builder setTokenBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        token_ = value;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:SwitchRemoteServer)
+    }
+
+    // @@protoc_insertion_point(class_scope:SwitchRemoteServer)
+    private static final com.proto.Login.SwitchRemoteServer DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new com.proto.Login.SwitchRemoteServer();
+    }
+
+    public static com.proto.Login.SwitchRemoteServer getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<SwitchRemoteServer>
+        PARSER = new com.google.protobuf.AbstractParser<SwitchRemoteServer>() {
+      @java.lang.Override
+      public SwitchRemoteServer parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new SwitchRemoteServer(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<SwitchRemoteServer> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<SwitchRemoteServer> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.proto.Login.SwitchRemoteServer getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface RemoteEnterGameOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:RemoteEnterGame)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>int64 role_id = 1;</code>
+     */
+    long getRoleId();
+
+    /**
+     * <code>string token = 2;</code>
+     */
+    java.lang.String getToken();
+    /**
+     * <code>string token = 2;</code>
+     */
+    com.google.protobuf.ByteString
+        getTokenBytes();
+  }
+  /**
+   * Protobuf type {@code RemoteEnterGame}
+   */
+  public  static final class RemoteEnterGame extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:RemoteEnterGame)
+      RemoteEnterGameOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use RemoteEnterGame.newBuilder() to construct.
+    private RemoteEnterGame(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private RemoteEnterGame() {
+      token_ = "";
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new RemoteEnterGame();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private RemoteEnterGame(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 8: {
+
+              roleId_ = input.readInt64();
+              break;
+            }
+            case 18: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              token_ = s;
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.proto.Login.internal_static_RemoteEnterGame_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.proto.Login.internal_static_RemoteEnterGame_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.proto.Login.RemoteEnterGame.class, com.proto.Login.RemoteEnterGame.Builder.class);
+    }
+
+    public static final int ROLE_ID_FIELD_NUMBER = 1;
+    private long roleId_;
+    /**
+     * <code>int64 role_id = 1;</code>
+     */
+    public long getRoleId() {
+      return roleId_;
+    }
+
+    public static final int TOKEN_FIELD_NUMBER = 2;
+    private volatile java.lang.Object token_;
+    /**
+     * <code>string token = 2;</code>
+     */
+    public java.lang.String getToken() {
+      java.lang.Object ref = token_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        token_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string token = 2;</code>
+     */
+    public com.google.protobuf.ByteString
+        getTokenBytes() {
+      java.lang.Object ref = token_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        token_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (roleId_ != 0L) {
+        output.writeInt64(1, roleId_);
+      }
+      if (!getTokenBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, token_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (roleId_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(1, roleId_);
+      }
+      if (!getTokenBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, token_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof com.proto.Login.RemoteEnterGame)) {
+        return super.equals(obj);
+      }
+      com.proto.Login.RemoteEnterGame other = (com.proto.Login.RemoteEnterGame) obj;
+
+      if (getRoleId()
+          != other.getRoleId()) return false;
+      if (!getToken()
+          .equals(other.getToken())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + ROLE_ID_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getRoleId());
+      hash = (37 * hash) + TOKEN_FIELD_NUMBER;
+      hash = (53 * hash) + getToken().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static com.proto.Login.RemoteEnterGame parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.proto.Login.RemoteEnterGame parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.proto.Login.RemoteEnterGame parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.proto.Login.RemoteEnterGame parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.proto.Login.RemoteEnterGame parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.proto.Login.RemoteEnterGame parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.proto.Login.RemoteEnterGame parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.proto.Login.RemoteEnterGame parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.proto.Login.RemoteEnterGame parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static com.proto.Login.RemoteEnterGame parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.proto.Login.RemoteEnterGame parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.proto.Login.RemoteEnterGame parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(com.proto.Login.RemoteEnterGame prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code RemoteEnterGame}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:RemoteEnterGame)
+        com.proto.Login.RemoteEnterGameOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.proto.Login.internal_static_RemoteEnterGame_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.proto.Login.internal_static_RemoteEnterGame_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.proto.Login.RemoteEnterGame.class, com.proto.Login.RemoteEnterGame.Builder.class);
+      }
+
+      // Construct using com.proto.Login.RemoteEnterGame.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        roleId_ = 0L;
+
+        token_ = "";
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.proto.Login.internal_static_RemoteEnterGame_descriptor;
+      }
+
+      @java.lang.Override
+      public com.proto.Login.RemoteEnterGame getDefaultInstanceForType() {
+        return com.proto.Login.RemoteEnterGame.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public com.proto.Login.RemoteEnterGame build() {
+        com.proto.Login.RemoteEnterGame result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public com.proto.Login.RemoteEnterGame buildPartial() {
+        com.proto.Login.RemoteEnterGame result = new com.proto.Login.RemoteEnterGame(this);
+        result.roleId_ = roleId_;
+        result.token_ = token_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.proto.Login.RemoteEnterGame) {
+          return mergeFrom((com.proto.Login.RemoteEnterGame)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(com.proto.Login.RemoteEnterGame other) {
+        if (other == com.proto.Login.RemoteEnterGame.getDefaultInstance()) return this;
+        if (other.getRoleId() != 0L) {
+          setRoleId(other.getRoleId());
+        }
+        if (!other.getToken().isEmpty()) {
+          token_ = other.token_;
+          onChanged();
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.proto.Login.RemoteEnterGame parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (com.proto.Login.RemoteEnterGame) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private long roleId_ ;
+      /**
+       * <code>int64 role_id = 1;</code>
+       */
+      public long getRoleId() {
+        return roleId_;
+      }
+      /**
+       * <code>int64 role_id = 1;</code>
+       */
+      public Builder setRoleId(long value) {
+        
+        roleId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int64 role_id = 1;</code>
+       */
+      public Builder clearRoleId() {
+        
+        roleId_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object token_ = "";
+      /**
+       * <code>string token = 2;</code>
+       */
+      public java.lang.String getToken() {
+        java.lang.Object ref = token_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          token_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string token = 2;</code>
+       */
+      public com.google.protobuf.ByteString
+          getTokenBytes() {
+        java.lang.Object ref = token_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          token_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string token = 2;</code>
+       */
+      public Builder setToken(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        token_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string token = 2;</code>
+       */
+      public Builder clearToken() {
+        
+        token_ = getDefaultInstance().getToken();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string token = 2;</code>
+       */
+      public Builder setTokenBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        token_ = value;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:RemoteEnterGame)
+    }
+
+    // @@protoc_insertion_point(class_scope:RemoteEnterGame)
+    private static final com.proto.Login.RemoteEnterGame DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new com.proto.Login.RemoteEnterGame();
+    }
+
+    public static com.proto.Login.RemoteEnterGame getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<RemoteEnterGame>
+        PARSER = new com.google.protobuf.AbstractParser<RemoteEnterGame>() {
+      @java.lang.Override
+      public RemoteEnterGame parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new RemoteEnterGame(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<RemoteEnterGame> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<RemoteEnterGame> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.proto.Login.RemoteEnterGame getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_LoginReq_descriptor;
   private static final 
@@ -7154,6 +8653,16 @@ public final class Login {
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_StartKcp_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_SwitchRemoteServer_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_SwitchRemoteServer_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_RemoteEnterGame_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_RemoteEnterGame_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -7166,18 +8675,23 @@ public final class Login {
       "\n\021proto/login.proto\"9\n\010LoginReq\022\017\n\007accou" +
       "nt\030\001 \001(\t\022\013\n\003pwd\030\002 \001(\t\022\017\n\007conn_id\030\003 \001(\005\"\034" +
       "\n\010LoginRsp\022\020\n\010err_code\030\001 \001(\005\"/\n\t_RoleInf" +
-      "o\022\017\n\007role_id\030\001 \001(\005\022\021\n\trole_name\030\002 \001(\t\"S\n" +
+      "o\022\017\n\007role_id\030\001 \001(\003\022\021\n\trole_name\030\002 \001(\t\"S\n" +
       "\017LoadRoleListRsp\022\017\n\007account\030\001 \001(\t\022\020\n\010err" +
       "_code\030\002 \001(\005\022\035\n\trole_list\030\003 \003(\0132\n._RoleIn" +
       "fo\"3\n\rCreateRoleReq\022\017\n\007account\030\001 \001(\t\022\021\n\t" +
       "role_name\030\002 \001(\t\"@\n\rCreateRoleRsp\022\020\n\010err_" +
       "code\030\001 \001(\005\022\035\n\trole_info\030\002 \001(\0132\n._RoleInf" +
-      "o\"-\n\tEnterGame\022\017\n\007role_id\030\001 \001(\005\022\017\n\007accou" +
+      "o\"-\n\tEnterGame\022\017\n\007role_id\030\001 \001(\003\022\017\n\007accou" +
       "nt\030\002 \001(\t\"?\n\014EnterGameRsp\022\020\n\010err_code\030\001 \001" +
       "(\005\022\035\n\trole_info\030\002 \001(\0132\n._RoleInfo\"\017\n\rDis" +
       "connectReq\"\037\n\rDisconnectRsp\022\016\n\006reason\030\001 " +
       "\001(\t\")\n\010StartKcp\022\016\n\006kcp_id\030\001 \001(\005\022\r\n\005token" +
-      "\030\002 \001(\tB\022\n\tcom.protoB\005Loginb\006proto3"
+      "\030\002 \001(\t\"u\n\022SwitchRemoteServer\022\017\n\007role_id\030" +
+      "\001 \001(\003\022\021\n\tremote_ip\030\002 \001(\t\022\023\n\013remote_port\030" +
+      "\003 \001(\005\022\027\n\017remote_udp_port\030\004 \001(\005\022\r\n\005token\030" +
+      "\005 \001(\t\"1\n\017RemoteEnterGame\022\017\n\007role_id\030\001 \001(" +
+      "\003\022\r\n\005token\030\002 \001(\tB\022\n\tcom.protoB\005Loginb\006pr" +
+      "oto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -7249,6 +8763,18 @@ public final class Login {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_StartKcp_descriptor,
         new java.lang.String[] { "KcpId", "Token", });
+    internal_static_SwitchRemoteServer_descriptor =
+      getDescriptor().getMessageTypes().get(11);
+    internal_static_SwitchRemoteServer_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_SwitchRemoteServer_descriptor,
+        new java.lang.String[] { "RoleId", "RemoteIp", "RemotePort", "RemoteUdpPort", "Token", });
+    internal_static_RemoteEnterGame_descriptor =
+      getDescriptor().getMessageTypes().get(12);
+    internal_static_RemoteEnterGame_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_RemoteEnterGame_descriptor,
+        new java.lang.String[] { "RoleId", "Token", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

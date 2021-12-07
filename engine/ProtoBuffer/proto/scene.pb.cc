@@ -223,8 +223,8 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
 
 const char descriptor_table_protodef_proto_2fscene_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n\021proto/scene.proto\"2\n\rEnterSceneReq\022\017\n\007"
-  "role_id\030\001 \001(\005\022\020\n\010scene_id\030\002 \001(\005\"D\n\rEnter"
-  "SceneRsp\022\017\n\007role_id\030\001 \001(\005\022\020\n\010scene_id\030\002 "
+  "role_id\030\001 \001(\003\022\020\n\010scene_id\030\002 \001(\005\"D\n\rEnter"
+  "SceneRsp\022\017\n\007role_id\030\001 \001(\003\022\020\n\010scene_id\030\002 "
   "\001(\005\022\020\n\010err_code\030\003 \001(\005\"-\n\013_PlayerInfo\022\020\n\010"
   "actor_id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\",\n\010_NpcInfo"
   "\022\020\n\010actor_id\030\001 \001(\005\022\016\n\006npc_id\030\002 \001(\005\"K\n\tAc"
@@ -323,7 +323,7 @@ const char* EnterSceneReq::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     CHK_(ptr);
     switch (tag >> 3) {
-      // int32 role_id = 1;
+      // int64 role_id = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
           role_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
@@ -367,12 +367,12 @@ bool EnterSceneReq::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // int32 role_id = 1;
+      // int64 role_id = 1;
       case 1: {
         if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (8 & 0xFF)) {
 
           DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
-                   ::PROTOBUF_NAMESPACE_ID::int32, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_INT32>(
+                   ::PROTOBUF_NAMESPACE_ID::int64, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_INT64>(
                  input, &role_id_)));
         } else {
           goto handle_unusual;
@@ -420,9 +420,9 @@ void EnterSceneReq::SerializeWithCachedSizes(
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // int32 role_id = 1;
+  // int64 role_id = 1;
   if (this->role_id() != 0) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32(1, this->role_id(), output);
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt64(1, this->role_id(), output);
   }
 
   // int32 scene_id = 2;
@@ -443,9 +443,9 @@ void EnterSceneReq::SerializeWithCachedSizes(
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // int32 role_id = 1;
+  // int64 role_id = 1;
   if (this->role_id() != 0) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->role_id(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt64ToArray(1, this->role_id(), target);
   }
 
   // int32 scene_id = 2;
@@ -474,10 +474,10 @@ size_t EnterSceneReq::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // int32 role_id = 1;
+  // int64 role_id = 1;
   if (this->role_id() != 0) {
     total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int64Size(
         this->role_id());
   }
 
@@ -619,7 +619,7 @@ const char* EnterSceneRsp::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     CHK_(ptr);
     switch (tag >> 3) {
-      // int32 role_id = 1;
+      // int64 role_id = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
           role_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
@@ -670,12 +670,12 @@ bool EnterSceneRsp::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // int32 role_id = 1;
+      // int64 role_id = 1;
       case 1: {
         if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (8 & 0xFF)) {
 
           DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
-                   ::PROTOBUF_NAMESPACE_ID::int32, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_INT32>(
+                   ::PROTOBUF_NAMESPACE_ID::int64, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_INT64>(
                  input, &role_id_)));
         } else {
           goto handle_unusual;
@@ -736,9 +736,9 @@ void EnterSceneRsp::SerializeWithCachedSizes(
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // int32 role_id = 1;
+  // int64 role_id = 1;
   if (this->role_id() != 0) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32(1, this->role_id(), output);
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt64(1, this->role_id(), output);
   }
 
   // int32 scene_id = 2;
@@ -764,9 +764,9 @@ void EnterSceneRsp::SerializeWithCachedSizes(
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // int32 role_id = 1;
+  // int64 role_id = 1;
   if (this->role_id() != 0) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->role_id(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt64ToArray(1, this->role_id(), target);
   }
 
   // int32 scene_id = 2;
@@ -800,10 +800,10 @@ size_t EnterSceneRsp::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // int32 role_id = 1;
+  // int64 role_id = 1;
   if (this->role_id() != 0) {
     total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int64Size(
         this->role_id());
   }
 

@@ -6,6 +6,7 @@ require("game.scene.game_npc")
 require("util.multi_index_container")
 require("base.service_type")
 require("data.cfg_scene")
+require("base.id_mgr")
 
 clsGameScene = clsObject:Inherit("clsGameScene")
 
@@ -43,7 +44,9 @@ end
 
 function clsGameScene:prepare_enter_scene(conn_id, role_id)
     local tbls = self:_add_load_tb(role_id)
-    local future = self.service.db_proxy:loadMulti(tbls)
+    local server_id = IDMgr.get_server_id_by_uid(role_id)
+    assert(server_id > 0, string.format("server_id < 0, role_id:%d", role_id))
+    local future = self.service.db_proxy:load_multi(server_id, tbls)
 
     local function on_load_role(err_code, result)
         print("on_load_role", StrUtil.tableToStr(result))

@@ -60,6 +60,14 @@ class StartKcpDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<StartKcp> _instance;
 } _StartKcp_default_instance_;
+class SwitchRemoteServerDefaultTypeInternal {
+ public:
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<SwitchRemoteServer> _instance;
+} _SwitchRemoteServer_default_instance_;
+class RemoteEnterGameDefaultTypeInternal {
+ public:
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<RemoteEnterGame> _instance;
+} _RemoteEnterGame_default_instance_;
 static void InitDefaultsscc_info_CreateRoleReq_proto_2flogin_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
@@ -189,6 +197,20 @@ static void InitDefaultsscc_info_LoginRsp_proto_2flogin_2eproto() {
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_LoginRsp_proto_2flogin_2eproto =
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info_LoginRsp_proto_2flogin_2eproto}, {}};
 
+static void InitDefaultsscc_info_RemoteEnterGame_proto_2flogin_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::_RemoteEnterGame_default_instance_;
+    new (ptr) ::RemoteEnterGame();
+    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::RemoteEnterGame::InitAsDefaultInstance();
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_RemoteEnterGame_proto_2flogin_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info_RemoteEnterGame_proto_2flogin_2eproto}, {}};
+
 static void InitDefaultsscc_info_StartKcp_proto_2flogin_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
@@ -202,6 +224,20 @@ static void InitDefaultsscc_info_StartKcp_proto_2flogin_2eproto() {
 
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_StartKcp_proto_2flogin_2eproto =
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info_StartKcp_proto_2flogin_2eproto}, {}};
+
+static void InitDefaultsscc_info_SwitchRemoteServer_proto_2flogin_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::_SwitchRemoteServer_default_instance_;
+    new (ptr) ::SwitchRemoteServer();
+    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::SwitchRemoteServer::InitAsDefaultInstance();
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_SwitchRemoteServer_proto_2flogin_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info_SwitchRemoteServer_proto_2flogin_2eproto}, {}};
 
 static void InitDefaultsscc_info__RoleInfo_proto_2flogin_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -217,7 +253,7 @@ static void InitDefaultsscc_info__RoleInfo_proto_2flogin_2eproto() {
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info__RoleInfo_proto_2flogin_2eproto =
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsscc_info__RoleInfo_proto_2flogin_2eproto}, {}};
 
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_proto_2flogin_2eproto[11];
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_proto_2flogin_2eproto[13];
 static constexpr ::PROTOBUF_NAMESPACE_ID::EnumDescriptor const** file_level_enum_descriptors_proto_2flogin_2eproto = nullptr;
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_proto_2flogin_2eproto = nullptr;
 
@@ -297,6 +333,23 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_proto_2flogin_2eproto::offsets
   ~0u,  // no _weak_field_map_
   PROTOBUF_FIELD_OFFSET(::StartKcp, kcp_id_),
   PROTOBUF_FIELD_OFFSET(::StartKcp, token_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::SwitchRemoteServer, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::SwitchRemoteServer, role_id_),
+  PROTOBUF_FIELD_OFFSET(::SwitchRemoteServer, remote_ip_),
+  PROTOBUF_FIELD_OFFSET(::SwitchRemoteServer, remote_port_),
+  PROTOBUF_FIELD_OFFSET(::SwitchRemoteServer, remote_udp_port_),
+  PROTOBUF_FIELD_OFFSET(::SwitchRemoteServer, token_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::RemoteEnterGame, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::RemoteEnterGame, role_id_),
+  PROTOBUF_FIELD_OFFSET(::RemoteEnterGame, token_),
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, sizeof(::LoginReq)},
@@ -310,6 +363,8 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 57, -1, sizeof(::DisconnectReq)},
   { 62, -1, sizeof(::DisconnectRsp)},
   { 68, -1, sizeof(::StartKcp)},
+  { 75, -1, sizeof(::SwitchRemoteServer)},
+  { 85, -1, sizeof(::RemoteEnterGame)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -324,28 +379,35 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_DisconnectReq_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_DisconnectRsp_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_StartKcp_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_SwitchRemoteServer_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_RemoteEnterGame_default_instance_),
 };
 
 const char descriptor_table_protodef_proto_2flogin_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n\021proto/login.proto\"9\n\010LoginReq\022\017\n\007accou"
   "nt\030\001 \001(\t\022\013\n\003pwd\030\002 \001(\t\022\017\n\007conn_id\030\003 \001(\005\"\034"
   "\n\010LoginRsp\022\020\n\010err_code\030\001 \001(\005\"/\n\t_RoleInf"
-  "o\022\017\n\007role_id\030\001 \001(\005\022\021\n\trole_name\030\002 \001(\t\"S\n"
+  "o\022\017\n\007role_id\030\001 \001(\003\022\021\n\trole_name\030\002 \001(\t\"S\n"
   "\017LoadRoleListRsp\022\017\n\007account\030\001 \001(\t\022\020\n\010err"
   "_code\030\002 \001(\005\022\035\n\trole_list\030\003 \003(\0132\n._RoleIn"
   "fo\"3\n\rCreateRoleReq\022\017\n\007account\030\001 \001(\t\022\021\n\t"
   "role_name\030\002 \001(\t\"@\n\rCreateRoleRsp\022\020\n\010err_"
   "code\030\001 \001(\005\022\035\n\trole_info\030\002 \001(\0132\n._RoleInf"
-  "o\"-\n\tEnterGame\022\017\n\007role_id\030\001 \001(\005\022\017\n\007accou"
+  "o\"-\n\tEnterGame\022\017\n\007role_id\030\001 \001(\003\022\017\n\007accou"
   "nt\030\002 \001(\t\"\?\n\014EnterGameRsp\022\020\n\010err_code\030\001 \001"
   "(\005\022\035\n\trole_info\030\002 \001(\0132\n._RoleInfo\"\017\n\rDis"
   "connectReq\"\037\n\rDisconnectRsp\022\016\n\006reason\030\001 "
   "\001(\t\")\n\010StartKcp\022\016\n\006kcp_id\030\001 \001(\005\022\r\n\005token"
-  "\030\002 \001(\tB\022\n\tcom.protoB\005Loginb\006proto3"
+  "\030\002 \001(\t\"u\n\022SwitchRemoteServer\022\017\n\007role_id\030"
+  "\001 \001(\003\022\021\n\tremote_ip\030\002 \001(\t\022\023\n\013remote_port\030"
+  "\003 \001(\005\022\027\n\017remote_udp_port\030\004 \001(\005\022\r\n\005token\030"
+  "\005 \001(\t\"1\n\017RemoteEnterGame\022\017\n\007role_id\030\001 \001("
+  "\003\022\r\n\005token\030\002 \001(\tB\022\n\tcom.protoB\005Loginb\006pr"
+  "oto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_proto_2flogin_2eproto_deps[1] = {
 };
-static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_proto_2flogin_2eproto_sccs[11] = {
+static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_proto_2flogin_2eproto_sccs[13] = {
   &scc_info_CreateRoleReq_proto_2flogin_2eproto.base,
   &scc_info_CreateRoleRsp_proto_2flogin_2eproto.base,
   &scc_info_DisconnectReq_proto_2flogin_2eproto.base,
@@ -355,16 +417,18 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_pro
   &scc_info_LoadRoleListRsp_proto_2flogin_2eproto.base,
   &scc_info_LoginReq_proto_2flogin_2eproto.base,
   &scc_info_LoginRsp_proto_2flogin_2eproto.base,
+  &scc_info_RemoteEnterGame_proto_2flogin_2eproto.base,
   &scc_info_StartKcp_proto_2flogin_2eproto.base,
+  &scc_info_SwitchRemoteServer_proto_2flogin_2eproto.base,
   &scc_info__RoleInfo_proto_2flogin_2eproto.base,
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_proto_2flogin_2eproto_once;
 static bool descriptor_table_proto_2flogin_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_proto_2flogin_2eproto = {
-  &descriptor_table_proto_2flogin_2eproto_initialized, descriptor_table_protodef_proto_2flogin_2eproto, "proto/login.proto", 594,
-  &descriptor_table_proto_2flogin_2eproto_once, descriptor_table_proto_2flogin_2eproto_sccs, descriptor_table_proto_2flogin_2eproto_deps, 11, 0,
+  &descriptor_table_proto_2flogin_2eproto_initialized, descriptor_table_protodef_proto_2flogin_2eproto, "proto/login.proto", 764,
+  &descriptor_table_proto_2flogin_2eproto_once, descriptor_table_proto_2flogin_2eproto_sccs, descriptor_table_proto_2flogin_2eproto_deps, 13, 0,
   schemas, file_default_instances, TableStruct_proto_2flogin_2eproto::offsets,
-  file_level_metadata_proto_2flogin_2eproto, 11, file_level_enum_descriptors_proto_2flogin_2eproto, file_level_service_descriptors_proto_2flogin_2eproto,
+  file_level_metadata_proto_2flogin_2eproto, 13, file_level_enum_descriptors_proto_2flogin_2eproto, file_level_service_descriptors_proto_2flogin_2eproto,
 };
 
 // Force running AddDescriptors() at dynamic initialization time.
@@ -1023,7 +1087,7 @@ _RoleInfo::_RoleInfo(const _RoleInfo& from)
 void _RoleInfo::SharedCtor() {
   ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info__RoleInfo_proto_2flogin_2eproto.base);
   role_name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  role_id_ = 0;
+  role_id_ = PROTOBUF_LONGLONG(0);
 }
 
 _RoleInfo::~_RoleInfo() {
@@ -1051,7 +1115,7 @@ void _RoleInfo::Clear() {
   (void) cached_has_bits;
 
   role_name_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  role_id_ = 0;
+  role_id_ = PROTOBUF_LONGLONG(0);
   _internal_metadata_.Clear();
 }
 
@@ -1063,7 +1127,7 @@ const char* _RoleInfo::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     CHK_(ptr);
     switch (tag >> 3) {
-      // int32 role_id = 1;
+      // int64 role_id = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
           role_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
@@ -1107,12 +1171,12 @@ bool _RoleInfo::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // int32 role_id = 1;
+      // int64 role_id = 1;
       case 1: {
         if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (8 & 0xFF)) {
 
           DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
-                   ::PROTOBUF_NAMESPACE_ID::int32, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_INT32>(
+                   ::PROTOBUF_NAMESPACE_ID::int64, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_INT64>(
                  input, &role_id_)));
         } else {
           goto handle_unusual;
@@ -1162,9 +1226,9 @@ void _RoleInfo::SerializeWithCachedSizes(
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // int32 role_id = 1;
+  // int64 role_id = 1;
   if (this->role_id() != 0) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32(1, this->role_id(), output);
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt64(1, this->role_id(), output);
   }
 
   // string role_name = 2;
@@ -1190,9 +1254,9 @@ void _RoleInfo::SerializeWithCachedSizes(
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // int32 role_id = 1;
+  // int64 role_id = 1;
   if (this->role_id() != 0) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->role_id(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt64ToArray(1, this->role_id(), target);
   }
 
   // string role_name = 2;
@@ -1234,10 +1298,10 @@ size_t _RoleInfo::ByteSizeLong() const {
         this->role_name());
   }
 
-  // int32 role_id = 1;
+  // int64 role_id = 1;
   if (this->role_id() != 0) {
     total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int64Size(
         this->role_id());
   }
 
@@ -2347,7 +2411,7 @@ EnterGame::EnterGame(const EnterGame& from)
 void EnterGame::SharedCtor() {
   ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_EnterGame_proto_2flogin_2eproto.base);
   account_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  role_id_ = 0;
+  role_id_ = PROTOBUF_LONGLONG(0);
 }
 
 EnterGame::~EnterGame() {
@@ -2375,7 +2439,7 @@ void EnterGame::Clear() {
   (void) cached_has_bits;
 
   account_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  role_id_ = 0;
+  role_id_ = PROTOBUF_LONGLONG(0);
   _internal_metadata_.Clear();
 }
 
@@ -2387,7 +2451,7 @@ const char* EnterGame::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     CHK_(ptr);
     switch (tag >> 3) {
-      // int32 role_id = 1;
+      // int64 role_id = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
           role_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
@@ -2431,12 +2495,12 @@ bool EnterGame::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // int32 role_id = 1;
+      // int64 role_id = 1;
       case 1: {
         if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (8 & 0xFF)) {
 
           DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
-                   ::PROTOBUF_NAMESPACE_ID::int32, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_INT32>(
+                   ::PROTOBUF_NAMESPACE_ID::int64, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_INT64>(
                  input, &role_id_)));
         } else {
           goto handle_unusual;
@@ -2486,9 +2550,9 @@ void EnterGame::SerializeWithCachedSizes(
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // int32 role_id = 1;
+  // int64 role_id = 1;
   if (this->role_id() != 0) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32(1, this->role_id(), output);
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt64(1, this->role_id(), output);
   }
 
   // string account = 2;
@@ -2514,9 +2578,9 @@ void EnterGame::SerializeWithCachedSizes(
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // int32 role_id = 1;
+  // int64 role_id = 1;
   if (this->role_id() != 0) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->role_id(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt64ToArray(1, this->role_id(), target);
   }
 
   // string account = 2;
@@ -2558,10 +2622,10 @@ size_t EnterGame::ByteSizeLong() const {
         this->account());
   }
 
-  // int32 role_id = 1;
+  // int64 role_id = 1;
   if (this->role_id() != 0) {
     total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int64Size(
         this->role_id());
   }
 
@@ -3724,6 +3788,783 @@ void StartKcp::InternalSwap(StartKcp* other) {
 }
 
 
+// ===================================================================
+
+void SwitchRemoteServer::InitAsDefaultInstance() {
+}
+class SwitchRemoteServer::_Internal {
+ public:
+};
+
+SwitchRemoteServer::SwitchRemoteServer()
+  : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:SwitchRemoteServer)
+}
+SwitchRemoteServer::SwitchRemoteServer(const SwitchRemoteServer& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      _internal_metadata_(nullptr) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  remote_ip_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from.remote_ip().empty()) {
+    remote_ip_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.remote_ip_);
+  }
+  token_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from.token().empty()) {
+    token_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.token_);
+  }
+  ::memcpy(&role_id_, &from.role_id_,
+    static_cast<size_t>(reinterpret_cast<char*>(&remote_udp_port_) -
+    reinterpret_cast<char*>(&role_id_)) + sizeof(remote_udp_port_));
+  // @@protoc_insertion_point(copy_constructor:SwitchRemoteServer)
+}
+
+void SwitchRemoteServer::SharedCtor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_SwitchRemoteServer_proto_2flogin_2eproto.base);
+  remote_ip_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  token_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  ::memset(&role_id_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&remote_udp_port_) -
+      reinterpret_cast<char*>(&role_id_)) + sizeof(remote_udp_port_));
+}
+
+SwitchRemoteServer::~SwitchRemoteServer() {
+  // @@protoc_insertion_point(destructor:SwitchRemoteServer)
+  SharedDtor();
+}
+
+void SwitchRemoteServer::SharedDtor() {
+  remote_ip_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  token_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+void SwitchRemoteServer::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const SwitchRemoteServer& SwitchRemoteServer::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_SwitchRemoteServer_proto_2flogin_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void SwitchRemoteServer::Clear() {
+// @@protoc_insertion_point(message_clear_start:SwitchRemoteServer)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  remote_ip_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  token_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  ::memset(&role_id_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&remote_udp_port_) -
+      reinterpret_cast<char*>(&role_id_)) + sizeof(remote_udp_port_));
+  _internal_metadata_.Clear();
+}
+
+#if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+const char* SwitchRemoteServer::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    CHK_(ptr);
+    switch (tag >> 3) {
+      // int64 role_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
+          role_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string remote_ip = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8(mutable_remote_ip(), ptr, ctx, "SwitchRemoteServer.remote_ip");
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // int32 remote_port = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 24)) {
+          remote_port_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // int32 remote_udp_port = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 32)) {
+          remote_udp_port_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string token = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 42)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8(mutable_token(), ptr, ctx, "SwitchRemoteServer.token");
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag, &_internal_metadata_, ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+#else  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+bool SwitchRemoteServer::MergePartialFromCodedStream(
+    ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!PROTOBUF_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+  // @@protoc_insertion_point(parse_start:SwitchRemoteServer)
+  for (;;) {
+    ::std::pair<::PROTOBUF_NAMESPACE_ID::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // int64 role_id = 1;
+      case 1: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (8 & 0xFF)) {
+
+          DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
+                   ::PROTOBUF_NAMESPACE_ID::int64, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_INT64>(
+                 input, &role_id_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string remote_ip = 2;
+      case 2: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (18 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadString(
+                input, this->mutable_remote_ip()));
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+            this->remote_ip().data(), static_cast<int>(this->remote_ip().length()),
+            ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::PARSE,
+            "SwitchRemoteServer.remote_ip"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 remote_port = 3;
+      case 3: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (24 & 0xFF)) {
+
+          DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
+                   ::PROTOBUF_NAMESPACE_ID::int32, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_INT32>(
+                 input, &remote_port_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 remote_udp_port = 4;
+      case 4: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (32 & 0xFF)) {
+
+          DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
+                   ::PROTOBUF_NAMESPACE_ID::int32, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_INT32>(
+                 input, &remote_udp_port_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string token = 5;
+      case 5: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (42 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadString(
+                input, this->mutable_token()));
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+            this->token().data(), static_cast<int>(this->token().length()),
+            ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::PARSE,
+            "SwitchRemoteServer.token"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SkipField(
+              input, tag, _internal_metadata_.mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:SwitchRemoteServer)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:SwitchRemoteServer)
+  return false;
+#undef DO_
+}
+#endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+
+void SwitchRemoteServer::SerializeWithCachedSizes(
+    ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:SwitchRemoteServer)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int64 role_id = 1;
+  if (this->role_id() != 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt64(1, this->role_id(), output);
+  }
+
+  // string remote_ip = 2;
+  if (this->remote_ip().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->remote_ip().data(), static_cast<int>(this->remote_ip().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "SwitchRemoteServer.remote_ip");
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringMaybeAliased(
+      2, this->remote_ip(), output);
+  }
+
+  // int32 remote_port = 3;
+  if (this->remote_port() != 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32(3, this->remote_port(), output);
+  }
+
+  // int32 remote_udp_port = 4;
+  if (this->remote_udp_port() != 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32(4, this->remote_udp_port(), output);
+  }
+
+  // string token = 5;
+  if (this->token().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->token().data(), static_cast<int>(this->token().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "SwitchRemoteServer.token");
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringMaybeAliased(
+      5, this->token(), output);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFields(
+        _internal_metadata_.unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:SwitchRemoteServer)
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* SwitchRemoteServer::InternalSerializeWithCachedSizesToArray(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:SwitchRemoteServer)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int64 role_id = 1;
+  if (this->role_id() != 0) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt64ToArray(1, this->role_id(), target);
+  }
+
+  // string remote_ip = 2;
+  if (this->remote_ip().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->remote_ip().data(), static_cast<int>(this->remote_ip().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "SwitchRemoteServer.remote_ip");
+    target =
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringToArray(
+        2, this->remote_ip(), target);
+  }
+
+  // int32 remote_port = 3;
+  if (this->remote_port() != 0) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(3, this->remote_port(), target);
+  }
+
+  // int32 remote_udp_port = 4;
+  if (this->remote_udp_port() != 0) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(4, this->remote_udp_port(), target);
+  }
+
+  // string token = 5;
+  if (this->token().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->token().data(), static_cast<int>(this->token().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "SwitchRemoteServer.token");
+    target =
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringToArray(
+        5, this->token(), target);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:SwitchRemoteServer)
+  return target;
+}
+
+size_t SwitchRemoteServer::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:SwitchRemoteServer)
+  size_t total_size = 0;
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::ComputeUnknownFieldsSize(
+        _internal_metadata_.unknown_fields());
+  }
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string remote_ip = 2;
+  if (this->remote_ip().size() > 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->remote_ip());
+  }
+
+  // string token = 5;
+  if (this->token().size() > 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->token());
+  }
+
+  // int64 role_id = 1;
+  if (this->role_id() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int64Size(
+        this->role_id());
+  }
+
+  // int32 remote_port = 3;
+  if (this->remote_port() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->remote_port());
+  }
+
+  // int32 remote_udp_port = 4;
+  if (this->remote_udp_port() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->remote_udp_port());
+  }
+
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void SwitchRemoteServer::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:SwitchRemoteServer)
+  GOOGLE_DCHECK_NE(&from, this);
+  const SwitchRemoteServer* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<SwitchRemoteServer>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:SwitchRemoteServer)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:SwitchRemoteServer)
+    MergeFrom(*source);
+  }
+}
+
+void SwitchRemoteServer::MergeFrom(const SwitchRemoteServer& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:SwitchRemoteServer)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.remote_ip().size() > 0) {
+
+    remote_ip_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.remote_ip_);
+  }
+  if (from.token().size() > 0) {
+
+    token_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.token_);
+  }
+  if (from.role_id() != 0) {
+    set_role_id(from.role_id());
+  }
+  if (from.remote_port() != 0) {
+    set_remote_port(from.remote_port());
+  }
+  if (from.remote_udp_port() != 0) {
+    set_remote_udp_port(from.remote_udp_port());
+  }
+}
+
+void SwitchRemoteServer::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:SwitchRemoteServer)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void SwitchRemoteServer::CopyFrom(const SwitchRemoteServer& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:SwitchRemoteServer)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool SwitchRemoteServer::IsInitialized() const {
+  return true;
+}
+
+void SwitchRemoteServer::InternalSwap(SwitchRemoteServer* other) {
+  using std::swap;
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  remote_ip_.Swap(&other->remote_ip_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  token_.Swap(&other->token_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  swap(role_id_, other->role_id_);
+  swap(remote_port_, other->remote_port_);
+  swap(remote_udp_port_, other->remote_udp_port_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata SwitchRemoteServer::GetMetadata() const {
+  return GetMetadataStatic();
+}
+
+
+// ===================================================================
+
+void RemoteEnterGame::InitAsDefaultInstance() {
+}
+class RemoteEnterGame::_Internal {
+ public:
+};
+
+RemoteEnterGame::RemoteEnterGame()
+  : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:RemoteEnterGame)
+}
+RemoteEnterGame::RemoteEnterGame(const RemoteEnterGame& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      _internal_metadata_(nullptr) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  token_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from.token().empty()) {
+    token_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.token_);
+  }
+  role_id_ = from.role_id_;
+  // @@protoc_insertion_point(copy_constructor:RemoteEnterGame)
+}
+
+void RemoteEnterGame::SharedCtor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_RemoteEnterGame_proto_2flogin_2eproto.base);
+  token_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  role_id_ = PROTOBUF_LONGLONG(0);
+}
+
+RemoteEnterGame::~RemoteEnterGame() {
+  // @@protoc_insertion_point(destructor:RemoteEnterGame)
+  SharedDtor();
+}
+
+void RemoteEnterGame::SharedDtor() {
+  token_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+void RemoteEnterGame::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const RemoteEnterGame& RemoteEnterGame::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_RemoteEnterGame_proto_2flogin_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void RemoteEnterGame::Clear() {
+// @@protoc_insertion_point(message_clear_start:RemoteEnterGame)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  token_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  role_id_ = PROTOBUF_LONGLONG(0);
+  _internal_metadata_.Clear();
+}
+
+#if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+const char* RemoteEnterGame::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    CHK_(ptr);
+    switch (tag >> 3) {
+      // int64 role_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
+          role_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string token = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8(mutable_token(), ptr, ctx, "RemoteEnterGame.token");
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag, &_internal_metadata_, ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+#else  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+bool RemoteEnterGame::MergePartialFromCodedStream(
+    ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!PROTOBUF_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+  // @@protoc_insertion_point(parse_start:RemoteEnterGame)
+  for (;;) {
+    ::std::pair<::PROTOBUF_NAMESPACE_ID::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // int64 role_id = 1;
+      case 1: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (8 & 0xFF)) {
+
+          DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
+                   ::PROTOBUF_NAMESPACE_ID::int64, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_INT64>(
+                 input, &role_id_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string token = 2;
+      case 2: {
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (18 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadString(
+                input, this->mutable_token()));
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+            this->token().data(), static_cast<int>(this->token().length()),
+            ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::PARSE,
+            "RemoteEnterGame.token"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SkipField(
+              input, tag, _internal_metadata_.mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:RemoteEnterGame)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:RemoteEnterGame)
+  return false;
+#undef DO_
+}
+#endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+
+void RemoteEnterGame::SerializeWithCachedSizes(
+    ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:RemoteEnterGame)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int64 role_id = 1;
+  if (this->role_id() != 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt64(1, this->role_id(), output);
+  }
+
+  // string token = 2;
+  if (this->token().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->token().data(), static_cast<int>(this->token().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "RemoteEnterGame.token");
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringMaybeAliased(
+      2, this->token(), output);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFields(
+        _internal_metadata_.unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:RemoteEnterGame)
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* RemoteEnterGame::InternalSerializeWithCachedSizesToArray(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:RemoteEnterGame)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int64 role_id = 1;
+  if (this->role_id() != 0) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt64ToArray(1, this->role_id(), target);
+  }
+
+  // string token = 2;
+  if (this->token().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->token().data(), static_cast<int>(this->token().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "RemoteEnterGame.token");
+    target =
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringToArray(
+        2, this->token(), target);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:RemoteEnterGame)
+  return target;
+}
+
+size_t RemoteEnterGame::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:RemoteEnterGame)
+  size_t total_size = 0;
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::ComputeUnknownFieldsSize(
+        _internal_metadata_.unknown_fields());
+  }
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string token = 2;
+  if (this->token().size() > 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->token());
+  }
+
+  // int64 role_id = 1;
+  if (this->role_id() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int64Size(
+        this->role_id());
+  }
+
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void RemoteEnterGame::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:RemoteEnterGame)
+  GOOGLE_DCHECK_NE(&from, this);
+  const RemoteEnterGame* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<RemoteEnterGame>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:RemoteEnterGame)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:RemoteEnterGame)
+    MergeFrom(*source);
+  }
+}
+
+void RemoteEnterGame::MergeFrom(const RemoteEnterGame& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:RemoteEnterGame)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.token().size() > 0) {
+
+    token_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.token_);
+  }
+  if (from.role_id() != 0) {
+    set_role_id(from.role_id());
+  }
+}
+
+void RemoteEnterGame::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:RemoteEnterGame)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void RemoteEnterGame::CopyFrom(const RemoteEnterGame& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:RemoteEnterGame)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool RemoteEnterGame::IsInitialized() const {
+  return true;
+}
+
+void RemoteEnterGame::InternalSwap(RemoteEnterGame* other) {
+  using std::swap;
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  token_.Swap(&other->token_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  swap(role_id_, other->role_id_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata RemoteEnterGame::GetMetadata() const {
+  return GetMetadataStatic();
+}
+
+
 // @@protoc_insertion_point(namespace_scope)
 PROTOBUF_NAMESPACE_OPEN
 template<> PROTOBUF_NOINLINE ::LoginReq* Arena::CreateMaybeMessage< ::LoginReq >(Arena* arena) {
@@ -3758,6 +4599,12 @@ template<> PROTOBUF_NOINLINE ::DisconnectRsp* Arena::CreateMaybeMessage< ::Disco
 }
 template<> PROTOBUF_NOINLINE ::StartKcp* Arena::CreateMaybeMessage< ::StartKcp >(Arena* arena) {
   return Arena::CreateInternal< ::StartKcp >(arena);
+}
+template<> PROTOBUF_NOINLINE ::SwitchRemoteServer* Arena::CreateMaybeMessage< ::SwitchRemoteServer >(Arena* arena) {
+  return Arena::CreateInternal< ::SwitchRemoteServer >(arena);
+}
+template<> PROTOBUF_NOINLINE ::RemoteEnterGame* Arena::CreateMaybeMessage< ::RemoteEnterGame >(Arena* arena) {
+  return Arena::CreateInternal< ::RemoteEnterGame >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
 

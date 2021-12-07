@@ -16,9 +16,9 @@ function clsServiceBase:__init__()
     self._rpc_mgr = clsRpc:New(self)
     self.gm_handler = clsGMHandler:New(self)
     self:_init_id_mgr()
-    self:regServiceMsgHandler(MSG_ID_RPC_MSG, self.onRecvRpcMsg)
-    self:regServiceMsgHandler(MSG_ID_RPC_MSG_RSP, self.onRecvRpcResp)
-    self:regRpcHandler("RpcGMCmd", self.rpcGMCmd)
+    self:reg_service_msg_handler(MSG_ID_RPC_MSG, self.onRecvRpcMsg)
+    self:reg_service_msg_handler(MSG_ID_RPC_MSG_RSP, self.onRecvRpcResp)
+    self:reg_rpc_handler("RpcGMCmd", self.rpcGMCmd)
     logger.logDebug("clsServiceBase:__init_")
 end
 
@@ -29,16 +29,16 @@ function clsServiceBase:_init_id_mgr()
     IDMgr.connect_redis(redis_ip, redis_port)
 end
 
-function clsServiceBase:regServiceMsgHandler(msgId, handler)
+function clsServiceBase:reg_service_msg_handler(msgId, handler)
     self._serviceMsgHandler[msgId] = handler
 end
 
-function clsServiceBase:regClientMsgHandler(msgId, handler)
+function clsServiceBase:reg_client_msg_handler(msgId, handler)
     self._clientMsgHandler[msgId] = handler
 end
 
-function clsServiceBase:regRpcHandler(funcName, func)
-    self._rpc_mgr:regRpcHandler(funcName, func)
+function clsServiceBase:reg_rpc_handler(funcName, func)
+    self._rpc_mgr:reg_rpc_handler(funcName, func)
 end
 
 function clsServiceBase:on_recv_service_msg(sender, msgId, msg)
