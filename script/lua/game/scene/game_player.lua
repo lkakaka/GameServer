@@ -155,9 +155,9 @@ function clsGamePlayer:_remote_switch_scene(server_id, scene_id)
         end
         local server_id = result.server_id
         local scene_uid = result.scene_uid
-        local gateway_ports = result.gateway_ports
+        local gateway_addr = result.gateway_addr
         local token = result.token
-        self:switch_remote_scene(server_id, scene_uid, gateway_ports, token)
+        self:switch_remote_scene(server_id, scene_uid, gateway_addr, token)
     end
 
     local scene_ctrl_addr = make_scene_ctrl_addr(server_id)
@@ -176,16 +176,16 @@ function clsGamePlayer:switch_local_scene(server_id, scene_uid)
     self:leave_scene("switch_scene")
 end
 
-function clsGamePlayer:switch_remote_scene(server_id, scene_uid, gateway_ports, token)
-    logger.logInfo("switch remote scene, role_id:%d, server_id:%d, scene_uid:%d, gateway_ports:%s", 
-                        self.role_id, server_id, scene_uid, StrUtil.tableToStr(gateway_ports))
+function clsGamePlayer:switch_remote_scene(server_id, scene_uid, gateway_addr, token)
+    logger.logInfo("switch remote scene, role_id:%d, server_id:%d, scene_uid:%d, gateway_addr:%s", 
+                        self.role_id, server_id, scene_uid, StrUtil.tableToStr(gateway_addr))
     local scene_ctrl_addr = make_scene_ctrl_addr(self.server_id)
     self.game_scene.service:callRpc(scene_ctrl_addr, "Player_SwitchToRemoteScene", -1,
                                         {role_id=self.role_id, server_id=server_id, scene_uid=scene_uid})
     local msg = {}
-    msg.remote_ip = "127.0.0.1"
-    msg.remote_port = gateway_ports.port
-    msg.remote_udp_port = gateway_ports.udp_port
+    msg.remote_ip = gateway_addr.ip
+    msg.remote_port = gateway_addr.port
+    msg.remote_udp_port = gateway_addr.udp_port
     msg.token = token
     self:send_msg_to_client(MSG_ID_SWITCH_REMOTE_SERVER, msg)
     -- self:leave_scene("switch_remote_scene")

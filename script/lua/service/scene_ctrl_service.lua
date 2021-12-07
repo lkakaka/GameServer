@@ -13,7 +13,7 @@ function clsSceneCtrlService:__init__()
 
     self._scene_mgr = clsSceneMgr:New(self)
     self._player_mgr = clsSceneCtrlPlayerMgr:New()
-    self._gateway_ports = {}
+    self._gateway_addresses = {}
     self._cross_server_roles = {}
 
     self._local_cross_player_info = {} -- 本地服记录跨服的玩家信息
@@ -23,7 +23,7 @@ function clsSceneCtrlService:__init__()
 end
 
 function clsSceneCtrlService:initRpcHandlder()
-    self:reg_rpc_handler("RegGatewayPort", self.rpc_reg_gateway_port)
+    self:reg_rpc_handler("RegGatewayAddress", self.rpc_reg_gateway_address)
     self:reg_rpc_handler("RegScene", self.rpc_reg_scene)
     self:reg_rpc_handler("UnRegScene", self.rpc_unreg_scene)
     self:reg_rpc_handler("Player_EnterGame", self.rpc_enter_game)
@@ -40,9 +40,9 @@ function clsSceneCtrlService:initRpcHandlder()
     
 end
 
-function clsSceneCtrlService:rpc_reg_gateway_port(sender, param)
-    self._gateway_ports[sender.serviceId] = param
-    logger.logInfo("rpc_RegGatewayPort, %s, %s", StrUtil.tableToStr(param), StrUtil.tableToStr(self._gateway_ports))
+function clsSceneCtrlService:rpc_reg_gateway_address(sender, param)
+    self._gateway_addresses[sender.serviceId] = param
+    logger.logInfo("rpc_RegGatewayAddress, %s, %s", StrUtil.tableToStr(param), StrUtil.tableToStr(self._gateway_addresses))
     return ErrorCode.OK
 end
 
@@ -156,9 +156,9 @@ function clsSceneCtrlService:rpc_remote_switch_scene_req(sender, param)
     local str_token = TokenPrefix.CROSS_SERVER .. tostring(role_id) .. tostring(os.time()) .. tostring(rand_num)
     local token_valid_ts = os.time() + 30
     self._cross_server_roles[role_id] = { token = str_token, token_ts = token_valid_ts, scene_uid = scene.scene_uid}
-    local gateway_ports = RandUtil.get_random_one(self._gateway_ports)
-    logger.logInfo("player switch scene req, role_id:%d, scene_id:%d, scene_uid:%d, gateway_ports:%s", 
-                    role_id, scene_id, scene.scene_uid, StrUtil.tableToStr(gateway_ports))
+    local gateway_addr = RandUtil.get_random_one(self._gateway_addresses)
+    logger.logInfo("player switch scene req, role_id:%d, scene_id:%d, scene_uid:%d, gateway_addr:%s", 
+                    role_id, scene_id, scene.scene_uid, StrUtil.tableToStr(gateway_addr))
 
     local future = self:callRpc(LOCAL_SERVICE_LOGIN, "regRemoteRole", -1, { role_id=role_id, token=str_token, token_ts = token_valid_ts})
     future:regCallback(function(err_code, result) 
@@ -166,7 +166,7 @@ function clsSceneCtrlService:rpc_remote_switch_scene_req(sender, param)
         logger.logError("reg remote role to login failed, role_id:%d", role_id)
     end)
 
-    return ErrorCode.OK, {server_id=SERVER_GROUP_ID, scene_uid=scene.scene_uid, gateway_ports=gateway_ports, token=str_token}
+    return ErrorCode.OK, {server_id=SERVER_GROUP_ID, scene_uid=scene.scene_uid, gateway_addr=gateway_addr, token=str_token}
 end
 
 function clsSceneCtrlService:rpc_remote_switch_scene(sender, param)

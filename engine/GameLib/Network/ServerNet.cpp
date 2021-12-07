@@ -4,6 +4,30 @@
 
 USE_NS_GAME_NET
 
+//std::string getLocalIpAddress()
+//{
+//	using boost::asio::ip::tcp;
+//	std::string result;
+//	try {
+//		boost::asio::io_service io_service;
+//		tcp::resolver resolver(io_service);
+//		tcp::resolver::query query(tcp::v4(), boost::asio::ip::host_name(), "");
+//		tcp::resolver::iterator iter = resolver.resolve(query);
+//		tcp::resolver::iterator end; // End marker.
+//		while (iter != end) {
+//			tcp::endpoint ep = *iter++;
+//			if (!result.empty()) {
+//				result += ";";
+//			}
+//			result += ep.address().to_string();
+//		}
+//	}
+//	catch (std::exception& e) {
+//		LOG_ERROR("get local ip address failed, %s", e.what());
+//	}
+//	return result;
+//}
+
 ServerNetwork::ServerNetwork(boost::asio::io_service* io) : m_acceptor(NULL), m_ioService(io)
 {
 	
