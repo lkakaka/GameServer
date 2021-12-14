@@ -3,8 +3,8 @@
 #include "MyBuffer.h"
 #include "ServiceType.h"
 #include "Network/ServiceCommEntityMgr.h"
-#include "ServiceInfo.h"
 #include "../Common/ServerMacros.h"
+#include "GameService.h"
 
 void LuaService::bindLuaService(std::shared_ptr<sol::state> lua) {
 	sol::table service = lua->create_named_table("Service");
@@ -62,7 +62,7 @@ bool LuaService::sendMsgToClient(int connId, int msgId, const char* msg, int msg
 	buffer.writeInt(connId);
 	buffer.writeByte(SEND_TYPE_TCP);
 	buffer.writeString(msg, msgLen);
-	ServiceAddr addr(ServiceInfo::getSingleton()->getServiceGroup(), ServiceType::SERVICE_TYPE_GATEWAY, 0);
+	ServiceAddr addr(SERVICE_GROUP, ServiceType::SERVICE_TYPE_GATEWAY, 0);
 	SERVER_CENTER_COMM_ENTITY->sendToService(&addr, (char*)buffer.data(), buffer.size());
 	return true;
 }
@@ -77,7 +77,7 @@ bool LuaService::broadcastMsgToClient(std::set<int> connIds, int msgId, const ch
 	}
 	buffer.writeByte(SEND_TYPE_TCP);
 	buffer.writeString(msg, msgLen);
-	ServiceAddr addr(ServiceInfo::getSingleton()->getServiceGroup(), ServiceType::SERVICE_TYPE_GATEWAY, 0);
+	ServiceAddr addr(SERVICE_GROUP, ServiceType::SERVICE_TYPE_GATEWAY, 0);
 	SERVER_CENTER_COMM_ENTITY->sendToService(&addr, (char*)buffer.data(), buffer.size());
 	return true;
 }
@@ -90,7 +90,7 @@ bool LuaService::sendMsgToClientKCP(int connId, int msgId, const char* msg, int 
 	buffer.writeInt(connId);
 	buffer.writeByte(SEND_TYPE_KCP);
 	buffer.writeString(msg, msgLen);
-	ServiceAddr addr(ServiceInfo::getSingleton()->getServiceGroup(), ServiceType::SERVICE_TYPE_GATEWAY, 0);
+	ServiceAddr addr(SERVICE_GROUP, ServiceType::SERVICE_TYPE_GATEWAY, 0);
 	SERVER_CENTER_COMM_ENTITY->sendToService(&addr, (char*)buffer.data(), buffer.size());
 	return true;
 }

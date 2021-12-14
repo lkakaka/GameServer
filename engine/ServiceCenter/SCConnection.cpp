@@ -1,7 +1,6 @@
 #include "SCConnection.h"
 #include "Logger.h"
 #include "SCMessageHandler.h"
-#include "ServiceInfo.h"
 
 #define MAX_MSG_LEN 64 * 1024
 

@@ -7,8 +7,9 @@
 #include "MyBuffer.h"
 #include "../Common/ServerMacros.h"
 #include "ServiceType.h"
-#include "ServiceInfo.h"
 #include "Network/ServiceCommEntityMgr.h"
+#include "GameScene.h"
+#include "GameService.h"
 
 
 SceneEntity::SceneEntity(SceneEntityType eType, int eid, void* gameScene, GridChgFunc gridChgFunc) :
@@ -148,7 +149,7 @@ void SceneEntity::broadcastMsgToClient(std::set<int>& connIds, int msgId, const 
 	}
 	buffer.writeByte(SEND_TYPE_TCP);
 	buffer.writeString(msg, msgLen);
-	ServiceAddr addr(ServiceInfo::getSingleton()->getServiceGroup(), ServiceType::SERVICE_TYPE_GATEWAY, 0);
+	ServiceAddr addr(SERVICE_GROUP, ServiceType::SERVICE_TYPE_GATEWAY, 0);
 	SERVER_CENTER_COMM_ENTITY->sendToService(&addr, (char*)buffer.data(), buffer.size());
 }
 

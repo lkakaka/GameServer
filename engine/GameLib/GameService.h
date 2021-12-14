@@ -22,7 +22,7 @@ public:
 	~GameService();
 
 	inline int getServiceGroup() { return m_serviceGroup; }
-	inline ServiceType getServieType() { return m_serviceType; }
+	inline ServiceType getServiceType() { return m_serviceType; }
 	inline int getServiceId() { return m_serviceId; }
 
 	inline void dispatchClientMsgToScript(int connId, int msgId, const char* data, int len) {

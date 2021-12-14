@@ -2,7 +2,6 @@
 #include "Logger.h"
 #include "MyBuffer.h"
 #include "ServiceType.h"
-#include "ServiceInfo.h"
 #include "GameScene.h"
 #include "SceneMgr.h"
 #include "LuaPlugin.h"

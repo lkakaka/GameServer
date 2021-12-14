@@ -9,14 +9,13 @@
 #include "proto.h"
 #include "ServiceType.h"
 #include "Network/ServiceCommEntity.h"
-#include "ServiceInfo.h"
 
 
 INIT_SINGLETON_CLASS(ServiceMessageHandler)
 
 bool ServiceMessageHandler::handleEngineGatewayMsg(int connId, int msgId, char* data, int dataLen)
 {
-	if (GameService::getSingleton()->getServieType() == SERVICE_TYPE_SCENE) {
+	if (SERVICE_TYPE == SERVICE_TYPE_SCENE) {
 		if (SceneMgr::getSceneMgr()->handleClientMsg(connId, msgId, data, dataLen)) {
 			return true;
 		}

@@ -12,7 +12,7 @@ static std::map<std::string, ServiceType> serviceName2Type = {
 	{"scene_ctrl", ServiceType::SERVICE_TYPE_SCENE_CTRL},
 };
 
-ServiceType getServiceType(std::string serviceName) {
+ServiceType getServiceType(std::string& serviceName) {
 	auto iter = serviceName2Type.find(serviceName);
 	if (iter == serviceName2Type.end()) {
 		return ServiceType::SERVICE_TYPE_UNKNOW;

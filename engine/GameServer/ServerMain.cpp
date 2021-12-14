@@ -16,7 +16,6 @@
 #include "ScriptBind.h"
 #include "server.hpp"
 #include "CmdLine.h"
-#include "ServiceInfo.h"
 #include "ExitTraceback.h"
 
 #include "GatewayEntry.h"
@@ -131,8 +130,6 @@ int main(int argc, char** argv)
 	
 	//signal(SIGSEGV, signalExit);
 	signal(SIGABRT, signalExit);
-
-	ServiceInfo* serviceInfo = new ServiceInfo(serverId, serviceType, serviceId);
 
 	std::string logFileName = serviceName;
 	if (serviceId > 0) logFileName += "_" + std::to_string(serviceId);

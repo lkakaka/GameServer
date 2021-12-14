@@ -1,8 +1,8 @@
 #include "PyService.h"
 #include "Logger.h"
 #include "ServiceType.h"
-#include "ServiceInfo.h"
 #include "Network/ServiceCommEntityMgr.h"
+#include "GameService.h"
 
 static PyTypeObject PyService_Type;
 
@@ -40,7 +40,7 @@ static PyObject* sendMsgToClient(PyObject* self, PyObject* args)
 	buffer.writeInt(msgId);
 	buffer.writeInt(connId);
 	buffer.writeString(msg, msgLen);
-	ServiceAddr addr(ServiceInfo::getSingleton()->getServiceGroup(), ServiceType::SERVICE_TYPE_GATEWAY, 0);
+	ServiceAddr addr(SERVICE_GROUP, ServiceType::SERVICE_TYPE_GATEWAY, 0);
 	SERVER_CENTER_COMM_ENTITY->sendToService(&addr, (char*)buffer.data(), buffer.size());
 
 	Py_RETURN_TRUE;

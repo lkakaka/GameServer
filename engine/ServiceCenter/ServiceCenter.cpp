@@ -5,13 +5,13 @@
 #include "Config.h"
 #include "../Common/ServerMacros.h"
 #include "Network/Network.h"
+#include "GameService.h" 
 
 #ifdef SERVICE_COMM_ENTITY_ZMQ
 #include "Network/ZmqRouter.h"
 #endif
 
 #include "Network/ServiceCommEntityMgr.h"
-#include "ServiceInfo.h"
 
 using boost::asio::ip::tcp;
 

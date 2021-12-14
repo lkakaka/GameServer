@@ -2,12 +2,12 @@
 #include "proto.h"
 #include "Network/ServiceCommEntityMgr.h"
 #include "ServiceType.h"
-#include "ServiceInfo.h"
 #include "Network/Network.h"
 #include "Timer.h"
 #include "TimeUtil.h"
 #include "GatewayNet.h"
 #include "proto.h"
+#include "GameService.h"
 
 
 #define KCP_TOKEN_VALID_TIME 30000 // ºÁÃë
@@ -131,7 +131,7 @@ void GatewayConnection::dispatchClientMsg(int msgId, int msgLen, const char* msg
 		case MSG_ID_ENTER_GAME: 
 		case MSG_ID_REMOTE_ENTER_GAME:
 		{
-			ServiceAddr addr(ServiceInfo::getSingleton()->getServiceGroup(), ServiceType::SERVICE_TYPE_LOGIN, 0);
+			ServiceAddr addr(SERVICE_GROUP, ServiceType::SERVICE_TYPE_LOGIN, 0);
 			SERVER_CENTER_COMM_ENTITY->sendToService(&addr, (char*)buffer.data(), buffer.size());
 			break;
 		}
@@ -142,7 +142,7 @@ void GatewayConnection::dispatchClientMsg(int msgId, int msgLen, const char* msg
 				setWaitClose("player not in scene");
 				return;
 			}
-			ServiceAddr addr(ServiceInfo::getSingleton()->getServiceGroup(), ServiceType::SERVICE_TYPE_SCENE, m_sceneServiceId);
+			ServiceAddr addr(SERVICE_GROUP, ServiceType::SERVICE_TYPE_SCENE, m_sceneServiceId);
 			SERVER_CENTER_COMM_ENTITY->sendToService(&addr, (char*)buffer.data(), buffer.size());
 			break;
 		}

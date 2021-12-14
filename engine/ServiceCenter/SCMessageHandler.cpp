@@ -2,8 +2,8 @@
 #include "Logger.h"
 #include "Network/Network.h"
 #include "SCNet.h"
-#include "ServiceInfo.h"
 #include "ServiceType.h"
+#include "GameService.h"
 #include "Network/ServiceCommEntityMgr.h"
 
 extern const char* SERVICE_CONN_KEY;

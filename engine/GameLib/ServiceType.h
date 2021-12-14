@@ -16,4 +16,4 @@ enum ServiceType {
 	SERVICE_TYPE_END = 7,
 };
 
-ServiceType getServiceType(std::string serviceName);
+ServiceType getServiceType(std::string& serviceName);
