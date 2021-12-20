@@ -36,6 +36,7 @@ class ItemMgr(object):
         self._weak_player = weakref.ref(player)
         self._items = {}
         self._items_by_id = {}
+        self.server_id = player.server_id
 
     @property
     def service_obj(self):
@@ -142,10 +143,10 @@ class ItemMgr(object):
 
         print(chg_items, new_items)
         if len(chg_items) > 0:
-            self.service_obj.db_proxy.update(chg_items)
+            self.service_obj.db_proxy.update(self.server_id, chg_items)
 
         if len(new_items) > 0:
-            self.service_obj.db_proxy.insert(new_items)
+            self.service_obj.db_proxy.insert(self.server_id, new_items)
 
         game.util.logger.log_info("add item:{}", repr(item_list))
         return ErrorCode.OK
@@ -193,10 +194,10 @@ class ItemMgr(object):
         if len(del_items) > 0:
             for tbl_item in del_items:
                 self._remove_item_by_uid(tbl_item.item_uid)
-            self.service_obj.db_proxy.delete(del_items)
+            self.service_obj.db_proxy.delete(self.server_id, del_items)
 
         if len(chg_items) > 0:
-            self.service_obj.db_proxy.update(chg_items)
+            self.service_obj.db_proxy.update(self.server_id, chg_items)
 
         game.util.logger.log_info("use item:{}", repr((item_id, item_count)))
         return ErrorCode.OK

@@ -42,6 +42,13 @@ def test_timer():
     logger.log_info("add timer {}", timer_id)
 
 
+def create_gateway_service():
+    import game.service.gateway_service
+    service_inst = game.service.gateway_service.GatewayService()
+    service_inst.on_service_start()
+    return service_inst
+
+
 def create_db_service():
     import game.service.db_service
     service_inst = game.service.db_service.DBService()

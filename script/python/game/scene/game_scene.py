@@ -13,6 +13,7 @@ from game.data import cfg_scene
 from game.service.service_addr import LOCAL_GATEWAY_SERVICE_ADDR
 from game.service.service_addr import LOCAL_SCENE_CTRL_SERVICE_ADDR
 import game.util.multi_index_container
+from game.util.id_mgr import IDMgr
 
 
 class GameScene:
@@ -37,14 +38,16 @@ class GameScene:
 
     def prepare_enter_scene(self, conn_id, role_id):
         tbls = self._add_load_tb(role_id)
-        future = self.service.db_proxy.load_multi(tbls)
+        server_id = IDMgr.get_server_id_by_uid(role_id)
+        print("server_id = ", role_id, server_id)
+        future = self.service.db_proxy.load_multi(server_id, tbls)
 
         def on_load_role(err_code, tbls):
             self.on_load_player(err_code, conn_id, role_id, tbls)
 
         future.on_fin += on_load_role
         future.on_timeout += on_load_role
-        logger.log_info("prepare enter scene, role_id:{}, scene_uid:{}, scene_id:%d", role_id, self.scene_uid, self.scene_id)
+        logger.log_info("prepare enter scene, role_id:{}, scene_uid:{}, scene_id:{}", role_id, self.scene_uid, self.scene_id)
 
     def _add_load_tb(self, role_id):
         tbls = []
@@ -67,6 +70,8 @@ class GameScene:
         if err_code != ErrorCode.OK:
             logger.log_error("load player data error, role_id:{0}, conn_id:{1}", role_id, conn_id)
             return
+
+        print(tbls)
 
         sorted_tbls = {}
         for tbl in tbls:
@@ -138,10 +143,7 @@ class GameScene:
         return self._mic_player.get_one_elem(GamePlayer.ATTR_ROLE_ID, role_id)
 
     def get_actor(self, actor_id):
-        weak_actor = self._actors.get(actor_id, None)
-        if weak_actor is None:
-            return None
-        return weak_actor()
+        return self._actors.get(actor_id, None)
 
     def on_recv_client_msg(self, conn_id, msg_id, msg_data):
         player = self.get_player_by_conn_id(conn_id)

@@ -1,6 +1,7 @@
 
 import game.util.cmd_util
 from game.service.service_addr import ServiceAddr
+from game.service.service_addr import LOCAL_SERVICE_GROUP
 
 
 class GMParam(object):
@@ -51,6 +52,10 @@ class GMHandler(object):
 
     @_gm_cmd.reg_cmd("goto_scene")
     def _goto_scene(self, param):
-        scene_id = int(param.args)
-        param.player.try_switch_scene(scene_id)
+        arg_list = param.args.split(",")
+        scene_id = int(arg_list[0])
+        server_id = LOCAL_SERVICE_GROUP
+        if len(arg_list) >= 2:
+            server_id = int(arg_list[1])
+        param.player.try_switch_scene(server_id, scene_id)
         return "ok"

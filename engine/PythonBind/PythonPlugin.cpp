@@ -70,6 +70,7 @@ void PythonPlugin::initPython()
 	PyImport_AppendInittab("Test", PyInit_Test);  // python3
 
 	initConfigModule();
+	initCryptModule();
 	initDbModule();
 	initLoggerModule();
 	initTimerModule();

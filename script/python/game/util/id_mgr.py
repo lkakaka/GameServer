@@ -4,6 +4,7 @@ from game.db.tbl.tbl_player import TblPlayer
 from game.db.tbl.tbl_item import TblItem
 from game.util.const import RedisKey
 from game.util import logger
+from game.service.service_addr import LOCAL_SERVICE_GROUP
 
 
 class IDMgr(object):
@@ -12,6 +13,9 @@ class IDMgr(object):
 
     REDIS_KEY_ROLE = TblPlayer.tb_name
     REDIS_KEY_ITEM = TblItem.tb_name
+
+    # ID共64位，第64位为符号位，41 - 63为服务器ID，1 - 40位为自增ID
+    ID_BIT_COUNT = 40
 
     def __init__(self):
         pass
@@ -22,6 +26,14 @@ class IDMgr(object):
             return
         IDMgr._redis = game.db.db_redis.DBRedis(redis_ip, redis_port)
         logger.log_info("connect id redis, ip:{}, port:{}".format(redis_ip, redis_port))
+
+    @staticmethod
+    def get_server_id_by_uid(uid):
+        return uid >> IDMgr.ID_BIT_COUNT
+
+    @staticmethod
+    def get_server_start_uid():
+        return LOCAL_SERVICE_GROUP << IDMgr.ID_BIT_COUNT
 
     @staticmethod
     def alloc_role_id(count=1):

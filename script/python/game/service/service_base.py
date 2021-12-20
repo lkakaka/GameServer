@@ -36,8 +36,8 @@ class ServiceBase:
         self._init_id_mgr()
 
     def _init_id_mgr(self):
-        redis_ip = Config.getConfigStr("id_redis_ip")
-        redis_port = Config.getConfigInt("id_redis_port")
+        redis_ip = Config.getConfigStr("redis_ip")
+        redis_port = Config.getConfigInt("redis_port")
         if not redis_ip or not redis_port:
             return
         import game.util.id_mgr
@@ -61,10 +61,10 @@ class ServiceBase:
     #         print("loop end")
 
     # def on_recv_client_msg(self, conn_id, msg_id, msg_data):
-    #     logger.logError("$service on_recv_client_msg error, must override in drived class!!!", conn_id, msg_id, msg_data)
+    #     logger.log_error("$service on_recv_client_msg error, must override in drived class!!!", conn_id, msg_id, msg_data)
 
     # def on_recv_service_msg(self, sender, msg_id, msg_data):
-    #     logger.logError("service on_recv_service_msg error, must override in drived class!!!", sender, msg_id, msg_data)
+    #     logger.log_error("service on_recv_service_msg error, must override in drived class!!!", sender, msg_id, msg_data)
 
     def on_recv_client_msg(self, conn_id, msg_id, msg_data):
         logger.log_info("recv client msg, conn_id:{}, msg_id:{}", conn_id, msg_id)
@@ -122,6 +122,11 @@ class ServiceBase:
         msg_dat = msg.SerializeToString()
         msg_id = Message.get_msg_id(msg)
         self._service_obj.sendMsgToClient(conn_id, msg_id, msg_dat)
+
+    def send_msg_to_client_kcp(self, conn_id, msg):
+        msg_dat = msg.SerializeToString()
+        msg_id = Message.get_msg_id(msg)
+        self._service_obj.sendMsgToClientKCP(conn_id, msg_id, msg_dat)
 
     def send_msg_to_service(self, dst_srv_addr, msg):
         if type(dst_srv_addr) != ServiceAddr:

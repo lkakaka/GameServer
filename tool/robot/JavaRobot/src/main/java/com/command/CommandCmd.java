@@ -38,6 +38,10 @@ class CommandCmd extends CmdDispatch {
 
     private void parseCmdStr(String strCmd) {
         strCmd = strCmd.trim();
+        if (strCmd.startsWith("$")) {
+            strCmd = strCmd.substring(1);
+            strCmd = "gm " + strCmd;
+        }
         String[] cmdInfo = strCmd.split(" ");
         if (cmdInfo.length < 1) {
             System.out.println("input cmd fromat error:" + strCmd);

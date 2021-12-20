@@ -14,7 +14,7 @@ static PyObject* logInfo(PyObject* self, PyObject* args)
 		Py_RETURN_FALSE;
 	}
 
-	LOG_INFO(msg);
+	LOG_INFO("%s", msg);
 	Py_RETURN_TRUE;
 }
 
@@ -26,7 +26,7 @@ static PyObject* logError(PyObject* self, PyObject* args)
 		Py_RETURN_FALSE;
 	}
 
-	Logger::logError(msg);
+	Logger::logError("%s", msg);
 	Py_RETURN_TRUE;
 }
 
@@ -50,7 +50,7 @@ static PyObject* logWarn(PyObject* self, PyObject* args)
 		Py_RETURN_FALSE;
 	}
 
-	LOG_WARN(msg);
+	LOG_WARN("%s", msg);
 	Py_RETURN_TRUE;
 }
 

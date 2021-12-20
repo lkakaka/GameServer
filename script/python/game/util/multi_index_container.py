@@ -9,15 +9,19 @@ class MultiIndexElement(object):
     _in_container = False
     _multi_index_attr_names = []
 
+    def __init__(self):
+        self._container = None
+
     # note: 做为索引的字段不能修改
     @staticmethod
     def define_multi_index_attr_names():
         return None
 
-    def on_add_to_container(self):
-        if self._in_container:
+    def on_add_to_container(self, container):
+        if self._container is not None:
+            raise Exception("repeated add to container")
             return
-        self._in_container = True
+        self._container = container
         self._multi_index_attr_names = []
         attr_names = self.define_multi_index_attr_names()
         for attr_name in attr_names:
@@ -28,13 +32,15 @@ class MultiIndexElement(object):
                     self._multi_index_attr_names.append(name)
 
     def on_remove_from_container(self):
-        self._in_container = False
+        self._container = None
         self._multi_index_attr_names = []
 
     def __setattr__(self, key, value):
-        if not self._in_container or key not in self._multi_index_attr_names:
-            return object.__setattr__(self, key, value)
-        raise MulitIndexAttrCannotSetException("cannot change multi index attr val!!, attr:{0}".format(key))
+        if getattr(self, "_container", None) and key in self._multi_index_attr_names:
+            old_val = getattr(self, key)
+            self._container.on_elem_change_attr(key, old_val, value)
+        return object.__setattr__(self, key, value)
+        # raise MulitIndexAttrCannotSetException("cannot change multi index attr val!!, attr:{0}".format(key))
 
 
 class MultiIndexContainer(object):
@@ -112,7 +118,7 @@ class MultiIndexContainer(object):
                 container[attr_val] = []
             if element not in container[attr_val]:
                 container[attr_val].append(element)
-        element.on_add_to_container()
+        element.on_add_to_container(self)
 
     def remove_elem(self, element):
         for attr_name in self._attr_names:
@@ -139,6 +145,12 @@ class MultiIndexContainer(object):
             return None
         return elems[0]
 
+    def on_elem_change_attr(self, attr_name, old_attr_val, attr_val):
+        con = self._container[attr_name]
+        con[old_attr_val][elem] = None
+        con[attr_val] = con[attr_val] or {}
+        con[attr_val][elem] = True
+
 
 class MultiIndexElementTest(MultiIndexElement):
     @staticmethod
@@ -146,6 +158,7 @@ class MultiIndexElementTest(MultiIndexElement):
         return "a", "b", ("a", "b")
 
     def __init__(self, a, b, c):
+        MultiIndexElement.__init__(self)
         self.a = a
         self.b = b
         self.c = c

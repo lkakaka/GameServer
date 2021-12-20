@@ -10,6 +10,7 @@ from game.db.db_builder import DbInfo
 import game.util.cmd_util
 import game.util.db_util
 import game.db.tbl
+from game.util.id_mgr import IDMgr
 
 
 CUR_DB_VERSION = 1
@@ -24,9 +25,6 @@ class DBService(ServiceBase):
         ServiceBase.__init__(self, DBService._s_cmd, None, DBService._rpc_proc)
         self._db_handler = None
         self._db_info = None
-
-    def _init_id_mgr(self):
-        pass
 
     def on_service_start(self):
         ServiceBase.on_service_start(self)
@@ -54,17 +52,17 @@ class DBService(ServiceBase):
         #
         # if db_ver == -1:
         #     if not self.init_db():
-        #         logger.logError("$init db error")
+        #         logger.log_error("$init db error")
         #         raise RuntimeError("init db error")
         #         return
         # else:
         #     if not self.upgrade_db(db_ver):
-        #         logger.logError("$upgrade db error, db_ver:{}".format(db_ver))
+        #         logger.log_error("$upgrade db error, db_ver:{}".format(db_ver))
         #         raise RuntimeError("upgrade db error, db_ver:{}".format(db_ver))
         #         return
         #
         # if not self._db_info.set_int_val(DbInfo.DB_INFO_KEY_VERSION, CUR_DB_VERSION):
-        #     logger.logError("$set db version failed, old_version:{}, cur_version:{}".format(db_ver, CUR_DB_VERSION))
+        #     logger.log_error("$set db version failed, old_version:{}, cur_version:{}".format(db_ver, CUR_DB_VERSION))
         #     raise RuntimeError("set db version failed, old_version:{}, cur_version:{}".format(db_ver, CUR_DB_VERSION))
 
         self._db_handler.test_db_and_redis()
@@ -165,8 +163,8 @@ class DBService(ServiceBase):
             rsp_msg.err_code = ErrorCode.ROLE_NAME_EXIST
             self.send_msg_to_client(conn_id, rsp_msg)
             return
-
-        self._db_handler.execute_sql("insert into player(role_name, account) values('{}', '{}')".format(role_name, account))
+        role_id = IDMgr.alloc_role_id(1)
+        self._db_handler.execute_sql("insert into player(role_id, role_name, account) values({}, '{}', '{}')".format(role_id, role_name, account))
         db_res = self._db_handler.execute_sql("select * from player where role_name='{}'".format(role_name))
 
         # from game.db.tbl.tbl_player import TblPlayer

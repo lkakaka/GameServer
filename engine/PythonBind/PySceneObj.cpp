@@ -107,11 +107,12 @@ static void PySceneObj_Free(void* ptr) {
 
 static PyObject* createPlayer(PyObject* self, PyObject* args)
 {
-	int connId, roleId;
+	int connId;
+	int64_t	roleId;
 	char* name;
 	int x, y, move_speed;
 	PyObject* scriptObj;
-	if (!PyArg_ParseTuple(args, "iisiii", &connId, &roleId, &name, &x, &y, &move_speed)) {
+	if (!PyArg_ParseTuple(args, "iLsiii", &connId, &roleId, &name, &x, &y, &move_speed)) {
 		//PyErr_SetString(ModuleError, "create scene obj failed");
 		LOG_ERROR("create player failed, arg error");
 		Py_RETURN_NONE;

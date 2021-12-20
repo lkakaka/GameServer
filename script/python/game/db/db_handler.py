@@ -4,6 +4,7 @@ import PyDb
 from game.util import logger
 from game.db.db_redis import DBRedis
 import game.util.timer
+from game.util.id_mgr import IDMgr
 
 
 class DBRowResult:
@@ -110,6 +111,8 @@ class DBHandler:
             sql = "select max({}) as max_id from {}".format(tbl.primary_col.name, tbl_name)
             res = self.execute_sql(sql)
             max_id = res[0].max_id
+            if max_id == 0:
+                max_id = IDMgr.get_server_start_uid()
             redis_cmd += " {} {}".format(tbl_name, max_id)
         if self._db_redis.exec_redis_cmd(redis_cmd) is None:
             raise RuntimeError("init id allocator error, redis cmd:{}".format(redis_cmd))

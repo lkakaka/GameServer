@@ -4,6 +4,7 @@ import game.util.cmd_util
 from proto.pb_message import Message
 from game.util import logger
 from game.service.service_addr import LOCAL_DB_SERVICE_ADDR
+from game.service.service_addr import LOCAL_SERVICE_GROUP
 from game.db.tbl.tbl_player import TblPlayer
 
 
@@ -28,8 +29,13 @@ class MsgHandler(object):
 
     @_c_cmd.reg_cmd(Message.MSG_ID_DISCONNECT_REQ)
     def _on_recv_disconnect(self, msg_id, msg):
-        logger.log_error("player disconnect, role_id:{},reason:{}", self.player.role_id, msg.reason)
+        logger.log_error("player disconnect req, role_id:{},reason:{}", self.player.role_id, msg.reason)
         self.player.game_scene.tick_player(self.player.role_id, "client req disconnect")
+
+    @_c_cmd.reg_cmd(Message.MSG_ID_CLIENT_DISCONNECT)
+    def _on_recv_disconnect(self, msg_id, msg):
+        logger.log_error("player disconnect, role_id:{},reason:{}", self.player.role_id, msg.reason)
+        self.player.game_scene.tick_player(self.player.role_id, msg.reason)
 
     @_c_cmd.reg_cmd(Message.MSG_ID_GM_CMD)
     def _on_recv_gm_cmd(self, msg_id, msg):
@@ -50,23 +56,25 @@ class MsgHandler(object):
         print("$player recv test req, role_id:{}, msg:{}", self.player.role_id, msg)
         rsp_msg = Message.create_msg_by_id(Message.MSG_ID_TEST_REQ)
         rsp_msg.id = 10
-        rsp_msg.msg = "[Python]welcome to game world, {0}, scene_id:{1}, scene_uid:{2}".format(self.player.name,
+        rsp_msg.msg = "[Python]welcome to game world, {0}, server_id:{1}, scene_id:{2}, scene_uid:{3}".format(self.player.name,
+                                                                                       LOCAL_SERVICE_GROUP,
                                                                                        game_scene.scene_id,
                                                                                        game_scene.scene_uid)
         self.player.send_msg_to_client(rsp_msg)
+        self.player.send_msg_to_client_kcp(rsp_msg)
         self.player.send_msg_to_service(LOCAL_DB_SERVICE_ADDR, msg)
 
-        def on_load_cb(err_code, lst):
-            print("on_load_cb----", lst)
+        # def on_load_cb(err_code, lst):
+        #     print("on_load_cb----", lst)
+        #
+        # future = self.player.game_scene.service.db_proxy.load("player", role_id=1)
+        # future.on_fin += on_load_cb
 
-        future = self.player.game_scene.service.db_proxy.load("player", role_id=1)
-        future.on_fin += on_load_cb
-
-        tbl_player = TblPlayer()
-        tbl_player.role_id = 6
-        tbl_player.role_name = "rename"
-        # tbl_player.account = "aa"
-        self.player.game_scene.service.db_proxy.update(tbl_player)
+        # tbl_player = TblPlayer()
+        # tbl_player.role_id = 6
+        # tbl_player.role_name = "rename"
+        # # tbl_player.account = "aa"
+        # self.player.game_scene.service.db_proxy.update(tbl_player)
         start_pos = (15, 10, -47)
         end_pos = (43, 10, -1)
         # start_pos = (-665610, 0, -689073)

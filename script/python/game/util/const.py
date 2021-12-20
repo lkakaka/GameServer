@@ -1,6 +1,6 @@
 
 
-# È«¾Ö±äÁ¿¶¨Òå
+# È«ï¿½Ö±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 class GlobalVar(object):
     MAX_ROLE_NUM = 6
 
@@ -9,7 +9,7 @@ class RedisKey(object):
     ID_ALLOCATOR = "_id_allocator"
 
 
-# ´íÎóÂë¶¨Òå
+# ï¿½ï¿½ï¿½ï¿½ï¿½ë¶¨ï¿½ï¿½
 class ErrorCode(object):
     OK = 0
 
@@ -27,4 +27,10 @@ class ErrorCode(object):
     ITEM_NOT_EXIST = -20100
     ITEM_NOT_ENOUGH = -20101
     BAG_SPACE_NOT_ENOUGH = -20102
+
+
+class TokenPrefix(object):
+    KCP = "KCPToken_$gs20210915@"
+    CROSS_SERVER = "CrossServerToken_$gs20211203@"
+
 

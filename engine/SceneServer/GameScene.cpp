@@ -55,7 +55,7 @@ void GameScene::onDestory()
 	LOG_INFO("destory scene, sceneId:%d, sceneUid:%d", m_sceneId, m_sceneUid);
 }
 
-PlayerEntity* GameScene::createPlayer(int connId, int roleId, const char* name, int x, int y, int moveSpeed)
+PlayerEntity* GameScene::createPlayer(int connId, int64_t roleId, const char* name, int x, int y, int moveSpeed)
 {
 	int eid = m_maxEntityId++;
 	PlayerEntity* player = new PlayerEntity(connId, eid, roleId, name, x, y, moveSpeed, this, std::bind(&GameScene::onEntityGridChg, this, std::placeholders::_1, std::placeholders::_2));

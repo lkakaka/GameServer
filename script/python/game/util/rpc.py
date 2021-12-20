@@ -31,6 +31,7 @@ class _Future(object):
     def on_recv_rsp(self, rpc_data):
         self.remove_timeout_timer()
         params = eval(rpc_data) if rpc_data != "" else ()
+        print(params)
         for fin_cb in self.on_fin.future_cb:
             fin_cb(*params)
         logger.log_info("future finish, rpc_id:{}", self._rpc_id)

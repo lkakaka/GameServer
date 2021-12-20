@@ -8,6 +8,7 @@ class PlayerState:
     LOGINING = 1    # 登录中
     IN_SCENE = 2    # 在场景中
     SWITCHING = 3   # 切换场景中
+    REMOTE_SWITCHING = 4,   # 切换到其他服场景中
 
 
 class PlayerInfo(MultiIndexElement):
@@ -20,6 +21,7 @@ class PlayerInfo(MultiIndexElement):
         return PlayerInfo.ATTR_ROLE_ID, PlayerInfo.ATTR_CONN_ID
 
     def __init__(self, role_id, conn_id):
+        MultiIndexElement.__init__(self)
         self.role_id = role_id
         self.conn_id = conn_id
         self.state = PlayerState.UNKNOW
@@ -51,7 +53,7 @@ class PlayerMgr(object):
     def switch_state(self, role_id, state, **kwargs):
         player_info = self.get_player_info_by_role_id(role_id)
         if player_info is None:
-            logger.logError("not found player info, role_id:{0}", role_id)
+            logger.log_error("not found player info, role_id:{0}", role_id)
             return
         player_info.state = state
         for attr_name in ("scene_uid", "scene_id"):

@@ -10,6 +10,7 @@
 #include "Network/ServiceCommEntityMgr.h"
 #include "GameScene.h"
 #include "GameService.h"
+#include "MsgBuilder.h"
 
 
 SceneEntity::SceneEntity(SceneEntityType eType, int eid, void* gameScene, GridChgFunc gridChgFunc) :
@@ -140,15 +141,18 @@ void SceneEntity::broadcastMsgToClient(std::set<int>& connIds, int msgId, google
 }
 
 void SceneEntity::broadcastMsgToClient(std::set<int>& connIds, int msgId, const char* msg, int msgLen) {
-	MyBuffer buffer;
-	buffer.writeByte(1); // 是否是发给客户端的消息
-	buffer.writeInt(msgId);
-	buffer.writeInt(connIds.size()); // 连接数量
-	for (int connId : connIds) {
-		buffer.writeInt(connId);
-	}
-	buffer.writeByte(SEND_TYPE_TCP);
-	buffer.writeString(msg, msgLen);
+	//MyBuffer buffer;
+	//buffer.writeByte(1); // 是否是发给客户端的消息
+	//buffer.writeInt(msgId);
+	//buffer.writeInt(connIds.size()); // 连接数量
+	//for (int connId : connIds) {
+	//	buffer.writeInt(connId);
+	//}
+	//buffer.writeByte(SEND_TYPE_TCP);
+	//buffer.writeString(msg, msgLen);
+
+	MyBuffer buffer = MsgBuilder::buildClientBroadcastTcpMsg(connIds, msgId, msg, msgLen);
+
 	ServiceAddr addr(SERVICE_GROUP, ServiceType::SERVICE_TYPE_GATEWAY, 0);
 	SERVER_CENTER_COMM_ENTITY->sendToService(&addr, (char*)buffer.data(), buffer.size());
 }

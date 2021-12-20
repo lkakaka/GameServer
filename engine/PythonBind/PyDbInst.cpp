@@ -138,7 +138,7 @@ static bool _initTable(DBHandler* dbHandler, PyObject* tblObj) {
 		case TableField::FieldType::TYPE_BIGINT:
 		{
 			if (defaultObj != Py_None) {
-				long defVal = PyLong_AsLong(defaultObj);
+				int64_t defVal = PyLong_AsLongLong(defaultObj);
 				field->defaut_val = defVal;
 			}
 			break;
@@ -321,7 +321,7 @@ static PyObject* insertRow(PyObject* self, PyObject* args)
 		case TableField::FieldType::TYPE_INT:
 		case TableField::FieldType::TYPE_BIGINT:
 		{
-			field->lval = PyLong_AsLong(val);
+			field->lval = PyLong_AsLongLong(val);
 			break;
 		}
 		case TableField::FieldType::TYPE_DOUBLE:
@@ -375,7 +375,7 @@ static void PyTableToTable(PyObject* pyTbl, Table* tbl) {
 			case TableField::FieldType::TYPE_INT:
 			case TableField::FieldType::TYPE_BIGINT:
 			{
-				tbField->lval = PyLong_AsLong(colObj);
+				tbField->lval = PyLong_AsLongLong(colObj);
 				break;
 			}
 			case TableField::FieldType::TYPE_DOUBLE:
@@ -427,7 +427,7 @@ static PyObject* TableToPyTable(Table* tbl) {
 		case TableField::FieldType::TYPE_INT:
 		case TableField::FieldType::TYPE_BIGINT:
 		{
-			PyObject_SetAttrString(tblObj, colName, PyLong_FromLong(field->lval));
+			PyObject_SetAttrString(tblObj, colName, PyLong_FromLongLong(field->lval));
 			break;
 		}
 		case TableField::FieldType::TYPE_DOUBLE:
@@ -523,7 +523,7 @@ static PyObject* updateRow(PyObject* self, PyObject* args)
 			case TableField::FieldType::TYPE_INT:
 			case TableField::FieldType::TYPE_BIGINT:
 			{
-				field->lval = PyLong_AsLong(val);
+				field->lval = PyLong_AsLongLong(val);
 				break;
 			}
 			case TableField::FieldType::TYPE_DOUBLE:

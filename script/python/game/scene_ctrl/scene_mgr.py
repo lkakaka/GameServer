@@ -15,6 +15,7 @@ class _Scene(MultiIndexElement):
                 _Scene.MULTI_INDEX_ATTR_SERVICE_ADDR)
 
     def __init__(self, scene_id, scene_uid, service_addr):
+        MultiIndexElement.__init__(self)
         self.scene_id = scene_id
         self.scene_uid = scene_uid
         self.service_addr = service_addr

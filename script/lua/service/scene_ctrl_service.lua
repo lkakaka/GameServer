@@ -5,6 +5,7 @@ require("util.rand_util")
 require("game.scene_ctrl.scene_mgr")
 require("game.scene_ctrl.player_mgr")
 require("util.multi_index_container")
+require("util.crypt")
 
 clsSceneCtrlService = clsServiceBase:Inherit("clsSceneCtrlService")
 
@@ -154,6 +155,7 @@ function clsSceneCtrlService:rpc_remote_switch_scene_req(sender, param)
     end
     local rand_num = math.random(1, 10000)
     local str_token = TokenPrefix.CROSS_SERVER .. tostring(role_id) .. tostring(os.time()) .. tostring(rand_num)
+    str_token = Crypt.md5(str_token)
     local token_valid_ts = os.time() + 30
     self._cross_server_roles[role_id] = { token = str_token, token_ts = token_valid_ts, scene_uid = scene.scene_uid}
     local gateway_addr = RandUtil.get_random_one(self._gateway_addresses)

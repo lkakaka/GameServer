@@ -46,7 +46,7 @@ public:
 	GameScene(int sceneId, int sceneUid);
 
 	void onDestory();
-	PlayerEntity* createPlayer(int connId, int roleId, const char* name, int x, int y, int moveSpeed);
+	PlayerEntity* createPlayer(int connId, int64_t roleId, const char* name, int x, int y, int moveSpeed);
 	NpcEntity* createNpc(int npcId, int x, int y, int moveSpeed);
 	void onEntityEnter(int eid);
 	void onEntityLeave(SceneEntity* entity);

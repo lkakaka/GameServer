@@ -30,6 +30,14 @@ class ServiceAddr(object):
         arr = addr.split(".")
         return ServiceAddr(int(arr[0]), int(arr[1]), int(arr[2]))
 
+    @staticmethod
+    def make_scene_ctrl_addr(server_id):
+        return ServiceAddr(server_id, ServiceType.SERVICE_TYPE_SCENE_CTRL, 0)
+
+    @staticmethod
+    def make_db_addr(server_id):
+        return ServiceAddr(server_id, ServiceType.SERVICE_TYPE_DB, 0)
+
 
 LOCAL_SERVICE_GROUP = Config.getConfigInt("server_id")
 LOCAL_DB_SERVICE_ADDR = ServiceAddr(LOCAL_SERVICE_GROUP, ServiceType.SERVICE_TYPE_DB, 0)

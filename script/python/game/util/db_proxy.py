@@ -1,6 +1,7 @@
 
 import weakref
 from game.service.service_addr import LOCAL_DB_SERVICE_ADDR
+from game.service.service_addr import ServiceAddr
 
 
 class DBProxy(object):
@@ -8,32 +9,38 @@ class DBProxy(object):
     def __init__(self, service_obj):
         self._service_obj = weakref.ref(service_obj)
 
-    def load(self, tb_name, **kwargs):
-        return self._service_obj().rpc_call(LOCAL_DB_SERVICE_ADDR, "RpcLoadDB", tb_name=tb_name, **kwargs)
+    def gen_db_addr(self, server_id):
+        db_addr = LOCAL_DB_SERVICE_ADDR
+        if server_id > 0:
+            db_addr = ServiceAddr.make_db_addr(server_id)
+        return db_addr
 
-    def load_multi(self, tbls):
+    def load(self, server_id, tb_name, **kwargs):
+        return self._service_obj().rpc_call(self.gen_db_addr(server_id), "RpcLoadDB", tb_name=tb_name, **kwargs)
+
+    def load_multi(self, server_id, tbls):
         if type(tbls) not in (list, tuple):
             tbls = (tbls,)
         tbl_lst = []
         for tbl in tbls:
             tbl_lst.append(tbl.to_dict(cols=None))
-        return self._service_obj().rpc_call(LOCAL_DB_SERVICE_ADDR, "RpcLoadDBMulti", tbl_list=tuple(tbl_lst))
+        return self._service_obj().rpc_call(self.gen_db_addr(server_id), "RpcLoadDBMulti", tbl_list=tuple(tbl_lst))
 
-    def insert(self, tbls):
+    def insert(self, server_id, tbls):
         if type(tbls) not in (list, tuple):
             tbls = (tbls,)
         tbl_lst = []
         for tbl in tbls:
             tbl_lst.append(tbl.to_dict(cols=None))
-        return self._service_obj().rpc_call(LOCAL_DB_SERVICE_ADDR, "RpcInsertDB", tbl_list=tuple(tbl_lst))
+        return self._service_obj().rpc_call(self.gen_db_addr(server_id), "RpcInsertDB", tbl_list=tuple(tbl_lst))
 
-    def update(self, tbls, cols=None):
+    def update(self, server_id, tbls, cols=None):
         if type(tbls) not in (list, tuple):
             tbls = (tbls,)
         tbl_lst = []
         for tbl in tbls:
             tbl_lst.append(tbl.to_dict(cols=cols))
-        return self._service_obj().rpc_call(LOCAL_DB_SERVICE_ADDR, "RpcUpdateDB", tbl_list=tuple(tbl_lst))
+        return self._service_obj().rpc_call(self.gen_db_addr(server_id), "RpcUpdateDB", tbl_list=tuple(tbl_lst))
 
     # def update_sync(self, tb_name, tbls, cols=None):
     #     if type(tbls) not in (list, tuple):
@@ -88,10 +95,10 @@ class DBProxy(object):
     #     result = yield
     #     return result
 
-    def delete(self, tbls, cols=None):
+    def delete(self, server_id, tbls, cols=None):
         if type(tbls) not in (list, tuple):
             tbls = (tbls,)
         tbl_lst = []
         for tbl in tbls:
             tbl_lst.append(tbl.to_dict(cols=cols))
-        return self._service_obj().rpc_call(LOCAL_DB_SERVICE_ADDR, "RpcDeleteDB", tbl_list=tuple(tbl_lst))
+        return self._service_obj().rpc_call(self.gen_db_addr(server_id), "RpcDeleteDB", tbl_list=tuple(tbl_lst))

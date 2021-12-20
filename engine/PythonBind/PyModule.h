@@ -7,3 +7,4 @@ void initLoggerModule();
 void addLoggerObj();
 void initGameModule();
 void initConfigModule();
+void initCryptModule();
