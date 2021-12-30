@@ -146,7 +146,8 @@ class MultiIndexContainer(object):
         return elems[0]
 
     def on_elem_change_attr(self, attr_name, old_attr_val, attr_val):
-        con = self._container[attr_name]
+        container_name = MultiIndexContainer.gen_container_name(attr_name)
+        con = self._get_container(container_name)
         con[old_attr_val][elem] = None
         con[attr_val] = con[attr_val] or {}
         con[attr_val][elem] = True
