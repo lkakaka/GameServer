@@ -115,7 +115,7 @@ class DBHandler:
             if max_id == 0:
                 max_id = start_uid
             if max_id < start_uid:
-                raise RuntimeError("init id allocator error, {0}, max_id < start uid".format(tbl_name))
+                raise RuntimeError("init id allocator error, {0}, max_id({1}) < start uid({2})".format(tbl_name, max_id, start_uid))
             redis_cmd += " {} {}".format(tbl_name, max_id)
         if self._db_redis.exec_redis_cmd(redis_cmd) is None:
             raise RuntimeError("init id allocator error, redis cmd:{}".format(redis_cmd))

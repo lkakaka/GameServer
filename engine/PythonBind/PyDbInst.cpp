@@ -82,8 +82,11 @@ static PyObject* executeSql(PyObject* self, PyObject* args)
 				PyObject* dataTuple = PyTuple_New(metaData->getColumnCount());
 				for (int i = 1; i <= colCount; i++) {
 					int colType = metaData->getColumnType(i);
-					if (colType >= sql::DataType::BIT && colType <= sql::DataType::BIGINT) {
+					if (colType >= sql::DataType::BIT && colType < sql::DataType::BIGINT) {
 						PyTuple_SetItem(dataTuple, i - 1, PyLong_FromLong(rs->getInt(i)));
+					}
+					else if (colType == sql::DataType::BIGINT) {
+						PyTuple_SetItem(dataTuple, i - 1, PyLong_FromLongLong(rs->getInt64(i)));
 					}
 					else if (colType >= sql::DataType::REAL && colType <= sql::DataType::NUMERIC) {
 						PyTuple_SetItem(dataTuple, i - 1, PyFloat_FromDouble(rs->getDouble(i)));
