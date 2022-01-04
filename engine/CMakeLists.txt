@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
-project(MyServer)
+project(GameServer)
 
 macro(gnu_setting pthread)
 	if (CMAKE_COMPILER_IS_GNUCXX)
