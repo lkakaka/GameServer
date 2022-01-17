@@ -4,12 +4,14 @@ import com.network.Network;
 import com.network.NetworkEventHandler;
 import com.proto.Login;
 import com.proto.ProtoBufferMsg;
+import com.proto.Role;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 public class GameRobot {
@@ -26,6 +28,8 @@ public class GameRobot {
     private ByteArrayOutputStream m_kcpBuffer = new ByteArrayOutputStream();
     private ServerCmd m_robotCmd;
     private boolean isSwitchServer;
+
+    ScheduledThreadPoolExecutor tpeMove = new ScheduledThreadPoolExecutor(1);
 
     GameRobot() {
         m_robotCmd = new ServerCmd(this);
@@ -206,5 +210,22 @@ public class GameRobot {
             isSwitchServer = false;
             runnable.run();
         }, 1, TimeUnit.SECONDS);
+    }
+
+    public void startRandMove(int iDelayMillSec) {
+        tpeMove.scheduleAtFixedRate(() -> randMove(), 0, iDelayMillSec, TimeUnit.MILLISECONDS);
+    }
+
+    public void stopRandMove() {
+        tpeMove.shutdown();
+    }
+
+    public void randMove() {
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+        int x = random.nextInt(1, 100);
+        int y = random.nextInt(1, 100);
+        Role.MoveTo.Builder builder = Role.MoveTo.newBuilder();
+        builder.setPosX(x).setPosY(y);
+        sendProto(ProtoBufferMsg.MSG_ID_MOVE_TO, builder.build());
     }
 }

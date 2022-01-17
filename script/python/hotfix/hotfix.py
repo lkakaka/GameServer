@@ -77,8 +77,10 @@ def start_hotfix():
     game.util.logger.log_info("start hotfix!!!")
 
     for dir_path, file_name, mod_name in for_each_file():
+        # game.util.logger.log_info("{}-{}".format(file_name, mod_name))
         if sys.modules.get(mod_name) is None:
             continue
+        # game.util.logger.log_info("--{}".format(file_name))
         with open(dir_path + "/" + file_name, 'rb') as fp:
             data = fp.read()
             file_md5 = hashlib.md5(data).hexdigest()
@@ -100,6 +102,7 @@ def for_each_file():
         if pos < 0:
             print("file path error")
         pkg_path = dir_path[pos + 3:].replace("\\", ".")
+        pkg_path = pkg_path.replace("/", ".")
         if pkg_path != "":
             pkg_path += "."
         # print(pkg_path)

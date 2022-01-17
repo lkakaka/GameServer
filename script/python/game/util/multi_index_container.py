@@ -38,7 +38,7 @@ class MultiIndexElement(object):
     def __setattr__(self, key, value):
         if getattr(self, "_container", None) and key in self._multi_index_attr_names:
             old_val = getattr(self, key)
-            self._container.on_elem_change_attr(key, old_val, value)
+            self._container.on_elem_change_attr(self, key, old_val, value)
         return object.__setattr__(self, key, value)
         # raise MulitIndexAttrCannotSetException("cannot change multi index attr val!!, attr:{0}".format(key))
 
@@ -145,12 +145,14 @@ class MultiIndexContainer(object):
             return None
         return elems[0]
 
-    def on_elem_change_attr(self, attr_name, old_attr_val, attr_val):
+    def on_elem_change_attr(self, elem, attr_name, old_attr_val, attr_val):
         container_name = MultiIndexContainer.gen_container_name(attr_name)
         con = self._get_container(container_name)
-        con[old_attr_val][elem] = None
+        con[old_attr_val].remove(elem)
         con[attr_val] = con[attr_val] or {}
-        con[attr_val][elem] = True
+        if elem in con[attr_val]:
+            raise Exception("multi index container elem exist!!, attr_name:{0}".format(attr_name))
+        con[attr_val].append(elem)
 
 
 class MultiIndexElementTest(MultiIndexElement):

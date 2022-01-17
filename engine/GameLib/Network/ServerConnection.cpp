@@ -49,7 +49,7 @@ void ServerConnection::_read()
 			//LOG_INFO("receive data, len:%d, %s", datLen, m_vecData.data());
 			//m_readBuf.append(m_vecData, bytes_transferred);
 			//onRead(m_readBuf.data(), bytes_transferred);
-			LOG_DEBUG("receive data, len=%d", bytes_transferred);
+			//LOG_DEBUG("receive data, len=%d", bytes_transferred);
 			m_recvBuffer.writeString(m_readBuf.data(), bytes_transferred);
 			parseMessage();
 		} else {

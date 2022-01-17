@@ -54,7 +54,7 @@ bool LuaService::sendMsgToService(sol::table dstAddr, int msgId, const char* msg
 
 	SERVER_CENTER_COMM_ENTITY->sendToService(&addr, (char*)buffer.data(), buffer.size());
 
-	LOG_INFO("send msg to service %s, msgId:%d", addr.getName(), msgId);
+	//LOG_INFO("send msg to service %s, msgId:%d", addr.getName(), msgId);
 	return true;
 }
 

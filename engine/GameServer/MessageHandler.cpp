@@ -60,12 +60,13 @@ int ServiceMessageHandler::handleGatewayMessage(ServiceAddr* srcAddr, char* data
 		return 0;
 	}
 	MyBuffer buffer(data, dataLen);
+	int msgId = buffer.readInt();
 	bool isClientMsg = (buffer.readByte() == 0);
 	int connId = buffer.readInt();
-	int msgId = buffer.readInt();
+	/*int msgId = buffer.readInt();*/
 	char* msgData = (char*)buffer.data();
 	int msgLen = buffer.size();
-	LOG_DEBUG("recv msg, sender:%s,  msgId:%d, msgLen:%d", srcAddr->getName(), msgId, msgLen);
+	//LOG_DEBUG("recv msg, sender:%s,  msgId:%d, msgLen:%d", srcAddr->getName(), msgId, msgLen);
 	
 	if (handleEngineGatewayMsg(connId, msgId, msgData, msgLen)) return msgId;
 
@@ -92,7 +93,7 @@ int ServiceMessageHandler::handleServiceMessage(ServiceAddr* srcAddr, char* data
 	int msgId = buffer.readInt();
 	char* msgData = (char*)buffer.data();
 	int msgLen = buffer.size();
-	LOG_DEBUG("recv msg, sender:%s,  msgId:%d, msgLen:%d", srcAddr->getName(), msgId, msgLen);
+	//LOG_DEBUG("recv msg, sender:%s,  msgId:%d, msgLen:%d", srcAddr->getName(), msgId, msgLen);
 	if (handleEngineServiceMsg(msgId, msgData, msgLen)) return msgId;
 
 	GameService::getSingleton()->dispatchServiceMsgToScript(srcAddr, msgId, msgData, msgLen);

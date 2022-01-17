@@ -57,8 +57,11 @@ void ClientConnection::connectHandler(boost::system::error_code ec) {
 	}
 	m_isConnected = true;
 	onConnect();
-	_read();
-	_trySend();
+
+	boost::asio::post(MAIN_IO, [this]() {
+		_read();
+		_trySend();
+	});
 }
 
 void ClientConnection::tryConnect() {
@@ -97,7 +100,7 @@ void ClientConnection::_read() {
 		}
 		if (datLen > 0)
 		{
-			LOG_DEBUG("receive data, len:%d, %s", datLen, buf.data());
+			//LOG_DEBUG("receive data, len:%d, %s", datLen, buf.data());
 			onRecvData(m_readBuff, datLen);
 		}
 		if (m_socket->is_open()) _read();

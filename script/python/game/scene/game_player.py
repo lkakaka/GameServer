@@ -81,7 +81,7 @@ class GamePlayer(game.scene.game_actor.GameActor, MultiIndexElement):
         msg = Message.create_msg_by_id(Message.MSG_ID_ACTOR_DISSOLVE)
         msg.actor_ids.append(actor.actor_id)
         self.send_msg_to_client(msg)
-        print("on_actor_leave_sight")
+        # print("on_actor_leave_sight")
 
     def on_enter_scene(self):
         game_scene = self.game_scene

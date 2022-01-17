@@ -1,8 +1,10 @@
 package com.game;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.function.Consumer;
 
 public class RobotMgr {
     private static final String m_localServerIP = "127.0.0.1";
@@ -14,6 +16,7 @@ public class RobotMgr {
     private GameRobot m_curRobot;   // 当前使用的robot
 
     private static final RobotMgr m_robotMgr;
+
     static {
         m_robotMgr = new RobotMgr();
     }
@@ -73,6 +76,10 @@ public class RobotMgr {
     public GameRobot getCurOrRandRobot() {
         if (m_curRobot != null) return m_curRobot;
         return getOneRobot();
+    }
+
+    public void forEach(Consumer<GameRobot> consumer) {
+        m_robots.values().forEach((robot) -> consumer.accept(robot));
     }
 
     public static RobotMgr getInstance() {

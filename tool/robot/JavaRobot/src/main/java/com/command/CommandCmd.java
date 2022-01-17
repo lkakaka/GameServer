@@ -10,6 +10,8 @@ import com.util.RC4;
 import javax.crypto.Cipher;
 import java.net.*;
 import java.nio.charset.Charset;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 class CommandCmd extends CmdDispatch {
     private String cmd;
@@ -40,6 +42,7 @@ class CommandCmd extends CmdDispatch {
         strCmd = strCmd.trim();
         if (strCmd.startsWith("$")) {
             strCmd = strCmd.substring(1);
+            strCmd = strCmd.replaceAll(" ", ",");
             strCmd = "gm " + strCmd;
         }
         String[] cmdInfo = strCmd.split(" ");
@@ -92,6 +95,25 @@ class CommandCmd extends CmdDispatch {
         String account = params[0];
         RobotMgr.getInstance().removeRobot(account);
         System.out.println("removeRobot successful, account:" + account);
+    }
+
+    @CmdAnnotation(inputCmd = "robot")
+    private void genRobot() {
+        if (params == null || params.length < 1) {
+            System.out.println("removeRobot error, params: " + params);
+            return;
+        }
+
+        boolean isRemote = false;
+        if (params.length >= 2) {
+            if (params[1].equals("1")) isRemote = true;
+        }
+
+        int robotCount = Integer.parseInt(params[0]);
+        for (int i = 1; i <= robotCount; i++) {
+            String account = "robot_" + i;
+            RobotMgr.getInstance().addRobot(account, isRemote);
+        }
     }
 
     @CmdAnnotation(inputCmd = "use")
@@ -147,6 +169,11 @@ class CommandCmd extends CmdDispatch {
         GameRobot robot = RobotMgr.getInstance().getRobot(account);
         robot.sendProto(ProtoBufferMsg.MSG_ID_MOVE_TO, builder.build());
         System.out.println("move successful, account:" + account);
+    }
+
+    @CmdAnnotation(inputCmd = "randmove")
+    private void randMove() {
+        RobotMgr.getInstance().forEach(robot -> robot.startRandMove(1000));
     }
 
     @CmdAnnotation(inputCmd = "test")

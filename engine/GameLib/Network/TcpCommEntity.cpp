@@ -46,7 +46,7 @@ void TcpCommEntity::sendToService(ServiceAddr* dstAddr, char* msg, int msgLen) {
 	buffer.writeString(msg, msgLen);
 	//send((char*)buffer.data(), buffer.size());
 	send(std::move(buffer.getBuf()));
-	LOG_INFO("tcp comm send msg to service %s, len:%d!!!", dstAddr->getName(), msgLen);
+	//LOG_INFO("tcp comm send msg to service %s, len:%d!!!", dstAddr->getName(), msgLen);
 }
 
 void TcpCommEntity::onConnect() {

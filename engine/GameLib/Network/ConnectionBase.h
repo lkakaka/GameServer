@@ -14,6 +14,7 @@ private:
 	std::list<std::vector<unsigned char>> m_sendingBuf; // 正在发送的列表
 	std::vector<boost::asio::const_buffer>m_sendingCBuffer;
 	bool m_isSending;
+	DWORD m_sendThreadId;
 private:
 	void _afterSend(size_t bytes_transferred);
 	bool _prepareSendBuf();

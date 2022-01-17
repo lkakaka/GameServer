@@ -68,6 +68,7 @@ void SCMessageHandler::sendServiceMsg(SCConnection* dstConn, MyBuffer* buffer, S
 	int msgId = -1;
 	if (size >= 20) msgId = buffer->getInt(16);
 	if (srcAddr != NULL) {
+
 		LOG_INFO("dispatch msg %s->%s, msgId:%d, len:%d ", srcAddr->getName(), dstConn->getServiceAddr()->getName(), msgId, size - 20);
 	}
 	else {

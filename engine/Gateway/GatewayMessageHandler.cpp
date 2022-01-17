@@ -49,7 +49,7 @@ void handMsg_Default(int msgId, int connId, send_type type, char* data, int data
 		return;
 	}
 	conn->sendMsgToClient(type, msgId, data, dataLen);
-	LOG_INFO("send msg to client, msgId:%d, connId:%d", msgId, connId);
+	//LOG_INFO("send msg to client, msgId:%d, connId:%d", msgId, connId);
 }
 
 void handClientMsg(int msgId, int connId, send_type type, char* data, int dataLen) {
@@ -93,8 +93,9 @@ void GatewayMessageHandler::onRecvMessage(ServiceAddr* sender, char* data, int d
 		LOG_ERROR("recv %s msg format error, data len(%d) < 5", sender->getName(), dataLen);
 		return;
 	}
-	bool isToClient = (buffer.readByte() == 1);
+	/*bool isToClient = (buffer.readByte() == 1);*/
 	int msgId = buffer.readInt();
+	bool isToClient = (buffer.readByte() == 1);
 	
 	if (isToClient) {
 		int connCount = buffer.readInt();
@@ -112,7 +113,7 @@ void GatewayMessageHandler::onRecvMessage(ServiceAddr* sender, char* data, int d
 		//int connId = buffer.readInt();
 		send_type sendType = buffer.readByte();
 
-		LOG_INFO("recv msg, sender:%s, msgId:%d, connCount:%d", sender->getName(), msgId, connCount);
+		//LOG_INFO("recv msg, sender:%s, msgId:%d, connCount:%d", sender->getName(), msgId, connCount);
 		// 网关处理的消息
 		for (int connId : connIds) {
 			handClientMsg(msgId, connId, sendType, &data[iDataOffset], dataLen - iDataOffset);

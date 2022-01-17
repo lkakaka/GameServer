@@ -15,7 +15,7 @@
 
 SceneEntity::SceneEntity(SceneEntityType eType, int eid, void* gameScene, GridChgFunc gridChgFunc) :
 	m_entityId(eid), m_entityType(eType), m_moveSpeed(0), m_gameScene(gameScene),
-	m_pos(Position(0, 0)), m_grid(Grid(0, 0)), m_lastMoveTime(0),
+	m_pos(Position(0, 0)), m_grid(Grid(0, 0)), m_lastMoveTime(0), m_viewRange(-1),
 	m_gridChgFunc(gridChgFunc) 
 {
 	
@@ -23,7 +23,7 @@ SceneEntity::SceneEntity(SceneEntityType eType, int eid, void* gameScene, GridCh
 
 SceneEntity::SceneEntity(SceneEntityType eType, int eid, int x, int y, int moveSpeed, void* gameScene, GridChgFunc posChgFunc) :
 	m_entityId(eid), m_entityType(eType), m_moveSpeed(moveSpeed), m_gameScene(gameScene),
-	m_pos(Position(x, y)), m_grid(Grid(x / GRID_X_SIZE, y / GRID_Y_SIZE)), m_lastMoveTime(0),
+	m_pos(Position(x, y)), m_grid(Grid(x / GRID_X_SIZE, y / GRID_Y_SIZE)), m_lastMoveTime(0), m_viewRange(-1),
 	m_gridChgFunc(posChgFunc)
 {
 
@@ -74,7 +74,7 @@ void SceneEntity::setPos(float x, float y, bool isTemp) {
 	}
 
 	
-	LOG_INFO("pos:%0.3f, %0.3f, gird_x:%d, gird_y:%d", x, y, m_grid.x, m_grid.y);
+	//LOG_DEBUG("eid:%d, pos:%0.3f, %0.3f, gird_x:%d, gird_y:%d", m_entityId, x, y, m_grid.x, m_grid.y);
 }
 
 void SceneEntity::setTgtPosList(std::vector<Position>& tgtPosList) {

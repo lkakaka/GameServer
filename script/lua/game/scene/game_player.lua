@@ -76,7 +76,7 @@ function clsGamePlayer:on_entity_leave_sight(entity)
     local msg = {actor_ids = {}}
     table.insert(msg.actor_ids, entity.entity_id)
     self:send_msg_to_client(MSG_ID_ACTOR_DISSOLVE, msg)
-    print("on_entity_leave_sight")
+    -- print("on_entity_leave_sight")
 end
 
 function clsGamePlayer:on_enter_scene()

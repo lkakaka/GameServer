@@ -37,6 +37,8 @@ protected:
 	std::mutex m_tgtPosLock;
 	int64_t m_lastMoveTime;	// 上次计算移动的时间戳(更新位置是使用)
 
+	int m_viewRange;
+
 	GridChgFunc m_gridChgFunc;
 
 public:
@@ -54,6 +56,7 @@ public:
 	inline int getY() { return m_pos.y; }
 	inline int getGridX() { return m_grid.x; }
 	inline int getGridY() { return m_grid.y; }
+	inline int getViewRange() { return m_viewRange; }
 	inline SceneEntityType getEntityType() { return m_entityType; }
 	inline bool isPlayer() { return m_entityType == PLYAER; }
 	inline bool isNpc() { return m_entityType == NPC; }

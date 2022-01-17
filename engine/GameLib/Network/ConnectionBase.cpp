@@ -6,7 +6,7 @@
 USE_NS_GAME_NET
 
 ConnectionBase::ConnectionBase(std::shared_ptr<tcp::socket> socket, bool isConnected):
-	m_socket(socket), m_isSending(false), m_isConnected(isConnected)
+	m_socket(socket), m_isSending(false), m_isConnected(isConnected), m_sendThreadId(0)
 {
 
 }
@@ -31,6 +31,12 @@ void ConnectionBase::_trySend() {
 		_send();
 	}*/
 
+	//DWORD tid = GetCurrentThreadId();//std::this_thread::get_id();
+	//if (m_sendThreadId == 0) m_sendThreadId = tid;
+	//if (tid != m_sendThreadId) {
+	//	LOG_ERROR("-----------send data in other thread!!");
+	//}
+
 	if (!m_isConnected) return;
 	if (m_isSending) return;
 
@@ -46,6 +52,7 @@ void ConnectionBase::_trySend() {
 			return;
 		}
 
+		//LOG_INFO("send data len: %d", bytes_transferred);
 		_afterSend(bytes_transferred);
 		_trySend();
 	});
@@ -59,11 +66,20 @@ bool ConnectionBase::_prepareSendBuf() {
 
 	if (m_sendingBuf.size() == 0) return false;
 
+	m_sendingCBuffer.clear();
 	for (auto const& sendBuffer : this->m_sendingBuf) {
 		m_sendingCBuffer.emplace_back(&sendBuffer.front(), sendBuffer.size());
 	}
 	return true;
 }
+
+//bool ConnectionBase::_prepareSendBuf() {
+//	for (auto const& sendBuffer : this->m_sendBuf) {
+//		m_sendingCBuffer.emplace_back(&sendBuffer.front(), sendBuffer.size());
+//	}
+//	if (m_sendingCBuffer.size() == 0) return false;
+//	return true;
+//}
 
 void ConnectionBase::_afterSend(size_t bytes_transferred) {
 	size_t less_bytes = bytes_transferred;
@@ -78,7 +94,11 @@ void ConnectionBase::_afterSend(size_t bytes_transferred) {
 		if (less_bytes < buf_len) {
 			auto& buf = this->m_sendingBuf.front();
 			buf.erase(buf.begin(), buf.begin() + less_bytes);
-			this->m_sendingCBuffer[constBufferIndex] = boost::asio::const_buffer(&buf.front(), buf_len - less_bytes);
+			if (buf.size() != (buf_len - less_bytes)) {
+				LOG_ERROR("buff len error!!!, buff size:%d, require:%d", buf.size(), buf_len - less_bytes);
+			}
+			//this->m_sendingCBuffer[constBufferIndex] = boost::asio::const_buffer((char*)cbuf.data() + less_bytes, buf_len - less_bytes);
+			//this->m_sendingCBuffer[constBufferIndex] = boost::asio::const_buffer(&buf.front(), buf_len - less_bytes);
 			break;
 		}
 		less_bytes -= buf_len;
@@ -86,7 +106,13 @@ void ConnectionBase::_afterSend(size_t bytes_transferred) {
 		m_sendingBuf.pop_front();
 	}
 
-	if (constBufferIndex > 0) {
+	//DWORD tid = GetCurrentThreadId();//std::this_thread::get_id();
+	//if (m_sendThreadId == 0) m_sendThreadId = tid;
+	//if (tid != m_sendThreadId) {
+	//	LOG_ERROR("-----------after send data in other thread!!");
+	//}
+
+	/*if (constBufferIndex > 0) {
 		this->m_sendingCBuffer.erase(this->m_sendingCBuffer.begin(), this->m_sendingCBuffer.begin() + constBufferIndex);
-	}
+	}*/
 }

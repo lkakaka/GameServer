@@ -83,7 +83,7 @@ void GameScene::onEntityEnter(int eid) {
 	}
 
 	std::set<int> neighbours;
-	m_AOIMgr.addNode(entity->getEntityId(), entity->getGridX(), entity->getGridY(), neighbours);
+	m_AOIMgr.addNode(entity->getEntityId(), entity->getGridX(), entity->getGridY(), entity->getViewRange(), neighbours);
 
 	if (!neighbours.empty()) {
 		onEnterSight(entity, neighbours);
@@ -226,7 +226,7 @@ void GameScene::onEntityGridChg(int eid, Grid* grid) {
 	}
 
 	onEntityMove(entity);
-	LOG_DEBUG("entity grid chg!!!");
+	//LOG_DEBUG("entity grid chg!!!");
 }
 
 void GameScene::onEntityPosChg(int eid, Position& pos) {

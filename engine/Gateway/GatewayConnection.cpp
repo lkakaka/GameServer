@@ -120,9 +120,10 @@ void GatewayConnection::parsePacket()
 
 void GatewayConnection::dispatchClientMsg(int msgId, int msgLen, const char* msgData) {
 	MyBuffer buffer;
+	buffer.writeInt(msgId);
 	buffer.writeByte(0);
 	buffer.writeInt(getConnID());
-	buffer.writeInt(msgId);
+	//buffer.writeInt(msgId);
 	buffer.writeString(msgData, msgLen);
 	switch (msgId)
 	{
