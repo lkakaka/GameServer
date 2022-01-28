@@ -7,7 +7,7 @@
 # find_package(PythonLibs REQUIRED)
 
 add_definitions(-DOPEN_PROFILE_TRACK -DLUA_BUILD_AS_DLL)
-add_definitions(-DUSE_PYTHON_SCRIPT)
+#add_definitions(-DUSE_PYTHON_SCRIPT)
 
 gnu_setting(false)
 open_vs_cplus17()

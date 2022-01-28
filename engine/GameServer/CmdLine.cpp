@@ -8,7 +8,14 @@
 static std::thread cmd_thread;
 
 
+std::function<void()> stopFunc;
+
 void handleCmd(std::string& cmd) {
+	if (cmd == "stop") {
+		LOG_INFO("recv stop server command!!!!!");
+		stopFunc();
+		return;
+	}
 #ifdef USE_PYTHON_SCRIPT
 	PyGILState_STATE py_state = PyGILState_Ensure();
 	PyObject* cmdObj = PyUnicode_FromString(cmd.c_str());
@@ -31,8 +38,15 @@ void waitInput() {
 	}
 }
 
-void startCmd() {
+void startCmd(std::function<void()> f) {
+	stopFunc = f;
 #ifdef WIN32	// linux下一直会读到空字符(未知原因)
 	cmd_thread = std::thread(waitInput);
+#endif
+}
+
+void stopCmd() {
+#ifdef WIN32
+	cmd_thread.detach();
 #endif
 }

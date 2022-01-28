@@ -36,6 +36,7 @@ static void stopServer()
 	//thread::id id = std::this_thread::get_id();
 	LOG_INFO("stop server!!!!");
 	_stop = true;
+	stopCmd();
 	MAIN_IO_SERVICE_PTR->async_run_task([]() { AsioServiceMgr::getSingleton()->stopAll(); });
 }
 
@@ -129,7 +130,7 @@ int main(int argc, char** argv)
 	boost::asio::io_service* io = ioService->getIoService();
 	
 	//signal(SIGSEGV, signalExit);
-	signal(SIGABRT, signalExit);
+	//signal(SIGABRT, signalExit);
 
 	std::string logFileName = serviceName;
 	if (serviceId > 0) logFileName += "_" + std::to_string(serviceId);
@@ -180,7 +181,7 @@ int main(int argc, char** argv)
 	
 	UnitTest::test();
 
-	startCmd();
+	startCmd(std::bind(stopServer));
 
 	LOG_INFO("MyServer Start!!!");
 

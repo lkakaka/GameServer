@@ -6,12 +6,28 @@
 USE_NS_GAME_NET
 
 ConnectionBase::ConnectionBase(std::shared_ptr<tcp::socket> socket, bool isConnected):
-	m_socket(socket), m_isSending(false), m_isConnected(isConnected), m_sendThreadId(0)
+	m_socket(socket), m_isSending(false), m_isConnected(isConnected)
 {
 
 }
 
-void ConnectionBase::send(std::vector<unsigned char>&& dat) {
+// 必须在主线程调用
+void ConnectionBase::send_MainThread(std::vector<unsigned char>&& dat) {
+	//boost::asio::post(MAIN_IO, [this, dat = std::move(dat)]() {
+	//	{
+	//		// 在同一线程执行，不需要锁
+	//		//std::unique_lock<std::mutex> lock(m_sendLock);
+	//		m_sendBuf.emplace_back(std::move(dat));
+	//	}
+	//	_trySend();
+	//});
+
+	m_sendBuf.emplace_back(std::move(dat)); 
+	_trySend();
+}
+
+// 在非主线程调用
+void ConnectionBase::send_OtherThread(std::vector<unsigned char>&& dat) {
 	boost::asio::post(MAIN_IO, [this, dat = std::move(dat)]() {
 		{
 			// 在同一线程执行，不需要锁

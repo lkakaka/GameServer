@@ -45,8 +45,8 @@ void TcpCommEntity::sendToService(ServiceAddr* dstAddr, char* msg, int msgLen) {
 	buffer.writeInt(msgLen);
 	buffer.writeString(msg, msgLen);
 	//send((char*)buffer.data(), buffer.size());
-	send(std::move(buffer.getBuf()));
-	//LOG_INFO("tcp comm send msg to service %s, len:%d!!!", dstAddr->getName(), msgLen);
+	send_MainThread(std::move(buffer.getBuf()));
+	LOG_INFO("tcp comm send msg to service %s, len:%d!!!", dstAddr->getName(), msgLen);
 }
 
 void TcpCommEntity::onConnect() {
@@ -58,6 +58,6 @@ void TcpCommEntity::onConnect() {
 	int len = strlen(SERVICE_CONN_KEY);
 	buffer.writeString(SERVICE_CONN_KEY, strlen(SERVICE_CONN_KEY));
 	//send((char*)buffer.data(), buffer.size());
-	send(std::move(buffer.getBuf()));
+	send_MainThread(std::move(buffer.getBuf()));
 	LOG_INFO("connected center service!!!");
 }

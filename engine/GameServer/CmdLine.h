@@ -1,3 +1,5 @@
 #pragma once
-void startCmd();
+#include <functional>
+void startCmd(std::function<void()> f);
+void stopCmd();
 

@@ -114,7 +114,7 @@ void GatewayConnection::parsePacket()
 		dispatchClientMsg(msgId, msgLen, (char*)m_recvBuffer.data());
 		m_recvBuffer.remove(msgLen);
 		dataLen = m_recvBuffer.size();
-		LOG_INFO("receive client msg, connId:%d, msgId:%d", getConnID(), msgId);
+		//LOG_INFO("receive client msg, connId:%d, msgId:%d", getConnID(), msgId);
 	}
 }
 
@@ -164,7 +164,7 @@ void GatewayConnection::sendMsgToClient(send_type type, int msgId,  char* data, 
 		ikcp_send(m_kcp, (char*)buffer.data(), buffer.size());
 	}
 	else {
-		send(std::move(buffer.getBuf()));
+		send_MainThread(std::move(buffer.getBuf()));
 	}
 }
 

@@ -4,7 +4,7 @@
 #include "../AsioService.h"
 #include "../TimeUtil.h"
 
-#define READ_BUFFER_SIZE 1024
+#define READ_BUFFER_SIZE 4 * 1024
 
 #define SEND_BUFFER_WARNING_SIZE 16 * 1024 * 1024
 

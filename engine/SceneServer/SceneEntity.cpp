@@ -11,6 +11,8 @@
 #include "GameScene.h"
 #include "GameService.h"
 #include "MsgBuilder.h"
+#include "AsioService.h"
+#include "SceneMgr.h"
 
 
 SceneEntity::SceneEntity(SceneEntityType eType, int eid, void* gameScene, GridChgFunc gridChgFunc) :
@@ -69,7 +71,15 @@ void SceneEntity::setPos(float x, float y, bool isTemp) {
 		pos_msg.set_actor_id(m_entityId);
 		pos_msg.set_pos_x(getX());
 		pos_msg.set_pos_y(getY());
-		broadcastMsgToSight(MSG_ID_SYNC_POS, &pos_msg);
+		int eid = m_entityId;
+		int sceneUid = gameScene->getSceneUid();
+		boost::asio::post(MAIN_IO, [sceneUid, eid, pos_msg]() {
+			GameScene* scene = SceneMgr::getSceneMgr()->getScene(sceneUid);
+			if (scene == NULL) return;
+			SceneEntity* entity = scene->getEntity(eid);
+			if (entity == NULL) return;
+			entity->broadcastMsgToSight(MSG_ID_SYNC_POS, (SyncPos*) &pos_msg);
+		});
 		((GameScene*)m_gameScene)->onEntityPosChg(m_entityId, m_pos);
 	}
 
