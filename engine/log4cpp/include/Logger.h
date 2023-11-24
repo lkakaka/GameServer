@@ -5,6 +5,7 @@
 #include "../../Common/ServerExports.h"
 #include <thread>
 #include <vector>
+#include <memory>
 
 #ifndef _WIN32
 #define LOG_NOT_ON_CONSOLE
