@@ -26,7 +26,7 @@
 
 void pyThreadFunc()
 {	
-#ifdef USE_PYTHON_SCRIPT
+#ifdef LOGIC_SCRIPT PYTHON
 
 	LOG_INFO("[UnitTest]Thread Start");
 	auto py_state = PyGILState_Ensure();

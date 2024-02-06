@@ -16,7 +16,7 @@ void handleCmd(std::string& cmd) {
 		stopFunc();
 		return;
 	}
-#ifdef USE_PYTHON_SCRIPT
+#ifdef LOGIC_SCRIPT PYTHON
 	PyGILState_STATE py_state = PyGILState_Ensure();
 	PyObject* cmdObj = PyUnicode_FromString(cmd.c_str());
 	if (cmdObj != NULL) {

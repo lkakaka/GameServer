@@ -6,8 +6,11 @@
 # find_package(Boost REQUIRED)
 # find_package(PythonLibs REQUIRED)
 
-add_definitions(-DOPEN_PROFILE_TRACK -DLUA_BUILD_AS_DLL)
+add_definitions(-DOPEN_PROFILE_TRACK -DLUA_BUILD_AS_DLL) 
 #add_definitions(-DUSE_PYTHON_SCRIPT)
+if(LOGIC_SCRIPT STREQUAL PYTHON)
+	add_definitions(-DLOGIC_SCRIPT=PYTHON)
+endif()
 
 gnu_setting(false)
 open_vs_cplus17()

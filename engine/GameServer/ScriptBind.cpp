@@ -6,7 +6,7 @@
 IScript* ScriptBind::bindScript(const char* funcName) {
 	IScript* script = NULL;
 	if (funcName == NULL || strlen(funcName) == 0) return script;
-#ifdef USE_PYTHON_SCRIPT
+#ifdef LOGIC_SCRIPT PYTHON
 	script = new PythonPlugin(funcName);
 #else
 	script = new LuaPlugin(funcName);
