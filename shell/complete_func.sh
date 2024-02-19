@@ -1,6 +1,6 @@
 #!/bin/bash
-# start 命令自动补充
-_start()
+# start stop 命令自动补充
+_complete_func()
 {
 	COMPREPLY=()
 	local cur=${COMP_WORDS[COMP_CWORD]}
@@ -25,4 +25,5 @@ _start()
 	return 0
 }
 
-complete -F _start ./start.sh
+complete -F _complete_func ./start.sh
+complete -F _complete_func ./stop.sh
