@@ -2,6 +2,7 @@
 import game.util.cmd_util
 from game.service.service_addr import ServiceAddr
 from game.service.service_addr import LOCAL_SERVICE_GROUP
+import Crypt
 
 
 class GMParam(object):
@@ -58,4 +59,12 @@ class GMHandler(object):
         if len(arg_list) >= 2:
             server_id = int(arg_list[1])
         param.player.try_switch_scene(server_id, scene_id)
+        return "ok"
+
+    @_gm_cmd.reg_cmd("gen_id")
+    def _gen_disorder_id(self, param):
+        arg_list = param.args.split(",")
+        origin_id = int(arg_list[0])
+        disorder_id = Crypt.genDisorderId(origin_id)
+        game.util.logger.log_info("origin_id: {0} disorder_id: {1}", origin_id, disorder_id)
         return "ok"

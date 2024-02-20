@@ -7,7 +7,7 @@ OPTS=$(getopt -a -n _cmake --options $SHORT --longoptions $LONG -- "$@")
 
 help()
 {
-	USAGE="Usage: _camke.sh [option] [arg]\n
+	USAGE="Usage: _cmake.sh [option] [arg]\n
 	options:\n
 	[-s|--script]           PYTHON or LUA, default option is LUA\n
 	[-b|--build_type]       Release or Debug, default option is Debug\n

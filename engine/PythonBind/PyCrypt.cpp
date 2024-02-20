@@ -3,6 +3,7 @@
 #include "Logger.h"
 #include "PythonPlugin.h"
 #include "crypt/md5.h"
+#include "crypt/DisorderID.h"
 
 static PyObject* ModuleError;
 static const char* ModuleName = "Crypt";
@@ -23,9 +24,27 @@ static PyObject* _MD5(PyObject* self, PyObject* args)
 	return PyUnicode_FromString(md5code);
 }
 
+static PyObject* generateDisorderId(PyObject* self, PyObject* args)
+{
+	int id = 0;
+	if (!PyArg_ParseTuple(args, "i", &id)) {
+		//PyErr_SetString(ModuleError, "logInfo failed");
+		LOG_ERROR("generateDisorderId args error");
+		Py_RETURN_NONE;
+	}
+
+	int disorderId = DisorderID::generate(id);
+	if (disorderId < 0) {
+		LOG_ERROR("gen disorder id failed!!");
+		Py_RETURN_NONE;
+	}
+
+	return Py_BuildValue("i", disorderId);
+}
 
 static PyMethodDef module_methods[] = {
 	{"md5", (PyCFunction)_MD5, METH_VARARGS, ""},
+	{"genDisorderId", (PyCFunction)generateDisorderId, METH_VARARGS, ""},
 	{NULL, NULL, 0, NULL}
 
 };

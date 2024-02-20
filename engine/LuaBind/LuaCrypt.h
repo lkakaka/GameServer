@@ -1,6 +1,7 @@
 #pragma once
 
 #include "crypt/md5.h"
+#include "crypt/DisorderID.h"
 #include "sol/sol.hpp"
 
 class LuaCrypt {

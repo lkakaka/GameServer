@@ -163,6 +163,27 @@ function clsGMHandler:_gm_test_cross(param)
     return ErrorCode.OK, "ok"
 end
 
+function clsGMHandler:_gm_gen_disorder_id(param)
+    local arg_list = StrUtil.split(param.args, ",")
+    local origin_id = tonumber(arg_list[1])
+    local disoder_id = DisorderID.genDisorderId(origin_id)
+    logger.logInfo("origin_id:%d, disorder_id:%d", origin_id, disoder_id)
+	local disoder_ids = {}
+    for i=1,999997 do
+        -- statements
+        local disoder_id = DisorderID.genDisorderId(i)  --DisorderID.genDisorderId(i)
+        --if i == 162 then
+        --    print(162 ^ 13)
+        --end
+        if disoder_ids[disoder_id] ~= nil then
+            logger.logError("repeated, origin_id:%d, %d, disorder_id:%d", i, disoder_ids[disoder_id], disoder_id)
+            break
+        end
+        disoder_ids[disoder_id] = i
+    end
+    return ErrorCode.OK, "ok"
+end
+
 clsGMHandler._gm_cmd = {
     ["mem_usage"] = clsGMHandler._gm_mem_usage,
     ["mem_gc"] = clsGMHandler._gm_mem_gc,
@@ -173,4 +194,5 @@ clsGMHandler._gm_cmd = {
     ["cnpc"] = clsGMHandler._gm_create_npc,
     ["rnpc"] = clsGMHandler._gm_remove_npc,
     ["test_cross"] = clsGMHandler._gm_test_cross,
+	["gen_id"] = clsGMHandler._gm_gen_disorder_id,
 }

@@ -97,6 +97,7 @@ set(SOL_ROOT ${DEPENDS_ROOT}/sol2-3.2.3)
 set(LUA_BIND_ROOT ${PROJECT_SOURCE_DIR}/LuaBind)
 set(PYTHON_BIND_ROOT ${PROJECT_SOURCE_DIR}/PythonBind)
 set(CURL_ROOT ${DEPENDS_ROOT}/curl)
+set(GMP_ROOT ${DEPENDS_ROOT}/gmp)
 
 set(BOOST_ROOT ../../boost_1_70_0)
 #set(PROTOBUFF_ROOT ../../protobuf-3.9.0)
